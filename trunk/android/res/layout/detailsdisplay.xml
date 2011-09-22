@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  >
+  <TableLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_marginRight="2dp"
+    >
+    <TableRow>
+      <TextView android:text="Longitude"
+        android:layout_marginRight="4dp"
+        android:textStyle="bold"
+        android:textColor="#eeeeee"
+        />
+      <TextView 
+        android:id="@+id/longitudeField"
+        android:textColor="#ffffff"
+        />
+    </TableRow>
+    <TableRow>
+      <TextView android:text="Latitude"
+        android:layout_marginRight="4dp"
+        android:textStyle="bold"
+        android:textColor="#eeeeee"
+        />
+      <TextView 
+        android:id="@+id/latitudeField"
+        android:textColor="#ffffff"
+        />
+    </TableRow>
+    <TableRow>
+      <TextView android:text="Altitude"
+        android:layout_marginRight="4dp"
+        android:textStyle="bold"
+        android:textColor="#eeeeee"
+        />
+      <TextView 
+        android:id="@+id/altitudeField"
+        android:textColor="#ffffff"
+        />
+    </TableRow>
+  </TableLayout>
+  <TableLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_marginLeft="2dp"
+    >
+    <TableRow>
+      <TextView android:text="Heading"
+        android:layout_marginRight="4dp"
+        android:textStyle="bold"
+        android:textColor="#eeeeee"
+        />
+      <TextView 
+        android:id="@+id/headingField"
+        android:textColor="#ffffff"
+        />
+    </TableRow>
+    <TableRow>
+      <TextView android:text="Speed"
+        android:layout_marginRight="4dp"
+        android:textStyle="bold"
+        android:textColor="#eeeeee"
+        />
+      <TextView 
+        android:id="@+id/speedField"
+        android:textColor="#ffffff"
+        />
+    </TableRow>
+    <TableRow>
+      <TextView android:text="Accuracy" 
+        android:layout_marginRight="4dp"
+        android:textStyle="bold"
+        android:textColor="#eeeeee"
+        />
+      <TextView 
+        android:id="@+id/accuracyField"
+        android:textColor="#ffffff"
+        />
+    </TableRow>
+  </TableLayout>
+</LinearLayout>

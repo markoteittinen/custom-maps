@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:paddingLeft="2dp"
+  android:paddingRight="2dp">
+
+  <TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:textColor="#FFFFFF"
+    android:textSize="12pt"
+    android:textStyle="bold"
+    android:text="Select map to use"/>
+
+  <ListView android:id="@id/android:list"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    />
+
+  <TextView android:id="@id/android:empty"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:text="No maps found on SD card in CustomMaps folder.\n\nUse menu to create maps and to get help finding them.\n\n Or press 'back' to exit."
+    android:textSize="8pt"
+    android:gravity="center"
+    />
+ </LinearLayout>
