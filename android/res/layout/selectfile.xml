@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    >
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1px"
+        android:minHeight="2pt"
+        android:maxHeight="2pt"
+        android:max="100"
+        android:progress="0"
+        />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="2pt"
+        android:background="#FFEEEEEE"
+        android:textColor="#FF000000"
+        android:text="Select the map image file"
+        android:textSize="10pt"
+        />
+    <ListView
+        android:id="@+id/filelist"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:padding="2pt"
+        />
+</LinearLayout>

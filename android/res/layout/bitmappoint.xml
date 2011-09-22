@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <Button
+        android:id="@+id/selectPoint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textSize="10pt"
+        android:text="Select point"
+        />
+    <view
+        class="com.custommapsapp.android.create.ImageDisplay"
+        android:id="@+id/imageDisplay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/selectPoint"
+        />
+    <view
+        class="com.custommapsapp.android.create.AnnotationLayer"
+        android:id="@+id/bitmapOverlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/selectPoint"
+        android:background="#00000000"
+        />
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="2pt"
+        android:paddingRight="2pt"
+        android:background="#C0FFFFFF"
+        android:textColor="#C0000000"
+        android:textSize="8pt"
+        android:text="Select point to be matched"
+        />
+</RelativeLayout>

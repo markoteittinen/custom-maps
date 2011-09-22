@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="2pt"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Map Name"
+        android:textSize="6pt"
+        />
+    <EditText
+        android:id="@+id/nameField"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2pt"
+        android:editable="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textSize="10pt"
+        android:text="New Map"
+        />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="6pt"
+        />
+    <EditText
+        android:id="@+id/descriptionField"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2pt"
+        android:editable="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textSize="8pt"
+        />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Tiepoints"
+        android:textSize="6pt"
+        />
+    <ListView
+        android:id="@+id/tiepoints"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:layout_marginBottom="2pt"
+        />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/addPoint"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="Add point"
+            />
+        <Button
+            android:id="@+id/preview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="Preview"
+            />
+    </LinearLayout>
+</LinearLayout>

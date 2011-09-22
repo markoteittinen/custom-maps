@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="2pt"
+    >
+    <TextView
+        android:id="@+id/helpText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4pt"
+        android:inputType="none"
+        android:textSize="8pt"
+        android:text=""
+        />
+    <TextView
+        android:id="@+id/webLink"
+        android:layout_below="@id/helpText"
+        android:layout_alignParentLeft="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4pt"
+        android:gravity="center_horizontal"
+        android:textSize="8pt"
+        android:textColor="#FF8080FF"
+        android:text=""
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/redisplayInfo"
+        android:layout_below="@id/webLink"
+        android:layout_alignParentLeft="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4pt"
+        android:gravity="center_horizontal"
+        android:inputType="none"
+        android:textSize="6pt"
+        android:text="You can redisplay this info using the menu"
+        />
+    <Button
+        android:id="@+id/okButton"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/redisplayInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4pt"
+        android:paddingLeft="20pt"
+        android:paddingRight="20pt"
+        android:text="OK"
+    />
+</RelativeLayout>

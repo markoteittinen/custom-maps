@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Custom Maps/Select map</string>
+    <string name="create_map_name">Custom Maps/Create map</string>
+    <string name="edit_prefs_name">Custom Maps/Settings</string>
+    
+    <string name="author">By Marko Teittinen</string>
+    <string name="open_source">
+      Custom Maps app and its source code are published under Apache License, version 2.0.
+    </string>
+    <string name="apache_license">Read Apache License 2.0</string>
+    <string name="google_code">Visit open source project website</string>
+    <string name="app_home">Visit Custom Maps app website</string>
+
+    <string name="safety_warning">
+      Many map images that can be used with Custom Maps are not drawn accurately enough to show
+      exact GPS locations. Displayed location should be considered approximate at all times.
+      \n\nEven within a single map some areas may be better aligned with GPS than others.
+    </string>
+</resources>
