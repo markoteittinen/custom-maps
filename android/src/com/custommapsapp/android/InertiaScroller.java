@@ -297,6 +297,7 @@ public class InertiaScroller {
         map.setFollowMode(false);
         lastMoveX = evt.getX();
         lastMoveY = evt.getY();
+        velocityTracker.addMovement(evt);
       }
       map.invalidate();
     }

@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 
 /**
  * MapImageOverlay displays a small image in the middle of the map display for
@@ -37,10 +38,14 @@ public class MapImageOverlay extends Overlay {
   private float scale = 1.0f;
   private Paint transparency;
   private Matrix imageMatrix = new Matrix();
+  private Paint centerPaint;
 
   public MapImageOverlay() {
     transparency = new Paint();
     transparency.setAlpha(255);
+    centerPaint = new Paint();
+    centerPaint.setAntiAlias(true);
+    centerPaint.setStyle(Style.STROKE);
   }
 
   public Bitmap getOverlayImage() {
@@ -54,8 +59,8 @@ public class MapImageOverlay extends Overlay {
   }
 
   public void setScale(float scale) {
-    if (scale < 1 || scale > 2) {
-      throw new IllegalArgumentException("Scale must be in range [1, 2], was: " + scale);
+    if (scale < 1 || scale > 4) {
+      throw new IllegalArgumentException("Scale must be in range [1, 4], was: " + scale);
     }
     this.scale = scale;
   }
@@ -88,6 +93,15 @@ public class MapImageOverlay extends Overlay {
     imageMatrix.postScale(scale, scale, x, y);
 
     canvas.drawBitmap(overlayImage, imageMatrix, transparency);
+
+    // Draw small black ring with white edge to indicate center point
+    centerPaint.setColor(0xffffffff);
+    centerPaint.setStrokeWidth(4f);
+    canvas.drawCircle(x, y, 5, centerPaint);
+    centerPaint.setColor(0xff000000);
+    centerPaint.setStrokeWidth(2f);
+    canvas.drawCircle(x, y, 5, centerPaint);
+
     return false;
   }
 }

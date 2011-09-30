@@ -159,6 +159,7 @@ public class MapEditor extends Activity {
       for (TiePoint tiepoint : tiepointAdapter.getAllTiePoints()) {
         tiepoint.releaseBitmap();
       }
+      tiepointAdapter.clear();
     }
     super.onPause();
   }

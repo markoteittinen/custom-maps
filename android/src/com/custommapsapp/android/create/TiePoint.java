@@ -32,7 +32,7 @@ import android.os.Parcelable;
 public class TiePoint implements Parcelable {
   private final Point imagePoint;
   private final Point offset;
-  private final byte[] pngData;
+  private byte[] pngData;
   private GeoPoint geoPoint;
   private transient Bitmap image;
 
@@ -76,6 +76,7 @@ public class TiePoint implements Parcelable {
     // Release memory used by the bitmap
     if (image != null && !image.isRecycled()) {
       image.recycle();
+      pngData = null;
       image = null;
     }
   }
