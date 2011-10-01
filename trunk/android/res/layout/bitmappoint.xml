@@ -30,6 +30,26 @@
         android:layout_above="@id/selectPoint"
         android:background="#00000000"
         />
+    <ImageButton 
+        android:id="@+id/zoomOut"
+        android:layout_alignBottom="@id/imageDisplay"
+        android:layout_alignLeft="@id/imageDisplay"
+        android:layout_margin="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/zoomout"
+        android:background="#00000000"
+        />
+    <ImageButton 
+        android:id="@+id/zoomIn"
+        android:layout_alignBottom="@id/imageDisplay"
+        android:layout_alignRight="@id/imageDisplay"
+        android:layout_margin="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/zoomin"
+        android:background="#00000000"
+        />
     <TextView
         android:id="@+id/help"
         android:layout_width="wrap_content"

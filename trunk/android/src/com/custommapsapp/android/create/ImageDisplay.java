@@ -19,8 +19,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -37,8 +38,9 @@ public class ImageDisplay extends View {
   private Bitmap image;
   private int imageW;
   private int imageH;
-  private float offsetX;
-  private float offsetY;
+  private float centerX;
+  private float centerY;
+  private float scale = 1.0f;
   private VelocityTracker velocityTracker = null;
   private AnnotationLayer annotations;
   private int rotation = 0;
@@ -72,7 +74,8 @@ public class ImageDisplay extends View {
       imageW = image.getWidth();
       imageH = image.getHeight();
     }
-    resetOffset();
+    scale = 1.0f;
+    resetCenter();
     postInvalidate();
   }
 
@@ -113,22 +116,44 @@ public class ImageDisplay extends View {
   }
 
   /**
+   * Apply the given multiplier to current image scale.
+   *
+   * @param multiplier to zoom by (>1 zooms in, <1 zooms out)
+   */
+  public void zoomBy(float multiplier) {
+    setScale(multiplier * getScale());
+  }
+
+  /**
+   * Sets the absolute scale factor for the image.
+   *
+   * @param scale size multiplier (1 = no scaling)
+   */
+  public void setScale(float scale) {
+    this.scale = scale;
+    postInvalidate();
+  }
+
+  /**
+   * @return the current image scaling factor
+   */
+  public float getScale() {
+    return scale;
+  }
+
+  /**
    * @return image coordinates that are in the center of the display
    */
-  public Point getCenterPoint() {
-    Point p = new Point(getWidth() / 2, getHeight() / 2);
-    screenToImagePoint(p);
-    return p;
+  public PointF getCenterPoint() {
+    return new PointF(centerX, centerY);
   }
 
   /**
    * Set the image coordinates at display center point
    */
-  public void setCenterPoint(Point p) {
-    resetOffset();
-    imageToScreenPoint(p);
-    offsetX += -p.x;
-    offsetY += -p.y;
+  public void setCenterPoint(PointF p) {
+    centerX = p.x;
+    centerY = p.y;
     postInvalidate();
   }
 
@@ -138,21 +163,11 @@ public class ImageDisplay extends View {
       return;
     }
     checkImageOutOfBounds();
+    computeDrawMatrix();
     if (annotations != null) {
-      annotations.setOffset(offsetX, offsetY);
+      annotations.setDrawMatrix(drawMatrix);
     }
-    drawMatrix.set(imageRotation);
-    drawMatrix.postTranslate(offsetX, offsetY);
     canvas.drawBitmap(image, drawMatrix, null);
-  }
-
-  @Override
-  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    // keep center point centered in the new display size
-    float centerX = oldw / 2f - offsetX;
-    float centerY = oldh / 2f - offsetY;
-    offsetX = w / 2f - centerX;
-    offsetY = h / 2f - centerY;
   }
 
   /**
@@ -160,13 +175,12 @@ public class ImageDisplay extends View {
    *
    * @param p Point to be converted
    */
-  public void imageToScreenPoint(Point p) {
-    drawMatrix.set(imageRotation);
-    drawMatrix.postTranslate(offsetX, offsetY);
+  public void imageToScreenPoint(PointF p) {
+    computeDrawMatrix();
     mapPoint(drawMatrix, p);
   }
 
-  public void rotateImagePoint(Point p) {
+  public void rotateImagePoint(PointF p) {
     drawMatrix.set(imageRotation);
     mapPoint(drawMatrix, p);
   }
@@ -176,9 +190,8 @@ public class ImageDisplay extends View {
    *
    * @param p Point to be converted
    */
-  public void screenToImagePoint(Point p) {
-    drawMatrix.set(imageRotation);
-    drawMatrix.postTranslate(offsetX, offsetY);
+  public void screenToImagePoint(PointF p) {
+    computeDrawMatrix();
     Matrix inverse = new Matrix();
     drawMatrix.invert(inverse);
     mapPoint(inverse, p);
@@ -190,24 +203,34 @@ public class ImageDisplay extends View {
    * @param m Matrix used for conversion
    * @param p Point to be mapped
    */
-  private void mapPoint(Matrix m, Point p) {
+  private void mapPoint(Matrix m, PointF p) {
     float[] point = new float[] { p.x, p.y };
     m.mapPoints(point);
-    p.x = Math.round(point[0]);
-    p.y = Math.round(point[1]);
+    p.x = point[0];
+    p.y = point[1];
   }
 
   /**
    * Centers the bitmap in this widget
    */
-  private void resetOffset() {
+  private void resetCenter() {
     if (image != null) {
-      offsetX = (getWidth() - imageW) / 2f;
-      offsetY = (getHeight() - imageH) / 2f;
+      centerX = imageW / 2f;
+      centerY = imageH / 2f;
     } else {
-      offsetX = 0;
-      offsetY = 0;
+      centerX = 0;
+      centerY = 0;
     }
+  }
+
+  /**
+   * Recomputes the matrix used for drawing the image (updates scale and
+   * translation)
+   */
+  private void computeDrawMatrix() {
+    drawMatrix.set(imageRotation);
+    drawMatrix.postScale(scale, scale);
+    drawMatrix.postTranslate(getWidth() / 2f - scale * centerX, getHeight() / 2f - scale * centerY);
   }
 
   /**
@@ -218,25 +241,24 @@ public class ImageDisplay extends View {
     if (image == null || image.isRecycled()) {
       return;
     }
-    float centerX = getWidth() / 2f;
-    float centerY = getHeight() / 2f;
-    float translateX = 0f;
-    float translateY = 0f;
-    if (offsetX > centerX) {
-      translateX = centerX - offsetX;
-    } else if (offsetX + imageW < centerX) {
-      translateX = centerX - (offsetX + imageW);
+    boolean stopScroll = false;
+    if (centerX < 0) {
+      centerX = 0;
+      stopScroll = true;
+    } else if (centerX > imageW) {
+      centerX = imageW;
+      stopScroll = true;
     }
-    if (offsetY > centerY) {
-      translateY = centerY - offsetY;
-    } else if (offsetY + imageH < centerY) {
-      translateY = centerY - (offsetY + imageH);
+    if (centerY < 0) {
+      centerY = 0;
+      stopScroll = true;
+    } else if (centerY > imageH) {
+      centerY = imageH;
+      stopScroll = true;
     }
 
-    if (translateX != 0f || translateY != 0f) {
+    if (stopScroll) {
       inertiaScroller.stop();
-      offsetX += translateX;
-      offsetY += translateY;
     }
   }
 
@@ -269,8 +291,8 @@ public class ImageDisplay extends View {
 
     @Override
     public void run() {
-      offsetX += xv;
-      offsetY += yv;
+      centerX += xv / scale;
+      centerY += yv / scale;
       invalidate();
 
       if (xv == 0 || (xv < 0 && xv >= xFriction) || (xv > 0 && xv <= xFriction)) {
@@ -319,14 +341,15 @@ public class ImageDisplay extends View {
   private void stopTouch(MotionEvent event) {
     velocityTracker.addMovement(event);
     velocityTracker.computeCurrentVelocity(50); // per 0.05 seconds (50 ms)
-    inertiaScroller.start(velocityTracker.getXVelocity(), velocityTracker.getYVelocity());
+    inertiaScroller.start(-velocityTracker.getXVelocity(), -velocityTracker.getYVelocity());
     velocityTracker.recycle();
     velocityTracker = null;
   }
 
   private void moveTouch(MotionEvent evt) {
-    offsetX += evt.getX() - lastMoveX;
-    offsetY += evt.getY() - lastMoveY;
+    velocityTracker.addMovement(evt);
+    centerX += (lastMoveX - evt.getX()) / scale;
+    centerY += (lastMoveY - evt.getY()) / scale;
     lastMoveX = evt.getX();
     lastMoveY = evt.getY();
     invalidate();
