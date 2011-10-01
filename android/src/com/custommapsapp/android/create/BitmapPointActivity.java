@@ -24,11 +24,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -96,7 +98,7 @@ public class BitmapPointActivity extends Activity {
       imageDisplay.setBitmap(image);
       orientation = ImageHelper.readOrientation(fileName);
       imageDisplay.setOrientation(orientation);
-      imageDisplay.setCenterPoint(new Point(image.getWidth() / 2, image.getHeight() / 2));
+      imageDisplay.setCenterPoint(new PointF(image.getWidth() / 2f, image.getHeight() / 2f));
     } else {
       Toast.makeText(this, "Selected map image is too large", Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
@@ -106,14 +108,29 @@ public class BitmapPointActivity extends Activity {
     // Pass existing tiepoints to AnnotationLayer
     int[] pointArray = getIntent().getIntArrayExtra(TIEPOINTS);
     if (pointArray != null) {
-      List<Point> tiePoints = new ArrayList<Point>();
+      List<PointF> tiePoints = new ArrayList<PointF>();
       for (int i = 0; i + 1 < pointArray.length; i += 2) {
-        Point p = new Point(pointArray[i], pointArray[i + 1]);
+        PointF p = new PointF(pointArray[i], pointArray[i + 1]);
         imageDisplay.rotateImagePoint(p);
         tiePoints.add(p);
       }
       dataLayer.addTiePoints(tiePoints);
     }
+
+    ImageButton zoomIn = (ImageButton) findViewById(R.id.zoomIn);
+    ImageButton zoomOut = (ImageButton) findViewById(R.id.zoomOut);
+    zoomIn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        imageDisplay.zoomBy(2.0f);
+      }
+    });
+    zoomOut.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        imageDisplay.zoomBy(0.5f);
+      }
+    });
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_BITMAP_POINT,
         "Select a point to be located on a Google map.\n\n" + //
@@ -124,17 +141,17 @@ public class BitmapPointActivity extends Activity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    Point p = imageDisplay.getCenterPoint();
-    outState.putIntArray(CENTER_POINT, new int[] {p.x, p.y});
+    PointF p = imageDisplay.getCenterPoint();
+    outState.putFloatArray(CENTER_POINT, new float[] {p.x, p.y});
     helpDialogManager.onSaveInstanceState(outState);
   }
 
   @Override
   protected void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
-    int[] point = savedInstanceState.getIntArray(CENTER_POINT);
+    float[] point = savedInstanceState.getFloatArray(CENTER_POINT);
     if (point != null) {
-      imageDisplay.setCenterPoint(new Point(point[0], point[1]));
+      imageDisplay.setCenterPoint(new PointF(point[0], point[1]));
     }
     helpDialogManager.onRestoreInstanceState(savedInstanceState);
   }
@@ -184,12 +201,13 @@ public class BitmapPointActivity extends Activity {
     }
   }
 
-  private void returnSelectedPoint(Point bitmapPoint) {
+  private void returnSelectedPoint(PointF bitmapPoint) {
+    Point intPoint = new Point(Math.round(bitmapPoint.x), Math.round(bitmapPoint.y));
     int snippetSize = MapEditor.SNIPPET_SIZE;
-    byte[] mapSnippet = ImageHelper.createPngSample(image, bitmapPoint, snippetSize, orientation);
+    byte[] mapSnippet = ImageHelper.createPngSample(image, intPoint, snippetSize, orientation);
     Point snippetPoint = new Point();
-    snippetPoint.x = Math.min(bitmapPoint.x, snippetSize / 2);
-    snippetPoint.y = Math.min(bitmapPoint.y, snippetSize / 2);
+    snippetPoint.x = Math.min(intPoint.x, snippetSize / 2);
+    snippetPoint.y = Math.min(intPoint.y, snippetSize / 2);
 
     // Release memory used by the loaded large bitmap
     imageDisplay.setBitmap(null);
@@ -201,7 +219,7 @@ public class BitmapPointActivity extends Activity {
 
     // Return the result to calling activity in the original Intent
     Intent result = getIntent();
-    int[] points = new int[] {bitmapPoint.x, bitmapPoint.y, snippetPoint.x, snippetPoint.y};
+    int[] points = new int[] { intPoint.x, intPoint.y, snippetPoint.x, snippetPoint.y};
     result.putExtra(SELECTED_POINT, points);
     result.putExtra(BITMAP_DATA, mapSnippet);
     setResult(RESULT_OK, result);

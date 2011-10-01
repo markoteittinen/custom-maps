@@ -21,8 +21,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -41,9 +42,8 @@ public class AnnotationLayer extends View {
   private Paint blackPaint;
   private Paint whitePaint;
   private Bitmap pushpin;
-  private List<Point> tiePoints;
-  private float offsetX = 0;
-  private float offsetY = 0;
+  private List<PointF> tiePoints;
+  private Matrix drawMatrix;
 
   public AnnotationLayer(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -57,7 +57,8 @@ public class AnnotationLayer extends View {
     whitePaint.setColor(0x80FFFFFF);
     whitePaint.setStrokeWidth(4f);
 
-    tiePoints = new ArrayList<Point>();
+    tiePoints = new ArrayList<PointF>();
+    drawMatrix = new Matrix();
 
     pushpin = BitmapFactory.decodeResource(context.getResources(), R.drawable.pushpin);
   }
@@ -65,26 +66,29 @@ public class AnnotationLayer extends View {
   /**
    * Adds a collection of points to be marked with a pushpin
    */
-  public void addTiePoints(Collection<Point> points) {
+  public void addTiePoints(Collection<PointF> points) {
     if (points != null) {
       tiePoints.addAll(points);
     }
   }
 
   /**
-   * Sets the display offset to keep pushpins properly located while user drags
-   * the image around. Called by ImageDisplay.
+   * Sets the drawing matrix to be used to keep pushpins properly located while
+   * the user pans and zooms around the image.
    */
-  public void setOffset(float offsetX, float offsetY) {
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
+  public void setDrawMatrix(Matrix drawMatrix) {
+    this.drawMatrix.set(drawMatrix);
   }
 
   @Override
   public void onDraw(Canvas canvas) {
-    // Draw existing tiepoints
-    for (Point p : tiePoints) {
-      canvas.drawBitmap(pushpin, offsetX - 21 + p.x, offsetY - 52 + p.y, null);
+    // Mark existing tiepoints
+    float[] pointXY = new float[2];
+    for (PointF point : tiePoints) {
+      pointXY[0] = point.x;
+      pointXY[1] = point.y;
+      drawMatrix.mapPoints(pointXY);
+      canvas.drawBitmap(pushpin, pointXY[0] - 21, pointXY[1] - 52, null);
     }
     // Draw selection circle in the center
     int x = getWidth() / 2;
