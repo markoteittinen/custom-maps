@@ -80,6 +80,7 @@ public class CustomMaps extends Activity {
 
   private MapDisplay mapDisplay;
   private LocationLayer locationLayer;
+  private DistanceLayer distanceLayer;
   private GroundOverlay selectedMap = null;
   private DetailsDisplay detailsDisplay;
   private InertiaScroller inertiaScroller;
@@ -99,6 +100,8 @@ public class CustomMaps extends Activity {
     DisplayState displayState = new DisplayState();
     mapDisplay.setDisplayState(displayState);
     locationLayer.setDisplayState(displayState);
+    distanceLayer = (DistanceLayer) findViewById(R.id.distanceLayer);
+    distanceLayer.setDisplayState(displayState);
     detailsDisplay = (DetailsDisplay) findViewById(R.id.detailsDisplay);
 
     locator = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -179,6 +182,8 @@ public class CustomMaps extends Activity {
     inertiaScroller.setUseMultitouch(prefs.useMultitouch());
     int visibility = (prefs.isShowDetails() ? View.VISIBLE : View.GONE);
     detailsDisplay.setVisibility(visibility);
+    visibility = (prefs.isShowDistance() ? View.VISIBLE : View.GONE);
+    distanceLayer.setVisibility(visibility);
   }
 
   @Override
@@ -620,6 +625,9 @@ public class CustomMaps extends Activity {
       mapDisplay.setGpsLocation((float) location.getLongitude(), (float) location.getLatitude(),
           location.hasAccuracy() ? location.getAccuracy() : 10000f, location.getBearing());
       locationLayer.setGpsLocation(location);
+      if (distanceLayer.getVisibility() == View.VISIBLE) {
+        distanceLayer.setUserLocation(location);
+      }
       if (detailsDisplay.isShown()) {
         detailsDisplay.updateValues(location);
       }

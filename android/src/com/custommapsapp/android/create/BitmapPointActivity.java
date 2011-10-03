@@ -59,6 +59,7 @@ public class BitmapPointActivity extends Activity {
   public static final String BITMAP_DATA = EXTRA_PREFIX + ".BitmapData";
 
   private static final String CENTER_POINT = EXTRA_PREFIX + ".CenterPoint";
+  private static final String SCALE = EXTRA_PREFIX + ".Scale";
 
   private static final String LOG_TAG = "Custom Maps";
 
@@ -111,7 +112,6 @@ public class BitmapPointActivity extends Activity {
       List<PointF> tiePoints = new ArrayList<PointF>();
       for (int i = 0; i + 1 < pointArray.length; i += 2) {
         PointF p = new PointF(pointArray[i], pointArray[i + 1]);
-        imageDisplay.rotateImagePoint(p);
         tiePoints.add(p);
       }
       dataLayer.addTiePoints(tiePoints);
@@ -141,6 +141,8 @@ public class BitmapPointActivity extends Activity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
+    float scale = imageDisplay.getScale();
+    outState.putFloat(SCALE, scale);
     PointF p = imageDisplay.getCenterPoint();
     outState.putFloatArray(CENTER_POINT, new float[] {p.x, p.y});
     helpDialogManager.onSaveInstanceState(outState);
@@ -149,6 +151,8 @@ public class BitmapPointActivity extends Activity {
   @Override
   protected void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
+    float scale = savedInstanceState.getFloat(SCALE, 1f);
+    imageDisplay.setScale(scale);
     float[] point = savedInstanceState.getFloatArray(CENTER_POINT);
     if (point != null) {
       imageDisplay.setCenterPoint(new PointF(point[0], point[1]));
