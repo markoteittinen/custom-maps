@@ -21,7 +21,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -38,8 +37,8 @@ public class ImageDisplay extends View {
   private Bitmap image;
   private int imageW;
   private int imageH;
-  private float centerX;
-  private float centerY;
+  private float centerX;    // in rotated image coordinates
+  private float centerY;    // in rotated image coordinates
   private float scale = 1.0f;
   private VelocityTracker velocityTracker = null;
   private AnnotationLayer annotations;
@@ -145,13 +144,18 @@ public class ImageDisplay extends View {
    * @return image coordinates that are in the center of the display
    */
   public PointF getCenterPoint() {
-    return new PointF(centerX, centerY);
+    PointF center = new PointF(centerX, centerY);
+    Matrix m = new Matrix();
+    imageRotation.invert(m);
+    mapPoint(m, center);
+    return center;
   }
 
   /**
    * Set the image coordinates at display center point
    */
   public void setCenterPoint(PointF p) {
+    mapPoint(imageRotation, p);
     centerX = p.x;
     centerY = p.y;
     postInvalidate();
@@ -168,33 +172,6 @@ public class ImageDisplay extends View {
       annotations.setDrawMatrix(drawMatrix);
     }
     canvas.drawBitmap(image, drawMatrix, null);
-  }
-
-  /**
-   * Convert a point from image coordinates to screen coordinates
-   *
-   * @param p Point to be converted
-   */
-  public void imageToScreenPoint(PointF p) {
-    computeDrawMatrix();
-    mapPoint(drawMatrix, p);
-  }
-
-  public void rotateImagePoint(PointF p) {
-    drawMatrix.set(imageRotation);
-    mapPoint(drawMatrix, p);
-  }
-
-  /**
-   * Convert a point from screen coordinates to image coordinates
-   *
-   * @param p Point to be converted
-   */
-  public void screenToImagePoint(PointF p) {
-    computeDrawMatrix();
-    Matrix inverse = new Matrix();
-    drawMatrix.invert(inverse);
-    mapPoint(inverse, p);
   }
 
   /**

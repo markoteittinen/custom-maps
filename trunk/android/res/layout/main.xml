@@ -5,24 +5,35 @@
   android:layout_height="fill_parent"
   android:keepScreenOn="true"
   >
-  <com.custommapsapp.android.DetailsDisplay
+  <view
+    class="com.custommapsapp.android.DetailsDisplay"
     android:id="@+id/detailsDisplay"
     android:layout_alignParentBottom="true"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:visibility="gone"
     />
-  <com.custommapsapp.android.MapUpMapDisplay
+  <view
+    class="com.custommapsapp.android.MapUpMapDisplay"
     android:id="@+id/mapDisplay"
     android:layout_above="@id/detailsDisplay"
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
     android:layout_weight="1"
     />
-  <com.custommapsapp.android.LocationLayer
+  <view
+    class="com.custommapsapp.android.LocationLayer"
     android:id="@+id/locationLayer"
     android:layout_alignBottom="@id/mapDisplay"
     android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    />
+  <view
+    class="com.custommapsapp.android.DistanceLayer"
+    android:id="@+id/distanceLayer"
+    android:layout_alignBottom="@id/mapDisplay"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
     />

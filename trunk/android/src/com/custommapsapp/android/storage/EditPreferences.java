@@ -69,6 +69,15 @@ public class EditPreferences extends PreferenceActivity {
       root.addPreference(useMultitouch);
     }
 
+    // Display distance to center of screen
+    CheckBoxPreference distanceDisplay = new CheckBoxPreference(this);
+    distanceDisplay.setDefaultValue(false);
+    distanceDisplay.setKey(PreferenceStore.PREFS_SHOW_DISTANCE);
+    distanceDisplay.setTitle("Display distance");
+    distanceDisplay.setSummaryOn("Displays distance from user location to center of screen");
+    distanceDisplay.setSummaryOff("Distance is not displayed or computed");
+    root.addPreference(distanceDisplay);
+
     // Display safety reminder when map is changed preference
     CheckBoxPreference safetyReminder = new CheckBoxPreference(this);
     safetyReminder.setDefaultValue(true);
