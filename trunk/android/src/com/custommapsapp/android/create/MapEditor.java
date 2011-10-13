@@ -590,9 +590,37 @@ public class MapEditor extends Activity {
     finish();
   }
 
+  /**
+   * Converts a map name to a valid filename by keeping all letters and digits
+   * and replacing all other characters with underscores ('_'). Collapses
+   * underscores so that only single underscore separates letters and digit
+   * sequences.
+   *
+   * @param mapName String to be converted
+   * @return converted string that should be a valid file name
+   */
+  private String convertToFileName(CharSequence mapName) {
+    StringBuilder fileName = new StringBuilder();
+    boolean wasReplaced = true;
+    for (int i = 0; i < mapName.length(); i++) {
+      char ch = mapName.charAt(i);
+      if (Character.isLetterOrDigit(ch)) {
+        fileName.append(ch);
+        wasReplaced = false;
+      } else if (!wasReplaced) {
+        fileName.append('_');
+        wasReplaced = true;
+      }
+    }
+    if (fileName.length() > 1 && wasReplaced) {
+      fileName.setLength(fileName.length() - 1);
+    }
+    return fileName.toString();
+  }
+
   private void saveAsKmz(ArrayList<GeoPoint> imageCorners) throws IOException {
     if (kmzFilename == null) {
-      kmzFilename = nameField.getText().toString().trim().replace(' ', '_');
+      kmzFilename = convertToFileName(nameField.getText());
       kmzFilename = FileUtil.DATA_DIR + "/" + kmzFilename + ".kmz";
     }
 
