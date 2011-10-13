@@ -22,7 +22,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.AttributeSet;
 import android.view.View;
@@ -63,43 +62,17 @@ public class LocationLayer extends View {
     fillPaint.setAntiAlias(true);
     fillPaint.setStyle(Paint.Style.FILL);
 
-    animation = new AnimationDrawable();
-    Drawable frame = getResources().getDrawable(R.drawable.arrow_bright);
-    animation.addFrame(frame, 500);
-    frame = getResources().getDrawable(R.drawable.arrow_dark);
-    animation.addFrame(frame, 500);
-    animation.setOneShot(false);
-    animation.setCallback(new Drawable.Callback() {
-      @Override
-      public void unscheduleDrawable(Drawable who, Runnable what) {
-        if (getHandler() != null) {
-          getHandler().removeCallbacks(what, who);
-        }
-      }
+    animation = (AnimationDrawable) getResources().getDrawable(R.drawable.blinking_arrow);
+  }
 
-      @Override
-      public void scheduleDrawable(Drawable who, Runnable what, long when) {
-        if (getHandler() == null) {
-          int delayByMs = 100;
-          final Drawable who2 = who;
-          final Runnable what2 = what;
-          final long when2 = when + delayByMs;
-          postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              scheduleDrawable(who2, what2, when2);
-            }
-          }, delayByMs);
-        } else {
-          getHandler().postAtTime(what, who, when);
-        }
-      }
-
-      @Override
-      public void invalidateDrawable(Drawable who) {
-        invalidate();
-      }
-    });
+  @Override
+  protected void onWindowVisibilityChanged(int visibility) {
+    super.onWindowVisibilityChanged(visibility);
+    if (visibility == View.VISIBLE) {
+      triggerAnimation();
+    } else if (visibility == View.GONE) {
+      cancelAnimation();
+    }
   }
 
   public void setDisplayState(DisplayState displayState) {
@@ -157,9 +130,7 @@ public class LocationLayer extends View {
     if (!locationSet) {
       return;
     }
-    if (!animation.isRunning()) {
-      animation.start();
-    }
+
     // Find screen coordinates of geo location
     System.arraycopy(geoLocation, 0, location, 0, 2);
     displayState.convertGeoToScreenCoordinates(location);
@@ -199,5 +170,32 @@ public class LocationLayer extends View {
     headingMatrix.postTranslate(location[0], location[1]);
     // solidPaint has anti alias and bitmap filtering flags on so image transforms are smooth.
     canvas.drawBitmap(image, headingMatrix, solidPaint);
+  }
+
+  // --------------------------------------------------------------------------
+  // Animation management
+
+  /* Advances animation by one step, invalidates view, and queues next update */
+  private Runnable animationStep = new Runnable() {
+    private int idx = 0;
+
+    public void run() {
+      idx = (idx + 1) % animation.getNumberOfFrames();
+      animation.selectDrawable(idx);
+      invalidate();
+      postDelayed(this, animation.getDuration(idx));
+    }
+  };
+
+  private void triggerAnimation() {
+    // Remove existing animation "threads" if any
+    cancelAnimation();
+    // Start a new animation loop
+    animation.selectDrawable(0);
+    postDelayed(animationStep, animation.getDuration(0));
+  }
+
+  private void cancelAnimation() {
+    removeCallbacks(animationStep);
   }
 }

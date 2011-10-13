@@ -73,7 +73,7 @@ public class MemoryUtil {
     int memMB = getTotalAppMemoryMB(context);
     if (memMB >= 64) {
       // Honeycomb tablets
-      return 8000000;
+      return 12000000;
     } else if (memMB >= 32) {
       // Gingerbread phones
       return 5000000;

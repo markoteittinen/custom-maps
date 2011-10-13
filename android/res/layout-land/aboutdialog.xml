@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:background="#FFFFFFFF"
     android:padding="2pt"
     >
@@ -104,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6pt"
         android:layout_weight="1"
+        android:layout_marginBottom="2pt"
         android:gravity="center_horizontal"
         android:inputType="none"
         android:textSize="6pt"
