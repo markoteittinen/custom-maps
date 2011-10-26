@@ -22,7 +22,6 @@ import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.kml.GroundOverlay;
-import com.custommapsapp.android.kml.KmlInfo;
 import com.custommapsapp.android.kml.KmzFile;
 
 import android.app.Activity;
@@ -58,6 +57,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
@@ -235,7 +235,6 @@ public class MapEditor extends Activity {
     unpackImage(map, FileUtil.TMP_IMAGE);
     bitmapFilename = FileUtil.TMP_IMAGE;
 
-    KmlInfo kmlInfo = map.getKmlInfo();
     Bitmap mapImage = ImageHelper.loadImage(FileUtil.TMP_IMAGE);
     if (mapImage == null) {
       Toast.makeText(this, "Failed to load map image", Toast.LENGTH_LONG).show();
@@ -621,7 +620,12 @@ public class MapEditor extends Activity {
   private void saveAsKmz(ArrayList<GeoPoint> imageCorners) throws IOException {
     if (kmzFilename == null) {
       kmzFilename = convertToFileName(nameField.getText());
-      kmzFilename = FileUtil.DATA_DIR + "/" + kmzFilename + ".kmz";
+      File file = new File(FileUtil.DATA_DIR, kmzFilename + ".kmz");
+      if (file.exists()) {
+        // File with same name already exists, find unused name
+        file = FileUtil.newFileInDataDirectory(kmzFilename + "_%d.kmz");
+      }
+      kmzFilename = file.getAbsolutePath();
     }
 
     FileOutputStream out = new FileOutputStream(kmzFilename);
@@ -725,7 +729,7 @@ public class MapEditor extends Activity {
 
     // Add corner geo coordinates to kml and return it
     GeoPoint[] corners = cornerList.toArray(new GeoPoint[4]);
-    return String.format(kml,
+    return String.format(Locale.US, kml,
         corners[0].getLongitudeE6() / 1E6f,
         corners[0].getLatitudeE6() / 1E6f,
         corners[1].getLongitudeE6() / 1E6f,
@@ -777,7 +781,7 @@ public class MapEditor extends Activity {
     float west = (Math.min(imageCorners[0], imageCorners[4]) +
         Math.min(imageCorners[2], imageCorners[6])) / 2;
 
-    return String.format(kml, north, south, east, west, rotation);
+    return String.format(Locale.US, kml, north, south, east, west, rotation);
   }
 
   /**
@@ -845,7 +849,7 @@ public class MapEditor extends Activity {
   }
 
   private String generateTiepointMarkup(Point imagePoint, GeoPoint geoPoint) {
-    return String.format(TIEPOINT_FORMAT, imagePoint.x, imagePoint.y,
+    return String.format(Locale.US, TIEPOINT_FORMAT, imagePoint.x, imagePoint.y,
         geoPoint.getLongitudeE6() / 1E6f, geoPoint.getLatitudeE6() / 1E6f);
   }
 
