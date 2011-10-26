@@ -46,7 +46,8 @@ public class FileUtil {
   public static final String TMP_IMAGE = IMAGE_DIR + "/mapimage.jpg";
   private static final String SD_PHOTOS = SD_ROOT_PATH + "/DCIM/Camera";
   private static final String SD_PHOTOS_2 = SD_ROOT_PATH + "/DCIM/100MEDIA";
-  public static final String SD_DOWNLOADS = SD_ROOT_PATH + "/download";
+  private static final String SD_DOWNLOADS = SD_ROOT_PATH + "/download";
+  private static final String SD_DOWNLOADS_2 = SD_ROOT_PATH + "/downloads";
 
   public static final String KMZ_IMAGE_DIR = "images/";
 
@@ -57,7 +58,7 @@ public class FileUtil {
   public static File getPhotosDirectory() {
     // G1, Nexus One, and Nexus S use this folder
     File photoDir = new File(SD_PHOTOS);
-    if (photoDir.exists()) {
+    if (photoDir.exists() && photoDir.isDirectory()) {
       return photoDir;
     }
     // At least Droid Eris uses this folder
@@ -65,7 +66,11 @@ public class FileUtil {
   }
 
   public static File getDownloadsDirectory() {
-    return new File(SD_DOWNLOADS);
+    File downloadDir = new File(SD_DOWNLOADS);
+    if (downloadDir.exists() && downloadDir.isDirectory()) {
+      return downloadDir;
+    }
+    return new File(SD_DOWNLOADS_2);
   }
 
   public static File getDataDirectory() {

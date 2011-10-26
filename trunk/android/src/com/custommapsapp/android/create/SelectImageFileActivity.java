@@ -129,11 +129,13 @@ public class SelectImageFileActivity extends Activity {
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     MenuItem item = null;
-    if (FileUtil.getPhotosDirectory().exists()) {
+    File dir = FileUtil.getPhotosDirectory();
+    if (dir.exists() && dir.isDirectory()) {
       item = menu.add(Menu.NONE, MENU_PHOTOS, Menu.NONE, "Photos");
       item.setIcon(android.R.drawable.ic_menu_gallery);
     }
-    if (FileUtil.getDownloadsDirectory().exists()) {
+    dir = FileUtil.getDownloadsDirectory();
+    if (dir.exists() && dir.isDirectory()) {
       item = menu.add(Menu.NONE, MENU_DOWNLOADS, Menu.NONE, "Downloads");
       item.setIcon(R.drawable.ic_menu_my_downloads);
     }
@@ -257,6 +259,14 @@ public class SelectImageFileActivity extends Activity {
    */
   private void updateImageFileList() {
     File[] fileArray = currentDir.listFiles();
+    // Prevent app from force closing if currentDir somehow is non-directory
+    while (fileArray == null) {
+      currentDir = currentDir.getParentFile();
+      if (currentDir == null) {
+        currentDir = FileUtil.getSdRoot();
+      }
+      fileArray = currentDir.listFiles();
+    }
     List<ImageFile> dirListing = new ArrayList<ImageFile>();
     if (!isSdRootDir(currentDir)) {
       dirListing.add(new ImageFile(new File(currentDir, "..")));
