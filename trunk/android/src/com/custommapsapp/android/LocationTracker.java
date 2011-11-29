@@ -40,6 +40,7 @@ public class LocationTracker implements LocationListener, SensorEventListener {
   protected Context context = null;
   protected Float compassDeclination = null;
   protected long declinationTime = 0;
+  protected long lastGpsTime = 0;
   protected boolean hasHeading = false;
   protected float compassHeading = 0f;
   protected Location currentLocation = null;
@@ -165,34 +166,45 @@ public class LocationTracker implements LocationListener, SensorEventListener {
     if (location == null) {
       return;
     }
-    // Compute magnetic declination (diff between "true north" and magnetic north in degrees)
-    if (declinationTime + 60000 < System.currentTimeMillis()) {
-      declinationTime = System.currentTimeMillis();
+
+    long now = System.currentTimeMillis();
+    if (currentLocation != null) {
+      // Never overwrite recent GPS location with a NETWORK location
+      if (location.getProvider().equals(LocationManager.NETWORK_PROVIDER) &&
+          currentLocation.getProvider().equals(LocationManager.GPS_PROVIDER) &&
+          now < lastGpsTime + GPS_EXPIRATION) {
+        return;
+      }
+      // Ignore updates that come out of order from the same location provider
+      if (location.getProvider().equals(currentLocation.getProvider()) &&
+          location.getTime() < currentLocation.getTime()) {
+        return;
+      }
+    }
+    // Update magnetic declination once every minute
+    // -- diff between "true north" and magnetic north in degrees
+    if (declinationTime + 60000 < now) {
+      declinationTime = now;
       GeomagneticField magneticField = new GeomagneticField(
           (float) location.getLatitude(), (float) location.getLongitude(),
           location.hasAltitude() ? (float) location.getAltitude() : 100f, // use 100m if not known
           declinationTime);
       compassDeclination = new Float(magneticField.getDeclination());
     }
-    // If there is no bearing (usually lack of motion), use compass heading of the phone
+    // If there is no bearing (lack of motion or network location), use latest compass heading
     if (!location.hasBearing() || !location.hasSpeed() || location.getSpeed() < 0.3f) {
       location.setBearing(compassHeading);
     }
 
+    // Update current location
     if (currentLocation != null) {
-      if (location.getTime() < currentLocation.getTime()) {
-        // Old data, ignore
-        return;
-      }
-      if (location.getProvider().equals(LocationManager.NETWORK_PROVIDER) &&
-          currentLocation.getProvider().equals(LocationManager.GPS_PROVIDER) &&
-          System.currentTimeMillis() - currentLocation.getTime() < GPS_EXPIRATION) {
-        // GPS data hasn't expired yet, don't replace with NETWORK data
-        return;
-      }
       currentLocation.set(location);
     } else {
       currentLocation = new Location(location);
+    }
+
+    if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+      lastGpsTime = now;
     }
     updateSpeedAndAltitude(location);
   }
