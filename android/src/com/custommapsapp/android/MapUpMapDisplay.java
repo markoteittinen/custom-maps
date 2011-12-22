@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -121,6 +122,16 @@ public class MapUpMapDisplay extends MapDisplay {
       mapImage = loadMapImage(newMap);
     } catch (IOException ex) {
       mapImage = null;
+      // Failed to read image, display error message
+      String mapName = newMap.getName();
+      final String errorMsg = "Failed to load map image" +
+          (mapName == null || mapName.trim().length() == 0 ? "" : " for " + mapName );
+      post(new Runnable() {
+        @Override
+        public void run() {
+          Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+        }
+      });
     }
     if (mapImage == null) {
       spotSet = false;
@@ -148,7 +159,9 @@ public class MapUpMapDisplay extends MapDisplay {
   @Override
   public void centerOnMapCenterLocation() {
     float[] location = displayState.getMapCenterGeoLocation(null);
-    centerOnLocation(location[0], location[1]);
+    if (location != null) {
+      centerOnLocation(location[0], location[1]);
+    }
   }
 
   @Override

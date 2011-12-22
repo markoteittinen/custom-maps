@@ -218,7 +218,20 @@ public class SelectImageFileActivity extends Activity {
       finish();
     } else {
       clearImageFileList();
-      currentDir = currentDir.getParentFile();
+      File parent = currentDir.getParentFile();
+      if (parent == null) {
+        try {
+          currentDir = currentDir.getCanonicalFile();
+        } catch (IOException ex) {
+          // ignore, just keep currentDir as is
+        }
+        parent = currentDir.getParentFile();
+        if (parent == null) {
+          setResult(RESULT_CANCELED);
+          finish();
+        }
+      }
+      currentDir = parent;
       updateImageFileList();
     }
   }
@@ -258,6 +271,9 @@ public class SelectImageFileActivity extends Activity {
    * an AsyncTask to update thumbnails for the image files.
    */
   private void updateImageFileList() {
+    if (currentDir == null) {
+      return;
+    }
     File[] fileArray = currentDir.listFiles();
     // Prevent app from force closing if currentDir somehow is non-directory
     while (fileArray == null) {
