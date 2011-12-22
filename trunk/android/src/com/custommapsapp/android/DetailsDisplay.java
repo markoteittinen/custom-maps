@@ -60,6 +60,9 @@ public class DetailsDisplay extends LinearLayout {
   }
 
   public void updateValues(Location location) {
+    if (location == null) {
+      return;
+    }
     setLongitude((float) location.getLongitude());
     setLatitude((float) location.getLatitude());
     if (location.hasAltitude()) {

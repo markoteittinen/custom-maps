@@ -18,6 +18,7 @@ package com.custommapsapp.android.kml;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,7 +61,11 @@ public class KmzFile implements KmlInfo, Serializable {
   }
 
   public InputStream getImageStream(String path) throws IOException {
-    return kmzFile.getInputStream(kmzFile.getEntry(path));
+    ZipEntry zipEntry = kmzFile.getEntry(path);
+    if (zipEntry == null) {
+      throw new FileNotFoundException("Image not found in kmz file");
+    }
+    return kmzFile.getInputStream(zipEntry);
   }
 
   public int getImageOrientation(String path) {
