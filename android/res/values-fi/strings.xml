@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Custom Maps/Valitse Kartta</string>
+    <string name="create_map_name">Custom Maps/Luo Kartta</string>
+    <string name="edit_prefs_name" tools:ignore="UnusedResources">Custom Maps/Asetukset</string>
+    <string name="author">By Marko Teittinen</string>
+    <string name="open_source">
+        Custom Maps ja sen lähdekoodi on julkaistu Apache Lisenssin version 2.0 alaisena.
+    </string>
+    <string name="apache_license">Lue Apache Lisenssi 2.0</string>
+    <string name="google_code">Avaa Custom Mapsin avoimen lähdekoodin projektisivu</string>
+    <string name="app_home">Avaa Custom Mapsin nettisivut</string>
+
+    <!-- CustomMaps.java -->
+    <string name="gps_outside_map">GPS sijaintisi ei ole kartan alueella</string>
+    <string name="share_map_failed">Kartan lähetys epäonnistui</string>
+    <string name="external_content_failed">
+        Custom Maps ei pystynyt näyttämään KMZ-tiedoston sisältöä.
+    </string>
+    <string name="waiting_for_gps">Sijaintisi on tuntematon.\nGPS signaalia haetaan…</string>
+    <string name="map_too_large">Valitsemaasi karttaa ei voitu avata koska se on liian iso.</string>
+
+    <!-- sharing -->
+    <string name="share_message_subject">Haluaisin antaa sinulle tämän kartan</string>
+    <string name="share_chooser_title">Lähetä kartta ohjelmalla…</string>
+
+    <!-- safety warning -->
+    <string name="safety_warning_title">TÄRKEÄÄ!</string>
+    <string name="safety_warning">
+        Monia karttakuvia ei ole piirretty niin tarkasti, että niissä voisi nähdä tarkan GPS 
+        sijaintinsa edes Custom Mapsin avulla. Oleta, että Custom Mapsin näyttämä sijaintisi kartalla on aina
+        suurinpiirteinen.\n\nJopa saman karttakuvan eri puolilla sijaintisi tarkkuus voi vaihdella
+        huomattavasti. 
+    </string>
+    <string name="remind_me_again">Muistuta uudestaan ensi kerralla</string>
+    
+    <!-- select map -->
+    <string name="select_map_to_use">Valitse kartta</string>
+    <string name="no_maps_found_on_sd">
+        Custom Maps hakemistossa SD-kortilla ei ole karttoja.\n\nAvaa valikko luodaksesi uusi kartta
+        tai saadaksesi apua karttojen löytämiseen.\n\nTai paina \'Peru\'-nappia lopettaaksesi.
+    </string>
+    <string name="create_map_help">
+        Valitse \'Luo kartta\' valikosta tehdäksesi uusia karttoja valokuvista tai netistä
+        ladatuista karttakuvista.\n\nKosketa pitkään karttaa listassa, jos haluat muokata sitä tai
+        poistaa sen.
+    </string>
+    <string name="create_map_help_link">
+        Tämä linkki johtaa Custom Mapsin nettisivuille, missä on esimerkkikarttoja ja 
+        yksityiskohtaiset kartan teko-ohjeet.
+    </string>
+    <string name="no_map_sharing_apps">Ei löytynyt ohjelmia, jotka voisivat lähettää karttoja</string>
+    <string name="delete_map_dialog_title">Varmista kartan poisto</string>
+    <string name="delete_map_dialog">Oletko varma, että haluat poistaa kartan\n\"%s\"?</string>
+    <string name="delete_map_dialog_positive">Kyllä - poista</string>
+    <string name="delete_map_dialog_negative">Ei - pidä tallessa</string>
+    <string name="deleting_map_failed">Kartan \"%s\" poisto epäonnistui</string>
+    <string name="local_maps">Paikalliset kartat</string>
+    <string name="nearby_maps">Läheiset kartat</string>
+    <string name="other_maps">Muut kartat</string>
+    <string name="all_maps">Kaikki kartat</string>
+    
+    <!-- downloading -->
+    <string name="progress_format">Tuntematon kartan koko. Ladattu %,d kB.</string>
+    <string name="download_canceled">Kartan lataaminen peruttu</string>
+    <string name="download_failed">Kartan lataamine epäonnistui paikasta %s</string>
+    <string name="download_successful">Kartta ladattiin onnistuneesti</string>
+    <string name="download_no_datadir">
+        Custom Maps ei löydä SD-korttia, minne kartan voisi tallentaa.\nLataus peruttu.
+    </string>
+    <string name="download_title_label">Karttaa ladataan netistä</string>
+    <string name="download_progress_label">Tilanne</string>
+    <string name="download_starting">Lataaminen alkaa…</string>
+    <string name="download_info">
+        Odota kunnes koko kartta on ladattu tai peru lataus alla olevalla napilla
+    </string>
+    
+    <!-- map image display -->
+    <string name="unnamed_map">nimeämätön kartta</string>
+    <string name="map_image_load_failed">Kartan %s kuvan lataaminen epäonnistui.</string>
+    
+    <!-- help manager -->
+    <string name="help_menu_title">Ohje</string>
+    <string name="help_redisplay">Voit avata tämän ohjeen uudestaan valikon avulla</string>
+    
+    <!-- details display -->
+    <string name="latitude">Leveyspiiri</string>
+    <string name="longitude">Pituuspiiri</string>
+    <string name="altitude">Korkeus</string>
+    <string name="heading">Suunta</string>
+    <string name="speed">Nopeus</string>
+    <string name="accuracy">Tarkkuus</string>
+    <string name="no_data_available">--</string>
+    
+    <!-- map image selection -->
+    <string name="select_image_help">
+        Valitse karttakuvan sisältävä tiedosto.\n\nKäytä vain kuvia, joita sinulla on oikeus
+        käyttää.\n\nValikosta löytyy pikalinkit valokuviisi ja nettilatauksiisi.
+    </string>
+    <string name="select_image_invalid">
+        %s ei ole kuvatiedosto.\nValitse kuvatiedosto.
+    </string>
+    <string name="select_image_select_file">Valitse karttakuva</string>
+    
+    <!-- map image point selection -->
+    <string name="image_point_help">
+        Valitse piste, minkä osaat löytää Googlen kartalta.\n\nParhaat tulokset saat valitsemalla
+        pisteitä, jotka ovat kaukana toisistaan.\n\nÄlä valitse pisteitä jo valittujen pisteiden
+        välistä.
+    </string>
+    <string name="image_point_no_image">
+        Kuvaa ei ole valittu, joten pisteitäkään ei voi valita.
+    </string>
+    <string name="image_point_select_for_matching">Valitse kiintopiste karttakuvasta</string>
+    
+    <!-- map geo point selection -->
+    <string name="geo_point_help">
+        Voit zoomata ja siirtää Googlen karttaa löytääksesi valitun kiintopisteen.\n\nKäytä 
+        liukusäätimiä kiintopistekuvan kulman, koon, ja läpinäkyvyyden säätämiseen.\n\n
+        Karttapainike vaihtaa Googlen kartan sateliittikuvaksi ja takaisin.
+    </string>
+    <string name="geo_point_mapview_failure">
+        Googlen kartan näyttäminen epäonnistui.\nUusia karttoja ei voi nyt tehdä.
+    </string>
+    <string name="geo_point_rotate">Kulma</string>
+    <string name="geo_point_scale">Koko</string>
+    <string name="geo_point_transparency">Läpinäkyvyys</string>
+    
+    <!-- map editor -->
+    <string name="editor_help">
+        Nimeä karttasi, ja lisää kuvaus sen tunnistamiseksi karttalistassa.\n\nValitse 2-4
+        kiintopistettä karttakuvan sijainnin ja mittakaavan määrittämiseksi.\n\nVoit säätää tai
+        poistaa kiintopisteitä koskettamalla niitä pitkään listassa.\n\nKartan voi tallettaa
+        esikatselun jälkeen.
+    </string>
+    <string name="editor_image_load_failed">Karttakuvan lataaminen epäonnistui</string>
+    <string name="editor_need_two_points">
+        Ennen esikatselua pitää valita ainakin 2 kiintopistettä
+    </string>
+    <string name="editor_map_save_failed">Kartan tallennus epäonnistui</string>
+    <string name="editor_map_name">Kartan nimi</string>
+    <string name="editor_new_map">Uusi kartta</string>
+    <string name="editor_description">Kuvaus</string>
+    <string name="editor_tiepoints">Kiintopisteet</string>
+    
+    <!-- map preview -->
+    <string name="preview_help">
+        Tarkista karttakuvan kohdennus zoomaamalla ja siirtämällä näkymää.\n\n\'Peru\'-napilla voit
+        palata säätämään tai lisäämään kiintopisteitä.\n\nHUOMAA: Joitakin karttakuvia ei ole 
+        mahdollista kohdentaa kovin hyvin.
+    </string>
+    <string name="preview_mapview_failure">
+        Google kartan näyttäminen epäonnistui.\nKartan esikatselu ei ole mahdollista.
+    </string>
+    <string name="preview_transparency">Läpinäkyvyys</string>
+    
+    <!-- edit preferences -->
+    <string name="metric_title">Käytä metrijärjestelmää</string>
+    <string name="metric_use_metric">Metrijärjestelmä käytössä</string>
+    <string name="metric_use_english">Englantilainen mittajärjestelmä käytössä</string>
+    <string name="multitouch_title">Käytä nipistyszoomia</string>
+    <string name="multitouch_enable_pinch">Nipistyszoomi käytössä</string>
+    <string name="multitouch_disable_pinch">Nipistyszoomi ei ole käytössä</string>
+    <string name="distance_title">Näytä etäisyys</string>
+    <string name="distance_show">Etäisyys näytetään näytön keskipisteeseen</string>
+    <string name="distance_hide">Etäisyyttä ei näytetä eikä lasketa</string>
+    <string name="safety_reminder_title">Näytä turvamuistutus</string>
+    <string name="safety_reminder_show">Näytetään karttaa vaihdettaessa</string>
+    <string name="safety_reminder_hide">Ei näytetä</string>
+    <string name="language_title">Valitse kieli</string>
+    <string name="language_default">Oletuskieli</string>
+    <string name="language_selected_format">Käytössä %s</string>
+    <string name="max_map_img_size_title">Maksimi karttakuvan koko</string>
+    <string name="max_map_img_size">%.1f miljoonaa pistettä</string>
+    <string name="about_custom_maps">Tietoja Custom Mapsistä</string>
+    
+    <!-- about dialog -->
+    <string name="version_label">Versio</string>
+    <string name="credits_text">
+        <b>Erityiskiitokset</b>\n
+        \u2022 Harlan Hile (nipistyszoomi, käyttäjän sijaintikuvake)\n
+        \u2022 Patrick Steiner (ohjelman käännettävyys, Saksan kieli)
+    </string>
+    
+    <!-- button items -->
+    <string name="button_ok">OK</string>
+    <string name="button_close">Sulje</string>
+    <string name="button_accept_license">Hyväksy lisenssi</string>
+    <string name="button_cancel">Peru</string>
+    <string name="button_save">Tallenna</string>
+    <string name="button_add_point">Lisää piste</string>
+    <string name="button_preview">Esikatselu</string>
+    <string name="button_accept">Hyväksy</string>
+    
+    <!-- menu items -->
+    <string name="select_map">Valitse kartta</string>
+    <string name="my_location">Sijaintini</string>
+    <string name="location_details">Sijantitietoja</string>
+    <string name="share_map">Lähetä kartta</string>
+    <string name="settings">Asetukset</string>
+    <string name="create_map">Luo kartta</string>
+    <string name="modify_map">Muokkaa karttaa</string>
+    <string name="delete_map">Poista kartta</string>
+    <string name="map_cannot_modify">Osa karttaryhmää. Ei voida muokata tai poistaa</string>
+    <string name="select_point">Valitse piste</string>
+    <string name="adjust_tiepoint">Säädä kiintopistettä</string>
+    <string name="delete_tiepoint">Poista kiintopiste</string>
+    <string name="photos">Valokuvat</string>
+    <string name="downloads">Nettilataukset</string>
+    <string name="sdcard">SD-kortti</string>
+
+</resources>

@@ -52,6 +52,9 @@ public class LocationTracker implements LocationListener, SensorEventListener {
 
   public void setContext(Context context) {
     this.context = context;
+    if (context != null && !GeoidHeightEstimator.isInitialized()) {
+      GeoidHeightEstimator.initialize(context.getAssets());
+    }
   }
 
   public void setDisplay(Display display) {
@@ -189,11 +192,18 @@ public class LocationTracker implements LocationListener, SensorEventListener {
           (float) location.getLatitude(), (float) location.getLongitude(),
           location.hasAltitude() ? (float) location.getAltitude() : 100f, // use 100m if not known
           declinationTime);
-      compassDeclination = new Float(magneticField.getDeclination());
+      compassDeclination = Float.valueOf(magneticField.getDeclination());
     }
     // If there is no bearing (lack of motion or network location), use latest compass heading
     if (!location.hasBearing() || !location.hasSpeed() || location.getSpeed() < 0.3f) {
       location.setBearing(compassHeading);
+    }
+
+    // Apply geoid height correction to altitude, if reported
+    if (location.hasAltitude() && GeoidHeightEstimator.isInitialized()) {
+      int geoidCm =
+          GeoidHeightEstimator.computeGeoidHeight(location.getLatitude(), location.getLongitude());
+      location.setAltitude(location.getAltitude() - Math.round(geoidCm / 100f));
     }
 
     // Update current location

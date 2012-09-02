@@ -30,7 +30,6 @@ import java.lang.reflect.Method;
  * @author Marko Teittinen
  */
 public class MemoryUtil {
-  private static final String LOG_TAG = "Custom Maps";
   private static int totalAppMemoryMB = -1;
 
   /**
@@ -56,7 +55,7 @@ public class MemoryUtil {
     } catch (Exception ex) {
       // Something failed, assume safely 16 MB
       totalAppMemoryMB = 16;
-      Log.w(LOG_TAG, "Unknown available memory, using 16 MB", ex);
+      Log.w(CustomMaps.LOG_TAG, "Unknown available memory, using 16 MB", ex);
     }
     return totalAppMemoryMB;
   }
@@ -72,7 +71,7 @@ public class MemoryUtil {
   public static int getMaxImagePixelCount(Context context) {
     int memMB = getTotalAppMemoryMB(context);
     if (memMB >= 64) {
-      // Honeycomb tablets
+      // Honeycomb tablets & Ice Cream Sandwich and later phones
       return 12000000;
     } else if (memMB >= 32) {
       // Gingerbread phones

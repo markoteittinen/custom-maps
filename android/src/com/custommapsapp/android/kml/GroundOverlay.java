@@ -20,6 +20,7 @@ import com.google.android.maps.GeoPoint;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
+import android.util.FloatMath;
 
 import java.io.File;
 import java.io.IOException;
@@ -296,7 +297,7 @@ public class GroundOverlay implements Serializable {
 
   // Finds shortest distance from point (x, y) to line connecting points (x0, y0) and (x1, y1)
   public float getGeometricDistance(float xDiff, float yDiff) {
-    return (float) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+    return FloatMath.sqrt(xDiff * xDiff + yDiff * yDiff);
   }
 
   private void initializeGeoToMetricMatrix() {

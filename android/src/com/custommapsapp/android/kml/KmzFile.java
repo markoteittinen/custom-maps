@@ -15,6 +15,8 @@
  */
 package com.custommapsapp.android.kml;
 
+import com.custommapsapp.android.FileUtil;
+
 import android.util.Log;
 
 import java.io.File;
@@ -87,13 +89,7 @@ public class KmzFile implements KmlInfo, Serializable {
       // Failed to read file, or value is not a number, return no rotation
       return 0;
     } finally {
-      if (in != null) {
-        try {
-          in.close();
-        } catch (IOException e) {
-          // Ignore, just cleaning up
-        }
-      }
+      FileUtil.tryToClose(in);
     }
   }
 

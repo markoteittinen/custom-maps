@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="2pt"
-    >
+    android:padding="2pt" >
+
     <TextView
         android:id="@+id/titleLabel"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:inputType="none"
-        android:textSize="8pt"
-        android:text="Downloading a map from the web"
-        />
+        android:text="@string/download_title_label"
+        android:textSize="8pt" />
+
     <TextView
         android:id="@+id/urlLabel"
-        android:layout_below="@id/titleLabel"
-        android:layout_alignParentLeft="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4pt"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/titleLabel"
         android:layout_marginBottom="4pt"
+        android:layout_marginTop="4pt"
         android:gravity="center_horizontal|center_vertical"
         android:inputType="none"
-        android:textSize="6pt"
-        android:text="http://host/path/file.kmz"
-        />
+        android:text=""
+        android:textSize="6pt" />
+
     <TextView
         android:id="@+id/progressLabel"
-        android:layout_below="@id/urlLabel"
-        android:layout_alignParentLeft="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/urlLabel"
         android:inputType="none"
-        android:textSize="6pt"
-        android:text="Progress"
-        />
+        android:text="@string/download_progress_label"
+        android:textSize="6pt" />
+
     <ViewSwitcher
         android:id="@+id/progressView"
-        android:layout_below="@id/progressLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2pt"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/progressLabel"
         android:layout_marginBottom="4pt"
-        >
+        android:layout_marginTop="2pt" >
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:indeterminate="false"
-            android:progress="0"
             android:max="100"
-            android:visibility="gone"
-            />
+            android:progress="0"
+            android:visibility="gone" />
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            >
+            android:orientation="horizontal" >
+
             <ProgressBar
                 android:id="@+id/progressSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminate="true"
-                />
+                android:indeterminate="true" />
+
             <TextView
                 android:id="@+id/progressDetails"
                 android:layout_width="fill_parent"
@@ -77,30 +77,30 @@
                 android:layout_marginLeft="4pt"
                 android:gravity="left|center_vertical"
                 android:inputType="none"
-                android:text="Downloaded 0 kB"
-                />
+                android:text="@string/download_starting" />
         </LinearLayout>
     </ViewSwitcher>
+
     <TextView
         android:id="@+id/instructionLabel"
-        android:layout_below="@id/progressView"
-        android:layout_alignParentLeft="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/progressView"
         android:layout_marginTop="2pt"
         android:inputType="none"
-        android:text="Please wait until the download completes or cancel download with the button below"
-        />
+        android:text="@string/download_info" />
+
     <Button
         android:id="@+id/cancelButton"
-        android:layout_below="@id/instructionLabel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="4pt"
-        android:layout_marginTop="4pt"
-        android:layout_marginRight="4pt"
-        android:layout_marginBottom="4pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        />
+        android:layout_below="@id/instructionLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="4pt"
+        android:layout_marginLeft="4pt"
+        android:layout_marginRight="4pt"
+        android:layout_marginTop="4pt"
+        android:text="@string/button_cancel" />
+
 </RelativeLayout>

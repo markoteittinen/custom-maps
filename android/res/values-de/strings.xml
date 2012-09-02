@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Custom Maps/Wähle Karte</string>
+    <string name="create_map_name">Custom Maps/Erstelle Karte</string>
+    <string name="edit_prefs_name">Custom Maps/Einstellungen</string>
+    <string name="author">By Marko Teittinen</string>
+    <string name="open_source">
+        Custom Maps App und der Quellcode stehen unter der Apache Lizenz, Version 2.0.
+    </string>
+    <string name="apache_license">Apache Lizenz 2.0 lesen</string>
+    <string name="google_code">Entwickler Projekt Webseite besuchen</string>
+    <string name="app_home">Besuche Custom Maps App Webseite</string>
+
+    <!-- CustomMaps.java -->
+    <string name="gps_outside_map">
+        GPS Position befindet sich nicht in der aktuellen Kartengrenzen
+    </string>
+    <string name="share_map_failed">Senden der Karte fehlgeschlagen</string>
+    <string name="external_content_failed">Custom Maps kann den KMZ Inhalt nicht anzeigen.</string>
+    <string name="waiting_for_gps">Aktuelle Position unbekannt.\nSuche nach GPS Signal…</string>
+    <string name="map_too_large">
+        Die aktuelle Karte konnte nicht geladen werden, da sie zu groß war.
+    </string>
+    
+    <!-- sharing -->
+    <string name="share_message_subject">Ich möchte eine Karte mit dir teilen</string>
+    <string name="share_chooser_title">Sende Karte mit…</string>
+    
+    <!-- safety warning -->
+    <string name="safety_warning_title">WICHTIG!</string>
+    <string name="safety_warning">
+        Einige Bilder welche mit Custom Maps verwendet werden können, sind nicht genau genug um die
+        exakte GPS Position zu zeigen. Die angzeigte Position soll immer als eine gemittelte
+        Position gesehen werden.\n\nAuch mit einer einzigen Karten werden einige Gebiete genauer
+        via GPS positioniert als Andere.
+    </string>
+    <string name="remind_me_again">Nächstes Mal wieder erinnern</string>
+
+    <!-- select map -->
+    <string name="select_map_to_use">Wähle Karte</string>
+    <string name="no_maps_found_on_sd">
+        Keine Karten auf der SD Karte im Ordner CustomMaps gefunden.\nVerwende das Menü um Karten
+        zu erstellen und um Hilfe zu bekommen.\n\nOder zum Verlassen drücke \'Zurück\'.
+    </string>
+    <string name="create_map_help">
+        Verwende das Menü um Karten von Fotos oder heruntergeladenen Kartenbildern zu erstellen.
+        \n\nDrücke und halte einen Kartennamen um ihn zu verändern oder zu löschen.
+    </string>
+    <string name="create_map_help_link">
+        Hier klicken umd die Webseite von Custom Maps für Exemplarkarten und Anleitungen zu
+        besuchen.
+    </string>
+    <string name="no_map_sharing_apps">Keine der installierten Apps kann Karten teilen</string>
+    <string name="delete_map_dialog_title">Bestätige löschen</string>
+    <string name="delete_map_dialog">Bist du sicher folgende Karte zu löschen:\n\"%s\"?</string>
+    <string name="delete_map_dialog_positive">Ja - Löschen</string>
+    <string name="delete_map_dialog_negative">Nein - Behalte Karte</string>
+    <string name="deleting_map_failed">Folgende Karte konnte nicht gelöscht werden:\"%s\"</string>
+    <string name="local_maps">Lokale Karten</string>
+    <string name="nearby_maps">Karten in der Nähe</string>
+    <string name="other_maps">Andere Karten</string>
+    <string name="all_maps">Alle Karten</string>
+    
+    <!-- downloading -->
+    <string name="progress_format">Unbekannte Kartengröße. Downloaded %,d kB.</string>
+    <string name="download_canceled">Karten Download abgebrochen</string>
+    <string name="download_failed">Karten Download von %s fehlgeschlagen</string>
+    <string name="download_successful">Karte erfolgreich heruntergeladen</string>
+    <string name="download_no_datadir">
+        Custom Maps kann keine SD Karte finden um Karten zu speichern.\nDownload abgebrochen.
+    </string>
+    <string name="download_title_label">Downloaden einer Karten aus dem Web</string>
+    <string name="download_progress_label">Fortschritt</string>
+    <string name="download_starting">Download gestartet…</string>
+    <string name="download_info">
+        Bitte warte bis der Download komplett ist oder breche den Download mit den Button unten ab
+    </string>
+    
+    <!-- map image display -->
+    <string name="unnamed_map">Unbenannte Karte</string>
+    <string name="map_image_load_failed">Laden des Kartenbildes für %s fehlgeschlagen.</string>
+    
+    <!-- help manager -->
+    <string name="help_menu_title">Hilfe</string>
+    <string name="help_redisplay">Du kann diese Infos über das Menü erneut anzeigen</string>
+    
+    <!-- details display -->
+    <string name="latitude">Breitengrad</string>
+    <string name="longitude">Längengrad</string>
+    <string name="altitude">Höhe</string>
+    <string name="heading">Richtung</string>
+    <string name="speed">Geschwindigkeit</string>
+    <string name="accuracy">Genauigkeit</string>
+    <string name="no_data_available">N/A</string>
+    
+    <!-- map image selection -->
+    <string name="select_image_help">
+        Wähle eine Datei die ein Kartenbild beinhaltet.\n\nVerwende nur Bilder bei denen du die
+        Berechtigung hast.\n\nDas Menü enthält Links zu Verzeichnissen mit deinen Fotos und
+        Internet Downloads.
+    </string>
+    <string name="select_image_invalid">
+        %s ist keine gültige Bilddatei.\nDu musst eine Bilddatei wählen
+    </string>
+    <string name="select_image_select_file">Wähle die Karten Bilddatei</string>
+    
+    <!-- map image point selection -->
+    <string name="image_point_help">
+        Wähle einen Punkt auf der Google map.\n\nFür die beste Qualität wähle eine weit entfernten
+        Punkt.\n\nVermeide Punkte zwischen bestehenden Punkten.
+    </string>
+    <string name="image_point_no_image">
+        Keine Kartendatei gewählt. Kann keine Punkte wählen.
+    </string>
+    <string name="image_point_select_for_matching">Wählen Punkt zum Vergleich.</string>
+    
+    <!-- map geo point selection -->
+    <string name="geo_point_help">
+        Zoome und schwenke die Google Karte um das Zentrum des Vorschaubildes anzupassen.\n\n
+        Verwende die Regler um das Vorschaubild zu rotieren, zu schwenken und die Transparenz
+        einzustellen.\n\nKarten Buttons wächseln zwischen Karten udn Satelliten Ansicht.
+    </string>
+    <string name="geo_point_mapview_failure">
+        Kartenansicht kann nicht erstellt werden.\nKartenerstellung ist nicht möglich.
+    </string>
+    <string name="geo_point_rotate">Rotieren</string>
+    <string name="geo_point_scale">Skalieren</string>
+    <string name="geo_point_transparency">Transparenz</string>
+    
+    <!-- map editor -->
+    <string name="editor_help">
+        Benenne deine Karten und füge eine Beschreibung dazu für die Kartenliste.\n\nFüge 2-4
+        Kalibrierungspunkte hinzu um die Karte richtig zu positionieren und skalieren.\n\nÄndere 
+        oder lösche mit einen langem Druck auf den Kalibrierungspunkt.\n\nKarte nach nahc der 
+        Vorschau gespeichert werden.
+    </string>
+    <string name="editor_image_load_failed">Laden des Kartenbildes fehlgeschlagen</string>
+    <string name="editor_need_two_points">
+        Du musst mindestens 2 Kalibrierungpunkte hinzufügen bevor die Vorschau funktioniert
+    </string>
+    <string name="editor_map_save_failed">Speichern der Karte fehlgeschlagen</string>
+    <string name="editor_map_name">Karten Name</string>
+    <string name="editor_new_map">Neue Karte</string>
+    <string name="editor_description">Beschreibung</string>
+    <string name="editor_tiepoints">Kalibrierungspunkte</string>
+    
+    <!-- map preview -->
+    <string name="preview_help">
+        Prüfe die Lage des Kartenbildes indem du zoomst.\n\nZurück Buttons erlauben dir 
+        Kalibrierungspunkte zu ändern oder hinzuzufügen.\n\nINFO: Einige Kartenbilder können nicht
+        perfekt ausgerichtet werden.
+    </string>
+    <string name="preview_mapview_failure">
+        Kartenansicht kann nicht erstellt werden.\nKartenvorschau ist nicht möglich.
+    </string>
+    <string name="preview_transparency">Transparenz</string>
+    
+    <!-- edit preferences -->
+    <string name="metric_title">Metrische Einheiten verwenden</string>
+    <string name="metric_use_metric">Metrische Einheiten werden verwendet</string>
+    <string name="metric_use_english">Englische Einheiten werden verwendet</string>
+    <string name="multitouch_title">Zwei-Finger-Zoom erlauben</string>
+    <string name="multitouch_enable_pinch">Zwei-Finger-Zoom eingeschalten</string>
+    <string name="multitouch_disable_pinch">Zwei-Finger-Zoom ausgeschalten</string>
+    <string name="distance_title">Distanz anzeigen</string>
+    <string name="distance_show">Distanz vom Benutzer zur Bildschirmmitte wird angezeigt</string>
+    <string name="distance_hide">Distanz wird nicht angezeigt bzw. berechnet</string>
+    <string name="safety_reminder_title">Sicherheitsinfo anzeigen</string>
+    <string name="safety_reminder_show">Sicherheitsinfo wird beim Kartenwechsel angezeigt</string>
+    <string name="safety_reminder_hide">
+        Sicherheitsinfo wird beim Kartenwechsel nicht angezeigt
+    </string>
+    <string name="language_title">Wähle Sprache</string>
+    <string name="language_default">Standard</string>
+    <string name="language_selected_format">Ausgewählt %s</string>
+    <string name="max_map_img_size_title">Maximale Bildgrösse der Karte</string>
+    <string name="max_map_img_size">%.1f Megapixel</string>
+    <string name="about_custom_maps">Über Custom Maps</string>
+    
+    <!-- about dialog -->
+    <string name="version_label">Version</string>
+    <string name="credits_text">
+        <b>Spezieller Dank</b>\n
+        \u2022 Harlan Hile (Zwei-Finger-Zoom, Benutzerlokalisierungs-Icon)\n
+        \u2022 Patrick Steiner (Internationalisierung , Deutsche Übersetzung)
+    </string>
+    
+    <!-- button items -->
+    <string name="button_ok">OK</string>
+    <string name="button_close">Schließen</string>
+    <string name="button_accept_license">Lizenz akzeptieren</string>
+    <string name="button_cancel">Abbrechen</string>
+    <string name="button_save">Speichern</string>
+    <string name="button_add_point">Punkt hinzufügen</string>
+    <string name="button_preview">Vorschau</string>
+    <string name="button_accept">Akzeptieren</string>
+    
+    <!-- menu items -->
+    <string name="select_map">Wähle Karte</string>
+    <string name="my_location">Meine Position</string>
+    <string name="location_details">Positions Infos</string>
+    <string name="share_map">Teile Karte</string>
+    <string name="settings">Einstellungen</string>
+    <string name="create_map">Erstelle Karte</string>
+    <string name="modify_map">Ändere Karte</string>
+    <string name="delete_map">Lösche Karte</string>
+    <string name="map_cannot_modify">
+        Teil einer Kartensammlung. Kann nicht geändert oder gelöscht werden
+    </string>
+    <string name="select_point">Wähle Punkt</string>
+    <string name="adjust_tiepoint">Ändere Punkt</string>
+    <string name="delete_tiepoint">Lösche Punkt</string>
+    <string name="photos">Photos</string>
+    <string name="downloads">Downloads</string>
+    <string name="sdcard">SD card</string>
+
+</resources>

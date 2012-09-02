@@ -37,8 +37,6 @@ import java.util.List;
  * @author Marko Teittinen
  */
 public class AnnotationLayer extends View {
-  private static final String LOG_TAG = "Custom Maps";
-
   private Paint blackPaint;
   private Paint whitePaint;
   private Bitmap pushpin;

@@ -169,8 +169,8 @@
     <string name="version_label">version</string>
     <string name="credits_text">
         <b>Special thanks</b>\n
-        \u2022 Harlan Hile (pinch zoom, user location icon)\n
-        \u2022 Patrick Steiner (internationalization, German translation)
+        \u2022 <i>Harlan Hile</i> (pinch zoom, user location icon)\n
+        \u2022 <i>Patrick Steiner</i> (internationalization, German translation)
     </string>
     
     <!-- button items -->

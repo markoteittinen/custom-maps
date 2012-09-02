@@ -19,6 +19,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.MapApiKeys;
@@ -36,8 +37,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -57,8 +58,6 @@ public class PreviewMapActivity extends MapActivity {
   public static final String IMAGE_POINTS = EXTRA_PREFIX + ".ImagePoints";
   public static final String TIEPOINTS = EXTRA_PREFIX + ".Tiepoints";
   public static final String CORNER_GEO_POINTS = EXTRA_PREFIX + ".CornerGeoPoints";
-
-  private static final String LOG_TAG = "Custom Maps";
 
   private MapView mapView;
   private Button saveButton;
@@ -91,9 +90,9 @@ public class PreviewMapActivity extends MapActivity {
         mapView.setEnabled(true);
         mapView.setClickable(true);
       } catch (IllegalArgumentException ex) {
-        Log.e(LOG_TAG, "Failed to create a map matching the signature key");
+        Log.e(CustomMaps.LOG_TAG, "Failed to create a map matching the signature key");
         mapViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
-        mapViewLocation.setText("Failed to create a MapView.\nMap preview is not available.");
+        mapViewLocation.setText(R.string.preview_mapview_failure);
         Button saveButton = (Button) findViewById(R.id.save);
         saveButton.setEnabled(false);
         return;
@@ -130,9 +129,7 @@ public class PreviewMapActivity extends MapActivity {
     imageOverlay.setTransparency(50);
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_PREVIEW_CREATE,
-      "Verify the alignment of the map image by zooming and panning the map.\n\n" + //
-      "Back button allows you to adjust or add tiepoints.\n\n" + //
-      "NOTE: Some map images can not be aligned perfectly.");
+                                              getString(R.string.preview_help));
 
     // Compute geo location of map image center
     if (!imageOverlay.computeImageWarp(mapView)) {

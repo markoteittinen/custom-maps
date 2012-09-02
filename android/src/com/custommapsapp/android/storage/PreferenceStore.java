@@ -15,6 +15,7 @@
  */
 package com.custommapsapp.android.storage;
 
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.InertiaScroller;
 import com.custommapsapp.android.MapApiKeys;
 
@@ -34,8 +35,6 @@ import java.util.Locale;
  * @author Marko Teittinen
  */
 public class PreferenceStore {
-  private static final String LOG_TAG = "Custom Maps";
-
   public static final String PREFS_METRIC = "isMetric";
   public static final String PREFS_MULTITOUCH = "useMultitouch";
   public static final String PREFS_LASTMAP = "lastMap";
@@ -43,6 +42,7 @@ public class PreferenceStore {
   public static final String PREFS_SHOW_DISTANCE = "showDistance";
   public static final String PREFS_LICENSE_ACCEPTED = "licenseAccepted";
   public static final String PREFS_SHOW_REMINDER = "showReminder";
+  public static final String PREFS_LANGUAGE = "language";
   public static final String SHARED_PREFS_NAME = "com.custommapsapp.android.prefs";
 
   private static PreferenceStore instance; // singleton
@@ -85,7 +85,7 @@ public class PreferenceStore {
         version = String.format("%s (beta #%d)", info.versionName, info.versionCode);
       }
     } catch (NameNotFoundException e) {
-      Log.w(LOG_TAG, "Failed to find version info for app", e);
+      Log.w(CustomMaps.LOG_TAG, "Failed to find version info for app", e);
     }
     return version;
   }
@@ -128,6 +128,28 @@ public class PreferenceStore {
 
   public void setShowDistance(boolean showDistance) {
     prefs.edit().putBoolean(PREFS_SHOW_DISTANCE, showDistance).commit();
+  }
+
+  /**
+   * @return Two-character ISO code for the selected language or null.
+   */
+  public String getLanguage() {
+    String languageCode = prefs.getString(PREFS_LANGUAGE, "default");
+    if (languageCode.length() != 2) {
+      languageCode = null;
+    }
+    return languageCode;
+  }
+
+  /**
+   * Overrides system language with user selected one.
+   * @param languageCode Two-character ISO code for the language.
+   */
+  public void setLanguage(String languageCode) {
+    if (languageCode == null) {
+      languageCode = "default";
+    }
+    prefs.edit().putString(PREFS_LANGUAGE, languageCode).commit();
   }
 
   public boolean isFirstTime(String helpName) {

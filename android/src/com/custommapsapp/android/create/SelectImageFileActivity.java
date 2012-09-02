@@ -15,6 +15,7 @@
  */
 package com.custommapsapp.android.create;
 
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
@@ -31,6 +32,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,7 +62,6 @@ import java.util.List;
  * @author Marko Teittinen
  */
 public class SelectImageFileActivity extends Activity {
-  private static final String LOG_TAG = "Custom Maps";
   private static final String EXTRA_PREFIX = "com.custommapsapp.android";
   public static final String BITMAP_FILE = EXTRA_PREFIX + ".BitmapFile";
   private static final String SAVED_CURRENTDIR = EXTRA_PREFIX + ".CurrentDir";
@@ -85,9 +86,7 @@ public class SelectImageFileActivity extends Activity {
     prepareUI();
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_SELECT_IMAGE_FILE,
-        "Select a file containing a map image.\n\n" +
-        "Only use images for which you have permission.\n\n" +
-        "Menu contains links to folders containing your photos and internet downloads.");
+                                              getString(R.string.select_image_help));
   }
 
   @Override
@@ -128,19 +127,18 @@ public class SelectImageFileActivity extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    MenuItem item = null;
     File dir = FileUtil.getPhotosDirectory();
     if (dir.exists() && dir.isDirectory()) {
-      item = menu.add(Menu.NONE, MENU_PHOTOS, Menu.NONE, "Photos");
-      item.setIcon(android.R.drawable.ic_menu_gallery);
+      menu.add(Menu.NONE, MENU_PHOTOS, Menu.NONE, R.string.photos)
+          .setIcon(android.R.drawable.ic_menu_gallery);
     }
     dir = FileUtil.getDownloadsDirectory();
     if (dir.exists() && dir.isDirectory()) {
-      item = menu.add(Menu.NONE, MENU_DOWNLOADS, Menu.NONE, "Downloads");
-      item.setIcon(R.drawable.ic_menu_my_downloads);
+      menu.add(Menu.NONE, MENU_DOWNLOADS, Menu.NONE, R.string.downloads)
+          .setIcon(R.drawable.ic_menu_my_downloads);
     }
-    item = menu.add(Menu.NONE, MENU_SD_ROOT, Menu.NONE, "SD card");
-    item.setIcon(android.R.drawable.ic_menu_save);
+    menu.add(Menu.NONE, MENU_SD_ROOT, Menu.NONE, R.string.sdcard)
+        .setIcon(android.R.drawable.ic_menu_save);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;
   }
@@ -372,7 +370,8 @@ public class SelectImageFileActivity extends Activity {
     }
     // Need to resize image, but first verify target directory exists
     if (!FileUtil.verifyImageDir()) {
-      Log.e(LOG_TAG, "Failed to create directory for resized image file " + FileUtil.TMP_IMAGE);
+      Log.e(CustomMaps.LOG_TAG, "Failed to create directory for resized image file " +
+            FileUtil.TMP_IMAGE);
       // Attempt to use full size image
       return origImage;
     }
@@ -385,7 +384,7 @@ public class SelectImageFileActivity extends Activity {
     getWindowManager().getDefaultDisplay().getMetrics(metrics);
     options.inTargetDensity = metrics.densityDpi;
     options.inDensity =
-        (int) Math.ceil(Math.sqrt(pixelCount / (float) maxPixels) * metrics.densityDpi);
+        (int) FloatMath.ceil(FloatMath.sqrt(pixelCount / (float) maxPixels) * metrics.densityDpi);
     options.inScaled = true;
     // Garbage collect to maximize available memory for resizing
     System.gc();
@@ -405,9 +404,9 @@ public class SelectImageFileActivity extends Activity {
       copyImageOrientation(origImage, resizedImage);
       return resizedImage;
     } catch (OutOfMemoryError err) {
-      Log.e(LOG_TAG, "Failed to resize large image", err);
+      Log.e(CustomMaps.LOG_TAG, "Failed to resize large image", err);
     } catch (IOException ex) {
-      Log.e(LOG_TAG, "Failed to save resized image", ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to save resized image", ex);
     } finally {
       if (image != null && !image.isRecycled()) {
         image.recycle();
@@ -460,8 +459,7 @@ public class SelectImageFileActivity extends Activity {
           clearImageFileList();
           returnImageFile(f);
         } else {
-          displayError(selected.getFile().getName() + " is not a valid image file.\n"
-              + "You must select an image file.");
+          displayError(getString(R.string.select_image_invalid, selected.getFile().getName()));
         }
       }
     });
@@ -661,7 +659,7 @@ public class SelectImageFileActivity extends Activity {
       divider = divider / options.inSampleSize;
       options.inScaled = true;
       options.inTargetDensity = getResources().getDisplayMetrics().densityDpi;
-      options.inDensity = (int) Math.ceil(options.inTargetDensity * divider);
+      options.inDensity = (int) FloatMath.ceil(options.inTargetDensity * divider);
       return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
     }
   }

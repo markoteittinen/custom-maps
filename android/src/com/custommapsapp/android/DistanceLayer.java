@@ -48,6 +48,9 @@ public class DistanceLayer extends View {
   private float textSizePt = 10;
   private float paddingPt = 4;
 
+  private transient Rect distanceBox = new Rect();
+  private transient RectF roundDistanceBox = new RectF();
+
   public DistanceLayer(Context context, AttributeSet attrs) {
     super(context, attrs);
 
@@ -111,7 +114,7 @@ public class DistanceLayer extends View {
     // Compute the pixel size of the distanceStr
     // -- set font size based on canvas density (dpi)
     textPaint.setTextSize(ptsToPixels(textSizePt, canvas));
-    Rect distanceBox = new Rect();
+    distanceBox.setEmpty();
     textPaint.getTextBounds(distanceStr, 0, distanceStr.length(), distanceBox);
     distanceBox.offsetTo(0, 0);
     int padding = Math.round(ptsToPixels(paddingPt, canvas));
@@ -123,7 +126,8 @@ public class DistanceLayer extends View {
     backgroundPaint.setStyle(Paint.Style.FILL);
     textPaint.setStrokeWidth(1f);
     textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-    canvas.drawRoundRect(new RectF(distanceBox), padding, padding, backgroundPaint);
+    roundDistanceBox.set(distanceBox);
+    canvas.drawRoundRect(roundDistanceBox, padding, padding, backgroundPaint);
     canvas.drawText(distanceStr, distanceBox.exactCenterX(), baseline, textPaint);
 
     // Draw center circles

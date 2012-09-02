@@ -23,7 +23,7 @@
             android:id="@+id/selectPoint"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Accept"
+            android:text="@string/button_accept"
         />
     </LinearLayout>
     <LinearLayout
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="left|center_vertical"
-            android:text="Rotate"
+            android:text="@string/geo_point_rotate"
         />
         <SeekBar
             android:id="@+id/rotateBar"
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="left|center_vertical"
-            android:text="Scale"
+            android:text="@string/geo_point_scale"
         />
         <SeekBar
             android:id="@+id/scaleBar"
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="left|center_vertical"
-            android:text="Transparency"
+            android:text="@string/geo_point_transparency"
         />
         <SeekBar
             android:id="@+id/transparencyBar"

@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -32,8 +33,6 @@ import android.view.View;
  * @author Marko Teittinen
  */
 public class ImageDisplay extends View {
-  private static final String LOG_TAG = "Custom Maps";
-
   private Bitmap image;
   private int imageW;
   private int imageH;
@@ -253,7 +252,7 @@ public class ImageDisplay extends View {
     private float yFriction = 0f;
 
     public void start(float xv, float yv) {
-      float speed = (float) Math.sqrt(xv * xv + yv * yv);
+      float speed = FloatMath.sqrt(xv * xv + yv * yv);
       float percent = friction / speed;
       xFriction = percent * xv;
       yFriction = percent * yv;

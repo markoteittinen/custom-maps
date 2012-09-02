@@ -20,12 +20,10 @@ import com.google.android.maps.MapView;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.util.Log;
-
-import java.util.HashMap;
-import java.util.Map;
+import android.util.SparseArray;
 
 /**
  * Utility class that helps managing Google Maps API keys.
@@ -35,17 +33,17 @@ import java.util.Map;
 public class MapApiKeys {
   // Marko's personal release API key
   private static final String MARKO_RELEASE_API_KEY = "0ZlhFjlu41t90_E0MJzSFfldUgbbjowXaiQZzlQ";
-  private static final Map<Integer, String> signatureHashToApiKey;
+  private static final SparseArray<String> signatureHashToApiKey;
 
   static {
-    signatureHashToApiKey = new HashMap<Integer, String>();
+    signatureHashToApiKey = new SparseArray<String>();
     // Marko's release key
     signatureHashToApiKey.put(0x1476E4EA, MARKO_RELEASE_API_KEY);
     // Add your personal signature hash to ApiKey mappings here
     // But do not submit them to source code repository
 
     // Example: Marko's debug key
-    signatureHashToApiKey.put(0x0132E8A3, "0ZlhFjlu41t-P9PnBmxwGQdp-4E_drxWLZ4xmPQ");
+    signatureHashToApiKey.put(0x242A7F00, "0ZlhFjlu41t9FUivMR9xgoAsPOdhjyKZ6nalMCQ");
   }
 
   /**
@@ -73,7 +71,7 @@ public class MapApiKeys {
         if (apiKey != null) {
           return apiKey;
         }
-        Log.i("MapApiKeys", String.format("Unknown signature hash: 0x%X", sigHash));
+        Log.i("MapApiKeys", String.format("--- Unknown signature hash: 0x%X", sigHash));
       }
     } catch (NameNotFoundException e) {
       Log.e("MapApiKeys", "Context package name was invalid", e);

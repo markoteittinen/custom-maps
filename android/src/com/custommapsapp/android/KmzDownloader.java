@@ -50,15 +50,11 @@ import java.util.Set;
  * @author Marko Teittinen
  */
 public class KmzDownloader extends Activity {
-  private static final String LOG_TAG = "Custom Maps";
-
   private static final String PREFIX = "com.custommapsapp.android";
   public static final String URL = PREFIX + ".URL";
   public static final String LOCAL_FILE = PREFIX + ".LocalFile";
 
   private static final String DEFAULT_NAME = "custommap.kmz";
-
-  private static final String PROGRESS_FORMAT = "Unknown map size. Downloaded %,d kB.";
 
   // Note: UNKNOWN_SIZE matches "undefined content length" value returned by
   // URLConnection.getContentLength()
@@ -89,7 +85,7 @@ public class KmzDownloader extends Activity {
       mapUrl = null;
     }
     if (mapUrl == null) {
-      Log.e(LOG_TAG, "KmzDownloader invoked with an invalid URL: " + urlString);
+      Log.e(CustomMaps.LOG_TAG, "KmzDownloader invoked with an invalid URL: " + urlString);
       cancelActivity(null);
       return;
     }
@@ -102,7 +98,7 @@ public class KmzDownloader extends Activity {
 
     progressBar.setProgress(0);
     progressBar.setMax(100);
-    progressDetails.setText(String.format(PROGRESS_FORMAT, 0));
+    progressDetails.setText(getString(R.string.progress_format, 0));
     if (progressDisplay.getCurrentView() != progressBar) {
       progressDisplay.showNext();
     }
@@ -117,7 +113,7 @@ public class KmzDownloader extends Activity {
       progressBar.setMax(totalSize);
       progressBar.setProgress(bytesDone);
     } else {
-      progressDetails.setText(String.format(PROGRESS_FORMAT, bytesDone / 1024));
+      progressDetails.setText(getString(R.string.progress_format, bytesDone / 1024));
     }
     progressDisplay.invalidate();
   }
@@ -142,7 +138,7 @@ public class KmzDownloader extends Activity {
     if (downloadTask != null) {
       downloadTask.cancel(true);
     }
-    cancelActivity("Map download canceled");
+    cancelActivity(getString(R.string.download_canceled));
   }
 
   private void cancelActivity(String message) {
@@ -154,7 +150,7 @@ public class KmzDownloader extends Activity {
   }
 
   private void returnActivityResult(File localFile) {
-    Toast.makeText(this, "Map downloaded successfully", Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, R.string.download_successful, Toast.LENGTH_SHORT).show();
     Intent resultIntent = getIntent();
     resultIntent.putExtra(LOCAL_FILE, localFile.getAbsolutePath());
     setResult(RESULT_OK, resultIntent);
@@ -171,7 +167,7 @@ public class KmzDownloader extends Activity {
   private String createLocalPath(URL mapUrl) {
     // Check that app data directory exists or can be created
     if (!FileUtil.verifyDataDir()) {
-      cancelActivity("Custom Maps cannot find SD card to save map to.\nDownload canceled.");
+      cancelActivity(getString(R.string.download_no_datadir));
       return null;
     }
     File localDir = FileUtil.getDataDirectory();
@@ -248,6 +244,7 @@ public class KmzDownloader extends Activity {
 
       HttpURLConnection conn = null;
       OutputStream out = null;
+      BufferedInputStream in = null;
       File resultFile = new File(fileName);
       try {
         // Open connection to map file
@@ -264,7 +261,7 @@ public class KmzDownloader extends Activity {
         out = new BufferedOutputStream(new FileOutputStream(resultFile));
 
         // Download the file (in 1kB blocks)
-        BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
+        in = new BufferedInputStream(conn.getInputStream());
         int n;
         byte[] buffer = new byte[1024];
         while ((n = in.read(buffer)) > 0) {
@@ -280,20 +277,16 @@ public class KmzDownloader extends Activity {
         out.flush();
       } catch (Exception ex) {
         // Error occurred during download, log it and return 'null' for error
-        Log.e(LOG_TAG, String.format("Map download failed from %s to %s", mapUrl, fileName), ex);
+        Log.e(CustomMaps.LOG_TAG,
+              String.format("Map download failed from %s to %s", mapUrl, fileName), ex);
         return null;
       } finally {
         // All done, close open streams
         if (conn != null) {
+          FileUtil.tryToClose(in);
           conn.disconnect();
         }
-        if (out != null) {
-          try {
-            out.close();
-          } catch (IOException ex) {
-            // Ignore
-          }
-        }
+        FileUtil.tryToClose(out);
       }
       // Successful completion, return File object pointing to new map
       return resultFile;
@@ -314,7 +307,7 @@ public class KmzDownloader extends Activity {
         returnActivityResult(mapFile);
       } else {
         // An error occurred during the download, notify user
-        cancelActivity(String.format("Failed to download map from %s", mapUrl));
+        cancelActivity(getString(R.string.download_failed, mapUrl));
       }
     }
 

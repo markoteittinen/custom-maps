@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#FFFFFFFF"
-    android:padding="2pt"
+    android:padding="4pt"
     >
     <ImageView
         android:id="@+id/appLogo"
@@ -24,10 +24,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="none"
+        android:text="@string/app_name"
         android:textSize="10pt"
         android:textStyle="bold"
         android:textColor="#ff000000"
-        android:text="@string/app_name"
         />
     <TextView
         android:id="@+id/version"
@@ -38,7 +38,7 @@
         android:inputType="none"
         android:textSize="6pt"
         android:textColor="#ff000000"
-        android:text="version"
+        android:text="@string/version_label"
         android:visibility="visible"
         />
     <TextView
@@ -53,9 +53,27 @@
         android:textColor="#ff000000"
         android:text="@string/author"
         />
+    
+    <ScrollView
+        android:id="@+id/credits"
+        android:layout_width="fill_parent"
+        android:layout_height="34pt"
+        android:layout_below="@id/appLogo"
+        android:layout_marginTop="4pt"
+        android:background="#f4f4ff" >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:padding="2pt"
+            android:text="@string/credits_text"
+            android:textColor="#000000"
+            android:textSize="6pt" />
+    </ScrollView>
+    
     <TextView
         android:id="@+id/open_source"
-        android:layout_below="@id/appLogo"
+        android:layout_below="@id/credits"
         android:layout_alignParentLeft="true" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -74,41 +92,41 @@
         android:layout_marginTop="6pt"
         android:layout_marginBottom="6pt"
         >
-    <TextView
-        android:id="@+id/apache_license"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff0000cc"
-        android:text="@string/apache_license"
-        />
-    <TextView
-        android:id="@+id/google_code"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6pt"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff0000cc"
-        android:text="@string/google_code"
-        />
-    <TextView
-        android:id="@+id/homepage"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6pt"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff0000cc"
-        android:text="@string/app_home"
-        />
+        <TextView
+            android:id="@+id/apache_license"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:textSize="6pt"
+            android:textColor="#ff0000cc"
+            android:text="@string/apache_license"
+            />
+        <TextView
+            android:id="@+id/google_code"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6pt"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:textSize="6pt"
+            android:textColor="#ff0000cc"
+            android:text="@string/google_code"
+            />
+        <TextView
+            android:id="@+id/homepage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6pt"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:textSize="6pt"
+            android:textColor="#ff0000cc"
+            android:text="@string/app_home"
+            />
     </LinearLayout>
 
     <Button
@@ -117,7 +135,7 @@
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept License"
+        android:text="@string/button_accept_license"
     />
     <Button
         android:id="@+id/doNotAgreeButton"
@@ -125,6 +143,6 @@
         android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Close"
+        android:text="@string/button_close"
     />
 </RelativeLayout>

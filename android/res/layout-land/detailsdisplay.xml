@@ -7,10 +7,11 @@
   android:layout_marginLeft="4dp"
   android:layout_marginRight="4dp"
   >
-  <TextView android:text="Longitude"
+  <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
+    android:text="@string/longitude"
     android:textStyle="bold"
     android:textColor="#eeeeee"
     />
@@ -23,10 +24,11 @@
     android:gravity="right"
     android:textColor="#ffffff"
     />
-  <TextView android:text="Latitude"
+  <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
+    android:text="@string/latitude"
     android:textStyle="bold"
     android:textColor="#eeeeee"
     />
@@ -39,10 +41,11 @@
     android:gravity="right"
     android:textColor="#ffffff"
     />
-  <TextView android:text="Altitude"
+  <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
+    android:text="@string/altitude"
     android:textStyle="bold"
     android:textColor="#eeeeee"
     />
@@ -55,10 +58,11 @@
     android:gravity="right"
     android:textColor="#ffffff"
     />
-  <TextView android:text="Heading"
+  <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
+    android:text="@string/heading"
     android:textStyle="bold"
     android:textColor="#eeeeee"
     />
@@ -71,10 +75,11 @@
     android:gravity="right"
     android:textColor="#ffffff"
     />
-  <TextView android:text="Speed"
+  <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
+    android:text="@string/speed"
     android:textStyle="bold"
     android:textColor="#eeeeee"
     />
@@ -87,10 +92,11 @@
     android:gravity="right"
     android:textColor="#ffffff"
     />
-  <TextView android:text="Accuracy" 
+  <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
+    android:text="@string/accuracy"
     android:textStyle="bold"
     android:textColor="#eeeeee"
     />

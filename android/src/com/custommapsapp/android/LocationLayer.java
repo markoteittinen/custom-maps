@@ -46,6 +46,8 @@ public class LocationLayer extends View {
   private float heading;
   private float speedMps = 0f;  // m/s
 
+  private transient Matrix headingMatrix = new Matrix();
+
   public LocationLayer(Context context, AttributeSet attrs) {
     super(context, attrs);
 
@@ -160,7 +162,7 @@ public class LocationLayer extends View {
     int w = image.getWidth();
     int h = image.getHeight();
     // Rotate arrow head to correct orientation
-    Matrix headingMatrix = new Matrix();
+    headingMatrix.reset();
     headingMatrix.postTranslate(-(w / 2f), -(h / 2f));
     headingMatrix.postRotate(heading + mapAngle);
     // Subtly scale pointer based on zoom level, so zoom 0.25->0.4 and zoom 4->1
