@@ -61,8 +61,6 @@ public class BitmapPointActivity extends Activity {
   private static final String CENTER_POINT = EXTRA_PREFIX + ".CenterPoint";
   private static final String SCALE = EXTRA_PREFIX + ".Scale";
 
-  private static final String LOG_TAG = "Custom Maps";
-
   private ImageDisplay imageDisplay;
   private Bitmap image = null;
   private Button selectPoint;
@@ -88,7 +86,7 @@ public class BitmapPointActivity extends Activity {
 
     String fileName = getIntent().getStringExtra(BITMAP_FILE);
     if (fileName == null) {
-      Toast.makeText(this, "No map image specified, can't select point", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, R.string.image_point_no_image, Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
       finish();
     }
@@ -101,7 +99,7 @@ public class BitmapPointActivity extends Activity {
       imageDisplay.setOrientation(orientation);
       imageDisplay.setCenterPoint(new PointF(image.getWidth() / 2f, image.getHeight() / 2f));
     } else {
-      Toast.makeText(this, "Selected map image is too large", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, R.string.map_too_large, Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
       finish();
     }
@@ -133,9 +131,7 @@ public class BitmapPointActivity extends Activity {
     });
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_BITMAP_POINT,
-        "Select a point to be located on a Google map.\n\n" + //
-        "Select points far apart for best results.\n\n" + //
-        "Avoid selecting points between previous points.");
+                                              getString(R.string.image_point_help));
   }
 
   @Override
@@ -187,7 +183,7 @@ public class BitmapPointActivity extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    menu.add(Menu.NONE, MENU_SELECT_POINT, Menu.NONE, "Select point");
+    menu.add(Menu.NONE, MENU_SELECT_POINT, Menu.NONE, R.string.select_point);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;
   }

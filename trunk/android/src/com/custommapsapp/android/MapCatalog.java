@@ -40,8 +40,6 @@ import java.util.zip.ZipFile;
  * @author Marko Teittinen
  */
 public class MapCatalog {
-  private static final String LOG_TAG = "Custom Maps";
-
   private File dataDir;
   private List<GroundOverlay> allMaps = new ArrayList<GroundOverlay>();
   private List<GroundOverlay> inMaps = new ArrayList<GroundOverlay>();
@@ -80,7 +78,7 @@ public class MapCatalog {
             return map;
           }
         } catch (Exception ex) {
-          Log.w(LOG_TAG, "Failed to parse KML file: " + sibling.toString(), ex);
+          Log.w(CustomMaps.LOG_TAG, "Failed to parse KML file: " + sibling.toString(), ex);
         }
       }
     }
@@ -213,7 +211,7 @@ public class MapCatalog {
           allMaps.add(overlay);
         }
       } catch (Exception ex) {
-        Log.w(LOG_TAG, "Failed to parse KML file: " + kmlInfo.toString(), ex);
+        Log.w(CustomMaps.LOG_TAG, "Failed to parse KML file: " + kmlInfo.toString(), ex);
       }
     }
   }
@@ -245,7 +243,7 @@ public class MapCatalog {
           kmzFile = new ZipFile(file);
         } catch (Exception ex) {
           // TODO: Add a notification dialog (?)
-          Log.w(LOG_TAG, "Not a valid KMZ file: " + file.getName(), ex);
+          Log.w(CustomMaps.LOG_TAG, "Not a valid KMZ file: " + file.getName(), ex);
           continue;
         }
         Enumeration<? extends ZipEntry> kmzContents = kmzFile.entries();

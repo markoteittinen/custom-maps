@@ -20,6 +20,8 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
+import com.custommapsapp.android.CustomMaps;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -37,8 +39,6 @@ import java.util.List;
  * @author Marko Teittinen
  */
 public class WarpedImageOverlay extends Overlay {
-  private static final String LOG_TAG = "Custom Maps";
-
   private List<Point> imagePoints;
   private List<GeoPoint> geoPoints;
   private List<Point> screenPoints;
@@ -171,7 +171,7 @@ public class WarpedImageOverlay extends Overlay {
     }
     Matrix result = new Matrix();
     if (!result.setPolyToPoly(imageCorners, 0, geoCorners, 0, 4)) {
-      Log.w(LOG_TAG, "Failed to create image-to-geo matrix");
+      Log.w(CustomMaps.LOG_TAG, "Failed to create image-to-geo matrix");
     }
     return result;
   }

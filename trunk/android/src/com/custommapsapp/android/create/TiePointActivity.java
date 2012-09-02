@@ -20,6 +20,7 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.MapApiKeys;
 import com.custommapsapp.android.R;
@@ -36,8 +37,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -55,8 +56,6 @@ public class TiePointActivity extends MapActivity {
   public static final String IMAGE_POINT = EXTRA_PREFIX + ".ImagePoint";
   public static final String RESTORE_SETTINGS = EXTRA_PREFIX + ".RestoreSettings";
   public static final String GEO_POINT_E6 = EXTRA_PREFIX + ".GeoPointE6";
-
-  private static final String LOG_TAG = "Custom Maps";
 
   private MapView mapView;
   private ImageButton mapModeButton;
@@ -86,10 +85,10 @@ public class TiePointActivity extends MapActivity {
         mapView.setEnabled(true);
         mapView.setClickable(true);
       } catch (IllegalArgumentException ex) {
-        Log.e(LOG_TAG, "Failed to create a map matching the signature key");
+        Log.e(CustomMaps.LOG_TAG, "Failed to create a map matching the signature key");
         setContentView(mapViewLocation);
         mapViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
-        mapViewLocation.setText("Failed to create a MapView.\nMap creation is not available.");
+        mapViewLocation.setText(R.string.geo_point_mapview_failure);
         return;
       }
     }
@@ -121,9 +120,7 @@ public class TiePointActivity extends MapActivity {
     }
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_TIE_POINT,
-      "Zoom and pan Google map to match the center of the thumbnail.\n\n" + //
-      "Use the sliders to rotate and scale the thumbnail, and to adjust its transparency.\n\n" +
-      "Map button toggles map view and satellite view.");
+                                              getString(R.string.geo_point_help));
   }
 
   @Override
@@ -200,8 +197,8 @@ public class TiePointActivity extends MapActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    menu.add(Menu.NONE, MENU_USER_LOCATION, Menu.NONE, "My location").setIcon(
-        android.R.drawable.ic_menu_mylocation);
+    menu.add(Menu.NONE, MENU_USER_LOCATION, Menu.NONE, R.string.my_location)
+        .setIcon(android.R.drawable.ic_menu_mylocation);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;
   }

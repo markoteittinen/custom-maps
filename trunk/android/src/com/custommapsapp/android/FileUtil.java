@@ -25,6 +25,7 @@ import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,7 +40,6 @@ import java.io.OutputStream;
  * @author Marko Teittinen
  */
 public class FileUtil {
-  private static final String LOG_TAG = "Custom Maps";
   public static final String SD_ROOT_PATH = "/sdcard";
   public static final String DATA_DIR = SD_ROOT_PATH + "/CustomMaps";
   public static final String IMAGE_DIR = DATA_DIR + "/images";
@@ -131,7 +131,7 @@ public class FileUtil {
     try {
       return file.getCanonicalPath();
     } catch (IOException ex) {
-      Log.w(LOG_TAG, "Failed to resolve canonical path for: " + file, ex);
+      Log.w(CustomMaps.LOG_TAG, "Failed to resolve canonical path for: " + file, ex);
     }
     return file.getAbsolutePath();
   }
@@ -189,10 +189,10 @@ public class FileUtil {
 
       return destination;
     } catch (IOException e) {
-      Log.w(LOG_TAG, "Failed to copy file to data directory: " + file, e);
+      Log.w(CustomMaps.LOG_TAG, "Failed to copy file to data directory: " + file, e);
     } finally {
-      tryToCloseInStream(in);
-      tryToCloseOutStream(out);
+      tryToClose(in);
+      tryToClose(out);
     }
     return null;
   }
@@ -215,7 +215,7 @@ public class FileUtil {
         return destination;
       }
     } catch (IOException e) {
-      Log.w(LOG_TAG, "Failed to move file to data directory: " + file, e);
+      Log.w(CustomMaps.LOG_TAG, "Failed to move file to data directory: " + file, e);
     }
     return null;
   }
@@ -241,12 +241,12 @@ public class FileUtil {
       return resultFile;
     } catch (Exception e) {
       // Failed to save file, log failure and return false
-      Log.w(LOG_TAG, "Failed to save KMZ Content from Uri: " + contentUri.toString(), e);
+      Log.w(CustomMaps.LOG_TAG, "Failed to save KMZ Content from Uri: " + contentUri.toString(), e);
       return null;
     } finally {
       // Close streams
-      tryToCloseInStream(in);
-      tryToCloseOutStream(out);
+      tryToClose(in);
+      tryToClose(out);
     }
   }
 
@@ -275,23 +275,12 @@ public class FileUtil {
     to.flush();
   }
 
-  private static void tryToCloseInStream(InputStream in) {
-    if (in == null) {
+  public static void tryToClose(Closeable stream) {
+    if (stream == null) {
       return;
     }
     try {
-      in.close();
-    } catch (IOException ex) {
-      // Ignore
-    }
-  }
-
-  private static void tryToCloseOutStream(OutputStream out) {
-    if (out == null) {
-      return;
-    }
-    try {
-      out.close();
+      stream.close();
     } catch (IOException ex) {
       // Ignore
     }
@@ -308,14 +297,15 @@ public class FileUtil {
     Intent sendMap = new Intent();
     sendMap.setAction(Intent.ACTION_SEND);
     sendMap.setType("application/vnd.google-earth.kmz");
-    sendMap.putExtra(Intent.EXTRA_SUBJECT, "I would like to share a map with you");
+    sendMap.putExtra(Intent.EXTRA_SUBJECT, sender.getString(R.string.share_message_subject));
     File mapFile = map.getKmlInfo().getFile();
     sendMap.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(mapFile));
     try {
-      sender.startActivity(Intent.createChooser(sendMap, "Send map with..."));
+      sender.startActivity(Intent.createChooser(sendMap,
+                                                sender.getString(R.string.share_chooser_title)));
       return true;
     } catch (Exception e) {
-      Log.w(LOG_TAG, "Sharing of map failed", e);
+      Log.w(CustomMaps.LOG_TAG, "Sharing of map failed", e);
       return false;
     }
   }

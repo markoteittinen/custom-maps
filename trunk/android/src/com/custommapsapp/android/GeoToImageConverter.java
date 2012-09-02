@@ -20,9 +20,9 @@ import com.custommapsapp.android.kml.GroundOverlay;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
+import android.util.FloatMath;
 import android.util.Log;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -32,7 +32,6 @@ import java.io.InputStream;
  * @author Marko Teittinen
  */
 public class GeoToImageConverter {
-  private static final String LOG_TAG = "Custom Maps";
   private GroundOverlay mapData;
   private int imageWidth;
   private int imageHeight;
@@ -214,7 +213,7 @@ public class GeoToImageConverter {
 
   private float latitudeToMercator(float latitude) {
     latitude = toRadians(latitude);
-    return (float) Math.log(Math.tan(latitude) + 1f / Math.cos(latitude));
+    return (float) Math.log(Math.tan(latitude) + 1f / FloatMath.cos(latitude));
   }
 
   private float latitudeFromMercator(float mercator) {
@@ -308,7 +307,7 @@ public class GeoToImageConverter {
     }
     geoToImageMatrix = temp;
     if (!success) {
-      Log.w(LOG_TAG, "FAILED to initialize geoToImageMatrix from rotation");
+      Log.w(CustomMaps.LOG_TAG, "FAILED to initialize geoToImageMatrix from rotation");
     }
   }
 
@@ -335,7 +334,7 @@ public class GeoToImageConverter {
     // Find matrix mapping geoCorners to imageCorners
     geoToImageMatrix = new Matrix();
     if (!geoToImageMatrix.setPolyToPoly(geoCorners, 0, imageCorners, 0, 4)) {
-      Log.w(LOG_TAG, "FAILED to initialize geoToImageMatrix from tie points");
+      Log.w(CustomMaps.LOG_TAG, "FAILED to initialize geoToImageMatrix from tie points");
     }
   }
 
@@ -357,13 +356,7 @@ public class GeoToImageConverter {
     } catch (Exception ex) {
       return false;
     } finally {
-      if (in != null) {
-        try {
-          in.close();
-        } catch (IOException ex) {
-          // Ignore, can't really help
-        }
-      }
+      FileUtil.tryToClose(in);
     }
   }
 }

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:textSize="10pt"
-        android:text="Select point"
+        android:text="@string/select_point"
         />
     <view
         class="com.custommapsapp.android.create.ImageDisplay"
@@ -34,9 +34,12 @@
         android:id="@+id/zoomOut"
         android:layout_alignBottom="@id/imageDisplay"
         android:layout_alignLeft="@id/imageDisplay"
-        android:layout_margin="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
         android:src="@drawable/zoomout"
         android:background="#00000000"
         />
@@ -44,9 +47,12 @@
         android:id="@+id/zoomIn"
         android:layout_alignBottom="@id/imageDisplay"
         android:layout_alignRight="@id/imageDisplay"
-        android:layout_margin="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
         android:src="@drawable/zoomin"
         android:background="#00000000"
         />
@@ -61,6 +67,6 @@
         android:background="#C0FFFFFF"
         android:textColor="#C0000000"
         android:textSize="8pt"
-        android:text="Select point to be matched"
+        android:text="@string/image_point_select_for_matching"
         />
 </RelativeLayout>

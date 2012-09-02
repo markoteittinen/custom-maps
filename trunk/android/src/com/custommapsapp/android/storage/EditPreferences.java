@@ -16,32 +16,55 @@
 package com.custommapsapp.android.storage;
 
 import com.custommapsapp.android.AboutDialog;
+import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.InertiaScroller;
 import com.custommapsapp.android.MemoryUtil;
+import com.custommapsapp.android.R;
 
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * EditPreferences is the PreferenceActivity for Custom Maps. Currently
  * supported preferences: <ul>
  * <li> isMetric (bool) - selects between metric and English units
  * <li> useMultitouch (bool) - selects if multitouch is enabled (if available)
+ * <li> distanceDisplay (bool) - selects if distance to center of map is displayed
+ * <li> safetyReminder (bool) - selects if safety reminder is shown when a map is opened
+ * <li> language (string) - allows user to override system language preference
  * </ul>
  *
  * @author Marko Teittinen
  */
 public class EditPreferences extends PreferenceActivity {
-  private static final String LOG_TAG = "Custom Maps";
+  private static final String PREFIX = "com.custommapsapp.android";
+  public static final String LANGUAGE_CHANGED = PREFIX + ".LanguageChanged";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getPreferenceManager().setSharedPreferencesName(PreferenceStore.SHARED_PREFS_NAME);
+    reloadUI();
+    // Prepare result so that calling activity will be notified on exit
+    getIntent().putExtra(LANGUAGE_CHANGED, false);
+    setResult(RESULT_OK, getIntent());
+  }
+
+  private void reloadUI() {
     setPreferenceScreen(createPreferenceScreen());
   }
 
@@ -53,9 +76,9 @@ public class EditPreferences extends PreferenceActivity {
     CheckBoxPreference isMetric = new CheckBoxPreference(this);
     isMetric.setDefaultValue(PreferenceStore.isMetricLocale());
     isMetric.setKey(PreferenceStore.PREFS_METRIC);
-    isMetric.setTitle("Use metric units");
-    isMetric.setSummaryOff("Now using English units");
-    isMetric.setSummaryOn("Now using metric units");
+    isMetric.setTitle(R.string.metric_title);
+    isMetric.setSummaryOff(R.string.metric_use_english);
+    isMetric.setSummaryOn(R.string.metric_use_metric);
     root.addPreference(isMetric);
 
     // Multitouch preference, aka "pinch zoom"
@@ -63,9 +86,9 @@ public class EditPreferences extends PreferenceActivity {
       CheckBoxPreference useMultitouch = new CheckBoxPreference(this);
       useMultitouch.setDefaultValue(Boolean.TRUE);
       useMultitouch.setKey(PreferenceStore.PREFS_MULTITOUCH);
-      useMultitouch.setTitle("Allow pinch zoom");
-      useMultitouch.setSummaryOff("Pinch zooming disabled");
-      useMultitouch.setSummaryOn("Pinch zooming enabled");
+      useMultitouch.setTitle(R.string.multitouch_title);
+      useMultitouch.setSummaryOff(R.string.multitouch_disable_pinch);
+      useMultitouch.setSummaryOn(R.string.multitouch_enable_pinch);
       root.addPreference(useMultitouch);
     }
 
@@ -73,19 +96,23 @@ public class EditPreferences extends PreferenceActivity {
     CheckBoxPreference distanceDisplay = new CheckBoxPreference(this);
     distanceDisplay.setDefaultValue(false);
     distanceDisplay.setKey(PreferenceStore.PREFS_SHOW_DISTANCE);
-    distanceDisplay.setTitle("Display distance");
-    distanceDisplay.setSummaryOn("Displays distance from user location to center of screen");
-    distanceDisplay.setSummaryOff("Distance is not displayed or computed");
+    distanceDisplay.setTitle(R.string.distance_title);
+    distanceDisplay.setSummaryOn(R.string.distance_show);
+    distanceDisplay.setSummaryOff(R.string.distance_hide);
     root.addPreference(distanceDisplay);
 
     // Display safety reminder when map is changed preference
     CheckBoxPreference safetyReminder = new CheckBoxPreference(this);
     safetyReminder.setDefaultValue(true);
     safetyReminder.setKey(PreferenceStore.PREFS_SHOW_REMINDER);
-    safetyReminder.setTitle("Show safety reminder");
-    safetyReminder.setSummaryOn("Safety reminder will be shown when map is changed");
-    safetyReminder.setSummaryOff("Safety reminder will not be shown when map is changed");
+    safetyReminder.setTitle(R.string.safety_reminder_title);
+    safetyReminder.setSummaryOn(R.string.safety_reminder_show);
+    safetyReminder.setSummaryOff(R.string.safety_reminder_hide);
     root.addPreference(safetyReminder);
+
+    // Display language selection option
+    Preference language = createLanguagePreference();
+    root.addPreference(language);
 
     // About dialog
     Preference about = createAboutPreference();
@@ -102,67 +129,108 @@ public class EditPreferences extends PreferenceActivity {
     return root;
   }
 
-  private Preference createImageSizeInfo() {
-    Preference imageSizeInfo = new Preference(this);
-    imageSizeInfo.setSelectable(false);
-    imageSizeInfo.setTitle("Maximum map image size");
-    float megaPixels = MemoryUtil.getMaxImagePixelCount(this) / 1E6f;
-    imageSizeInfo.setSummary(String.format("%.1f megapixels", megaPixels));
-    return imageSizeInfo;
-  }
-
   private Preference createAboutPreference() {
     Preference aboutPreference = new Preference(this);
-    aboutPreference.setTitle("About Custom Maps");
+    aboutPreference.setTitle(R.string.about_custom_maps);
     aboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
       @Override
       public boolean onPreferenceClick(Preference preference) {
-        showAboutDialog();
+        showDialog(DIALOG_ABOUT);
         return true;
       }
     });
     return aboutPreference;
   }
 
+  private ListPreference createLanguagePreference() {
+    ListPreference language = new ListPreference(this);
+    language.setKey(PreferenceStore.PREFS_LANGUAGE);
+    language.setTitle(R.string.language_title);
+    // Create a list of all available languages
+    List<Locale> languages = new ArrayList<Locale>();
+    languages.add(Locale.ENGLISH);
+    languages.add(Locale.GERMAN);
+    languages.add(new Locale("fi"));
+    // Sort languages by their localized display name
+    final Collator stringComparator = Collator.getInstance(Locale.getDefault());
+    Collections.sort(languages, new Comparator<Locale>() {
+      @Override
+      public int compare(Locale lhs, Locale rhs) {
+        return stringComparator.compare(lhs.getDisplayLanguage(lhs), rhs.getDisplayLanguage(rhs));
+      }
+    });
+    // Create display and value arrays, use "default" as first entry
+    String[] languageNames = new String[languages.size() + 1];
+    String[] languageCodes = new String[languages.size() + 1];
+    languageNames[0] = getString(R.string.language_default);
+    languageCodes[0] = "default";
+    int idx = 1;
+    for (Iterator<Locale> iter = languages.iterator(); iter.hasNext(); idx++) {
+      Locale locale = iter.next();
+      languageNames[idx] = locale.getDisplayLanguage(locale);
+      languageCodes[idx] = locale.getLanguage();
+    }
+    language.setEntryValues(languageCodes);
+    language.setEntries(languageNames);
+    // Create summary value showing current language
+    language.setDefaultValue(languageCodes[0]);
+    String selected = PreferenceStore.instance(this).getLanguage();
+    if (selected == null || selected.length() != 2) {
+      selected = languageNames[0];
+    } else {
+      Locale tmp = new Locale(selected);
+      selected = tmp.getDisplayLanguage(tmp);
+    }
+    language.setSummary(getString(R.string.language_selected_format, selected));
+    // Prepare dialog
+    language.setDialogTitle(R.string.language_title);
+    language.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+      @Override
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        // Update language used by app on user selection
+        CustomMapsApp app = (CustomMapsApp) getApplication();
+        String languageCode = (String) newValue;
+        app.changeLanguage(languageCode);
+        PreferenceStore.instance(null).setLanguage(languageCode);
+        getIntent().putExtra(LANGUAGE_CHANGED, true);
+
+        reloadUI();
+        return true;
+      }
+    });
+    return language;
+  }
+
+  private Preference createImageSizeInfo() {
+    Preference imageSizeInfo = new Preference(this);
+    imageSizeInfo.setSelectable(false);
+    imageSizeInfo.setTitle(R.string.max_map_img_size_title);
+    float megaPixels = MemoryUtil.getMaxImagePixelCount(this) / 1E6f;
+    imageSizeInfo.setSummary(getString(R.string.max_map_img_size, megaPixels));
+    return imageSizeInfo;
+  }
+
   // --------------------------------------------------------------------------
   // About dialog
 
-  private AboutDialog aboutDialog;
-
-  private void showAboutDialog() {
-    aboutDialog = new AboutDialog(this);
-    String version = PreferenceStore.instance(this).getVersion();
-    aboutDialog.setVersion(version);
-    aboutDialog.useSingleButton();
-    aboutDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-      @Override
-      public void onDismiss(DialogInterface dialog) {
-        AboutDialog aboutDialog = (AboutDialog) dialog;
-        // Remove listener, and clear internal variable
-        aboutDialog.setOnDismissListener(null);
-        EditPreferences.this.aboutDialog = null;
-      }
-    });
-    aboutDialog.show();
-  }
-
-  // --------------------------------------------------------------------------
-  // Lifecycle methods
-
-  private static final String PREFIX = EditPreferences.class.getName();
-  private static final String ABOUT_SHOWING = PREFIX + ".AboutShowing";
+  private static final int DIALOG_ABOUT = 1;
 
   @Override
-  protected void onRestoreInstanceState(Bundle state) {
-    super.onRestoreInstanceState(state);
-    if (state.getBoolean(ABOUT_SHOWING, false)) {
-      showAboutDialog();
+  protected Dialog onCreateDialog(int id) {
+    if (id == DIALOG_ABOUT) {
+      return new AboutDialog(this);
     }
+    return super.onCreateDialog(id);
   }
 
   @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    outState.putBoolean(ABOUT_SHOWING, aboutDialog != null);
+  protected void onPrepareDialog(int id, Dialog dialog) {
+    super.onPrepareDialog(id, dialog);
+    if (id == DIALOG_ABOUT) {
+      AboutDialog aboutDialog = (AboutDialog) dialog;
+      String version = PreferenceStore.instance(this).getVersion();
+      aboutDialog.setVersion(version);
+      aboutDialog.useSingleButton();
+    }
   }
 }

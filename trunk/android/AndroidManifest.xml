@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.custommapsapp.android"
-      android:versionName="1.1.4" android:versionCode="57">
-    <uses-sdk android:minSdkVersion="4" />
+      android:versionName="1.2.0" android:versionCode="58">
+    <uses-sdk
+        android:targetSdkVersion="10" 
+        android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application android:icon="@drawable/icon"
+    <application android:name=".CustomMapsApp"
+                 android:icon="@drawable/icon"
                  android:label="@string/app_name"
-                 android:theme="@android:style/Theme.NoTitleBar"
-                 android:debuggable="false">
+                 android:theme="@android:style/Theme.NoTitleBar">
         <activity android:name=".CustomMaps"
                   android:label="@string/app_name"
                   android:orientation="vertical">

@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Map Name"
+        android:text="@string/editor_map_name"
         android:textSize="6pt"
         />
     <EditText
@@ -17,16 +17,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2pt"
-        android:editable="true"
         android:inputType="text"
         android:singleLine="true"
         android:textSize="10pt"
-        android:text="New Map"
+        android:text="@string/editor_new_map"
         />
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="@string/editor_description"
         android:textSize="6pt"
         />
     <EditText
@@ -34,7 +33,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2pt"
-        android:editable="true"
         android:inputType="text"
         android:singleLine="true"
         android:textSize="8pt"
@@ -42,7 +40,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Tiepoints"
+        android:text="@string/editor_tiepoints"
         android:textSize="6pt"
         />
     <ListView
@@ -62,14 +60,14 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="Add point"
+            android:text="@string/button_add_point"
             />
         <Button
             android:id="@+id/preview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="Preview"
+            android:text="@string/button_preview"
             />
     </LinearLayout>
 </LinearLayout>

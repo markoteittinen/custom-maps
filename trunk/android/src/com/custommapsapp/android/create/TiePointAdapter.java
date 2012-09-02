@@ -34,9 +34,6 @@ import java.util.ArrayList;
  * @author Marko Teittinen
  */
 public class TiePointAdapter extends ArrayAdapter<TiePoint> {
-  @SuppressWarnings("unused")
-  private static final String LOG_TAG = "Custom Maps";
-
   public TiePointAdapter(Context context, int rowViewResourceId) {
     super(context, rowViewResourceId);
   }

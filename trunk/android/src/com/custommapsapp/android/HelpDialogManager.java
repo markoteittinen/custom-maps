@@ -109,8 +109,8 @@ public class HelpDialogManager {
   }
 
   public void onCreateOptionsMenu(Menu menu) {
-    MenuItem item = menu.add(Menu.NONE, HELP_ID, Menu.NONE, "Help");
-    item.setIcon(android.R.drawable.ic_menu_help);
+    menu.add(Menu.NONE, HELP_ID, Menu.NONE, R.string.help_menu_title)
+        .setIcon(android.R.drawable.ic_menu_help);
   }
 
   public void onOptionsItemSelected(MenuItem selected) {

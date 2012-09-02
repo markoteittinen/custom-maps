@@ -19,7 +19,6 @@
     android:layout_toLeftOf="@id/detailsDisplay"
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    android:layout_weight="1"
     />
   <view
     class="com.custommapsapp.android.LocationLayer"
@@ -27,7 +26,6 @@
     android:layout_alignRight="@id/mapDisplay"
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    android:layout_weight="1"
     />
   <view
     class="com.custommapsapp.android.DistanceLayer"
@@ -35,13 +33,15 @@
     android:layout_alignRight="@id/mapDisplay"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_weight="1"
     />
   <ImageButton
     android:id="@+id/zoomOut"
     android:layout_alignBottom="@id/mapDisplay"
     android:layout_alignLeft="@id/mapDisplay"
-    android:layout_margin="15dp"
+    android:paddingLeft="10dp"
+    android:paddingBottom="10dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/zoomout"
@@ -51,7 +51,10 @@
     android:id="@+id/zoomIn"
     android:layout_alignBottom="@id/mapDisplay"
     android:layout_alignRight="@id/mapDisplay"
-    android:layout_margin="15dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/zoomin"

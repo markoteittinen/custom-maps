@@ -24,6 +24,7 @@ import com.custommapsapp.android.storage.EditPreferences;
 import com.custommapsapp.android.storage.PreferenceStore;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,7 +56,7 @@ import java.net.URL;
  * @author Marko Teittinen
  */
 public class CustomMaps extends Activity {
-  private static final String LOG_TAG = "Custom Maps";
+  public static final String LOG_TAG = "Custom Maps";
 
   private static final String PREFIX = "com.custommapsapp.android";
   private static final String SAVED_LOCATION = PREFIX + ".Location";
@@ -64,13 +65,13 @@ public class CustomMaps extends Activity {
   private static final String SAVED_FOLLOWMODE = PREFIX + ".FollowMode";
   private static final String SAVED_CENTER = PREFIX + ".Center";
   private static final String SAVED_INSTANCESTATE = PREFIX + ".InstanceState";
-  private static final String SAVED_LICENSE_DIALOG = PREFIX + ".AboutShowing";
   private static final String SAVED_SAFETY_REMINDER = PREFIX + ".SafetyReminder";
 
   private static final String DOWNLOAD_URL_PREFIX = "http://www.custommapsapp.com/qr?";
 
   private static final int SELECT_MAP = 1;
   private static final int DOWNLOAD_MAP = 2;
+  private static final int EDIT_PREFS = 3;
 
   private static final int MENU_SELECT_MAP = 1;
   private static final int MENU_MY_LOCATION = 2;
@@ -78,37 +79,76 @@ public class CustomMaps extends Activity {
   private static final int MENU_SHARE_MAP = 4;
   private static final int MENU_PREFERENCES = 5;
 
+  private static final int DIALOG_LICENSE = 1;
+
   private MapDisplay mapDisplay;
   private LocationLayer locationLayer;
   private DistanceLayer distanceLayer;
   private GroundOverlay selectedMap = null;
   private DetailsDisplay detailsDisplay;
   private InertiaScroller inertiaScroller;
+  private ImageButton zoomIn;
+  private ImageButton zoomOut;
+  private DisplayState displayState;
 
-  private AboutDialog licenseDialog = null;
+  private boolean licenseDialogCreated = false;
   private SafetyWarningDialog safetyReminder = null;
+  private boolean updateMenuItems = false;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.i(LOG_TAG, "App memory available (MB): " + MemoryUtil.getTotalAppMemoryMB(this));
 
+    reloadUI();
+
+    GeoidHeightEstimator.initialize(getAssets());
+
+    // Do not process launch intent if software license is not accepted yet
+    if (PreferenceStore.instance(this).isLicenseAccepted()) {
+      processLaunchIntent(savedInstanceState);
+    } else {
+      selectedMap = null;
+    }
+  }
+
+  private void reloadUI() {
+    float[] screenCenter = null;
+    float zoomLevel = Float.NaN;
+    if (displayState != null) {
+      screenCenter = displayState.getScreenCenterGeoLocation();
+      zoomLevel = displayState.getZoomLevel();
+    }
     setContentView(R.layout.main);
     mapDisplay = (MapDisplay) findViewById(R.id.mapDisplay);
-    inertiaScroller = new InertiaScroller(mapDisplay);
+    if (inertiaScroller == null) {
+      inertiaScroller = new InertiaScroller(mapDisplay);
+    } else {
+      inertiaScroller.setMap(mapDisplay);
+    }
     locationLayer = (LocationLayer) findViewById(R.id.locationLayer);
-    DisplayState displayState = new DisplayState();
+    displayState = new DisplayState();
     mapDisplay.setDisplayState(displayState);
     locationLayer.setDisplayState(displayState);
     distanceLayer = (DistanceLayer) findViewById(R.id.distanceLayer);
     distanceLayer.setDisplayState(displayState);
     detailsDisplay = (DetailsDisplay) findViewById(R.id.detailsDisplay);
 
-    locator = (LocationManager) getSystemService(LOCATION_SERVICE);
-    sensors = (SensorManager) getSystemService(SENSOR_SERVICE);
+    if (locator == null) {
+      locator = (LocationManager) getSystemService(LOCATION_SERVICE);
+    }
+    if (sensors == null) {
+      sensors = (SensorManager) getSystemService(SENSOR_SERVICE);
+    }
 
-    ImageButton zoomIn = (ImageButton) findViewById(R.id.zoomIn);
-    ImageButton zoomOut = (ImageButton) findViewById(R.id.zoomOut);
+    if (zoomIn != null) {
+      zoomIn.setOnClickListener(null);
+    }
+    if (zoomOut != null) {
+      zoomOut.setOnClickListener(null);
+    }
+    zoomIn = (ImageButton) findViewById(R.id.zoomIn);
+    zoomOut = (ImageButton) findViewById(R.id.zoomOut);
     zoomIn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -121,12 +161,12 @@ public class CustomMaps extends Activity {
         mapDisplay.zoomMap(0.5f);
       }
     });
-
-    // Do not process launch intent if software license is not accepted yet
-    if (PreferenceStore.instance(this).isLicenseAccepted()) {
-      processLaunchIntent(savedInstanceState);
-    } else {
-      selectedMap = null;
+    if (selectedMap != null) {
+      loadMapForDisplay(selectedMap, null);
+      if (screenCenter != null) {
+        displayState.centerOnGeoLocation(screenCenter[0], screenCenter[1]);
+        displayState.setZoomLevel(zoomLevel);
+      }
     }
   }
 
@@ -158,12 +198,10 @@ public class CustomMaps extends Activity {
     super.onResume();
 
     // Do not display anything if license is not accepted yet
-    if (!PreferenceStore.instance(this).isLicenseAccepted()) {
-      if (licenseDialog == null) {
-        showLicenseDialog();
-      } else if (!licenseDialog.isShowing()) {
-        licenseDialog.show();
-      }
+    if (!PreferenceStore.instance(this).isLicenseAccepted() && !licenseDialogCreated) {
+      licenseDialogCreated = true;
+      Log.i(LOG_TAG, "Showing license dialog");
+      showDialog(DIALOG_LICENSE);
       return;
     }
 
@@ -208,7 +246,6 @@ public class CustomMaps extends Activity {
     }
     float zoomLevel = mapDisplay.getZoomLevel();
     outState.putFloat(SAVED_ZOOMLEVEL, zoomLevel);
-    outState.putBoolean(SAVED_LICENSE_DIALOG, licenseDialog != null);
     if (safetyReminder != null) {
       outState.putBundle(SAVED_SAFETY_REMINDER, safetyReminder.onSaveInstanceState());
     }
@@ -218,9 +255,7 @@ public class CustomMaps extends Activity {
 
   @Override
   public void onRestoreInstanceState(Bundle inState) {
-    if (inState.getBoolean(SAVED_LICENSE_DIALOG)) {
-      showLicenseDialog();
-    } else {
+    if (PreferenceStore.instance(this).isLicenseAccepted()) {
       Bundle safetyReminderState = inState.getBundle(SAVED_SAFETY_REMINDER);
       if (safetyReminderState != null) {
         displaySafetyReminder(safetyReminderState);
@@ -268,17 +303,30 @@ public class CustomMaps extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    MenuItem item = menu.add(Menu.NONE, MENU_SELECT_MAP, Menu.NONE, "Select map");
-    item.setIcon(android.R.drawable.ic_menu_mapmode);
-    item = menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, "My location");
-    item.setIcon(android.R.drawable.ic_menu_mylocation);
-    item = menu.add(Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, "Location details");
-    item.setIcon(android.R.drawable.ic_menu_info_details);
-    item = menu.add(Menu.NONE, MENU_SHARE_MAP, Menu.NONE, "Share map");
-    item.setIcon(android.R.drawable.ic_menu_share);
-    item = menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, "Settings");
-    item.setIcon(android.R.drawable.ic_menu_preferences);
+    menu.add(Menu.NONE, MENU_SELECT_MAP, Menu.NONE, R.string.select_map)
+        .setIcon(android.R.drawable.ic_menu_mapmode);
+    menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, R.string.my_location)
+        .setIcon(android.R.drawable.ic_menu_mylocation);
+    menu.add(Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, R.string.location_details)
+        .setIcon(android.R.drawable.ic_menu_info_details);
+    menu.add(Menu.NONE, MENU_SHARE_MAP, Menu.NONE, R.string.share_map)
+        .setIcon(android.R.drawable.ic_menu_share);
+    menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, R.string.settings)
+        .setIcon(android.R.drawable.ic_menu_preferences);
     return true;
+  }
+
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    if (updateMenuItems) {
+      menu.findItem(MENU_SELECT_MAP).setTitle(R.string.select_map);
+      menu.findItem(MENU_MY_LOCATION).setTitle(R.string.my_location);
+      menu.findItem(MENU_LOCATION_DETAILS).setTitle(R.string.location_details);
+      menu.findItem(MENU_SHARE_MAP).setTitle(R.string.share_map);
+      menu.findItem(MENU_PREFERENCES).setTitle(R.string.settings);
+      updateMenuItems = false;
+    }
+    return super.onPrepareOptionsMenu(menu);
   }
 
   @Override
@@ -306,7 +354,7 @@ public class CustomMaps extends Activity {
 
   private void centerUserLocation() {
     if (!mapDisplay.centerOnGpsLocation()) {
-      displayUserMessage("GPS location is not within map boundaries");
+      displayUserMessage(getString(R.string.gps_outside_map));
     } else {
       mapDisplay.setFollowMode(true);
     }
@@ -328,7 +376,7 @@ public class CustomMaps extends Activity {
 
   private void shareMap() {
     if (!FileUtil.shareMap(this, selectedMap)) {
-      displayUserMessage("Failed to send the map");
+      displayUserMessage(getString(R.string.share_map_failed));
     }
   }
 
@@ -347,7 +395,7 @@ public class CustomMaps extends Activity {
         data = Uri.fromFile(savedFile);
       } else {
         // Failed to save the data, display error message and quit app
-        displayUserMessage(LOG_TAG + " failed to display the KMZ content.");
+        displayUserMessage(getString(R.string.external_content_failed));
         finish();
         return false;
       }
@@ -403,7 +451,7 @@ public class CustomMaps extends Activity {
 
   private void launchEditPreferences() {
     Intent editPrefs = new Intent(this, EditPreferences.class);
-    startActivity(editPrefs);
+    startActivityForResult(editPrefs, EDIT_PREFS);
   }
 
   private void launchSelectMap(File localFile) {
@@ -455,7 +503,7 @@ public class CustomMaps extends Activity {
       }
       locationTracker.onLocationChanged(location);
       if (location == null) {
-        displayUserMessage("Current location unknown.\nSearching for GPS signal...");
+        displayUserMessage(getString(R.string.waiting_for_gps));
         mapDisplay.setFollowMode(true);
         mapDisplay.centerOnMapCenterLocation();
       } else {
@@ -465,6 +513,14 @@ public class CustomMaps extends Activity {
           mapDisplay.centerOnMapCenterLocation();
         }
       }
+    }
+  }
+
+  private void processEditPreferencesResult(Intent data) {
+    boolean languageChanged = data.getBooleanExtra(EditPreferences.LANGUAGE_CHANGED, false);
+    if (languageChanged) {
+      reloadUI();
+      updateMenuItems = true;
     }
   }
 
@@ -486,6 +542,10 @@ public class CustomMaps extends Activity {
       } else {
         processSelectMapResult(null);
       }
+      return;
+    }
+    if (requestCode == EDIT_PREFS) {
+      processEditPreferencesResult(data);
       return;
     }
     Log.w(LOG_TAG, String.format(
@@ -524,7 +584,7 @@ public class CustomMaps extends Activity {
 
   private void displayMapLoadWarning() {
     // Failed to load selected map, old was recovered, display error message
-    displayUserMessage("The selected map could not be loaded as it was too large");
+    displayUserMessage(getString(R.string.map_too_large));
   }
 
   private void displaySafetyReminder(Bundle savedState) {
@@ -549,7 +609,7 @@ public class CustomMaps extends Activity {
   // License handling
 
   private void showLicenseDialog() {
-    licenseDialog = new AboutDialog(this);
+    AboutDialog licenseDialog = new AboutDialog(this);
     String version = PreferenceStore.instance(this).getVersion();
     licenseDialog.setVersion(version);
     licenseDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -575,12 +635,44 @@ public class CustomMaps extends Activity {
     licenseDialog.show();
   }
 
+  @Override
+  protected Dialog onCreateDialog(int id) {
+    if (id == DIALOG_LICENSE) {
+      return new AboutDialog(this);
+    }
+    return super.onCreateDialog(id);
+  }
+
+  @Override
+  protected void onPrepareDialog(int id, Dialog dialog) {
+    super.onPrepareDialog(id, dialog);
+    if (id == DIALOG_LICENSE) {
+      String version = PreferenceStore.instance(this).getVersion();
+      AboutDialog dlg = (AboutDialog) dialog;
+      dlg.setVersion(version);
+
+      dlg.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+          AboutDialog aboutDialog = (AboutDialog) dialog;
+          if (aboutDialog.wasButtonPressed()) {
+            // Dialog dismissed with the "accept" button
+            if (aboutDialog.isLicenseAccepted()) {
+              licenseAccepted();
+            } else {
+              // License rejected, exit app
+              Log.i(LOG_TAG, "User rejected software license, exiting app");
+              finish();
+            }
+          }
+        }
+      });
+    }
+  }
+
   private void licenseAccepted() {
     Log.i(LOG_TAG, "Software license was accepted");
     PreferenceStore.instance(this).setLicenseAccepted(true);
-    // Clean up
-    licenseDialog.setOnDismissListener(null);
-    licenseDialog = null;
     // Continue app launch
     processLaunchIntent(null);
   }

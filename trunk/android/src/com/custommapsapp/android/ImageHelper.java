@@ -40,11 +40,9 @@ import java.lang.reflect.Method;
  * @author Marko Teittinen
  */
 public class ImageHelper {
-  private static final String LOG_TAG = "Custom Maps";
-
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("rawtypes")
   private static Class EXIF_CLASS;
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("rawtypes")
   private static Constructor EXIF_CONSTRUCTOR;
 
   private static int EXIF_ORIENTATION_UNDEFINED;
@@ -71,7 +69,8 @@ public class ImageHelper {
     } catch (Exception ex) {
       EXIF_CLASS = null;
       if (Build.VERSION.SDK_INT >= 5) {
-        Log.e(LOG_TAG, "Failed to initialize ImageHelper. SDK: " + Build.VERSION.SDK_INT, ex);
+        Log.e(CustomMaps.LOG_TAG, "Failed to initialize ImageHelper. SDK: " + Build.VERSION.SDK_INT,
+              ex);
       }
     }
   }
@@ -102,9 +101,10 @@ public class ImageHelper {
         return 270;
       }
       // Unexpected values fall through past exception handling
-      Log.w(LOG_TAG, "Unexpected image orientation: " + orientation);
+      Log.w(CustomMaps.LOG_TAG, "Unexpected image orientation: " + orientation);
     } catch (Exception ex) {
-      Log.e(LOG_TAG, "Failed to determine image orientation. SDK: " + Build.VERSION.SDK_INT, ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to determine image orientation. SDK: " +
+            Build.VERSION.SDK_INT, ex);
     }
     // Return "not rotated" image in all error cases
     return 0;
@@ -137,7 +137,7 @@ public class ImageHelper {
       in = new BufferedInputStream(new FileInputStream(filename));
       return loadImage(in);
     } catch (Exception ex) {
-      Log.e(LOG_TAG, "Failed to load image: " + filename, ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to load image: " + filename, ex);
       return null;
     } finally {
       if (in != null) {
@@ -170,7 +170,7 @@ public class ImageHelper {
       bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
       return BitmapFactory.decodeStream(in, null, bitmapOptions);
     } catch (OutOfMemoryError err) {
-      Log.w(LOG_TAG, "Out of memory loading map image", err);
+      Log.w(CustomMaps.LOG_TAG, "Out of memory loading map image", err);
       System.gc();
     }
     return null;
@@ -236,7 +236,7 @@ public class ImageHelper {
       writeExifOrientation(exifInstance, orientationValue);
       return true;
     } catch (Exception ex) {
-      Log.e(LOG_TAG, "Failed to store image orientation to file", ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to store image orientation to file", ex);
     }
     return false;
   }

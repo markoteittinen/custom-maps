@@ -177,9 +177,7 @@ public abstract class MapDisplay extends View {
         throw new MapImageTooLargeException(map.getImage());
       }
     } finally {
-      if (in != null) {
-        in.close();
-      }
+      FileUtil.tryToClose(in);
     }
   }
 

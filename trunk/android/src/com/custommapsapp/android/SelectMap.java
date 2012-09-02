@@ -31,18 +31,18 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,7 +61,6 @@ public class SelectMap extends ListActivity {
   public static final String SELECTED_MAP = EXTRA_PREFIX + ".SelectedMap";
   public static final String AUTO_SELECT = EXTRA_PREFIX + ".AutoSelect";
 
-  private static final String LOG_TAG = "Custom Maps";
   // Option menu and activity result constants
   private static final int MENU_CREATE_MAP = 1;
   private static final int MENU_PREFERENCES = 2;
@@ -95,7 +94,7 @@ public class SelectMap extends ListActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (!FileUtil.verifyDataDir()) {
-      Log.e(LOG_TAG, "Creation of data dir failed. Name: " + FileUtil.DATA_DIR);
+      Log.e(CustomMaps.LOG_TAG, "Creation of data dir failed. Name: " + FileUtil.DATA_DIR);
     }
     mapCatalog = new MapCatalog(FileUtil.getDataDirectory());
     setContentView(R.layout.selectmap);
@@ -117,10 +116,9 @@ public class SelectMap extends ListActivity {
     });
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_SELECT_MAP,
-        "Use menu to create maps from photos or from downloaded map images.\n\n" + //
-        "Tap and hold a map name to modify or delete it.");
-    helpDialogManager.addWebLink("Click here to visit Custom Maps web site for sample maps " +
-        "and a tutorial.", "http://www.custommapsapp.com/sample-maps");
+        getString(R.string.create_map_help));
+    helpDialogManager.addWebLink(getString(R.string.create_map_help_link),
+        "http://www.custommapsapp.com/sample-maps");
   }
 
   @Override
@@ -298,9 +296,9 @@ public class SelectMap extends ListActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    menu.add(Menu.NONE, MENU_CREATE_MAP, Menu.NONE, "Create map")
+    menu.add(Menu.NONE, MENU_CREATE_MAP, Menu.NONE, R.string.create_map)
         .setIcon(android.R.drawable.ic_menu_gallery);
-    menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, "Settings")
+    menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, R.string.settings)
         .setIcon(android.R.drawable.ic_menu_preferences);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;
@@ -366,20 +364,19 @@ public class SelectMap extends ListActivity {
     } else {
       GroundOverlay map = (GroundOverlay) item;
       menu.setHeaderTitle(map.getName());
-      menu.add(Menu.NONE, ITEM_SELECT_MAP, Menu.NONE, "Select map");
+      menu.add(Menu.NONE, ITEM_SELECT_MAP, Menu.NONE, R.string.select_map);
       // check if the map is part of a set
       boolean isSoloMap = !mapCatalog.isPartOfMapSet(map);
       if (isSoloMap) {
         // Files containing single maps are easy to edit and delete
         // TODO: make these available for map sets
-        menu.add(Menu.NONE, ITEM_MODIFY_MAP, Menu.NONE, "Modify map");
-        menu.add(Menu.NONE, ITEM_SEND_MAP, Menu.NONE, "Share map");
-        menu.add(Menu.NONE, ITEM_DELETE_MAP, Menu.NONE, "Delete map");
+        menu.add(Menu.NONE, ITEM_MODIFY_MAP, Menu.NONE, R.string.modify_map);
+        menu.add(Menu.NONE, ITEM_SEND_MAP, Menu.NONE, R.string.share_map);
+        menu.add(Menu.NONE, ITEM_DELETE_MAP, Menu.NONE, R.string.delete_map);
       } else {
-        menu.add(Menu.NONE, ITEM_SEND_MAP, Menu.NONE, "Share map");
+        menu.add(Menu.NONE, ITEM_SEND_MAP, Menu.NONE, R.string.share_map);
         // If map file contains multiple maps, delete would kill them all
-        menu.add(Menu.NONE, ITEM_CANNOT_MODIFY, Menu.NONE,
-            "Part of map set. Cannot be modified or deleted");
+        menu.add(Menu.NONE, ITEM_CANNOT_MODIFY, Menu.NONE, R.string.map_cannot_modify);
       }
     }
   }
@@ -431,7 +428,7 @@ public class SelectMap extends ListActivity {
 
   private void shareMap(GroundOverlay map) {
     if (!FileUtil.shareMap(this, map)) {
-      displayMessage("There are no installed apps that can share maps", true);
+      displayMessage(getString(R.string.no_map_sharing_apps), true);
     }
   }
 
@@ -447,10 +444,10 @@ public class SelectMap extends ListActivity {
     };
     // Confirm deletion
     AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle("Confirm deletion")
-        .setMessage(String.format("Are you sure you want to delete map%n\"%s\"?", map.getName()))
-        .setNegativeButton("No - keep map", buttonHandler)
-        .setPositiveButton("Yes - delete", buttonHandler)
+        .setTitle(R.string.delete_map_dialog_title)
+        .setMessage(getString(R.string.delete_map_dialog, map.getName()))
+        .setNegativeButton(R.string.delete_map_dialog_negative, buttonHandler)
+        .setPositiveButton(R.string.delete_map_dialog_positive, buttonHandler)
         .create();
     dialog.show();
   }
@@ -462,13 +459,13 @@ public class SelectMap extends ListActivity {
       image = new File(markup.getParentFile(), map.getImage());
     }
     if (!markup.delete()) {
-      Log.w(LOG_TAG, "Failed to delete map markup file: " + markup.getAbsolutePath());
-      displayMessage(String.format("Failed to delete map \"%s\"", map.getName()), true);
+      Log.w(CustomMaps.LOG_TAG, "Failed to delete map markup file: " + markup.getAbsolutePath());
+      displayMessage(getString(R.string.deleting_map_failed, map.getName()), true);
     } else {
       // Markup file deleted successfully, delete image if necessary
       if (image != null && !image.delete()) {
-        // Only log image deletion failure, map will be gone from UI
-        Log.w(LOG_TAG, "Failed to delete map image file: " + image.getAbsolutePath());
+        // Log image deletion failure only, map will be gone from UI
+        Log.w(CustomMaps.LOG_TAG, "Failed to delete map image file: " + image.getAbsolutePath());
       }
     }
     getListView().post(refreshCatalog);
@@ -570,15 +567,16 @@ public class SelectMap extends ListActivity {
     public Object getItem(int position) {
       int originalPosition = position;
       if (position < menuItemsIn(localMaps)) {
-        return getItem(localMaps, "Local Maps", position);
+        return getItem(localMaps, getString(R.string.local_maps), position);
       }
       position -= menuItemsIn(localMaps);
       if (position < menuItemsIn(nearMaps)) {
-        return getItem(nearMaps, "Nearby Maps", position);
+        return getItem(nearMaps, getString(R.string.nearby_maps), position);
       }
       position -= menuItemsIn(nearMaps);
       if (position < menuItemsIn(farMaps)) {
-        String title = (position < originalPosition ? "Other Maps" : "All Maps");
+        String title = getString(position < originalPosition ?
+                                 R.string.other_maps : R.string.all_maps);
         return getItem(farMaps, title, position);
       }
       return null;

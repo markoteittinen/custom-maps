@@ -17,6 +17,7 @@ package com.custommapsapp.android.create;
 
 import com.google.android.maps.GeoPoint;
 
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
@@ -36,15 +37,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -69,8 +70,6 @@ import java.util.zip.ZipOutputStream;
  * @author Marko Teittinen
  */
 public class MapEditor extends Activity {
-  private static final String LOG_TAG = "Custom Maps";
-
   private static final String EXTRA_PREFIX = "com.custommapsapp.android";
   private static final String TIEPOINT_INDEX = EXTRA_PREFIX + ".TiepointIndex";
   public static final String BITMAP_FILE = EXTRA_PREFIX + ".BitmapFile";
@@ -110,10 +109,7 @@ public class MapEditor extends Activity {
     prepareUI();
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_MAP_EDITOR,
-      "Name your map and describe it for the map list.\n\n" + //
-      "Add 2-4 tiepoints to locate and scale the map image.\n\n" + //
-      "Adjust or delete tiepoints by long pressing the entries.\n\n" + //
-      "Maps can be saved after preview.");
+                                              getString(R.string.editor_help));
 
     if (savedInstanceState != null) {
       onRestoreInstanceState(savedInstanceState);
@@ -237,7 +233,7 @@ public class MapEditor extends Activity {
 
     Bitmap mapImage = ImageHelper.loadImage(FileUtil.TMP_IMAGE);
     if (mapImage == null) {
-      Toast.makeText(this, "Failed to load map image", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, R.string.editor_image_load_failed, Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
       finish();
       return;
@@ -325,18 +321,10 @@ public class MapEditor extends Activity {
       copyContents(in, out);
       out.flush();
     } catch (IOException ex) {
-      Log.w(LOG_TAG, "Failed to unpack image from KMZ", ex);
+      Log.w(CustomMaps.LOG_TAG, "Failed to unpack image from KMZ", ex);
     } finally {
-      try {
-        if (in != null) {
-          in.close();
-        }
-        if (out != null) {
-          out.close();
-        }
-      } catch (IOException e) {
-        // Ignore
-      }
+      FileUtil.tryToClose(in);
+      FileUtil.tryToClose(out);
     }
   }
 
@@ -437,7 +425,7 @@ public class MapEditor extends Activity {
     assignGeoPoint.putExtra(TiePointActivity.RESTORE_SETTINGS, !firstTiepoint);
     int index = tiepointAdapter.getPosition(tiepoint);
     if (index < 0) {
-      Log.e(LOG_TAG, "Given tiepoint was not found in tiepoint adapter!!!");
+      Log.e(CustomMaps.LOG_TAG, "Given tiepoint was not found in tiepoint adapter!!!");
     }
     // store (index + 1), since value '0' means "not stored"
     assignGeoPoint.putExtra(TIEPOINT_INDEX, index);
@@ -457,7 +445,7 @@ public class MapEditor extends Activity {
       tiepoint.setGeoPoint(geoLocation);
       tiepointAdapter.notifyDataSetChanged();
     } else {
-      Log.e(LOG_TAG, "TiePoint defined, but tiepoint index is missing!!!");
+      Log.e(CustomMaps.LOG_TAG, "TiePoint defined, but tiepoint index is missing!!!");
     }
     firstTiepoint = false;
   }
@@ -481,8 +469,7 @@ public class MapEditor extends Activity {
    */
   private void launchPreviewActivity() {
     if (tiepointAdapter.getCount() < 2) {
-      String message = "You must add at least 2 points before previewing";
-      Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+      Toast.makeText(this, R.string.editor_need_two_points, Toast.LENGTH_LONG).show();
       return;
     }
 
@@ -569,8 +556,8 @@ public class MapEditor extends Activity {
     try {
       saveAsKmz(corners);
     } catch (Exception ex) {
-      Toast.makeText(this, "Failed to save the map", Toast.LENGTH_LONG).show();
-      Log.e(LOG_TAG, "Failed to save map: " + nameField.getText(), ex);
+      Toast.makeText(this, R.string.editor_map_save_failed, Toast.LENGTH_LONG).show();
+      Log.e(CustomMaps.LOG_TAG, "Failed to save map: " + nameField.getText(), ex);
       return;
     }
 
@@ -665,10 +652,10 @@ public class MapEditor extends Activity {
 
       zipOut.finish();
     } catch (IOException ex) {
-      Log.e(LOG_TAG, "Zip creation failed", ex);
+      Log.e(CustomMaps.LOG_TAG, "Zip creation failed", ex);
       throw ex;
     } catch (RuntimeException ex) {
-      Log.e(LOG_TAG, "Zip creation failed", ex);
+      Log.e(CustomMaps.LOG_TAG, "Zip creation failed", ex);
       throw ex;
     } finally {
       if (zipOut != null) {
@@ -822,7 +809,7 @@ public class MapEditor extends Activity {
       in.close();
     } catch (IOException ex) {
       // Should never happen, but log it and assume 1000x1000 image
-      Log.e(LOG_TAG, "Failed to open image file: " + bitmapFilename, ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to open image file: " + bitmapFilename, ex);
       return new float[] { 0, 1000, 1000, 1000, 1000, 0, 0, 0 };
     }
     // return all corners in image coordinates (clockwise from lower left)
@@ -941,8 +928,8 @@ public class MapEditor extends Activity {
     tiePointsList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
       @Override
       public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        menu.add(Menu.NONE, MENU_ADJUST_TIEPOINT, Menu.NONE, "Adjust tiepoint");
-        menu.add(Menu.NONE, MENU_DELETE_TIEPOINT, Menu.NONE, "Delete tiepoint");
+        menu.add(Menu.NONE, MENU_ADJUST_TIEPOINT, Menu.NONE, R.string.adjust_tiepoint);
+        menu.add(Menu.NONE, MENU_DELETE_TIEPOINT, Menu.NONE, R.string.delete_tiepoint);
       }
     });
 

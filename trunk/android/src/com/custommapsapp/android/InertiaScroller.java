@@ -117,7 +117,7 @@ public class InertiaScroller {
   }
 
   private void startScrolling(float xv, float yv) {
-    float speed = (float) Math.sqrt(xv * xv + yv * yv);
+    float speed = FloatMath.sqrt(xv * xv + yv * yv);
     float percent = FRICTION / speed;
     xFriction = percent * xv;
     yFriction = percent * yv;
@@ -153,7 +153,7 @@ public class InertiaScroller {
 
   // This makes calls to event.getX(int) work using introspection so that
   // this code can be android 1.6 compatible but still use 2.1 features.
-  private static final Integer one = new Integer(1);
+  private static final Integer one = Integer.valueOf(1);
   // Gets the event.point(1), ie, the second touch point.
   private static void getEventPositionOne(MotionEvent event, PointF point) {
     try {

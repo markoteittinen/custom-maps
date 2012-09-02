@@ -89,7 +89,7 @@ public class DetailsDisplay extends LinearLayout {
 
   public void setLongitude(float value) {
     if (Float.isNaN(value)) {
-      longitude.setText("N/A");
+      longitude.setText(R.string.no_data_available);
     } else {
       longitude.setText(String.format("%.5f", value));
     }
@@ -97,7 +97,7 @@ public class DetailsDisplay extends LinearLayout {
 
   public void setLatitude(float value) {
     if (Float.isNaN(value)) {
-      latitude.setText("N/A");
+      latitude.setText(R.string.no_data_available);
     } else {
       latitude.setText(String.format("%.5f", value));
     }
@@ -105,7 +105,7 @@ public class DetailsDisplay extends LinearLayout {
 
   public void setAltitude(float meters) {
     if (Float.isNaN(meters)) {
-      altitude.setText("N/A");
+      altitude.setText(R.string.no_data_available);
     } else if (useMetric) {
       altitude.setText(String.format("%.0f m", meters));
     } else {
@@ -116,7 +116,7 @@ public class DetailsDisplay extends LinearLayout {
 
   public void setHeading(float value) {
     if (Float.isNaN(value)) {
-      heading.setText("N/A");
+      heading.setText(R.string.no_data_available);
     } else {
       heading.setText(String.format("%.0f", value));
     }
@@ -124,7 +124,7 @@ public class DetailsDisplay extends LinearLayout {
 
   public void setSpeed(float metersPerSecond) {
     if (Float.isNaN(metersPerSecond)) {
-      speed.setText("N/A");
+      speed.setText(R.string.no_data_available);
     } else  if (useMetric) {
       // Convert to km/h
       float kmph = 3.6f * metersPerSecond;
@@ -138,7 +138,7 @@ public class DetailsDisplay extends LinearLayout {
 
   public void setAccuracy(float accuracyInMeters) {
     if (Float.isNaN(accuracyInMeters)) {
-      accuracy.setText("N/A");
+      accuracy.setText(R.string.no_data_available);
       return;
     }
     float value = accuracyInMeters;

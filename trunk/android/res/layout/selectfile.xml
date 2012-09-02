@@ -10,7 +10,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1px"
+        android:layout_marginBottom="1dp"
         android:minHeight="2pt"
         android:maxHeight="2pt"
         android:max="100"
@@ -22,7 +22,7 @@
         android:padding="2pt"
         android:background="#FFEEEEEE"
         android:textColor="#FF000000"
-        android:text="Select the map image file"
+        android:text="@string/select_image_select_file"
         android:textSize="10pt"
         />
     <ListView

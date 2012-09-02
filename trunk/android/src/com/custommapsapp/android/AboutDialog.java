@@ -19,6 +19,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -37,6 +38,7 @@ public class AboutDialog extends Dialog {
       "http://www.apache.org/licenses/LICENSE-2.0";
   private static final String GOOGLE_CODE_URL = "http://code.google.com/p/custom-maps";
   private static final String HOMEPAGE_URL = "http://www.custommapsapp.com/";
+  private static final String VERSION_KEY = "com.custommaps.version";
 
   private boolean buttonPressed = false;
   private boolean licenseAccepted = false;
@@ -46,8 +48,31 @@ public class AboutDialog extends Dialog {
     super(context);
     setCancelable(false);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
     setContentView(R.layout.aboutdialog);
+    prepareUI();
+
+    if (savedInstanceState != null) {
+      String version = savedInstanceState.getString(VERSION_KEY);
+      setVersion(version + " (rotated)");
+    }
+  }
+
+  @Override
+  public Bundle onSaveInstanceState() {
+    Bundle bundle = super.onSaveInstanceState();
+    if (versionLabel.getVisibility() == View.VISIBLE) {
+      bundle.putString(VERSION_KEY, versionLabel.getText().toString());
+    }
+    return bundle;
+  }
+
+  private void prepareUI() {
     versionLabel = (TextView) findViewById(R.id.version);
     versionLabel.setVisibility(View.GONE);
 
@@ -78,7 +103,7 @@ public class AboutDialog extends Dialog {
     doNotAgreeButton.setVisibility(View.GONE);
 
     Button agreeButton = (Button) findViewById(R.id.agreeButton);
-    agreeButton.setText("Close");
+    agreeButton.setText(R.string.button_close);
 
     setCancelable(true);
   }

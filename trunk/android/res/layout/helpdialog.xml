@@ -39,7 +39,7 @@
         android:gravity="center_horizontal"
         android:inputType="none"
         android:textSize="6pt"
-        android:text="You can redisplay this info using the menu"
+        android:text="@string/help_redisplay"
         />
     <Button
         android:id="@+id/okButton"
@@ -50,6 +50,6 @@
         android:layout_margin="4pt"
         android:paddingLeft="20pt"
         android:paddingRight="20pt"
-        android:text="OK"
+        android:text="@string/button_ok"
     />
 </RelativeLayout>

@@ -10,9 +10,9 @@
         android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="@string/safety_warning_title"
         android:textColor="#ffffffff"
         android:textSize="12pt"
-        android:text="IMPORTANT!"
     />
     <ScrollView
         android:id="@+id/textArea"
@@ -26,9 +26,9 @@
             android:id="@+id/warningBody"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="@string/safety_warning"
             android:textColor="#ffffffff"
             android:textSize="8pt"
-            android:text="@string/safety_warning"
         />
     </ScrollView>
     <CheckBox
@@ -36,7 +36,7 @@
         android:layout_below="@id/textArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remind me again next time"
+        android:text="@string/remind_me_again"
         android:checked="true"
     />
     <Button
@@ -47,6 +47,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="20pt"
         android:paddingRight="20pt"
-        android:text="OK"
+        android:text="@string/button_ok"
     />
 </RelativeLayout>

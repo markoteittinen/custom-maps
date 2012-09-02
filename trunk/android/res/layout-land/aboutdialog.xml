@@ -1,134 +1,162 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:background="#FFFFFFFF"
-    android:padding="2pt"
-    >
-    <ImageView
-        android:id="@+id/appLogo"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:src="@drawable/icon"
-        android:scaleType="fitCenter"
-        />
-    <TextView
-        android:id="@+id/appTitle"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/appLogo"
-        android:layout_alignTop="@id/appLogo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:textSize="10pt"
-        android:textStyle="bold"
-        android:textColor="#ff000000"
-        android:text="@string/app_name"
-        />
-    <TextView
-        android:id="@+id/version"
-        android:layout_alignLeft="@id/appTitle"
-        android:layout_below="@id/appTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff000000"
-        android:text="version"
-        android:visibility="visible"
-        />
-    <TextView
-        android:id="@+id/author"
-        android:layout_below="@id/version"
-        android:layout_alignLeft="@id/appTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4pt"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff000000"
-        android:text="@string/author"
-        />
-    <TextView
-        android:id="@+id/open_source"
-        android:layout_below="@id/appLogo"
-        android:layout_alignParentLeft="true" 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4pt"
-        android:inputType="none"
-        android:textColor="#ff000000"
-        android:text="@string/open_source"
-        />
-    <LinearLayout
-        android:id="@+id/weblinks"
-        android:orientation="vertical"
-        android:layout_below="@id/open_source"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/agreeButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6pt"
-        android:layout_marginBottom="4pt"
-        >
-    <TextView
-        android:id="@+id/apache_license"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff0000cc"
-        android:text="@string/apache_license"
-        />
-    <TextView
-        android:id="@+id/google_code"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6pt"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff0000cc"
-        android:text="@string/google_code"
-        />
-    <TextView
-        android:id="@+id/homepage"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6pt"
-        android:layout_weight="1"
-        android:layout_marginBottom="2pt"
-        android:gravity="center_horizontal"
-        android:inputType="none"
-        android:textSize="6pt"
-        android:textColor="#ff0000cc"
-        android:text="@string/app_home"
-        />
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/agreeButton"
-        android:layout_alignBottom="@id/weblinks"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="2.6in"
         android:layout_height="wrap_content"
-        android:text="Accept License"
-    />
-    <Button
-        android:id="@+id/doNotAgreeButton"
-        android:layout_above="@id/agreeButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignLeft="@id/agreeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2pt"
-        android:text="Close"
-    />
-</RelativeLayout>
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        android:padding="2pt" >
+
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/appTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/appLogo"
+            android:text="@string/app_name"
+            android:textColor="#000000"
+            android:textSize="10pt"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/appTitle"
+            android:layout_below="@+id/appTitle"
+            android:text="@string/version_label"
+            android:textColor="#000000"
+            android:textSize="6pt" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/version"
+            android:layout_below="@+id/version"
+            android:layout_marginTop="4pt"
+            android:text="@string/author"
+            android:textColor="#000000"
+            android:textSize="6pt" />
+
+        <LinearLayout
+            android:id="@+id/credits_license"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appLogo"
+            android:layout_marginTop="4pt"
+            android:orientation="horizontal" >
+
+            <ScrollView
+                android:id="@+id/credits"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f4f4ff"
+                android:minWidth="1in" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/credits_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2pt"
+                        android:text="@string/credits_text"
+                        android:textColor="#000000"
+                        android:textSize="6pt" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <RelativeLayout
+                android:id="@+id/license_panel"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="2pt"
+                android:layout_weight="2" >
+
+                <TextView
+                    android:id="@+id/open_source"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="2pt"
+                    android:text="@string/open_source"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/apache_license"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/open_source"
+                    android:layout_below="@id/open_source"
+                    android:layout_marginTop="6pt"
+                    android:layout_toLeftOf="@id/agreeButton"
+                    android:gravity="center_horizontal"
+                    android:text="@string/apache_license"
+                    android:textColor="#0000cc"
+                    android:textSize="6pt" />
+
+                <TextView
+                    android:id="@+id/google_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/apache_license"
+                    android:layout_below="@id/apache_license"
+                    android:layout_marginTop="6pt"
+                    android:layout_toLeftOf="@id/agreeButton"
+                    android:gravity="center_horizontal"
+                    android:text="@string/google_code"
+                    android:textColor="#0000cc"
+                    android:textSize="6pt" />
+
+                <TextView
+                    android:id="@+id/homepage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/google_code"
+                    android:layout_below="@id/google_code"
+                    android:layout_marginTop="6pt"
+                    android:layout_toLeftOf="@id/agreeButton"
+                    android:gravity="center_horizontal"
+                    android:text="@string/app_home"
+                    android:textColor="#0000cc"
+                    android:textSize="6pt" />
+
+                <Button
+                    android:id="@+id/agreeButton"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/button_accept_license" />
+
+                <Button
+                    android:id="@+id/doNotAgreeButton"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/agreeButton"
+                    android:layout_alignLeft="@id/agreeButton"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="6pt"
+                    android:text="@string/button_close" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>

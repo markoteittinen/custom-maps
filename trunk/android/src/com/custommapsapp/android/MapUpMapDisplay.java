@@ -124,8 +124,10 @@ public class MapUpMapDisplay extends MapDisplay {
       mapImage = null;
       // Failed to read image, display error message
       String mapName = newMap.getName();
-      final String errorMsg = "Failed to load map image" +
-          (mapName == null || mapName.trim().length() == 0 ? "" : " for " + mapName );
+      if (mapName == null || mapName.trim().length() == 0) {
+        mapName = getContext().getString(R.string.unnamed_map);
+      }
+      final String errorMsg = getContext().getString(R.string.map_image_load_failed, mapName);
       post(new Runnable() {
         @Override
         public void run() {
