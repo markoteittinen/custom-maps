@@ -17,6 +17,7 @@ package com.custommapsapp.android;
 
 import com.custommapsapp.android.create.MapEditor;
 import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.KmlFolder;
 import com.custommapsapp.android.storage.EditPreferences;
 import com.custommapsapp.android.storage.PreferenceStore;
 
@@ -93,10 +94,13 @@ public class SelectMap extends ListActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (!FileUtil.verifyDataDir()) {
+    File dataDir = FileUtil.getDataDirectory();
+    if (!dataDir.exists()) {
       Log.e(CustomMaps.LOG_TAG, "Creation of data dir failed. Name: " + FileUtil.DATA_DIR);
     }
-    mapCatalog = new MapCatalog(FileUtil.getDataDirectory());
+    // Update default map name in case language has changed
+    MapCatalog.setDefaultMapName(getString(R.string.unnamed_map));
+    mapCatalog = new MapCatalog(dataDir);
     setContentView(R.layout.selectmap);
 
     autoSelectRequested = getIntent().getBooleanExtra(AUTO_SELECT, false);
@@ -199,7 +203,7 @@ public class SelectMap extends ListActivity {
       }
     }
 
-    GroundOverlay selected = mapCatalog.parseLocalFile(localFile);
+    KmlFolder selected = mapCatalog.parseLocalFile(localFile);
     if (selected != null) {
       returnMap(selected);
       return true;
@@ -218,17 +222,19 @@ public class SelectMap extends ListActivity {
     float longitude = (float) current.getLongitude();
     float latitude = (float) current.getLatitude();
     String lastUsedMap = PreferenceStore.instance(this).getLastUsedMap();
-    GroundOverlay selected = null;
+    KmlFolder selected = null;
     float minArea = Float.MAX_VALUE;
-    for (GroundOverlay map : mapCatalog.getMapsContainingPoint(longitude, latitude)) {
+    for (KmlFolder mapHolder : mapCatalog.getMapsContainingPoint(longitude, latitude)) {
+      GroundOverlay map = mapHolder.getFirstMap();
       // Open last used map if the user is still within the map area
       if (lastUsedMap != null && lastUsedMap.equals(map.getName())) {
-        selected = map;
+        selected = mapHolder;
         break;
       }
+      // Otherwise use the one with smallest area
       float area = map.computeAreaKm2();
       if (area < minArea) {
-        selected = map;
+        selected = mapHolder;
         minArea = area;
       }
     }
@@ -253,9 +259,10 @@ public class SelectMap extends ListActivity {
       return false;
     }
     // Find last used map
-    for (GroundOverlay map : mapCatalog.getAllMapsSortedByName()) {
+    for (KmlFolder mapHolder : mapCatalog.getAllMapsSortedByName()) {
+      GroundOverlay map = mapHolder.getFirstMap();
       if (lastUsedMap.equals(map.getName())) {
-        returnMap(map);
+        returnMap(mapHolder);
         return true;
       }
     }
@@ -280,10 +287,10 @@ public class SelectMap extends ListActivity {
     setListAdapter(listAdapter);
   }
 
-  private void displayMessage(final String message, final boolean error) {
+  private void displayMessage(final String message, final boolean showLong) {
     Runnable postMessage = new Runnable() {
       public void run() {
-        int duration = (error ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        int duration = (showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         Toast.makeText(SelectMap.this, message, duration).show();
       }
     };
@@ -356,27 +363,41 @@ public class SelectMap extends ListActivity {
   private void createMapContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
     AdapterContextMenuInfo adapterMenuInfo = (AdapterContextMenuInfo) menuInfo;
     Object item = getListAdapter().getItem(adapterMenuInfo.position);
-    if (!(item instanceof GroundOverlay) ||
+    if (!(item instanceof KmlFolder) ||
         !getListAdapter().isEnabled(adapterMenuInfo.position))  {
       // Map category, no menu available
       menu.clear();
       return;
     } else {
-      GroundOverlay map = (GroundOverlay) item;
+      KmlFolder mapHolder = (KmlFolder) item;
+      GroundOverlay map = mapHolder.getFirstMap();
+      if (map == null) {
+        menu.clear();
+        return;
+      }
       menu.setHeaderTitle(map.getName());
       menu.add(Menu.NONE, ITEM_SELECT_MAP, Menu.NONE, R.string.select_map);
       // check if the map is part of a set
-      boolean isSoloMap = !mapCatalog.isPartOfMapSet(map);
-      if (isSoloMap) {
+      boolean isSoloMap = !mapCatalog.isPartOfMapSet(mapHolder);
+      boolean containsPlacemarks = mapHolder.hasPlacemarks();
+      if (isSoloMap && !containsPlacemarks) {
         // Files containing single maps are easy to edit and delete
-        // TODO: make these available for map sets
+        // TODO: make these menu items available for map sets
         menu.add(Menu.NONE, ITEM_MODIFY_MAP, Menu.NONE, R.string.modify_map);
         menu.add(Menu.NONE, ITEM_SEND_MAP, Menu.NONE, R.string.share_map);
         menu.add(Menu.NONE, ITEM_DELETE_MAP, Menu.NONE, R.string.delete_map);
       } else {
         menu.add(Menu.NONE, ITEM_SEND_MAP, Menu.NONE, R.string.share_map);
-        // If map file contains multiple maps, delete would kill them all
-        menu.add(Menu.NONE, ITEM_CANNOT_MODIFY, Menu.NONE, R.string.map_cannot_modify);
+        if (!isSoloMap) {
+          // Part of map set, prevent editing and deletion. Saving maps does not
+          // support map sets, and deletion would remove all maps in the set
+          displayMessage(getString(R.string.select_cannot_modify_map_set), true);
+        } else {
+          // Single map that contains placemarks, delete is allowed, modify not
+          menu.add(Menu.NONE, ITEM_DELETE_MAP, Menu.NONE, R.string.delete_map);
+          // TODO: remove modification limitation (i.e. implement placemark saving)
+          displayMessage(getString(R.string.select_cannot_modify_placemarks), true);
+        }
       }
     }
   }
@@ -385,28 +406,26 @@ public class SelectMap extends ListActivity {
   public boolean onContextItemSelected(MenuItem item) {
     AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
     int position = menuInfo.position;
-    GroundOverlay map;
-    switch (item.getItemId()) {
-      case ITEM_SELECT_MAP:
-        map = (GroundOverlay) getListAdapter().getItem(position);
-        returnMap(map);
-        break;
-      case ITEM_MODIFY_MAP:
-        map = (GroundOverlay) getListAdapter().getItem(position);
-        modifyMap(map);
-        break;
-      case ITEM_SEND_MAP:
-        map = (GroundOverlay) getListAdapter().getItem(position);
-        shareMap(map);
-        break;
-      case ITEM_DELETE_MAP:
-        map = (GroundOverlay) getListAdapter().getItem(position);
-        confirmDeleteMap(map);
-        break;
-      case ITEM_CANNOT_MODIFY:
-        //$FALL-THROUGH$
-      default:
-        return super.onContextItemSelected(item);
+    KmlFolder map = (KmlFolder) getListAdapter().getItem(position);
+    if (map.getFirstMap() != null) {
+      switch (item.getItemId()) {
+        case ITEM_SELECT_MAP:
+          returnMap(map);
+          break;
+        case ITEM_MODIFY_MAP:
+          modifyMap(map);
+          break;
+        case ITEM_SEND_MAP:
+          shareMap(map);
+          break;
+        case ITEM_DELETE_MAP:
+          confirmDeleteMap(map);
+          break;
+        case ITEM_CANNOT_MODIFY:
+          //$FALL-THROUGH$
+        default:
+          return super.onContextItemSelected(item);
+      }
     }
     super.onContextItemSelected(item);
     return true;
@@ -415,24 +434,26 @@ public class SelectMap extends ListActivity {
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
-    GroundOverlay map = (GroundOverlay) getListAdapter().getItem(position);
-    returnMap(map);
+    KmlFolder map = (KmlFolder) getListAdapter().getItem(position);
+    if (map.getFirstMap() != null) {
+      returnMap(map);
+    }
   }
 
-  private void modifyMap(GroundOverlay map) {
+  private void modifyMap(KmlFolder map) {
     Intent editMap = new Intent(this, MapEditor.class);
     editMap.putExtra(MapEditor.KMZ_FILE, map.getKmlInfo().getFile().getAbsolutePath());
-    editMap.putExtra(MapEditor.GROUND_OVERLAY, map);
+    editMap.putExtra(MapEditor.KML_FOLDER, map);
     startActivityForResult(editMap, CREATE_MAP);
   }
 
-  private void shareMap(GroundOverlay map) {
+  private void shareMap(KmlFolder map) {
     if (!FileUtil.shareMap(this, map)) {
       displayMessage(getString(R.string.no_map_sharing_apps), true);
     }
   }
 
-  private void confirmDeleteMap(final GroundOverlay map) {
+  private void confirmDeleteMap(final KmlFolder map) {
     // Delete file
     DialogInterface.OnClickListener buttonHandler = new DialogInterface.OnClickListener() {
       @Override
@@ -452,11 +473,14 @@ public class SelectMap extends ListActivity {
     dialog.show();
   }
 
-  private void deleteMap(GroundOverlay map) {
+  private void deleteMap(KmlFolder map) {
     File markup = map.getKmlInfo().getFile();
     File image = null;
     if (markup.getAbsolutePath().toLowerCase().endsWith(".kml")) {
-      image = new File(markup.getParentFile(), map.getImage());
+      GroundOverlay mapData = map.getFirstMap();
+      if (mapData != null) {
+        image = new File(markup.getParentFile(), mapData.getImage());
+      }
     }
     if (!markup.delete()) {
       Log.w(CustomMaps.LOG_TAG, "Failed to delete map markup file: " + markup.getAbsolutePath());
@@ -471,9 +495,10 @@ public class SelectMap extends ListActivity {
     getListView().post(refreshCatalog);
   }
 
-  private void returnMap(GroundOverlay map) {
+  private void returnMap(KmlFolder mapHolder) {
+    GroundOverlay map = mapHolder.getFirstMap();
     PreferenceStore.instance(this).setLastUsedMap(map.getName());
-    getIntent().putExtra(SELECTED_MAP, map);
+    getIntent().putExtra(SELECTED_MAP, mapHolder);
     setResult(RESULT_OK, getIntent());
     locator.removeUpdates(locationTracker);
     finish();
@@ -481,10 +506,10 @@ public class SelectMap extends ListActivity {
 
   // -------------------------------------------------------------------------------------
 
-  private class MapListAdapter extends ArrayAdapter<GroundOverlay> {
-    public MapListAdapter(Context context, Iterable<GroundOverlay> maps) {
+  private class MapListAdapter extends ArrayAdapter<KmlFolder> {
+    public MapListAdapter(Context context, Iterable<KmlFolder> maps) {
       super(context, 0);
-      for (GroundOverlay map : maps) {
+      for (KmlFolder map : maps) {
         add(map);
       }
     }
@@ -497,27 +522,30 @@ public class SelectMap extends ListActivity {
       TextView title = (TextView) convertView.findViewById(R.id.titleField);
       TextView description = (TextView) convertView.findViewById(R.id.descriptionField);
 
-      GroundOverlay map = getItem(position);
-      title.setText(map.getName());
-      description.setText(map.getDescription());
+      KmlFolder mapHolder = getItem(position);
+      GroundOverlay map = mapHolder.getFirstMap();
+      if (map != null) {
+        title.setText(map.getName());
+        description.setText(map.getDescription());
+      }
       return convertView;
     }
   }
 
   private class GroupedMapAdapter extends BaseAdapter {
-    private List<GroundOverlay> localMaps = new ArrayList<GroundOverlay>();
-    private List<GroundOverlay> nearMaps = new ArrayList<GroundOverlay>();
-    private List<GroundOverlay> farMaps = new ArrayList<GroundOverlay>();
+    private List<KmlFolder> localMaps = new ArrayList<KmlFolder>();
+    private List<KmlFolder> nearMaps = new ArrayList<KmlFolder>();
+    private List<KmlFolder> farMaps = new ArrayList<KmlFolder>();
 
-    void setLocalMaps(Iterable<GroundOverlay> localMaps) {
+    void setLocalMaps(Iterable<KmlFolder> localMaps) {
       setMaps(this.localMaps, localMaps);
     }
 
-    void setNearMaps(Iterable<GroundOverlay> nearMaps) {
+    void setNearMaps(Iterable<KmlFolder> nearMaps) {
       setMaps(this.nearMaps, nearMaps);
     }
 
-    void setFarMaps(Iterable<GroundOverlay> farMaps) {
+    void setFarMaps(Iterable<KmlFolder> farMaps) {
       setMaps(this.farMaps, farMaps);
     }
 
@@ -546,9 +574,9 @@ public class SelectMap extends ListActivity {
       return !(getItem(position) instanceof String);
     }
 
-    private void setMaps(List<GroundOverlay> maps, Iterable<GroundOverlay> newMaps) {
+    private void setMaps(List<KmlFolder> maps, Iterable<KmlFolder> newMaps) {
       maps.clear();
-      for (GroundOverlay map : newMaps) {
+      for (KmlFolder map : newMaps) {
         maps.add(map);
       }
       notifyDataSetChanged();
@@ -559,7 +587,7 @@ public class SelectMap extends ListActivity {
       return menuItemsIn(localMaps) + menuItemsIn(nearMaps) + menuItemsIn(farMaps);
     }
 
-    private int menuItemsIn(List<GroundOverlay> mapList) {
+    private int menuItemsIn(List<KmlFolder> mapList) {
       return (mapList.isEmpty() ? 0 : mapList.size() + 1);
     }
 
@@ -582,7 +610,7 @@ public class SelectMap extends ListActivity {
       return null;
     }
 
-    private Object getItem(List<GroundOverlay> mapList, String title, int position) {
+    private Object getItem(List<KmlFolder> mapList, String title, int position) {
       if (position == 0) {
         return title;
       }
@@ -601,7 +629,7 @@ public class SelectMap extends ListActivity {
       TextView description = null;
       String titleText = null;
       String descriptionText = null;
-      if (item instanceof GroundOverlay) {
+      if (item instanceof KmlFolder) {
         // Map item in the list
         if (convertView == null) {
           convertView =
@@ -610,9 +638,12 @@ public class SelectMap extends ListActivity {
         title = (TextView) convertView.findViewById(R.id.titleField);
         description = (TextView) convertView.findViewById(R.id.descriptionField);
 
-        GroundOverlay map = (GroundOverlay) item;
-        titleText = map.getName();
-        descriptionText = map.getDescription();
+        KmlFolder mapHolder = (KmlFolder) item;
+        GroundOverlay map = mapHolder.getFirstMap();
+        if (map != null) {
+          titleText = map.getName();
+          descriptionText = map.getDescription();
+        }
       } else {
         // Section header in the list
         if (convertView == null) {

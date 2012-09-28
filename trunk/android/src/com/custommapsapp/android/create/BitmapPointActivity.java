@@ -91,8 +91,8 @@ public class BitmapPointActivity extends Activity {
       finish();
     }
 
-    // Load the actual bitmap (if load fails, should display an error message)
-    image = ImageHelper.loadImage(fileName);
+    // Load the actual bitmap (if load fails, displays an error message)
+    image = ImageHelper.loadImage(fileName, true);
     if (image != null) {
       imageDisplay.setBitmap(image);
       orientation = ImageHelper.readOrientation(fileName);

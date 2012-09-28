@@ -36,12 +36,12 @@ import java.util.List;
  *
  * @author Marko Teittinen
  */
-public class GroundOverlay implements Serializable {
+public class GroundOverlay extends KmlFeature {
   private static final long serialVersionUID = 1L;
 
   private KmlInfo kmlInfo;
   private String image;
-  private String name;
+  private String name = "Untitled map";
   private String description;
 
   private float north;
@@ -60,9 +60,11 @@ public class GroundOverlay implements Serializable {
   private transient Matrix geoToMetric = null;
   private transient float[] metricSize = null;
 
+  @Override
   public KmlInfo getKmlInfo() {
     return kmlInfo;
   }
+  @Override
   public void setKmlInfo(KmlInfo kmlInfo) {
     this.kmlInfo = kmlInfo;
   }
@@ -74,24 +76,31 @@ public class GroundOverlay implements Serializable {
     this.image = image;
   }
 
+  @Override
   public String getName() {
     return name;
   }
+  @Override
   public void setName(String name) {
     this.name = name;
   }
 
+  @Override
   public String getDescription() {
     return description;
   }
+  @Override
   public void setDescription(String description) {
     this.description = description;
   }
 
-  @SuppressWarnings("unchecked")
-  public Iterable<GroundOverlay.Tiepoint> getTiepoints() {
-    return (tiepoints != null ? tiepoints : Collections.EMPTY_LIST);
+  public List<GroundOverlay.Tiepoint> getTiepoints() {
+    if (tiepoints == null) {
+      return Collections.emptyList();
+    }
+    return Collections.unmodifiableList(tiepoints);
   }
+
   public void clearTiepoints() {
     if (tiepoints != null) {
       tiepoints.clear();

@@ -47,6 +47,11 @@ public class KmlFile implements KmlInfo, Serializable {
     return new FileReader(kmlFile);
   }
 
+  public long getImageDate(String path) {
+    File imageFile = new File(kmlFile.getParentFile(), path);
+    return imageFile.lastModified();
+  }
+
   public InputStream getImageStream(String path) throws IOException {
     File imageFile = new File(kmlFile.getParentFile(), path);
     return new FileInputStream(imageFile);

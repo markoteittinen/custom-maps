@@ -17,9 +17,12 @@ package com.custommapsapp.android;
 
 import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
 import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.KmlFeature;
 import com.custommapsapp.android.kml.KmlFinder;
+import com.custommapsapp.android.kml.KmlFolder;
 import com.custommapsapp.android.kml.KmlInfo;
 import com.custommapsapp.android.kml.KmlParser;
+import com.custommapsapp.android.kml.Placemark;
 import com.custommapsapp.android.storage.EditPreferences;
 import com.custommapsapp.android.storage.PreferenceStore;
 
@@ -48,6 +51,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CustomMaps is the main activity of the application. It displays a bitmap
@@ -61,6 +66,7 @@ public class CustomMaps extends Activity {
   private static final String PREFIX = "com.custommapsapp.android";
   private static final String SAVED_LOCATION = PREFIX + ".Location";
   private static final String SAVED_MAP = PREFIX + ".Map";
+  private static final String SAVED_MARKER = PREFIX + ".Placemark";
   private static final String SAVED_ZOOMLEVEL = PREFIX + ".ZoomLevel";
   private static final String SAVED_FOLLOWMODE = PREFIX + ".FollowMode";
   private static final String SAVED_CENTER = PREFIX + ".Center";
@@ -84,7 +90,9 @@ public class CustomMaps extends Activity {
   private MapDisplay mapDisplay;
   private LocationLayer locationLayer;
   private DistanceLayer distanceLayer;
-  private GroundOverlay selectedMap = null;
+  private KmlFolder selectedMap = null;
+  private GroundOverlay mapImage = null;
+  private List<Placemark> placemarks = new ArrayList<Placemark>();
   private DetailsDisplay detailsDisplay;
   private InertiaScroller inertiaScroller;
   private ImageButton zoomIn;
@@ -101,6 +109,9 @@ public class CustomMaps extends Activity {
     Log.i(LOG_TAG, "App memory available (MB): " + MemoryUtil.getTotalAppMemoryMB(this));
 
     reloadUI();
+
+    // Initialize disk cache properly
+    ImageDiskCache.instance(this);
 
     GeoidHeightEstimator.initialize(getAssets());
 
@@ -162,7 +173,7 @@ public class CustomMaps extends Activity {
       }
     });
     if (selectedMap != null) {
-      loadMapForDisplay(selectedMap, null);
+      loadMapForDisplay(mapImage, null);
       if (screenCenter != null) {
         displayState.centerOnGeoLocation(screenCenter[0], screenCenter[1]);
         displayState.setZoomLevel(zoomLevel);
@@ -265,10 +276,12 @@ public class CustomMaps extends Activity {
       // Do not restore instance state since a map is selected
       return;
     }
-    GroundOverlay savedMap = (GroundOverlay) inState.getSerializable(SAVED_MAP);
+    KmlFolder savedMap = (KmlFolder) inState.getSerializable(SAVED_MAP);
     if (savedMap != null) {
-      if (loadMapForDisplay(savedMap, null)) {
+      initializeMapVariables(savedMap);
+      if (loadMapForDisplay(mapImage, null)) {
         selectedMap = savedMap;
+        mapDisplay.addMapMarkers(placemarks);
         float[] geoCenter = (float[]) inState.getSerializable(SAVED_CENTER);
         if (geoCenter != null) {
           mapDisplay.centerOnLocation(geoCenter[0], geoCenter[1]);
@@ -295,6 +308,29 @@ public class CustomMaps extends Activity {
       }
     };
     runOnUiThread(displayTask);
+  }
+
+  /**
+   * Initializes mapImage (first GroundOverlay in KmlFolder) and list of
+   * placemarks stored with map.
+   *
+   * @param map KmlFolder containing the data
+   */
+  private void initializeMapVariables(KmlFolder map) {
+    Log.d(LOG_TAG, "Initializing map variables");
+    selectedMap = map;
+    placemarks.clear();
+    mapImage = null;
+    if (map != null) {
+      mapImage = map.getFirstMap();
+      for (KmlFeature feature : map.getFeatures()) {
+        if (feature instanceof Placemark) {
+          placemarks.add((Placemark) feature);
+        }
+      }
+    }
+    Log.d(LOG_TAG,
+        String.format("CustomMaps initialized map. Found %d placemarks.", placemarks.size()));
   }
 
   // --------------------------------------------------------------------------
@@ -486,11 +522,14 @@ public class CustomMaps extends Activity {
         finish();
       }
     } else {
-      selectedMap = (GroundOverlay) data.getSerializableExtra(SelectMap.SELECTED_MAP);
-      if (!loadMapForDisplay(selectedMap, mapDisplay.getMap())) {
+      initializeMapVariables((KmlFolder) data.getSerializableExtra(SelectMap.SELECTED_MAP));
+      if (!loadMapForDisplay(mapImage, mapDisplay.getMap())) {
         displayMapLoadWarning();
-      } else if (PreferenceStore.instance(this).isReminderRequested()) {
-        displaySafetyReminder(null);
+      } else {
+        mapDisplay.addMapMarkers(placemarks);
+        if (PreferenceStore.instance(this).isReminderRequested()) {
+          displaySafetyReminder(null);
+        }
       }
       // Start with last known location if it is fresher than 15 minutes
       long _15MinutesAgo = System.currentTimeMillis() - 15 * 60 * 1000;
@@ -681,13 +720,13 @@ public class CustomMaps extends Activity {
 
   private void loadKmlFile() {
     try {
-      selectedMap = findGroundOverlay();
+      selectedMap = findAnyMap();
     } catch (Exception ex) {
       Log.w(LOG_TAG, "Failed to load kml file", ex);
     }
   }
 
-  private GroundOverlay findGroundOverlay() throws IOException, XmlPullParserException {
+  private KmlFolder findAnyMap() throws IOException, XmlPullParserException {
     if (selectedMap != null) {
       return selectedMap;
     }
@@ -695,11 +734,53 @@ public class CustomMaps extends Activity {
     Iterable<KmlInfo> kmlFiles = KmlFinder.findKmlFiles(FileUtil.getDataDirectory());
     KmlInfo data = kmlFiles.iterator().next();
     KmlParser parser = new KmlParser();
-    Iterable<GroundOverlay> overlays = parser.readFile(data.getKmlReader());
-    GroundOverlay overlay = overlays.iterator().next();
-    overlay.setKmlInfo(data);
-
-    return overlay;
+    Iterable<KmlFeature> features = parser.readFile(data.getKmlReader());
+    // Find first map in the KML file
+    KmlFolder mapFolder = null;
+    List<KmlFeature> placemarks = new ArrayList<KmlFeature>();
+    GroundOverlay map = null;
+    for (KmlFeature feature : features) {
+      if (feature instanceof Placemark) {
+        feature.setKmlInfo(data);
+        placemarks.add(feature);
+        continue;
+      }
+      if (map != null) {
+        continue;
+      }
+      if (feature instanceof GroundOverlay) {
+        map = (GroundOverlay) feature;
+      } else if (feature instanceof KmlFolder) {
+        // Scan folder for a possible map
+        KmlFolder folder = (KmlFolder) feature;
+        for (KmlFeature folderFeature : folder.getFeatures()) {
+          if (folderFeature instanceof GroundOverlay) {
+            map = (GroundOverlay) folderFeature;
+            mapFolder = folder;
+            break;
+          }
+        }
+      }
+    }
+    KmlFolder result = null;
+    if (map != null) {
+      map.setKmlInfo(data);
+      result = new KmlFolder();
+      result.setKmlInfo(data);
+      result.addFeature(map);
+      result.addFeatures(placemarks);
+      if (mapFolder != null) {
+        result.setName(mapFolder.getName());
+        result.setDescription(mapFolder.getDescription());
+        for (KmlFeature feature : mapFolder.getFeatures()) {
+          if (feature instanceof Placemark) {
+            feature.setKmlInfo(data);
+            result.addFeature(feature);
+          }
+        }
+      }
+    }
+    return result;
   }
 
   private LocationManager locator;

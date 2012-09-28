@@ -15,16 +15,25 @@
  */
 package com.custommapsapp.android;
 
+import com.google.android.maps.GeoPoint;
+
 import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.IconStyle;
 import com.custommapsapp.android.kml.KmlInfo;
+import com.custommapsapp.android.kml.Placemark;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MapDisplay is a base class for different kinds of MapDisplays. Nowadays there
@@ -33,6 +42,10 @@ import java.io.InputStream;
  * @author Marko Teittinen
  */
 public abstract class MapDisplay extends View {
+  protected Bitmap mapImage;
+  protected GroundOverlay mapData;
+  protected List<Placemark> mapMarkers = new ArrayList<Placemark>();
+  protected DisplayState displayState;
   protected boolean followMode = false;
 
   public MapDisplay(Context context) {
@@ -64,23 +77,115 @@ public abstract class MapDisplay extends View {
     return followMode;
   }
 
+  // --------------------------------------------------------------------------
+  // Placemarks
+
+  public void removeAllMapMarkers() {
+    mapMarkers.clear();
+  }
+
+  public void removeMapMarker(Placemark marker) {
+    mapMarkers.remove(marker);
+  }
+
+  public void addMapMarkers(Iterable<Placemark> markers) {
+    for (Placemark marker : markers) {
+      mapMarkers.add(marker);
+    }
+  }
+
+  public void addMapMarker(Placemark marker) {
+    if (marker != null && !mapMarkers.contains(marker)) {
+      mapMarkers.add(marker);
+    }
+  }
+
+  protected void drawMapMarkers(Canvas canvas, DisplayState displayState) {
+    for (Placemark marker : mapMarkers) {
+      drawPlacemark(canvas, marker);
+    }
+  }
+
+  private void drawPlacemark(Canvas canvas, Placemark marker) {
+    float[] coordinates = new float[2];
+    GeoPoint geo = marker.getPoint();
+    coordinates[0] = geo.getLongitudeE6() / 1E6f;
+    coordinates[1] = geo.getLatitudeE6() / 1E6f;
+    if (displayState.convertGeoToScreenCoordinates(coordinates) == null) {
+      return;
+    }
+
+    IconStyle iconStyle = marker.getIconStyle();
+    if (iconStyle.isIconReady()) {
+      Bitmap icon = iconStyle.getIcon();
+      if (icon != null) {
+        canvas.save();
+        float scale = iconStyle.getScale();
+        canvas.scale(scale, scale, coordinates[0], coordinates[1]);
+
+        PointF offset = iconStyle.getIconOffset();
+        if (offset != null) {
+          coordinates[0] += offset.x;
+          coordinates[1] += offset.y;
+        }
+
+        Paint p = new Paint();
+        p.setAlpha(0xC0);
+        canvas.drawBitmap(icon, coordinates[0], coordinates[1], p);
+        canvas.restore();
+      }
+    } else {
+      // Icon is not yet available, load in background
+      final IconStyle loadable = iconStyle;
+      Runnable loadIcon = new Runnable() {
+        public void run() {
+          loadable.getIcon();
+          MapDisplay.this.postInvalidate();
+        }
+      };
+      Thread t = new Thread(loadIcon);
+      t.setDaemon(true);
+      t.start();
+    }
+  }
+
+  // --------------------------------------------------------------------------
+
   /**
    * Sets the DisplayState object used to track geo to screen location
    * conversions.
    *
    * @param displayState
    */
-  public abstract void setDisplayState(DisplayState displayState);
+  public void setDisplayState(DisplayState displayState) {
+    this.displayState = displayState;
+  }
 
   /**
    * @return the zoom level the map is being displayed at
    */
-  public abstract float getZoomLevel();
+  public float getZoomLevel() {
+    return displayState.getZoomLevel();
+  }
 
   /**
    * Set the zoom level of the map to the given scale factor.
    */
-  public abstract void setZoomLevel(float zoomLevel);
+  public void setZoomLevel(float zoomLevel) {
+    displayState.setZoomLevel(zoomLevel);
+    invalidate();
+  }
+
+  /**
+   * Zooms the map image by a factor. Values larger than 1 make the image grow
+   * and values smaller than 1 make the image shrink.
+   *
+   * @param factor to to zoom the map by. Must be larger than 0.
+   */
+  public void zoomMap(float factor) {
+    displayState.zoom(factor);
+    invalidate();
+  }
 
   /**
    * @return the longitude and latitude of the center of the display
@@ -111,14 +216,6 @@ public abstract class MapDisplay extends View {
    * movement of the map image.
    */
   public abstract boolean translateMap(float xv, float yv);
-
-  /**
-   * Zooms the map image by a factor. Values larger than 1 make the image grow
-   * and values smaller than 1 make the image shrink.
-   *
-   * @param factor to to zoom the map by. Must be larger than 0.
-   */
-  public abstract void zoomMap(float factor);
 
   /**
    * Sets the user's GPS location to be drawn on the map.
@@ -152,6 +249,9 @@ public abstract class MapDisplay extends View {
    */
   public abstract boolean centerOnLocation(float longitude, float latitude);
 
+  // --------------------------------------------------------------------------
+  // Image loading
+
   /**
    * Loads the bitmap image used as a map in a GroundOverlay.
    *
@@ -169,7 +269,7 @@ public abstract class MapDisplay extends View {
     InputStream in = null;
     try {
       in = data.getImageStream(map.getImage());
-      Bitmap image = ImageHelper.loadImage(in);
+      Bitmap image = ImageHelper.loadImage(in, true);
       if (image != null) {
         return image;
       } else {

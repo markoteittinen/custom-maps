@@ -128,7 +128,9 @@ public class InertiaScroller {
 
   private void stopScrolling() {
     xv = yv = xFriction = yFriction = 0f;
-    map.removeCallbacks(scrollMap);
+    if (map != null) {
+      map.removeCallbacks(scrollMap);
+    }
   }
 
   //------------------------------------------------------------------------------------------
@@ -235,6 +237,11 @@ public class InertiaScroller {
     }
 
     private void startTouch(MotionEvent event) {
+      // Stop any existing scrolling to allow "catching" a rolling map
+      boolean isCatchEvent = (xv > 0 || yv > 0);
+      if (isCatchEvent) {
+        stopScrolling();
+      }
       lastMoveX = event.getX();
       lastMoveY = event.getY();
       velocityTracker = VelocityTracker.obtain();
@@ -256,7 +263,8 @@ public class InertiaScroller {
     }
 
     private void stopTouch(MotionEvent event) {
-      velocityTracker.addMovement(event);
+      // Don't add the finger lift point as it can cause accidental map move
+      // velocityTracker.addMovement(event);
       velocityTracker.computeCurrentVelocity(50); // per 0.05 seconds (50 ms)
       startScrolling(velocityTracker.getXVelocity(), velocityTracker.getYVelocity());
       velocityTracker.recycle();

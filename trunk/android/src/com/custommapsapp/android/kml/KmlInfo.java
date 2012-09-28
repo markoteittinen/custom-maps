@@ -28,6 +28,7 @@ import java.io.Reader;
 public interface KmlInfo {
   public File getFile();
   public Reader getKmlReader() throws IOException;
+  public long getImageDate(String path) throws IOException;
   public InputStream getImageStream(String path) throws IOException;
   public int getImageOrientation(String path);
 }
