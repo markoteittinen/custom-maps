@@ -186,6 +186,11 @@ public class DisplayState {
     return true;
   }
 
+  /**
+   * Converts geo coordinates (lon, lat) to screen coordinates in place.
+   *
+   * @return the original float array containing screen coordinates (x, y)
+   */
   public float[] convertGeoToScreenCoordinates(float[] location) {
     geoToImage.convertGeoToImageCoordinates(location);
     return imageToScreen.convertImageToScreenCoordinates(location);

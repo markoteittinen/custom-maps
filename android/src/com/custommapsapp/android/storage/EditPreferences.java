@@ -54,6 +54,8 @@ public class EditPreferences extends PreferenceActivity {
   private static final String PREFIX = "com.custommapsapp.android";
   public static final String LANGUAGE_CHANGED = PREFIX + ".LanguageChanged";
 
+  private boolean aboutDialogCreated = false;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -66,6 +68,10 @@ public class EditPreferences extends PreferenceActivity {
 
   private void reloadUI() {
     setPreferenceScreen(createPreferenceScreen());
+    if (aboutDialogCreated) {
+      removeDialog(DIALOG_ABOUT);
+      aboutDialogCreated = false;
+    }
   }
 
   private PreferenceScreen createPreferenceScreen() {
@@ -150,6 +156,7 @@ public class EditPreferences extends PreferenceActivity {
     List<Locale> languages = new ArrayList<Locale>();
     languages.add(Locale.ENGLISH);
     languages.add(Locale.GERMAN);
+    languages.add(Locale.ITALIAN);
     languages.add(new Locale("fi"));
     // Sort languages by their localized display name
     final Collator stringComparator = Collator.getInstance(Locale.getDefault());
@@ -165,9 +172,15 @@ public class EditPreferences extends PreferenceActivity {
     languageNames[0] = getString(R.string.language_default);
     languageCodes[0] = "default";
     int idx = 1;
+    StringBuilder buf = new StringBuilder();
     for (Iterator<Locale> iter = languages.iterator(); iter.hasNext(); idx++) {
       Locale locale = iter.next();
-      languageNames[idx] = locale.getDisplayLanguage(locale);
+      // Make sure the first character of the language name is uppercase
+      buf.setLength(0);
+      buf.append(locale.getDisplayLanguage(locale));
+      buf.setCharAt(0, Character.toUpperCase(buf.charAt(0)));
+      languageNames[idx] = buf.toString();
+
       languageCodes[idx] = locale.getLanguage();
     }
     language.setEntryValues(languageCodes);
@@ -218,6 +231,7 @@ public class EditPreferences extends PreferenceActivity {
   @Override
   protected Dialog onCreateDialog(int id) {
     if (id == DIALOG_ABOUT) {
+      aboutDialogCreated = true;
       return new AboutDialog(this);
     }
     return super.onCreateDialog(id);

@@ -51,6 +51,12 @@
         Hier klicken umd die Webseite von Custom Maps für Exemplarkarten und Anleitungen zu
         besuchen.
     </string>
+    <string name="select_cannot_modify_map_set">
+        Diese Karte ist Teil einer Kartensammlung. Es kann nicht geändert oder gelöscht werden.
+    </string>
+    <string name="select_cannot_modify_placemarks">
+        Diese Karte enthält Ortsmarken. Es kann nicht geändert werden.
+    </string>
     <string name="no_map_sharing_apps">Keine der installierten Apps kann Karten teilen</string>
     <string name="delete_map_dialog_title">Bestätige löschen</string>
     <string name="delete_map_dialog">Bist du sicher folgende Karte zu löschen:\n\"%s\"?</string>
@@ -183,7 +189,8 @@
     <string name="credits_text">
         <b>Spezieller Dank</b>\n
         \u2022 Harlan Hile (Zwei-Finger-Zoom, Benutzerlokalisierungs-Icon)\n
-        \u2022 Patrick Steiner (Internationalisierung , Deutsche Übersetzung)
+        \u2022 Patrick Steiner (Internationalisierung , Deutsche Übersetzung)\n
+        \u2022 Francesco Terribile (Italienische Übersetzung)
     </string>
     
     <!-- button items -->
@@ -205,9 +212,6 @@
     <string name="create_map">Erstelle Karte</string>
     <string name="modify_map">Ändere Karte</string>
     <string name="delete_map">Lösche Karte</string>
-    <string name="map_cannot_modify">
-        Teil einer Kartensammlung. Kann nicht geändert oder gelöscht werden
-    </string>
     <string name="select_point">Wähle Punkt</string>
     <string name="adjust_tiepoint">Ändere Punkt</string>
     <string name="delete_tiepoint">Lösche Punkt</string>

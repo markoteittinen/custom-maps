@@ -454,7 +454,7 @@ public class SelectImageFileActivity extends Activity {
             currentDir = selected.getFile();
           }
           updateImageFileList();
-        } else if (selected.getImage() != null) {
+        } else if (selected.getImage(true) != null) {
           File f = limitImageSize(selected.getFile());
           clearImageFileList();
           returnImageFile(f);
@@ -505,9 +505,11 @@ public class SelectImageFileActivity extends Activity {
   private class ImageFile {
     private File file;
     private Bitmap image;
+    private boolean isImageSet;
 
     ImageFile(File file) {
       this.file = file;
+      isImageSet = false;
     }
 
     public File getFile() {
@@ -520,10 +522,42 @@ public class SelectImageFileActivity extends Activity {
 
     public void setImage(Bitmap image) {
       this.image = image;
+      isImageSet = true;
     }
 
-    public Bitmap getImage() {
+    public Bitmap getImage(boolean validate) {
+      if (!isImageSet && validate) {
+        setImage(loadThumbnail());
+      }
       return image;
+    }
+
+    public synchronized Bitmap loadThumbnail() {
+      BitmapFactory.Options options = decodeImageBounds(file);
+      int w = options.outWidth;
+      int h = options.outHeight;
+      if (w < 0) {
+        return null;
+      }
+      // Target max dimensions: 150 x 100 (w x h)
+      float divider = Math.max(w / 150f, h / 100f);
+      options.inJustDecodeBounds = false;
+      // Use inSampleSize to get close to target dimension
+      if (divider >= 16) {
+        options.inSampleSize = 16;
+      } else if (divider >= 8) {
+        options.inSampleSize = 8;
+      } else if (divider >= 4) {
+        options.inSampleSize = 4;
+      } else if (divider >= 2) {
+        options.inSampleSize = 2;
+      }
+      // Match the target dimension by scaling
+      divider = divider / options.inSampleSize;
+      options.inScaled = true;
+      options.inTargetDensity = getResources().getDisplayMetrics().densityDpi;
+      options.inDensity = (int) FloatMath.ceil(options.inTargetDensity * divider);
+      return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
     }
 
     public void recycleBitmap() {
@@ -553,8 +587,8 @@ public class SelectImageFileActivity extends Activity {
       ImageView imageView = (ImageView) convertView.findViewById(R.id.thumbnail);
       TextView textView = (TextView) convertView.findViewById(R.id.nameField);
       ImageFile imageFile = getItem(position);
-      if (imageFile.getImage() != null) {
-        imageView.setImageBitmap(imageFile.getImage());
+      if (imageFile.getImage(false) != null) {
+        imageView.setImageBitmap(imageFile.getImage(false));
         imageView.setVisibility(View.VISIBLE);
       } else {
         // No image available (directory?), remove unused image area from view
@@ -595,11 +629,9 @@ public class SelectImageFileActivity extends Activity {
       for (ImageFile imageFile : imageFiles) {
         i++;
         if (!imageFile.isDirectory()) {
-          Bitmap thumbnail = loadThumbnail(imageFile.getFile());
-          if (thumbnail != null) {
-            imageFile.setImage(thumbnail);
-            imageLoaded = true;
-          }
+          Bitmap thumbnail = imageFile.loadThumbnail();
+          imageLoaded = (thumbnail != null);
+          imageFile.setImage(thumbnail);
         }
         // First param is progress value, second boolean flag (as int)
         publishProgress(Math.round(100f * i / imageFiles.size()), imageLoaded ? 1 : 0);
@@ -633,34 +665,6 @@ public class SelectImageFileActivity extends Activity {
 
     private long timeElapsed() {
       return SystemClock.elapsedRealtime() - startTime;
-    }
-
-    private Bitmap loadThumbnail(File file) {
-      BitmapFactory.Options options = decodeImageBounds(file);
-      int w = options.outWidth;
-      int h = options.outHeight;
-      if (w < 0) {
-        return null;
-      }
-      // Target max dimensions: 150 x 100 (w x h)
-      float divider = Math.max(w / 150f, h / 100f);
-      options.inJustDecodeBounds = false;
-      // Use inSampleSize to get close to target dimension
-      if (divider >= 16) {
-        options.inSampleSize = 16;
-      } else if (divider >= 8) {
-        options.inSampleSize = 8;
-      } else if (divider >= 4) {
-        options.inSampleSize = 4;
-      } else if (divider >= 2) {
-        options.inSampleSize = 2;
-      }
-      // Match the target dimension by scaling
-      divider = divider / options.inSampleSize;
-      options.inScaled = true;
-      options.inTargetDensity = getResources().getDisplayMetrics().densityDpi;
-      options.inDensity = (int) FloatMath.ceil(options.inTargetDensity * divider);
-      return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
     }
   }
 

@@ -32,6 +32,15 @@ import java.io.InputStream;
  * @author Marko Teittinen
  */
 public class GeoToImageConverter {
+
+  public static float e6ToFloat(int valueE6) {
+    return valueE6 / 1E6f;
+  }
+
+  public static int floatToE6(float value) {
+    return Math.round(1E6f * value);
+  }
+
   private GroundOverlay mapData;
   private int imageWidth;
   private int imageHeight;

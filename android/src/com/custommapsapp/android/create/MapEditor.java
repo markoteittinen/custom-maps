@@ -23,7 +23,11 @@ import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.KmlFeature;
+import com.custommapsapp.android.kml.KmlFolder;
+import com.custommapsapp.android.kml.KmlInfo;
 import com.custommapsapp.android.kml.KmzFile;
+import com.custommapsapp.android.kml.Placemark;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -74,7 +78,7 @@ public class MapEditor extends Activity {
   private static final String TIEPOINT_INDEX = EXTRA_PREFIX + ".TiepointIndex";
   public static final String BITMAP_FILE = EXTRA_PREFIX + ".BitmapFile";
   public static final String KMZ_FILE = EXTRA_PREFIX + ".KmzFile";
-  public static final String GROUND_OVERLAY = EXTRA_PREFIX + ".GroundOverlay";
+  public static final String KML_FOLDER = EXTRA_PREFIX + ".KmlFolder";
 
   public static final int SNIPPET_SIZE = 150;
 
@@ -90,7 +94,9 @@ public class MapEditor extends Activity {
 
   private String bitmapFilename;
   private String kmzFilename;
-  private GroundOverlay originalMap;
+  private KmlFolder originalMap;
+  private GroundOverlay mapImage;
+  private List<Placemark> placemarks;
 
   private EditText nameField;
   private EditText descriptionField;
@@ -121,12 +127,18 @@ public class MapEditor extends Activity {
         bitmapFilename = intent.getStringExtra(BITMAP_FILE);
       } else if (intent.hasExtra(KMZ_FILE)) {
         kmzFilename = intent.getStringExtra(KMZ_FILE);
-        originalMap = (GroundOverlay) intent.getSerializableExtra(GROUND_OVERLAY);
+        initializeMapVariables((KmlFolder) intent.getSerializableExtra(KML_FOLDER));
 
-        nameField.setText(originalMap.getName());
-        descriptionField.setText(originalMap.getDescription());
-
-        findTiePoints(originalMap);
+        if (mapImage != null) {
+          nameField.setText(mapImage.getName());
+          descriptionField.setText(mapImage.getDescription());
+          findTiePoints(mapImage);
+        } else {
+          // No map with image provided, cancel
+          Toast.makeText(this, R.string.editor_image_load_failed, Toast.LENGTH_LONG).show();
+          setResult(RESULT_CANCELED);
+          finish();
+        }
         // If there was an error, this activity will quit
         if (this.isFinishing()) {
           return;
@@ -173,7 +185,7 @@ public class MapEditor extends Activity {
     outState.putParcelableArrayList(TIEPOINTS, tiepointAdapter.getAllTiePoints());
     outState.putString(KMZ_FILE, kmzFilename);
     if (originalMap != null) {
-      outState.putSerializable(GROUND_OVERLAY, originalMap);
+      outState.putSerializable(KML_FOLDER, originalMap);
     }
     helpDialogManager.onSaveInstanceState(outState);
   }
@@ -188,8 +200,8 @@ public class MapEditor extends Activity {
     descriptionField.setText(description);
 
     kmzFilename = savedInstanceState.getString(KMZ_FILE);
-    if (savedInstanceState.containsKey(GROUND_OVERLAY)) {
-      originalMap = (GroundOverlay) savedInstanceState.getSerializable(GROUND_OVERLAY);
+    if (savedInstanceState.containsKey(KML_FOLDER)) {
+      initializeMapVariables((KmlFolder) savedInstanceState.getSerializable(KML_FOLDER));
     }
 
     tiepointAdapter.clear();
@@ -200,6 +212,26 @@ public class MapEditor extends Activity {
       }
     }
     helpDialogManager.onRestoreInstanceState(savedInstanceState);
+  }
+
+  /**
+   * Initializes mapImage (first GroundOverlay in KmlFolder) and list of
+   * placemarks stored with map.
+   *
+   * @param map KmlFolder containing the data
+   */
+  private void initializeMapVariables(KmlFolder map) {
+    originalMap = map;
+    placemarks = new ArrayList<Placemark>();
+    mapImage = null;
+    if (map != null) {
+      mapImage = map.getFirstMap();
+      for (KmlFeature feature : map.getFeatures()) {
+        if (feature instanceof Placemark) {
+          placemarks.add((Placemark) feature);
+        }
+      }
+    }
   }
 
   @Override
@@ -231,7 +263,7 @@ public class MapEditor extends Activity {
     unpackImage(map, FileUtil.TMP_IMAGE);
     bitmapFilename = FileUtil.TMP_IMAGE;
 
-    Bitmap mapImage = ImageHelper.loadImage(FileUtil.TMP_IMAGE);
+    Bitmap mapImage = ImageHelper.loadImage(FileUtil.TMP_IMAGE, true);
     if (mapImage == null) {
       Toast.makeText(this, R.string.editor_image_load_failed, Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
@@ -315,24 +347,27 @@ public class MapEditor extends Activity {
   private void unpackImage(GroundOverlay map, String destinationPath) {
     InputStream in = null;
     OutputStream out = null;
+    File destFile = null;
+    long imageDate = 0;
     try {
-      in = new BufferedInputStream(map.getKmlInfo().getImageStream(map.getImage()));
-      out = new BufferedOutputStream(new FileOutputStream(destinationPath));
-      copyContents(in, out);
+      KmlInfo srcInfo = map.getKmlInfo();
+      String imageName = map.getImage();
+      imageDate = srcInfo.getImageDate(imageName);
+      in = new BufferedInputStream(srcInfo.getImageStream(map.getImage()));
+      destFile = new File(destinationPath);
+      out = new BufferedOutputStream(new FileOutputStream(destFile));
+      FileUtil.copyContents(in, out);
       out.flush();
     } catch (IOException ex) {
       Log.w(CustomMaps.LOG_TAG, "Failed to unpack image from KMZ", ex);
+      destFile = null;
     } finally {
       FileUtil.tryToClose(in);
       FileUtil.tryToClose(out);
     }
-  }
-
-  private void copyContents(InputStream in, OutputStream out) throws IOException {
-    byte[] buf = new byte[1024];
-    int n;
-    while ((n = in.read(buf)) >= 0) {
-      out.write(buf, 0, n);
+    // Keep image timestamp
+    if (destFile != null && imageDate != 0) {
+      destFile.setLastModified(imageDate);
     }
   }
 
@@ -621,6 +656,7 @@ public class MapEditor extends Activity {
       zipOut.setMethod(ZipOutputStream.STORED);
 
       ZipEntry entry = new ZipEntry("doc.kml");
+      // TODO: Add support for saving maps with placemarks.
       byte[] data;
       if (tiepointAdapter.getCount() > 2) {
         data = generateLatLonQuadKml(imageCorners).getBytes();

@@ -15,6 +15,7 @@
  */
 package com.custommapsapp.android;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -25,17 +26,14 @@ import android.util.Log;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * ImageOrientationDetector tries to determine the orientation of a JPEG image
- * based on the EXIF data stored in the image. These methods are not available
- * in Android versions before 2.0 (SDK 5). In earlier Android versions this
- * class always reports that the images do not require rotation.
+ * ImageHelper contains several image related static helper methods, like
+ * EXIF orientation detection, reading images and their sizes from files, etc.
  *
  * @author Marko Teittinen
  */
@@ -71,7 +69,11 @@ public class ImageHelper {
       if (Build.VERSION.SDK_INT >= 5) {
         Log.e(CustomMaps.LOG_TAG, "Failed to initialize ImageHelper. SDK: " + Build.VERSION.SDK_INT,
               ex);
+      } else {
+        Log.e(CustomMaps.LOG_TAG, "ImageHelper initialization failed", ex);
       }
+    } catch (Error err) {
+      Log.e(CustomMaps.LOG_TAG, "ImageHelper initialization failed with error", err);
     }
   }
 
@@ -128,25 +130,41 @@ public class ImageHelper {
   /**
    * Load a bitmap from a file.
    *
-   * @param filename
+   * @param filename Name of the file containing image
+   * @param ignoreDpi Flag indicating if image should be scaled to display density.
    * @return Bitmap from named file, or 'null' in case of errors
    */
-  public static Bitmap loadImage(String filename) {
+  public static Bitmap loadImage(String filename, boolean ignoreDpi) {
     InputStream in = null;
     try {
       in = new BufferedInputStream(new FileInputStream(filename));
-      return loadImage(in);
+      return loadImage(in, ignoreDpi);
     } catch (Exception ex) {
       Log.e(CustomMaps.LOG_TAG, "Failed to load image: " + filename, ex);
       return null;
     } finally {
-      if (in != null) {
-        try {
-          in.close();
-        } catch (IOException ex) {
-          // Ignore
-        }
-      }
+      FileUtil.tryToClose(in);
+    }
+  }
+
+  /**
+   * Load a bitmap from a resource with given id.
+   *
+   * @param context Context to read the resource from.
+   * @param resourceId Resource ID to be read (must be png, gif, or jpg image).
+   * @param ignoreDpi Flag selecting if image should be scaled to display density.
+   * @return Bitmap from the resource, or 'null' in case of errors.
+   */
+  public static Bitmap loadImage(Context context, int resourceId, boolean ignoreDpi) {
+    InputStream in = null;
+    try {
+      in = context.getResources().openRawResource(resourceId);
+      return loadImage(in, ignoreDpi);
+    } catch (Exception ex) {
+      Log.e(CustomMaps.LOG_TAG, "Failed to load image resource: " + resourceId, ex);
+      return null;
+    } finally {
+      FileUtil.tryToClose(in);
     }
   }
 
@@ -154,9 +172,10 @@ public class ImageHelper {
    * Load a bitmap from InputStream and catch OutOfMemoryErrors.
    *
    * @param in InputStream containing the bitmap
+   * @param ignoreDpi Flag selecting if image should be scaled to display density.
    * @return Bitmap from InputStream, or 'null' in case of errors
    */
-  public static Bitmap loadImage(InputStream in) {
+  public static Bitmap loadImage(InputStream in, boolean ignoreDpi) {
     System.gc();
     if (in == null) {
       return null;
@@ -164,7 +183,9 @@ public class ImageHelper {
     try {
       BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
       bitmapOptions.inScaled = false;
-      bitmapOptions.inTargetDensity = 0;
+      if (ignoreDpi) {
+        bitmapOptions.inTargetDensity = 0;
+      }
       bitmapOptions.inPurgeable = true;
       bitmapOptions.inInputShareable = true;
       bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;

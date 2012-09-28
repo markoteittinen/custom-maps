@@ -18,7 +18,6 @@ package com.custommapsapp.android;
 import com.custommapsapp.android.kml.GroundOverlay;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.Toast;
@@ -32,9 +31,6 @@ import java.io.IOException;
  * @author Marko Teittinen
  */
 public class MapUpMapDisplay extends MapDisplay {
-  private Bitmap mapImage;
-  private GroundOverlay mapData;
-  private DisplayState displayState = new DisplayState();
 
   public MapUpMapDisplay(Context context) {
     super(context);
@@ -42,16 +38,6 @@ public class MapUpMapDisplay extends MapDisplay {
 
   public MapUpMapDisplay(Context context, AttributeSet attrs) {
     super(context, attrs);
-  }
-
-  @Override
-  public void setDisplayState(DisplayState displayState) {
-    this.displayState = displayState;
-  }
-
-  @Override
-  public void setFollowMode(boolean followMode) {
-    super.setFollowMode(followMode);
   }
 
   /**
@@ -86,23 +72,6 @@ public class MapUpMapDisplay extends MapDisplay {
   }
 
   @Override
-  public float getZoomLevel() {
-    return displayState.getZoomLevel();
-  }
-
-  @Override
-  public void zoomMap(float factor) {
-    displayState.zoom(factor);
-    invalidate();
-  }
-
-  @Override
-  public void setZoomLevel(float zoom) {
-    displayState.setZoomLevel(zoom);
-    invalidate();
-  }
-
-  @Override
   public GroundOverlay getMap() {
     return mapData;
   }
@@ -112,6 +81,7 @@ public class MapUpMapDisplay extends MapDisplay {
     if (mapData == newMap || (mapData != null && mapData.equals(newMap))) {
       return;
     }
+    removeAllMapMarkers();
     if (mapImage != null) {
       // Release memory used by the old map image
       mapImage.recycle();
@@ -181,13 +151,16 @@ public class MapUpMapDisplay extends MapDisplay {
       return;
     }
     canvas.drawBitmap(mapImage, displayState.getImageToScreenMatrix(), null);
+    drawMapMarkers(canvas, displayState);
   }
 
   @Override
   public void onSizeChanged(int w, int h, int oldW, int oldH) {
     super.onSizeChanged(w, h, oldW, oldH);
-    // Keep the same point centered in the view
-    displayState.translate((w - oldW) / 2f, (h - oldH) / 2);
+    if (displayState != null) {
+      // Keep the same point centered in the view
+      displayState.translate((w - oldW) / 2f, (h - oldH) / 2);
+    }
   }
 
   //--------------------------------------------------------------------------------------------

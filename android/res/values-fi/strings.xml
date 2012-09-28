@@ -50,6 +50,12 @@
         Tämä linkki johtaa Custom Mapsin nettisivuille, missä on esimerkkikarttoja ja 
         yksityiskohtaiset kartan teko-ohjeet.
     </string>
+    <string name="select_cannot_modify_map_set">
+        Tämä kartta on osa karttaryhmää. Sitä ei voi muokata eikä poistaa.
+    </string>
+    <string name="select_cannot_modify_placemarks">
+        Tämä kartta sisältää karttamerkkejä. Sitä ei voi muokata.
+    </string>
     <string name="no_map_sharing_apps">Ei löytynyt ohjelmia, jotka voisivat lähettää karttoja</string>
     <string name="delete_map_dialog_title">Varmista kartan poisto</string>
     <string name="delete_map_dialog">Oletko varma, että haluat poistaa kartan\n\"%s\"?</string>
@@ -60,7 +66,7 @@
     <string name="nearby_maps">Läheiset kartat</string>
     <string name="other_maps">Muut kartat</string>
     <string name="all_maps">Kaikki kartat</string>
-    
+
     <!-- downloading -->
     <string name="progress_format">Tuntematon kartan koko. Ladattu %,d kB.</string>
     <string name="download_canceled">Kartan lataaminen peruttu</string>
@@ -77,7 +83,7 @@
     </string>
     
     <!-- map image display -->
-    <string name="unnamed_map">nimeämätön kartta</string>
+    <string name="unnamed_map">Nimeämätön kartta</string>
     <string name="map_image_load_failed">Kartan %s kuvan lataaminen epäonnistui.</string>
     
     <!-- help manager -->
@@ -180,7 +186,8 @@
     <string name="credits_text">
         <b>Erityiskiitokset</b>\n
         \u2022 Harlan Hile (nipistyszoomi, käyttäjän sijaintikuvake)\n
-        \u2022 Patrick Steiner (ohjelman käännettävyys, Saksan kieli)
+        \u2022 Patrick Steiner (ohjelman käännettävyys, Saksan kieli)\n
+        \u2022 Francesco Terribile (Italian kieli)
     </string>
     
     <!-- button items -->
@@ -202,7 +209,6 @@
     <string name="create_map">Luo kartta</string>
     <string name="modify_map">Muokkaa karttaa</string>
     <string name="delete_map">Poista kartta</string>
-    <string name="map_cannot_modify">Osa karttaryhmää. Ei voida muokata tai poistaa</string>
     <string name="select_point">Valitse piste</string>
     <string name="adjust_tiepoint">Säädä kiintopistettä</string>
     <string name="delete_tiepoint">Poista kiintopiste</string>

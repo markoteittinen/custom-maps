@@ -16,48 +16,74 @@
 package com.custommapsapp.android.kml;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
- * KmlFolder manages a set of GroundOverlays stored in kml and kmz files located
- * within a single source directory (folder).
+ * KmlFolder manages a set of KmlFeatures stored in kml and kmz files located
+ * within a single source directory (folder). Supported KmlFeatures are
+ * GroundOverlay and Placemarks.
  *
  * @author Marko Teittinen
  */
-public class KmlFolder {
-  private KmlInfo kmlInfo;
-  private String name;
-  private String description;
-  private List<GroundOverlay> overlays = new ArrayList<GroundOverlay>();
+public class KmlFolder extends KmlFeature {
+  private List<KmlFeature> features = new ArrayList<KmlFeature>();
 
-  public KmlInfo getKmlInfo() {
-    return kmlInfo;
-  }
-  public void setKmlInfo(KmlInfo kmlInfo) {
-    this.kmlInfo = kmlInfo;
-  }
-
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
+  /**
+   * Adds a GroundOverlay or a Placemark to this folder
+   *
+   * @param feature GroundOverlay (map) or a Placemark (icon)
+   */
+  public void addFeature(KmlFeature feature) {
+    features.add(feature);
   }
 
-  public String getDescription() {
-    return description;
-  }
-  public void setDescription(String description) {
-    this.description = description;
+  /**
+   * Adds all KmlFeatures from a Collection to this KmlFolder.
+   *
+   * @param moreFeatures features to be added to this folder
+   */
+  public void addFeatures(Collection<? extends KmlFeature> moreFeatures) {
+    if (moreFeatures != null) {
+      features.addAll(moreFeatures);
+    }
   }
 
-  public void addOverlay(GroundOverlay overlay) {
-    overlays.add(overlay);
+  /**
+   * @return true, if this folder contains any KmlFeatures
+   */
+  public boolean hasFeatures() {
+    return !features.isEmpty();
   }
-  public boolean hasOverlays() {
-    return !overlays.isEmpty();
+
+  /**
+   * @return true, if this folder contains any Placemarks
+   */
+  public boolean hasPlacemarks() {
+    for (KmlFeature feature : features) {
+      if (feature instanceof Placemark) {
+        return true;
+      }
+    }
+    return false;
   }
-  public Iterable<GroundOverlay> getOverlays() {
-    return overlays;
+
+  /**
+   * @return Iterable over all KmlFeatures stored in this folder
+   */
+  public Iterable<KmlFeature> getFeatures() {
+    return features;
+  }
+
+  /**
+   * @return The first GroundOverlay found in this folder
+   */
+  public GroundOverlay getFirstMap() {
+    for (KmlFeature feature : features) {
+      if (feature instanceof GroundOverlay) {
+        return (GroundOverlay) feature;
+      }
+    }
+    return null;
   }
 }

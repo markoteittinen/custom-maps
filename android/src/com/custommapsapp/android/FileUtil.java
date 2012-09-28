@@ -15,7 +15,7 @@
  */
 package com.custommapsapp.android;
 
-import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.KmlFolder;
 
 import android.app.Activity;
 import android.content.Context;
@@ -43,6 +43,7 @@ public class FileUtil {
   public static final String SD_ROOT_PATH = "/sdcard";
   public static final String DATA_DIR = SD_ROOT_PATH + "/CustomMaps";
   public static final String IMAGE_DIR = DATA_DIR + "/images";
+  public static final String CACHE_DIR = DATA_DIR + "/cache";
   public static final String TMP_IMAGE = IMAGE_DIR + "/mapimage.jpg";
   private static final String SD_PHOTOS = SD_ROOT_PATH + "/DCIM/Camera";
   private static final String SD_PHOTOS_2 = SD_ROOT_PATH + "/DCIM/100MEDIA";
@@ -74,23 +75,32 @@ public class FileUtil {
   }
 
   public static File getDataDirectory() {
-    return new File(DATA_DIR);
-  }
-
-  public static boolean verifyDataDir() {
-    File dataDir = getDataDirectory();
-    if (dataDir.exists()) {
-      return true;
-    }
-    return dataDir.mkdirs();
+    return verifyDir(DATA_DIR);
   }
 
   public static File getImageDirectory() {
-    File imageDir = new File(IMAGE_DIR);
-    if (!imageDir.exists()) {
-      imageDir.mkdirs();
+    return verifyDir(IMAGE_DIR);
+  }
+
+  public static File getCacheDirectory() {
+    return verifyDir(CACHE_DIR);
+  }
+
+  /**
+   * Helper method to initialize directory. If a directory with given path does
+   * not exist, the directory is created and a .nomedia file is created in it
+   * to prevent internal resources from appearing in Android Gallery.
+   *
+   * @param pathToDir String path to directory that needs to exist
+   * @return File object referring to the directory that was created if necessary
+   */
+  private static File verifyDir(String pathToDir) {
+    File dir = new File(pathToDir);
+    if (!dir.exists()) {
+      dir.mkdirs();
     }
-    return imageDir;
+    addNoMediaFile(dir);
+    return dir;
   }
 
   /**
@@ -143,10 +153,7 @@ public class FileUtil {
    */
   public static boolean verifyImageDir() {
     File imageDir = getImageDirectory();
-    if (imageDir.exists()) {
-      return true;
-    }
-    return imageDir.mkdirs();
+    return imageDir.exists();
   }
 
   /**
@@ -257,7 +264,7 @@ public class FileUtil {
    * @param to
    * @throws IOException
    */
-  private static void copyContents(InputStream from, OutputStream to) throws IOException {
+  public static void copyContents(InputStream from, OutputStream to) throws IOException {
     if (!(from instanceof BufferedInputStream)) {
       from = new BufferedInputStream(from);
     }
@@ -275,14 +282,46 @@ public class FileUtil {
     to.flush();
   }
 
-  public static void tryToClose(Closeable stream) {
-    if (stream == null) {
+  /**
+   * Attempts to close a closeable object, typically an input or output stream.
+   * Returns 'true' if the closing was successful, and 'false' if it failed with
+   * an exception (closing a null object will result in no-op success). If
+   * an exception was thrown, it is logged, but never thrown for the caller.
+   *
+   * @param stream Closeable object (not necessarily a stream) to be closed
+   * @return {@code true} if closing succeeded without errors.
+   */
+  public static boolean tryToClose(Closeable stream) {
+    if (stream != null) {
+      try {
+        stream.close();
+      } catch (IOException ex) {
+        Log.w(CustomMaps.LOG_TAG, "Failed to close stream", ex);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Attempts to add an empty .nomedia file to a directory to indicate it does
+   * not contain public image files.
+   */
+  private static void addNoMediaFile(File dir) {
+    if (!dir.exists()) {
       return;
     }
-    try {
-      stream.close();
-    } catch (IOException ex) {
-      // Ignore
+    File noMedia = new File(dir, ".nomedia");
+    if (!noMedia.exists()) {
+      FileOutputStream out = null;
+      try {
+        // Create an empty file
+        out = new FileOutputStream(noMedia);
+      } catch (Exception e) {
+        // ignore
+      } finally {
+        tryToClose(out);
+      }
     }
   }
 
@@ -290,10 +329,10 @@ public class FileUtil {
    * Sends a map using another application installed on the device (e.g. gmail).
    *
    * @param sender currently active Activity
-   * @param map GroundOverlay to be sent
+   * @param map KmlFolder to be sent
    * @return {@code true} if the map was sent successfully
    */
-  public static boolean shareMap(Activity sender, GroundOverlay map) {
+  public static boolean shareMap(Activity sender, KmlFolder map) {
     Intent sendMap = new Intent();
     sendMap.setAction(Intent.ACTION_SEND);
     sendMap.setType("application/vnd.google-earth.kmz");

@@ -166,11 +166,11 @@ public class KmzDownloader extends Activity {
    */
   private String createLocalPath(URL mapUrl) {
     // Check that app data directory exists or can be created
-    if (!FileUtil.verifyDataDir()) {
+    File localDir = FileUtil.getDataDirectory();
+    if (!localDir.exists()) {
       cancelActivity(getString(R.string.download_no_datadir));
       return null;
     }
-    File localDir = FileUtil.getDataDirectory();
     // Find all existing filenames (use lower case to ignore case)
     Set<String> localNames = new HashSet<String>();
     for (String name : localDir.list()) {
@@ -229,12 +229,6 @@ public class KmzDownloader extends Activity {
       }
       this.mapUrl = mapUrl;
       this.fileName = fileName;
-    }
-
-    @Override
-    protected void onPreExecute() {
-      super.onPreExecute();
-      // TODO: open connection, set the max progress(?)
     }
 
     @Override

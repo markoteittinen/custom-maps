@@ -24,12 +24,15 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * KmlParser is a partial XML pull parser implementation of KML parsing. It
@@ -39,13 +42,22 @@ import java.util.List;
  * @author Marko Teittinen
  */
 public class KmlParser {
-
-  public Iterable<GroundOverlay> readFile(Reader reader)
+  /**
+   * Parses a KML file using the reader and returns an Iterable for found
+   * KmlFeatures. KmlFeatures are KmlFolders, GroundOverlays, and Placemarks.
+   * KmlFolders in turn can contain GroundOverlays and Placemarks.
+   */
+  public Iterable<KmlFeature> readFile(Reader reader)
       throws XmlPullParserException, IOException {
     return parseStream(reader);
   }
 
-  public Iterable<GroundOverlay> readFile(File kmlFile) throws XmlPullParserException, IOException {
+  /**
+   * Parses a KML file and returns an Iterable for found KmlFeatures.
+   * KmlFeatures are KmlFolders, GroundOverlays, and Placemarks. KmlFolders
+   * in turn can contain GroundOverlays and Placemarks.
+   */
+  public Iterable<KmlFeature> readFile(File kmlFile) throws XmlPullParserException, IOException {
     FileReader reader = new FileReader(kmlFile);
     try {
       return parseStream(reader);
@@ -58,15 +70,25 @@ public class KmlParser {
     }
   }
 
-  private Iterable<GroundOverlay> parseStream(Reader in)
+  private Iterable<KmlFeature> parseStream(Reader in)
       throws XmlPullParserException, IOException {
+    // Ignore possible leading U+feff char (Byte Order Mark in UTF some files)
+    // XmlPullParser should ignore it as whitespace, but actually chokes on it
+    BufferedReader inBuf =
+        (in instanceof BufferedReader ? (BufferedReader) in : new BufferedReader(in));
+    inBuf.mark(4);
+    int ch = inBuf.read();
+    if (ch != 0xFEFF) {
+      // Not Byte Order Mark, reset to beginning
+      inBuf.reset();
+    }
+
     XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
     // factory.setNamespaceAware(true);
     XmlPullParser xpp = factory.newPullParser();
+    xpp.setInput(inBuf);
 
-    xpp.setInput(in);
-
-    Iterable<GroundOverlay> result = null;
+    Iterable<KmlFeature> result = null;
     int event = xpp.getEventType();
     while (event != XmlPullParser.END_DOCUMENT) {
       if (event == XmlPullParser.START_TAG && xpp.getName().equals("kml")) {
@@ -77,27 +99,77 @@ public class KmlParser {
     return result;
   }
 
-  private Iterable<GroundOverlay> parseKml(XmlPullParser xpp) throws XmlPullParserException,
+  private Iterable<KmlFeature> parseKml(XmlPullParser xpp) throws XmlPullParserException,
       IOException {
     if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("kml")) {
       throw new IllegalStateException("XML parser is not at <kml> tag");
     }
-    List<GroundOverlay> result = new ArrayList<GroundOverlay>();
+    List<KmlFeature> result = new ArrayList<KmlFeature>();
     int event = xpp.next();
     while (event != XmlPullParser.END_TAG || !xpp.getName().equals("kml")) {
       if (event == XmlPullParser.START_TAG) {
-        if (xpp.getName().equals("GroundOverlay")) {
-          result.add(parseGroundOverlay(xpp));
-        } else if (xpp.getName().equals("Folder")) {
-          KmlFolder folder = parseFolder(xpp);
-          for (GroundOverlay overlay : folder.getOverlays()) {
-            result.add(overlay);
+        if (xpp.getName().equals("Document")) {
+          for (KmlFeature item : parseDocument(xpp)) {
+            result.add(item);
           }
+        } else if (xpp.getName().equals("Folder")) {
+          result.add(parseFolder(xpp));
+        } else if (xpp.getName().equals("GroundOverlay")) {
+          result.add(parseGroundOverlay(xpp));
         } else {
           skipBranch(xpp);
         }
       }
       event = xpp.next();
+    }
+    return result;
+  }
+
+  /**
+   * Parses a Document tag in a kml file. Document can contain IconStyles
+   * for PlaceMarks and Folders containing GroundOverlays and Placemarks.
+   *
+   * @return Iterable<KmlFeature> containing PlaceMarks and GroundOverlays
+   */
+  private Iterable<KmlFeature> parseDocument(XmlPullParser xpp) throws XmlPullParserException,
+      IOException {
+    if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("Document")) {
+      throw new IllegalStateException("XML parser is not at <Document> tag");
+    }
+    List<KmlFeature> result = new ArrayList<KmlFeature>();
+    Map<String, String> styleNameMap = new HashMap<String, String>();
+    Map<String, IconStyle> iconStyleMap = new HashMap<String, IconStyle>();
+    int event = xpp.next();
+    while (event != XmlPullParser.END_TAG || !xpp.getName().equals("Document")) {
+      if (event == XmlPullParser.START_TAG) {
+        if (xpp.getName().equals("StyleMap")) {
+          // Get style map id (key)
+          String styleId = getAttributeValue("id", xpp);
+          // Get style name for normal style (value)
+          String normalId = parseStyleMapNormal(xpp);
+          styleNameMap.put(styleId, normalId);
+        } else if (xpp.getName().equals("Style")) {
+          // Map style id to style defined in tag
+          String styleId = getAttributeValue("id", xpp);
+          IconStyle style = parseStyle(xpp);
+          if (style != null) {
+            iconStyleMap.put(styleId, style);
+          }
+        } else if (xpp.getName().equals("Folder")) {
+          result.add(parseFolder(xpp));
+        } else if (xpp.getName().equals("GroundOverlay")) {
+          result.add(parseGroundOverlay(xpp));
+        } else if (xpp.getName().equals("Placemark")) {
+          result.add(parsePlacemark(xpp));
+        } else {
+          skipBranch(xpp);
+        }
+      }
+      event = xpp.next();
+    }
+    // Resolve all placemark icons
+    if (!iconStyleMap.isEmpty()) {
+      resolvePlacemarkIcons(result, styleNameMap, iconStyleMap);
     }
     return result;
   }
@@ -112,6 +184,8 @@ public class KmlParser {
       throw new IllegalStateException("XML parser is not at <Folder> tag");
     }
     KmlFolder folder = new KmlFolder();
+    Map<String, String> styleNameMap = new HashMap<String, String>();
+    Map<String, IconStyle> iconStyleMap = new HashMap<String, IconStyle>();
     int event = xpp.next();
     while (event != XmlPullParser.END_TAG || !xpp.getName().equals("Folder")) {
       if (event == XmlPullParser.START_TAG) {
@@ -119,15 +193,224 @@ public class KmlParser {
           folder.setName(xpp.nextText());
         } else if (xpp.getName().equals("description")) {
           folder.setDescription(xpp.nextText());
+        } else if (xpp.getName().equals("StyleMap")) {
+          // Map style map ID to normal value in map
+          String styleId = getAttributeValue("id", xpp);
+          String normalId = parseStyleMapNormal(xpp);
+          styleNameMap.put(styleId, normalId);
+        } else if (xpp.getName().equals("Style")) {
+          // Map style id to style defined in tag
+          String styleId = getAttributeValue("id", xpp);
+          IconStyle style = parseStyle(xpp);
+          if (style != null) {
+            iconStyleMap.put(styleId, style);
+          }
         } else if (xpp.getName().equals("GroundOverlay")) {
-          folder.addOverlay(parseGroundOverlay(xpp));
+          folder.addFeature(parseGroundOverlay(xpp));
+        } else if (xpp.getName().equals("Placemark")) {
+          folder.addFeature(parsePlacemark(xpp));
         } else {
           skipBranch(xpp);
         }
       }
       event = xpp.next();
     }
+    // Resolve all placemark icons
+    if (!iconStyleMap.isEmpty()) {
+      resolvePlacemarkIcons(folder.getFeatures(), styleNameMap, iconStyleMap);
+    }
     return folder;
+  }
+
+  /**
+   * Resolves all unresolved placemark icons to their values based on given
+   * style mappings.
+   */
+  private void resolvePlacemarkIcons(Iterable<KmlFeature> features,
+      Map<String, String> styleNameMap, Map<String, IconStyle> iconStyleMap) {
+    for (KmlFeature feature : features) {
+      // Resolve placemarks in subfolders recursively
+      if (feature instanceof KmlFolder) {
+        KmlFolder folder = (KmlFolder) feature;
+        resolvePlacemarkIcons(folder.getFeatures(), styleNameMap, iconStyleMap);
+      }
+      if (!(feature instanceof Placemark)) {
+        continue;
+      }
+
+      Placemark placemark = (Placemark) feature;
+      String styleId = placemark.getStyleId();
+      // If icon has not been resolved yet, attempt to resolve it now
+      if (styleId != null && placemark.getIconStyle() == null) {
+        if (!iconStyleMap.containsKey(styleId)) {
+          // StyleID does not refer directly to one of the icon styles,
+          // try to resolve through styleNameMap
+          styleId = styleNameMap.get(styleId);
+          if (styleId == null) {
+            continue;
+          }
+        }
+        IconStyle icon = iconStyleMap.get(styleId);
+        placemark.setIconStyle(icon);
+      }
+    }
+  }
+
+  /**
+   * Parses StyleMap tag in a kml file. Returns the id value of key "normal".
+   *
+   * @return id value (characters following #-sign) for key 'normal'. Does not
+   *         support full external URLs.
+   */
+  private String parseStyleMapNormal(XmlPullParser xpp) throws XmlPullParserException, IOException {
+    if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("StyleMap")) {
+      throw new IllegalStateException("XML parser is not at <StyleMap> tag");
+    }
+    int event = xpp.next();
+    String key = null;
+    String value = null;
+    String normalValue = null;
+    String anyValue = null;
+    while (event != XmlPullParser.END_TAG || !xpp.getName().equals("StyleMap")) {
+      if (event == XmlPullParser.START_TAG) {
+        if (xpp.getName().equals("Pair")) {
+          // parse contents within this method, ignore this enclosing Pair-tag
+        } else if (xpp.getName().equals("key")) {
+          key = xpp.nextText().trim();
+        } else if (xpp.getName().equals("styleUrl")) {
+          // Store only the part following last '#' sign
+          value = xpp.nextText().trim();
+          int hash = value.lastIndexOf('#');
+          if (hash >= 0) {
+            value = value.substring(hash + 1);
+          }
+          if (anyValue == null && value.length() > 0) {
+            anyValue = value;
+          }
+        } else {
+          skipBranch(xpp);
+        }
+      } else if (event == XmlPullParser.END_TAG && xpp.getName().equals("Pair")) {
+        if (key.equals("normal") && value != null) {
+          normalValue = value;
+        }
+        // Reset inner fields of Pair
+        key = null;
+        value = null;
+      }
+      event = xpp.next();
+    }
+    // Return mapping for 'normal' if it was found, otherwise return any value
+    return (normalValue != null ? normalValue : anyValue);
+  }
+
+  /**
+   * Parses a Style tag in a kml file. Returns a fully initialized IconStyle
+   * object (other styles are ignored) or null if IconStyle is not defined.
+   *
+   * @return fully constructed IconStyle object or null if IconStyle was not
+   *         defined
+   */
+  private IconStyle parseStyle(XmlPullParser xpp) throws XmlPullParserException, IOException {
+    if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("Style")) {
+      throw new IllegalStateException("XML parser is not at <Style> tag");
+    }
+    IconStyle result = null;
+    boolean isInIconStyle = false;
+    int event = xpp.next();
+    while (event != XmlPullParser.END_TAG || !xpp.getName().equals("Style")) {
+      if (event == XmlPullParser.START_TAG) {
+        if (!isInIconStyle) {
+          if (xpp.getName().equals("IconStyle")) {
+            // parse contents within this method
+            if (result == null) {
+              result = new IconStyle();
+            }
+            isInIconStyle = true;
+          } else {
+            // Only IconStyle branches are parsed, skip others
+            skipBranch(xpp);
+          }
+        } else {
+          if (xpp.getName().equals("Icon")) {
+            // icon contains href to image (icon palettes are not supported)
+            // ignore this enclosing "Icon" tag
+          } else if (xpp.getName().equals("href")) {
+            String iconPath = xpp.nextText();
+            result.setIconPath(iconPath);
+          } else if (xpp.getName().equals("scale")) {
+            // parse scale value
+            String scaleStr = xpp.nextText().trim();
+            float scale = Float.parseFloat(scaleStr);
+            result.setScale(scale);
+          } else if (xpp.getName().equals("hotSpot")) {
+            // parse hotspot attributes
+            for (int i = 0; i < xpp.getAttributeCount(); i++) {
+              String attrName = xpp.getAttributeName(i);
+              String attrValue = xpp.getAttributeValue(i);
+              if (attrName.equals("x")) {
+                result.setX(Float.parseFloat(attrValue));
+              } else if (attrName.equals("y")) {
+                result.setY(Float.parseFloat(attrValue));
+              } else if (attrName.equals("xunits")) {
+                IconStyle.Units units = IconStyle.Units.parseUnits(attrValue);
+                if (units != null) {
+                  result.setXUnits(units);
+                }
+              } else if (attrName.equals("yunits")) {
+                IconStyle.Units units = IconStyle.Units.parseUnits(attrValue);
+                if (units != null) {
+                  result.setYUnits(units);
+                }
+              }
+            }
+          } else {
+            skipBranch(xpp);
+          }
+        }
+      } else if (event == XmlPullParser.END_TAG && xpp.getName().equals("IconStyle")) {
+        isInIconStyle = false;
+      }
+      event = xpp.next();
+    }
+    return result;
+  }
+
+  private Placemark parsePlacemark(XmlPullParser xpp) throws XmlPullParserException, IOException {
+    if (xpp.getEventType() != XmlPullParser.START_TAG || !xpp.getName().equals("Placemark")) {
+      throw new IllegalStateException("XML parser is not at <Placemark> tag");
+    }
+    Placemark placemark = new Placemark();
+    int event = xpp.next();
+    boolean isInPoint = false;
+    while (event != XmlPullParser.END_TAG || !xpp.getName().equals("Placemark")) {
+      if (event == XmlPullParser.START_TAG) {
+        if (xpp.getName().equals("name")) {
+          placemark.setName(xpp.nextText());
+        } else if (xpp.getName().equals("description")) {
+          placemark.setDescription(xpp.nextText());
+        } else if (xpp.getName().equals("Point")) {
+          isInPoint = true;
+        } else if (xpp.getName().equals("coordinates") && isInPoint) {
+          // comma separated list: longitude, latitude, altitude (altitude optional)
+          String coordinates = xpp.nextText().trim();
+          String[] values = coordinates.split("\\s*,\\s*");
+          float longitude = Float.parseFloat(values[0]);
+          float latitude = Float.parseFloat(values[1]);
+          placemark.setPoint(latitude, longitude);
+        } else if (xpp.getName().equals("styleUrl")) {
+          placemark.setStyleUrl(xpp.nextText().trim());
+        } else {
+          skipBranch(xpp);
+        }
+      } else if (event == XmlPullParser.END_TAG) {
+        if (xpp.getName().equals("Point")) {
+          isInPoint = false;
+        }
+      }
+      event = xpp.next();
+    }
+    return placemark;
   }
 
   /**
@@ -335,5 +618,21 @@ public class KmlParser {
           break;
       }
     }
+  }
+
+  /**
+   * Finds value of a named attribute. xpp should be currently at a opening tag.
+   *
+   * @param name Name of the attribute
+   * @param xpp XmlPullParser pointing at the tag for which the value is wanted
+   * @return The value of the named attribute, or 'null' if attribute is missing
+   */
+  private String getAttributeValue(String name, XmlPullParser xpp) {
+    for (int i = 0; i < xpp.getAttributeCount(); i++) {
+      if (xpp.getAttributeName(i).equals(name)) {
+        return xpp.getAttributeValue(i);
+      }
+    }
+    return null;
   }
 }

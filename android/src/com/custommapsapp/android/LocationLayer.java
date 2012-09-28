@@ -133,9 +133,11 @@ public class LocationLayer extends View {
       return;
     }
 
-    // Find screen coordinates of geo location
+    // Find screen coordinates of geo location, quit if not ready
     System.arraycopy(geoLocation, 0, location, 0, 2);
-    displayState.convertGeoToScreenCoordinates(location);
+    if (displayState.convertGeoToScreenCoordinates(location) == null) {
+      return;
+    }
 
     // Find how many pixels from the location the arrow or accuracy reach
     float reach = 20f;

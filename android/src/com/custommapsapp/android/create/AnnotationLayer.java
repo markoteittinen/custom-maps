@@ -15,11 +15,11 @@
  */
 package com.custommapsapp.android.create;
 
+import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -58,7 +58,8 @@ public class AnnotationLayer extends View {
     tiePoints = new ArrayList<PointF>();
     drawMatrix = new Matrix();
 
-    pushpin = BitmapFactory.decodeResource(context.getResources(), R.drawable.pushpin);
+    // Read an unscaled version of the pushpin image resource
+    pushpin = ImageHelper.loadImage(context, R.drawable.pushpin, true);
   }
 
   /**

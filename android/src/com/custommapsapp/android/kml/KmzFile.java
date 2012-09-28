@@ -62,6 +62,14 @@ public class KmzFile implements KmlInfo, Serializable {
     return new InputStreamReader(stream);
   }
 
+  public long getImageDate(String path) throws IOException {
+    ZipEntry zipEntry = kmzFile.getEntry(path);
+    if (zipEntry == null) {
+      throw new FileNotFoundException("Image not found in kmz file");
+    }
+    return zipEntry.getTime();
+  }
+
   public InputStream getImageStream(String path) throws IOException {
     ZipEntry zipEntry = kmzFile.getEntry(path);
     if (zipEntry == null) {

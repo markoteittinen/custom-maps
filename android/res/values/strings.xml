@@ -45,6 +45,12 @@
     <string name="create_map_help_link">
         Click here to visit Custom Maps web site for sample maps and a tutorial.
     </string>
+    <string name="select_cannot_modify_map_set">
+        This map is part of a map set. It cannot be modified or deleted.
+    </string>
+    <string name="select_cannot_modify_placemarks">
+        This map contains placemarks. It cannot be modified.
+    </string>
     <string name="no_map_sharing_apps">There are no installed apps that can share maps</string>
     <string name="delete_map_dialog_title">Confirm deletion</string>
     <string name="delete_map_dialog">Are you sure you want to delete map\n\"%s\"?</string>
@@ -72,7 +78,7 @@
     </string>
     
     <!-- map image display -->
-    <string name="unnamed_map">unnamed map</string>
+    <string name="unnamed_map">Untitled map</string>
     <string name="map_image_load_failed">Failed to load map image for %s.</string>
     
     <!-- help manager -->
@@ -170,7 +176,8 @@
     <string name="credits_text">
         <b>Special thanks</b>\n
         \u2022 Harlan Hile (pinch zoom, user location icon)\n
-        \u2022 Patrick Steiner (internationalization, German translation)
+        \u2022 Patrick Steiner (internationalization, German translation)\n
+        \u2022 Francesco Terribile (Italian translation)
     </string>
     
     <!-- button items -->
@@ -192,7 +199,6 @@
     <string name="create_map">Create map</string>
     <string name="modify_map">Modify map</string>
     <string name="delete_map">Delete map</string>
-    <string name="map_cannot_modify">Part of map set. Cannot be modified or deleted</string>
     <string name="select_point">Select point</string>
     <string name="adjust_tiepoint">Adjust tiepoint</string>
     <string name="delete_tiepoint">Delete tiepoint</string>

@@ -105,7 +105,7 @@ public class PreviewMapActivity extends MapActivity {
 
     // Create overlay
     String fileName = getIntent().getStringExtra(BITMAP_FILE);
-    Bitmap mapImage = ImageHelper.loadImage(fileName);
+    Bitmap mapImage = ImageHelper.loadImage(fileName, true);
     if (mapImage == null) {
       // TODO: failed to load image, cancel
     }
