@@ -337,7 +337,10 @@ public class GeoToImageConverter {
         Point imagePt = pt.getImagePoint();
         imagePoints[2 * n] = imagePt.x;
         imagePoints[2 * n + 1] = imagePt.y;
-        n++;
+        if (++n == 4) {
+          // setPolyToPoly() below can use at most 4 tiepoints, ignore the rest
+          break;
+        }
       }
       geoToImageMatrix = new Matrix();
       if (geoToImageMatrix.setPolyToPoly(geoPoints, 0, imagePoints, 0, n)) {
