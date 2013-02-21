@@ -15,6 +15,8 @@
  */
 package com.custommapsapp.android;
 
+import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -153,7 +155,8 @@ public class ImageHelper {
    * @param context Context to read the resource from.
    * @param resourceId Resource ID to be read (must be png, gif, or jpg image).
    * @param ignoreDpi Flag selecting if image should be scaled to display density.
-   * @return Bitmap from the resource, or 'null' in case of errors.
+   * @return Bitmap from the resource, or 'null' in case of errors like invalid image format or
+   *     if the image is too large to fit in memory.
    */
   public static Bitmap loadImage(Context context, int resourceId, boolean ignoreDpi) {
     InputStream in = null;
@@ -173,9 +176,11 @@ public class ImageHelper {
    *
    * @param in InputStream containing the bitmap
    * @param ignoreDpi Flag selecting if image should be scaled to display density.
-   * @return Bitmap from InputStream, or 'null' in case of errors
+   * @return Bitmap from InputStream, or 'null' in case of errors like invalid image format.
+   * @throws MapImageTooLargeException if image is too large to be loaded.
    */
-  public static Bitmap loadImage(InputStream in, boolean ignoreDpi) {
+  public static Bitmap loadImage(InputStream in, boolean ignoreDpi)
+      throws MapImageTooLargeException {
     System.gc();
     if (in == null) {
       return null;
@@ -193,8 +198,8 @@ public class ImageHelper {
     } catch (OutOfMemoryError err) {
       Log.w(CustomMaps.LOG_TAG, "Out of memory loading map image", err);
       System.gc();
+      throw new MapImageTooLargeException("Out of memory loading an image");
     }
-    return null;
   }
 
   /**

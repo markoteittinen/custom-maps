@@ -17,6 +17,7 @@ package com.custommapsapp.android.create;
 
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.PtSizeFixer;
 import com.custommapsapp.android.R;
 
 import android.app.Activity;
@@ -70,6 +71,7 @@ public class BitmapPointActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.bitmappoint);
 
     imageDisplay = (ImageDisplay) findViewById(R.id.imageDisplay);
@@ -83,6 +85,10 @@ public class BitmapPointActivity extends Activity {
         returnSelectedPoint(imageDisplay.getCenterPoint());
       }
     });
+
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(imageDisplay.getRootView());
+    }
 
     String fileName = getIntent().getStringExtra(BITMAP_FILE);
     if (fileName == null) {

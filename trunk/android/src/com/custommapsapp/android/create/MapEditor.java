@@ -15,12 +15,11 @@
  */
 package com.custommapsapp.android.create;
 
-import com.google.android.maps.GeoPoint;
-
 import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.PtSizeFixer;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.kml.GroundOverlay;
 import com.custommapsapp.android.kml.KmlFeature;
@@ -68,6 +67,8 @@ import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.google.android.maps.GeoPoint;
+
 /**
  * MapEditor manages editing of a map and its tiepoints.
  *
@@ -111,8 +112,12 @@ public class MapEditor extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.mapeditor);
     prepareUI();
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(nameField.getRootView());
+    }
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_MAP_EDITOR,
                                               getString(R.string.editor_help));
@@ -260,10 +265,10 @@ public class MapEditor extends Activity {
 
   private void findTiePoints(GroundOverlay map) {
     FileUtil.verifyImageDir();
-    unpackImage(map, FileUtil.TMP_IMAGE);
-    bitmapFilename = FileUtil.TMP_IMAGE;
+    unpackImage(map, FileUtil.getTmpImagePath());
+    bitmapFilename = FileUtil.getTmpImagePath();
 
-    Bitmap mapImage = ImageHelper.loadImage(FileUtil.TMP_IMAGE, true);
+    Bitmap mapImage = ImageHelper.loadImage(FileUtil.getTmpImagePath(), true);
     if (mapImage == null) {
       Toast.makeText(this, R.string.editor_image_load_failed, Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
@@ -328,7 +333,7 @@ public class MapEditor extends Activity {
       mapPoints = pointList;
     }
 
-    int orientation = ImageHelper.readOrientation(FileUtil.TMP_IMAGE);
+    int orientation = ImageHelper.readOrientation(FileUtil.getTmpImagePath());
 
     for (GroundOverlay.Tiepoint oldPoint : mapPoints) {
       Point imagePoint = oldPoint.getImagePoint();
@@ -607,6 +612,7 @@ public class MapEditor extends Activity {
 
     // Return to calling activity
     Intent result = getIntent();
+    result.putExtra(KMZ_FILE, kmzFilename);
     setResult(RESULT_OK, result);
     finish();
   }
@@ -642,7 +648,7 @@ public class MapEditor extends Activity {
   private void saveAsKmz(ArrayList<GeoPoint> imageCorners) throws IOException {
     if (kmzFilename == null) {
       kmzFilename = convertToFileName(nameField.getText());
-      File file = new File(FileUtil.DATA_DIR, kmzFilename + ".kmz");
+      File file = new File(FileUtil.getDataDirectory(), kmzFilename + ".kmz");
       if (file.exists()) {
         // File with same name already exists, find unused name
         file = FileUtil.newFileInDataDirectory(kmzFilename + "_%d.kmz");

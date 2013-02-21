@@ -11,25 +11,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:minHeight="2pt"
-        android:maxHeight="2pt"
+        android:minHeight="4dp"
+        android:maxHeight="4dp"
         android:max="100"
         android:progress="0"
         />
     <TextView
+        style="@style/LargeText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="2pt"
+        android:padding="4dp"
         android:background="#FFEEEEEE"
         android:textColor="#FF000000"
         android:text="@string/select_image_select_file"
-        android:textSize="10pt"
         />
     <ListView
         android:id="@+id/filelist"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="2pt"
+        android:padding="4dp"
         />
 </LinearLayout>

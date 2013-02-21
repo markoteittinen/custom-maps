@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.custommapsapp.android"
-      android:versionName="1.3.1" android:versionCode="61">
+      android:versionName="1.3.2" android:versionCode="69">
     <uses-sdk
         android:targetSdkVersion="10" 
         android:minSdkVersion="4" />

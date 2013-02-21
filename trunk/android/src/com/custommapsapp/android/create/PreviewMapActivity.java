@@ -15,16 +15,14 @@
  */
 package com.custommapsapp.android.create;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapView;
-
 import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.MapApiKeys;
+import com.custommapsapp.android.PtSizeFixer;
 import com.custommapsapp.android.R;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -46,6 +44,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
 
 /**
  * PreviewMapActivity shows the created map aligned on top of Google Map.
@@ -100,6 +102,10 @@ public class PreviewMapActivity extends MapActivity {
     }
 
     prepareUI();
+    if (PtSizeFixer.isFixNeeded((Activity) null)) {
+      PtSizeFixer.fixView(saveButton.getRootView());
+    }
+
     mapView.setBuiltInZoomControls(true);
     mapView.setReticleDrawMode(MapView.ReticleDrawMode.DRAW_RETICLE_NEVER);
 

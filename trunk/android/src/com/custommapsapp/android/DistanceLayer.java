@@ -30,9 +30,9 @@ import android.view.View;
 
 /**
  * DistanceLayer draws a translucent label on the bottom of the MapDisplay
- * to display distance to the center of the screen. It also draws a little
- * circle at the center of the screen to make it easier to see where the
- * distance is measured to.
+ * to display distance (and heading) to the center of the screen. It also draws
+ * a little circle at the center of the screen to make it easier to see where
+ * the distance (and heading) is measured to.
  *
  * @author Marko Teittinen
  */
@@ -47,9 +47,10 @@ public class DistanceLayer extends View {
   private Location screenCenterLocation;
   private float textSizePt = 10;
   private float paddingPt = 4;
+  private boolean showHeading = false;
 
-  private transient Rect distanceBox = new Rect();
-  private transient RectF roundDistanceBox = new RectF();
+  private transient Rect infoBox = new Rect();
+  private transient RectF roundInfoBox = new RectF();
 
   public DistanceLayer(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -78,6 +79,16 @@ public class DistanceLayer extends View {
   }
 
   /**
+   * Decides whether heading to screen center should be shown in addition to
+   * distance.
+   *
+   * @param showHeading true if heading info should be shown on screen
+   */
+  public void setShowHeading(boolean showHeading) {
+    this.showHeading = showHeading;
+  }
+
+  /**
    * Updates current user location for measuring.
    *
    * @param location user's current location
@@ -88,20 +99,20 @@ public class DistanceLayer extends View {
 
   @Override
   protected void onDraw(Canvas canvas) {
-    if (userLocation == null || !userLocation.hasAccuracy() || displayState == null) {
+    // Don't display if user location is missing or user location is centered
+    if (userLocation == null || !userLocation.hasAccuracy() || displayState == null
+        || displayState.getFollowMode()) {
       return;
     }
     // Figure out distance from user location to screen center point
     float[] mapLonLat = displayState.getScreenCenterGeoLocation();
+    if (screenCenterLocation == null || mapLonLat == null) {
+      return;
+    }
     screenCenterLocation.setLatitude(mapLonLat[1]);
     screenCenterLocation.setLongitude(mapLonLat[0]);
     int distanceM = Math.round(userLocation.distanceTo(screenCenterLocation));
     int accuracyM = Math.round(userLocation.getAccuracy());
-
-    // Don't draw if centered
-    if (distanceM == 0) {
-      return;
-    }
 
     // Format the distance and accuracy nicely
     String distanceStr;
@@ -111,24 +122,35 @@ public class DistanceLayer extends View {
       distanceStr = getEnglishDistanceString(distanceM, accuracyM);
     }
 
+    // Add heading to center if requested
+    String displayStr;
+    if (showHeading) {
+      int heading = Math.round(userLocation.bearingTo(screenCenterLocation));
+      heading = (heading + 360) % 360;
+      displayStr = String.format("%s, %d\u00B0", distanceStr, heading);
+    } else {
+      displayStr = distanceStr;
+    }
+
     // Compute the pixel size of the distanceStr
     // -- set font size based on canvas density (dpi)
     textPaint.setTextSize(ptsToPixels(textSizePt, canvas));
-    distanceBox.setEmpty();
-    textPaint.getTextBounds(distanceStr, 0, distanceStr.length(), distanceBox);
-    distanceBox.offsetTo(0, 0);
+    infoBox.setEmpty();
+    textPaint.getTextBounds(displayStr, 0, displayStr.length(), infoBox);
+    infoBox.offsetTo(0, 0);
     int padding = Math.round(ptsToPixels(paddingPt, canvas));
-    distanceBox.right += 2 * padding;
-    distanceBox.bottom += 2 * padding;
-    distanceBox.offset((getWidth() - distanceBox.width()) / 2, getHeight() - distanceBox.height());
-    float baseline = distanceBox.bottom - padding;
+    infoBox.right += 2 * padding;
+    infoBox.bottom += 2 * padding;
+    int margin = Math.round(canvas.getDensity() * 4f / 72f);  // 4pt margin
+    infoBox.offset((getWidth() - infoBox.width()) / 2, getHeight() - infoBox.height() - margin);
+    float baseline = infoBox.bottom - padding;
     backgroundPaint.setAlpha(192);
     backgroundPaint.setStyle(Paint.Style.FILL);
     textPaint.setStrokeWidth(1f);
     textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-    roundDistanceBox.set(distanceBox);
-    canvas.drawRoundRect(roundDistanceBox, padding, padding, backgroundPaint);
-    canvas.drawText(distanceStr, distanceBox.exactCenterX(), baseline, textPaint);
+    roundInfoBox.set(infoBox);
+    canvas.drawRoundRect(roundInfoBox, padding, padding, backgroundPaint);
+    canvas.drawText(displayStr, infoBox.exactCenterX(), baseline, textPaint);
 
     // Draw center circles
     int x = getWidth() / 2;

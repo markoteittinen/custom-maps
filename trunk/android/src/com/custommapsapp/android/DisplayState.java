@@ -31,6 +31,7 @@ public class DisplayState {
   private GeoToImageConverter geoToImage = new GeoToImageConverter();
   private ImageToScreenConverter imageToScreen = new ImageToScreenConverter();
   private float imageNorthHeading = Float.NaN;
+  private boolean followMode = false;
 
   public void setMapData(GroundOverlay mapData) {
     int orientation = mapData.getKmlInfo().getImageOrientation(mapData.getImage());
@@ -42,6 +43,23 @@ public class DisplayState {
 
   public void setScreenView(View view) {
     imageToScreen.setScreenView(view);
+  }
+
+  /**
+   * Sets if the map display should keep the GPS location centered as it
+   * gets updated.
+   *
+   * @param followMode {@code true} to keep GPS dot centered on the display
+   */
+  public void setFollowMode(boolean followMode) {
+    this.followMode = followMode;
+  }
+
+  /**
+   * @return {@code true} if current GPS location is kept centered
+   */
+  public boolean getFollowMode() {
+    return followMode;
   }
 
   /**
@@ -193,6 +211,18 @@ public class DisplayState {
    */
   public float[] convertGeoToScreenCoordinates(float[] location) {
     geoToImage.convertGeoToImageCoordinates(location);
-    return imageToScreen.convertImageToScreenCoordinates(location);
+    imageToScreen.convertImageToScreenCoordinates(location);
+    return location;
+  }
+
+  /**
+   * Converts screen coordinates (x, y) to geo coordinates (lon, lat) in place.
+   *
+   * @return the original float array containing geo coordinates (lon, lat)
+   */
+  public float[] convertScreenToGeoCoordinates(float[] location) {
+    imageToScreen.convertScreenToImageCoordinates(location);
+    geoToImage.convertImageToGeoCoordinates(location);
+    return location;
   }
 }

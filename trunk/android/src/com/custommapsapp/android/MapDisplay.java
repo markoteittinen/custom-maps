@@ -15,8 +15,6 @@
  */
 package com.custommapsapp.android;
 
-import com.google.android.maps.GeoPoint;
-
 import com.custommapsapp.android.kml.GroundOverlay;
 import com.custommapsapp.android.kml.IconStyle;
 import com.custommapsapp.android.kml.KmlInfo;
@@ -30,10 +28,13 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.android.maps.GeoPoint;
 
 /**
  * MapDisplay is a base class for different kinds of MapDisplays. Nowadays there
@@ -46,7 +47,6 @@ public abstract class MapDisplay extends View {
   protected GroundOverlay mapData;
   protected List<Placemark> mapMarkers = new ArrayList<Placemark>();
   protected DisplayState displayState;
-  protected boolean followMode = false;
 
   public MapDisplay(Context context) {
     super(context);
@@ -61,20 +61,12 @@ public abstract class MapDisplay extends View {
   }
 
   /**
-   * Sets if the map display should keep the GPS location centered as it
-   * gets updated.
+   * Helper method to set followMode in displayState.
    *
    * @param followMode {@code true} to keep GPS dot centered on the display
    */
   public void setFollowMode(boolean followMode) {
-    this.followMode = followMode;
-  }
-
-  /**
-   * @return {@code true} if current GPS location is kept centered
-   */
-  public boolean getFollowMode() {
-    return followMode;
+    displayState.setFollowMode(followMode);
   }
 
   // --------------------------------------------------------------------------
@@ -138,6 +130,7 @@ public abstract class MapDisplay extends View {
       // Icon is not yet available, load in background
       final IconStyle loadable = iconStyle;
       Runnable loadIcon = new Runnable() {
+        @Override
         public void run() {
           loadable.getIcon();
           MapDisplay.this.postInvalidate();
@@ -256,7 +249,8 @@ public abstract class MapDisplay extends View {
    * Loads the bitmap image used as a map in a GroundOverlay.
    *
    * @param map GroundOverlay whose bitmap is going to be read
-   * @return {@code Bitmap} used by the GroundOverlay
+   * @return {@code Bitmap} used by the GroundOverlay. This may be 'null' if the image cannot
+   *     be parsed by Android image libraries.
    * @throws IOException if image loading fails because of I/O problem
    * @throws MapImageTooLargeException if the map image is too large to keep in memory
    */
@@ -266,16 +260,14 @@ public abstract class MapDisplay extends View {
       return null;
     }
     KmlInfo data = map.getKmlInfo();
+    // Verify that file still exists
+    if (!data.getFile().exists()) {
+      throw new FileNotFoundException("File/Directory not found: " + data.getFile().toString());
+    }
     InputStream in = null;
     try {
       in = data.getImageStream(map.getImage());
-      Bitmap image = ImageHelper.loadImage(in, true);
-      if (image != null) {
-        return image;
-      } else {
-        // Out of memory exception occurred while loading
-        throw new MapImageTooLargeException(map.getImage());
-      }
+      return ImageHelper.loadImage(in, true);
     } finally {
       FileUtil.tryToClose(in);
     }

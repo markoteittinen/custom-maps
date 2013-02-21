@@ -8,18 +8,18 @@
   <ImageView android:id="@+id/thumbnail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1pt"
-    android:layout_marginLeft="2pt"
-    android:minWidth="150px"
-    android:minHeight="100px"
+    android:layout_marginBottom="2dp"
+    android:layout_marginLeft="2dp"
+    android:minWidth="75dp"
+    android:minHeight="50dp"
     />
 
   <TextView android:id="@+id/nameField"
+    style="@style/LargeText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="2pt"
-    android:textSize="10pt"
+    android:layout_marginLeft="4dp"
     android:gravity="left|center_vertical"
-    android:minHeight="100px"
+    android:minHeight="50dp"
     />
 </LinearLayout>

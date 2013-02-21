@@ -54,12 +54,16 @@ public class AboutDialog extends Dialog {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.aboutdialog);
     prepareUI();
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(versionLabel.getRootView());
+    }
 
     if (savedInstanceState != null) {
       String version = savedInstanceState.getString(VERSION_KEY);
-      setVersion(version + " (rotated)");
+      setVersion(version);
     }
   }
 

@@ -15,6 +15,7 @@
  */
 package com.custommapsapp.android.kml;
 
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.FileUtil;
 
 import android.util.Log;
@@ -53,15 +54,18 @@ public class KmzFile implements KmlInfo, Serializable {
     this.kmlEntry = kmlEntry;
   }
 
+  @Override
   public File getFile() {
     return file;
   }
 
+  @Override
   public Reader getKmlReader() throws IOException {
     InputStream stream = kmzFile.getInputStream(kmlEntry);
     return new InputStreamReader(stream);
   }
 
+  @Override
   public long getImageDate(String path) throws IOException {
     ZipEntry zipEntry = kmzFile.getEntry(path);
     if (zipEntry == null) {
@@ -70,6 +74,7 @@ public class KmzFile implements KmlInfo, Serializable {
     return zipEntry.getTime();
   }
 
+  @Override
   public InputStream getImageStream(String path) throws IOException {
     ZipEntry zipEntry = kmzFile.getEntry(path);
     if (zipEntry == null) {
@@ -78,6 +83,7 @@ public class KmzFile implements KmlInfo, Serializable {
     return kmzFile.getInputStream(zipEntry);
   }
 
+  @Override
   public int getImageOrientation(String path) {
     // Read image orientation from kmz file if available
     ZipEntry entry = kmzFile.getEntry(MAP_ORIENTATION_PROPERTIES);
@@ -104,6 +110,14 @@ public class KmzFile implements KmlInfo, Serializable {
   @Override
   public String toString() {
     return "KmzFile[file='" + kmzFile.getName() + ", entry='" + kmlEntry.getName() + "']";
+  }
+
+  public void close() {
+    try {
+      kmzFile.close();
+    } catch (IOException ex) {
+      Log.w(CustomMaps.LOG_TAG, "Failed to close zip file: " + kmzFile.getName(), ex);
+    }
   }
 
   // --------------------------------------------------------------------------

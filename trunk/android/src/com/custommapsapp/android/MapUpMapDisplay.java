@@ -20,6 +20,7 @@ import com.custommapsapp.android.kml.GroundOverlay;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -91,6 +92,8 @@ public class MapUpMapDisplay extends MapDisplay {
     try {
       mapImage = loadMapImage(newMap);
     } catch (IOException ex) {
+      // TODO: throw IOException here, and display error message in caller
+      Log.w(CustomMaps.LOG_TAG, "Failed to load map image for " + newMap.getName(), ex);
       mapImage = null;
       // Failed to read image, display error message
       String mapName = newMap.getName();
@@ -106,6 +109,9 @@ public class MapUpMapDisplay extends MapDisplay {
       });
     }
     if (mapImage == null) {
+      if (newMap != null) {
+        Log.w(CustomMaps.LOG_TAG, "Map image failed to load, map not set.");
+      }
       spotSet = false;
       mapData = null;
       return;
@@ -177,8 +183,8 @@ public class MapUpMapDisplay extends MapDisplay {
     geoLocation[0] = longitude;
     geoLocation[1] = latitude;
     spotSet = true;
-    if (getFollowMode()) {
-      setFollowMode(centerOnGpsLocation());
+    if (displayState.getFollowMode()) {
+      displayState.setFollowMode(centerOnGpsLocation());
       invalidate();
     }
   }

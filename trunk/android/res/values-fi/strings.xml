@@ -13,6 +13,14 @@
     <string name="app_home">Avaa Custom Mapsin nettisivut</string>
 
     <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS järjestelmää ei löytynyt. Ohjelma ei voi näyttää tarkkaa sijaintiasi.
+        \nAnna tälle ohjelmalle lupa GPS:n käyttöön laitteesi asetuksissa. 
+    </string>
+    <string name="location_not_available">
+        Sijaintisi ei ole tämän ohjelman käytettävissä.
+        \nAnna tälle ohjelmalle lupa GPS:n käyttöön laitteesi asetuksissa.
+    </string>
     <string name="gps_outside_map">GPS sijaintisi ei ole kartan alueella</string>
     <string name="share_map_failed">Kartan lähetys epäonnistui</string>
     <string name="external_content_failed">
@@ -29,9 +37,9 @@
     <string name="safety_warning_title">TÄRKEÄÄ!</string>
     <string name="safety_warning">
         Monia karttakuvia ei ole piirretty niin tarkasti, että niissä voisi nähdä tarkan GPS 
-        sijaintinsa edes Custom Mapsin avulla. Oleta, että Custom Mapsin näyttämä sijaintisi kartalla on aina
-        suurinpiirteinen.\n\nJopa saman karttakuvan eri puolilla sijaintisi tarkkuus voi vaihdella
-        huomattavasti. 
+        sijaintinsa edes Custom Mapsin avulla. Oleta, että Custom Mapsin näyttämä sijaintisi
+        kartalla on aina suurinpiirteinen.\n\nJopa saman karttakuvan eri puolilla sijaintisi
+        tarkkuus voi vaihdella huomattavasti. 
     </string>
     <string name="remind_me_again">Muistuta uudestaan ensi kerralla</string>
     
@@ -123,8 +131,8 @@
     <!-- map geo point selection -->
     <string name="geo_point_help">
         Voit zoomata ja siirtää Googlen karttaa löytääksesi valitun kiintopisteen.\n\nKäytä 
-        liukusäätimiä kiintopistekuvan kulman, koon, ja läpinäkyvyyden säätämiseen.\n\n
-        Karttapainike vaihtaa Googlen kartan sateliittikuvaksi ja takaisin.
+        liukusäätimiä kiintopistekuvan kulman, koon, ja läpinäkyvyyden säätämiseen.\n
+        \nKarttapainike vaihtaa Googlen kartan sateliittikuvaksi ja takaisin.
     </string>
     <string name="geo_point_mapview_failure">
         Googlen kartan näyttäminen epäonnistui.\nUusia karttoja ei voi nyt tehdä.
@@ -171,6 +179,9 @@
     <string name="distance_title">Näytä etäisyys</string>
     <string name="distance_show">Etäisyys näytetään näytön keskipisteeseen</string>
     <string name="distance_hide">Etäisyyttä ei näytetä eikä lasketa</string>
+    <string name="heading_title">Näytä suunta</string>
+    <string name="heading_show">Kompassisuunta näytetään näytön keskipisteeseen</string>
+    <string name="heading_hide">Kompassisuuntaa näytön keskelle ei näytetä eikä lasketa</string>
     <string name="safety_reminder_title">Näytä turvamuistutus</string>
     <string name="safety_reminder_show">Näytetään karttaa vaihdettaessa</string>
     <string name="safety_reminder_hide">Ei näytetä</string>
@@ -184,10 +195,12 @@
     <!-- about dialog -->
     <string name="version_label">Versio</string>
     <string name="credits_text">
-        <b>Erityiskiitokset</b>\n
-        \u2022 Harlan Hile (nipistyszoomi, käyttäjän sijaintikuvake)\n
-        \u2022 Patrick Steiner (ohjelman käännettävyys, Saksan kieli)\n
-        \u2022 Francesco Terribile (Italian kieli)
+        <b>Erityiskiitokset</b>
+        \n\u2022 Harlan Hile (nipistyszoomi, käyttäjän sijaintikuvake)
+        \n\u2022 Patrick Steiner (ohjelman käännettävyys, Saksan kieli)
+        \n\u2022 Francesco Terribile (Italian kieli)
+        \n\u2022 Dorin Hongu (Romanian kieli)
+        \n\u2022 Germain Zouein (testaus)
     </string>
     
     <!-- button items -->

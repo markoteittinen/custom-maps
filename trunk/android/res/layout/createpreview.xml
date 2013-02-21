@@ -16,24 +16,27 @@
             android:id="@+id/mapmode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="1pt"
+            android:layout_marginRight="2dp"
             android:src="@android:drawable/ic_menu_mapmode"
             />
         <Button
+            style="@style/NormalText"
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:text="@string/button_save"
+            android:textColor="#000"
             />
     </LinearLayout>
     <TextView
+        style="@style/NormalText"
         android:id="@+id/transparencyLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/buttons"
-        android:layout_marginRight="2pt"
+        android:layout_marginRight="4dp"
         android:text="@string/preview_transparency"
         />
     <SeekBar
@@ -43,8 +46,8 @@
         android:layout_above="@id/transparencyLabel"
         android:layout_alignLeft="@id/transparencyLabel"
         android:layout_toLeftOf="@id/buttons"
-        android:layout_marginRight="2pt"
-        android:layout_marginTop="2pt"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
         android:max="100"
         android:progress="0"
         />
@@ -53,10 +56,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/buttons"
-        android:layout_marginBottom="2pt"
+        android:layout_above="@id/transparencyBar"
+        android:layout_marginBottom="4dp"
         >
         <TextView
+            style="@style/NormalText"
             android:id="@+id/mapviewlocation"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

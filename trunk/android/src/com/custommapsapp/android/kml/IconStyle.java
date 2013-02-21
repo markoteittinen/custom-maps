@@ -19,6 +19,7 @@ import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.ImageDiskCache;
 import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +39,6 @@ import java.net.URL;
  * @author Marko Teittinen
  */
 public class IconStyle extends KmlData {
-  private static final String LOG_TAG = CustomMaps.LOG_TAG;
   private static final long serialVersionUID = 1L;
 
   public static enum Units {
@@ -220,7 +220,7 @@ public class IconStyle extends KmlData {
       iconWidth = options.outWidth;
       iconHeight = options.outHeight;
     } catch (Exception ex) {
-      Log.e(LOG_TAG, "Failed to read icon size: " + iconPath, ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to read icon size: " + iconPath, ex);
     } finally {
       FileUtil.tryToClose(in);
     }
@@ -236,7 +236,10 @@ public class IconStyle extends KmlData {
       in = openIconFile(iconPath);
       return ImageHelper.loadImage(in, false);
     } catch (IOException ex) {
-      Log.e(LOG_TAG, "Failed to load icon: " + iconPath, ex);
+      Log.e(CustomMaps.LOG_TAG, "Failed to load icon: " + iconPath, ex);
+      return null;
+    } catch (MapImageTooLargeException ex) {
+      Log.e(CustomMaps.LOG_TAG, "Icon too large: " + iconPath, ex);
       return null;
     } finally {
       FileUtil.tryToClose(in);

@@ -8,6 +8,7 @@
   android:layout_marginRight="4dp"
   >
   <TextView
+    style="@style/SmallText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
@@ -16,6 +17,7 @@
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/SmallText"
     android:id="@+id/longitudeField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -25,6 +27,7 @@
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/SmallText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
@@ -33,6 +36,7 @@
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/SmallText"
     android:id="@+id/latitudeField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -42,6 +46,7 @@
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/SmallText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
@@ -50,15 +55,17 @@
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/SmallText"
     android:id="@+id/altitudeField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
-    android:layout_marginBottom="10pt"
+    android:layout_marginBottom="20dp"
     android:gravity="right"
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/SmallText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
@@ -67,6 +74,7 @@
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/SmallText"
     android:id="@+id/headingField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -76,6 +84,7 @@
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/SmallText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
@@ -84,6 +93,7 @@
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/SmallText"
     android:id="@+id/speedField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -93,6 +103,7 @@
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/SmallText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
@@ -101,6 +112,7 @@
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/SmallText"
     android:id="@+id/accuracyField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"

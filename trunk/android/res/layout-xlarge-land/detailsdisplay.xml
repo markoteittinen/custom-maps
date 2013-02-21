@@ -8,116 +8,116 @@
   android:layout_marginRight="4dp"
   >
   <TextView
+    style="@style/NormalText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
     android:text="@string/longitude"
     android:textStyle="bold"
-    android:textSize="10pt"
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/NormalText"
     android:id="@+id/longitudeField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginBottom="4dp"
     android:gravity="right"
-    android:textSize="10pt"
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/NormalText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
     android:text="@string/latitude"
     android:textStyle="bold"
-    android:textSize="10pt"
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/NormalText"
     android:id="@+id/latitudeField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginBottom="4dp"
     android:gravity="right"
-    android:textSize="10pt"
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/NormalText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
     android:text="@string/altitude"
     android:textStyle="bold"
-    android:textSize="10pt"
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/NormalText"
     android:id="@+id/altitudeField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
-    android:layout_marginBottom="10pt"
+    android:layout_marginBottom="20dp"
     android:gravity="right"
-    android:textSize="10pt"
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/NormalText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
     android:text="@string/heading"
     android:textStyle="bold"
-    android:textSize="10pt"
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/NormalText"
     android:id="@+id/headingField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginBottom="4dp"
     android:gravity="right"
-    android:textSize="10pt"
     android:textColor="#ffffff"
     />
   <TextView
+    style="@style/NormalText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
     android:text="@string/speed"
     android:textStyle="bold"
-    android:textSize="10pt"
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/NormalText"
     android:id="@+id/speedField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginBottom="4dp"
     android:gravity="right"
-    android:textSize="10pt"
     android:textColor="#ffffff"
     />
   <TextView 
+    style="@style/NormalText"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="8dp"
     android:text="@string/accuracy"
     android:textStyle="bold"
-    android:textSize="10pt"
     android:textColor="#eeeeee"
     />
   <TextView 
+    style="@style/NormalText"
     android:id="@+id/accuracyField"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:gravity="right"
-    android:textSize="10pt"
     android:textColor="#ffffff"
     />
 </LinearLayout>

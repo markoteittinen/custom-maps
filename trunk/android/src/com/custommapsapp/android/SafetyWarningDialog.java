@@ -37,8 +37,12 @@ public class SafetyWarningDialog extends Dialog {
     setCancelable(true);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.safetywarning);
     showAgain = (CheckBox) findViewById(R.id.showAgain);
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(showAgain.getRootView());
+    }
 
     Button okButton = (Button) findViewById(R.id.okButton);
     okButton.setOnClickListener(new View.OnClickListener() {

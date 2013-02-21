@@ -40,6 +40,7 @@ public class PreferenceStore {
   public static final String PREFS_LASTMAP = "lastMap";
   public static final String PREFS_SHOW_DETAILS = "showDetails";
   public static final String PREFS_SHOW_DISTANCE = "showDistance";
+  public static final String PREFS_SHOW_HEADING = "showHeading";
   public static final String PREFS_LICENSE_ACCEPTED = "licenseAccepted";
   public static final String PREFS_SHOW_REMINDER = "showReminder";
   public static final String PREFS_LANGUAGE = "language";
@@ -128,6 +129,14 @@ public class PreferenceStore {
 
   public void setShowDistance(boolean showDistance) {
     prefs.edit().putBoolean(PREFS_SHOW_DISTANCE, showDistance).commit();
+  }
+
+  public boolean isShowHeading() {
+    return prefs.getBoolean(PREFS_SHOW_HEADING, false);
+  }
+
+  public void setShowHeading(boolean showHeading) {
+    prefs.edit().putBoolean(PREFS_SHOW_HEADING, showHeading).commit();
   }
 
   /**

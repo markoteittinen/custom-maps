@@ -42,11 +42,15 @@ public class HelpDialog extends Dialog {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     // TODO: place helpText into a scroll pane to avoid hiding "OK"
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.helpdialog);
 
     helpText = (TextView) findViewById(R.id.helpText);
     webLink = (TextView) findViewById(R.id.webLink);
     redisplayInfo = (TextView) findViewById(R.id.redisplayInfo);
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(helpText.getRootView());
+    }
 
     Button okButton = (Button) findViewById(R.id.okButton);
     okButton.setOnClickListener(new View.OnClickListener() {

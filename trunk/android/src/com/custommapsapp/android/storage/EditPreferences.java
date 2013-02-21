@@ -68,6 +68,9 @@ public class EditPreferences extends PreferenceActivity {
 
   private void reloadUI() {
     setPreferenceScreen(createPreferenceScreen());
+    // heading to screen center can be shown only with distance
+    getPreferenceScreen().findPreference(PreferenceStore.PREFS_SHOW_HEADING)
+        .setDependency(PreferenceStore.PREFS_SHOW_DISTANCE);
     if (aboutDialogCreated) {
       removeDialog(DIALOG_ABOUT);
       aboutDialogCreated = false;
@@ -106,6 +109,14 @@ public class EditPreferences extends PreferenceActivity {
     distanceDisplay.setSummaryOn(R.string.distance_show);
     distanceDisplay.setSummaryOff(R.string.distance_hide);
     root.addPreference(distanceDisplay);
+
+    CheckBoxPreference headingDisplay = new CheckBoxPreference(this);
+    headingDisplay.setDefaultValue(false);
+    headingDisplay.setKey(PreferenceStore.PREFS_SHOW_HEADING);
+    headingDisplay.setTitle(R.string.heading_title);
+    headingDisplay.setSummaryOn(R.string.heading_show);
+    headingDisplay.setSummaryOff(R.string.heading_hide);
+    root.addPreference(headingDisplay);
 
     // Display safety reminder when map is changed preference
     CheckBoxPreference safetyReminder = new CheckBoxPreference(this);
@@ -157,6 +168,7 @@ public class EditPreferences extends PreferenceActivity {
     languages.add(Locale.ENGLISH);
     languages.add(Locale.GERMAN);
     languages.add(Locale.ITALIAN);
+    languages.add(new Locale("ro"));
     languages.add(new Locale("fi"));
     // Sort languages by their localized display name
     final Collator stringComparator = Collator.getInstance(Locale.getDefault());

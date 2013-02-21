@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
   xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/LargeText"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:paddingLeft="5dp"
@@ -9,5 +10,4 @@
   android:paddingBottom="2dp"
   android:background="#D0D0D0"
   android:textColor="#000000"
-  android:textSize="10pt"
   />

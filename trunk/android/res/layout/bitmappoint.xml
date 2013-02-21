@@ -6,12 +6,13 @@
     android:layout_height="fill_parent"
     >
     <Button
+        style="@style/LargeText"
         android:id="@+id/selectPoint"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:textSize="10pt"
         android:text="@string/select_point"
+        android:textColor="#000"
         />
     <view
         class="com.custommapsapp.android.create.ImageDisplay"
@@ -57,16 +58,16 @@
         android:background="#00000000"
         />
     <TextView
+        style="@style/NormalText"
         android:id="@+id/help"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:paddingLeft="2pt"
-        android:paddingRight="2pt"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:background="#C0FFFFFF"
         android:textColor="#C0000000"
-        android:textSize="8pt"
         android:text="@string/image_point_select_for_matching"
         />
 </RelativeLayout>

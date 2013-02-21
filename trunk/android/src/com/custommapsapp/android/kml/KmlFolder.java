@@ -15,6 +15,7 @@
  */
 package com.custommapsapp.android.kml;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.List;
  * @author Marko Teittinen
  */
 public class KmlFolder extends KmlFeature {
+  static final long serialVersionUID = 1L;
+
   private List<KmlFeature> features = new ArrayList<KmlFeature>();
 
   /**
@@ -85,5 +88,22 @@ public class KmlFolder extends KmlFeature {
       }
     }
     return null;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof KmlFolder)) {
+      return false;
+    }
+    KmlFolder other = (KmlFolder) obj;
+    // KmlFolders are considered equal if their files match and their map names match
+    String myName = this.getName();
+    String otherName = other.getName();
+    File myFile = (this.getKmlInfo() != null ? this.getKmlInfo().getFile() : null);
+    File otherFile = (other.getKmlInfo() != null ? other.getKmlInfo().getFile() : null);
+    String myFileName = (myFile != null ? myFile.getAbsolutePath() : null);
+    String otherFileName = (otherFile != null ? otherFile.getAbsolutePath() : null);
+    return (myName == otherName || (myName != null && myName.equals(otherName))) &&
+        (myFileName == otherFileName || (myFileName != null && myFileName.equals(otherFileName)));
   }
 }

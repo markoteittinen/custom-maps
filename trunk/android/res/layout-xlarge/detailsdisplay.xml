@@ -10,33 +10,33 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:layout_marginRight="4pt"
+    android:layout_marginRight="8dp"
     >
     <TableRow>
       <TextView
-        android:layout_marginRight="4pt"
+        style="@style/NormalText"
+        android:layout_marginRight="8dp"
         android:text="@string/longitude"
         android:textStyle="bold"
-        android:textSize="10pt"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/NormalText"
         android:id="@+id/longitudeField"
-        android:textSize="10pt"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView
-        android:layout_marginRight="4pt"
+        style="@style/NormalText"
+        android:layout_marginRight="8dp"
         android:text="@string/latitude"
         android:textStyle="bold"
-        android:textSize="10pt"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/NormalText"
         android:id="@+id/latitudeField"
-        android:textSize="10pt"
         android:textColor="#ffffff"
         />
     </TableRow>
@@ -48,29 +48,29 @@
     >
     <TableRow>
       <TextView
-        android:layout_marginRight="4pt"
+        style="@style/NormalText"
+        android:layout_marginRight="8dp"
         android:text="@string/altitude"
         android:textStyle="bold"
-        android:textSize="10pt"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/NormalText"
         android:id="@+id/altitudeField"
-        android:textSize="10pt"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView 
-        android:layout_marginRight="4pt"
+        style="@style/NormalText"
+        android:layout_marginRight="8dp"
         android:text="@string/accuracy"
         android:textStyle="bold"
-        android:textSize="10pt"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/NormalText"
         android:id="@+id/accuracyField"
-        android:textSize="10pt"
         android:textColor="#ffffff"
         />
     </TableRow>
@@ -79,33 +79,33 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:layout_marginLeft="4pt"
+    android:layout_marginLeft="8dp"
     >
     <TableRow>
       <TextView
-        android:layout_marginRight="4pt"
+        style="@style/NormalText"
+        android:layout_marginRight="8dp"
         android:text="@string/heading"
         android:textStyle="bold"
-        android:textSize="10pt"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/NormalText"
         android:id="@+id/headingField"
-        android:textSize="10pt"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView
-        android:layout_marginRight="4pt"
+        style="@style/NormalText"
+        android:layout_marginRight="8dp"
         android:text="@string/speed"
         android:textStyle="bold"
-        android:textSize="10pt"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/NormalText"
         android:id="@+id/speedField"
-        android:textSize="10pt"
         android:textColor="#ffffff"
         />
     </TableRow>
