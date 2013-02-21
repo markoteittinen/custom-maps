@@ -4,19 +4,19 @@
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
-    android:padding="1pt"
+    android:padding="2dp"
     >
     <ImageView
         android:id="@+id/tiepointImage"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_marginRight="2pt"
+        android:layout_marginRight="4dp"
         />
     <TextView
+        style="@style/NormalText"
         android:id="@+id/tiepointText"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:singleLine="true"
-        android:textSize="8pt"
         />
 </LinearLayout>

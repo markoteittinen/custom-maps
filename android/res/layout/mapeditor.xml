@@ -3,52 +3,54 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="2pt"
+    android:padding="4dp"
     android:orientation="vertical"
     >
     <TextView
+        style="@style/SmallText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/editor_map_name"
-        android:textSize="6pt"
         />
     <EditText
+        style="@style/LargeText"
         android:id="@+id/nameField"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2pt"
+        android:layout_marginBottom="4dp"
         android:inputType="text"
         android:singleLine="true"
-        android:textSize="10pt"
+        android:textColor="#000"
         android:text="@string/editor_new_map"
         />
     <TextView
+        style="@style/SmallText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/editor_description"
-        android:textSize="6pt"
         />
     <EditText
+        style="@style/NormalText"
         android:id="@+id/descriptionField"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2pt"
+        android:layout_marginBottom="4dp"
         android:inputType="text"
         android:singleLine="true"
-        android:textSize="8pt"
+        android:textColor="#000"
         />
     <TextView
+        style="@style/SmallText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/editor_tiepoints"
-        android:textSize="6pt"
         />
     <ListView
         android:id="@+id/tiepoints"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="2pt"
+        android:layout_marginBottom="4dp"
         />
     <LinearLayout
         android:layout_width="fill_parent"
@@ -56,17 +58,21 @@
         android:orientation="horizontal"
         >
         <Button
+            style="@style/NormalText"
             android:id="@+id/addPoint"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:textColor="#000"
             android:text="@string/button_add_point"
             />
         <Button
+            style="@style/NormalText"
             android:id="@+id/preview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:textColor="#000"
             android:text="@string/button_preview"
             />
     </LinearLayout>

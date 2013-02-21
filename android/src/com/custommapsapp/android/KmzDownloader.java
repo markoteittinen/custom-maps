@@ -73,7 +73,11 @@ public class KmzDownloader extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     prepareUI();
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(urlLabel.getRootView());
+    }
 
     String urlString = getIntent().getStringExtra(URL);
     URL mapUrl = null;
@@ -265,6 +269,8 @@ public class KmzDownloader extends Activity {
           publishProgress(bytesDownloaded, totalBytes);
           // Interrupt download if cancellation is requested
           if (isCancelled()) {
+            out.close();
+            out = null;
             return null;
           }
         }

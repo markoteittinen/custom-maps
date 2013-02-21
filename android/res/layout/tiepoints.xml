@@ -20,9 +20,11 @@
             android:src="@android:drawable/ic_menu_mapmode"
         />
         <Button
+            style="@style/SmallText"
             android:id="@+id/selectPoint"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textColor="#000"
             android:text="@string/button_accept"
         />
     </LinearLayout>
@@ -33,10 +35,11 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/buttons"
-        android:layout_marginTop="4pt"
-        android:layout_marginRight="6pt"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
         android:orientation="horizontal">
         <TextView
+            style="@style/SmallText"
             android:id="@+id/rotateLabel"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -47,7 +50,7 @@
             android:id="@+id/rotateBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2pt"
+            android:layout_marginLeft="4dp"
             android:max="360"
             android:progress="180"
         />
@@ -59,10 +62,11 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/buttons"
         android:layout_above="@id/rotatePanel"
-        android:layout_marginTop="4pt"
-        android:layout_marginRight="6pt"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
         android:orientation="horizontal">
         <TextView
+            style="@style/SmallText"
             android:id="@+id/scaleLabel"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -73,7 +77,7 @@
             android:id="@+id/scaleBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2pt"
+            android:layout_marginLeft="4dp"
             android:max="30"
             android:progress="0"
         />
@@ -85,10 +89,11 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/buttons"
         android:layout_above="@id/scalePanel"
-        android:layout_marginTop="4pt"
-        android:layout_marginRight="6pt"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
         android:orientation="horizontal">
         <TextView
+            style="@style/SmallText"
             android:id="@+id/transparencyLabel"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -99,7 +104,7 @@
             android:id="@+id/transparencyBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2pt"
+            android:layout_marginLeft="4dp"
             android:max="100"
             android:progress="0"
         />
@@ -110,7 +115,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:layout_above="@id/buttons"
-        android:layout_marginBottom="2pt"
+        android:layout_marginBottom="4dp"
         >
         <TextView
             android:id="@+id/mapviewlocation"

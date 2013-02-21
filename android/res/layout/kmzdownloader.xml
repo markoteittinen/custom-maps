@@ -4,9 +4,10 @@
     android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="2pt" >
+    android:padding="4dp" >
 
     <TextView
+        style="@style/NormalText"
         android:id="@+id/titleLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -14,22 +15,24 @@
         android:layout_alignParentTop="true"
         android:inputType="none"
         android:text="@string/download_title_label"
-        android:textSize="8pt" />
+        />
 
     <TextView
+        style="@style/SmallText"
         android:id="@+id/urlLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/titleLabel"
-        android:layout_marginBottom="4pt"
-        android:layout_marginTop="4pt"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal|center_vertical"
         android:inputType="none"
         android:text=""
-        android:textSize="6pt" />
+        />
 
     <TextView
+        style="@style/SmallText"
         android:id="@+id/progressLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -37,7 +40,7 @@
         android:layout_below="@id/urlLabel"
         android:inputType="none"
         android:text="@string/download_progress_label"
-        android:textSize="6pt" />
+        />
 
     <ViewSwitcher
         android:id="@+id/progressView"
@@ -46,8 +49,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@id/progressLabel"
-        android:layout_marginBottom="4pt"
-        android:layout_marginTop="2pt" >
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp" >
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -71,36 +74,41 @@
                 android:indeterminate="true" />
 
             <TextView
+                style="@style/NormalText"
                 android:id="@+id/progressDetails"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="4pt"
+                android:layout_marginLeft="8dp"
                 android:gravity="left|center_vertical"
                 android:inputType="none"
-                android:text="@string/download_starting" />
+                android:text="@string/download_starting"
+                />
         </LinearLayout>
     </ViewSwitcher>
 
     <TextView
+        style="@style/NormalText"
         android:id="@+id/instructionLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/progressView"
-        android:layout_marginTop="2pt"
+        android:layout_marginTop="4dp"
         android:inputType="none"
         android:text="@string/download_info" />
 
     <Button
+        style="@style/NormalText"
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/instructionLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4pt"
-        android:layout_marginLeft="4pt"
-        android:layout_marginRight="4pt"
-        android:layout_marginTop="4pt"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#000"
         android:text="@string/button_cancel" />
 
 </RelativeLayout>

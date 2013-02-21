@@ -30,7 +30,7 @@
     <string name="safety_warning">
         Molte delle immagini che possono essere usate con Custom Maps non sono precise abbastanza
         da poter mostrare l\'esatta posizione GPS. La posizione visualizzata dovrebbe essere
-        considerata sempre approssimativa. \n\nAnche in una singola mappa alcune zone possono
+        considerata sempre approssimativa.\n\nAnche in una singola mappa alcune zone possono
         risultare meglio allineate con il GPS rispetto ad altre.
     </string>
     <string name="remind_me_again">Ricordamelo al prossimo avvio</string>
@@ -39,7 +39,7 @@
     <string name="select_map_to_use">Seleziona mappa da usare</string>
     <string name="no_maps_found_on_sd">
         Nessuna mappa trovata sulla scheda SD nella cartella CustomMaps.\n\nUsa menu per creare le
-        mappe e per cercarle. \n\n Oppure premi \'back\' per uscire.
+        mappe e per cercarle.\n\nOppure premi \'back\' per uscire.
     </string>
     <string name="create_map_help">
        Usa menu per creare mappe da foto o da immagini scaricate.\n\nSeleziona e tieni premuto il
@@ -176,7 +176,12 @@
     <string name="distance_show">
         Mostra distanza dalla posizione dell\'utente al centro dello schermo
     </string>
-    <string name="distance_hide">Distanza non visualizzta o non calcolata</string>
+    <string name="distance_hide">Distanza non visualizzato o non calcolata</string>
+    <string name="heading_title">Mostra direzione</string>
+    <string name="heading_show">
+        Mostra direzione dalla posizione dell\'utente al centro dello schermo
+    </string>
+    <string name="heading_hide">Direzione non visualizzato o non calcolata</string>
     <string name="safety_reminder_title">Promemoria sicurezza</string>
     <string name="safety_reminder_show">
         Il promemoria sarà visualizzato quando la mappa cambia
@@ -194,10 +199,12 @@
     <!-- about dialog -->
     <string name="version_label">versione</string>
     <string name="credits_text">
-        <b>Ringraziamenti speciali</b>\n
-        \u2022 Harlan Hile (pinch zoom, posizione utente)\n
-        \u2022 Patrick Steiner (internazionalizzazione, tedesco)\n
-        \u2022 Francesco Terribile (italiano)
+        <b>Ringraziamenti speciali</b>
+        \n\u2022 Harlan Hile (pinch zoom, posizione utente)
+        \n\u2022 Patrick Steiner (internazionalizzazione, tedesco)
+        \n\u2022 Francesco Terribile (italiano)
+        \n\u2022 Dorin Hongu (rumena)
+        \n\u2022 Germain Zouein (testing)
     </string>
     
     <!-- button items -->

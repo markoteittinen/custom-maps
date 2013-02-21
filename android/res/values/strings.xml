@@ -13,6 +13,14 @@
     <string name="app_home">Visit Custom Maps app website</string>
 
     <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS location is not available to this app.
+        \nPlease allow this app to access GPS location to improve location accuracy.
+    </string>
+    <string name="location_not_available">
+        Your location is not available to this app.
+        \nPlease enable access to GPS or network location in system settings.
+    </string>
     <string name="gps_outside_map">GPS location is not within map boundaries</string>
     <string name="share_map_failed">Failed to send the map</string>
     <string name="external_content_failed">Custom Maps failed to display the KMZ content.</string>
@@ -36,7 +44,7 @@
     <string name="select_map_to_use">Select map to use</string>
     <string name="no_maps_found_on_sd">
         No maps found on SD card in CustomMaps folder.\n\nUse menu to create maps and to get help 
-        finding them.\n\n Or press \'back\' to exit.
+        finding them.\n\nOr press \'back\' to exit.
     </string>
     <string name="create_map_help">
         Use menu to create maps from photos or from downloaded map images.\n\nTap and hold a map 
@@ -96,8 +104,8 @@
     
     <!-- map image selection -->
     <string name="select_image_help">
-        Select a file containing a map image.\n\nOnly use images for which you have permission.\n\n
-        Menu contains links to folders containing your photos and internet downloads.
+        Select a file containing a map image.\n\nOnly use images for which you have permission.\n
+        \nMenu contains links to folders containing your photos and internet downloads.
     </string>
     <string name="select_image_invalid">
         %s is not a valid image file.\nYou must select an image file
@@ -159,6 +167,9 @@
     <string name="distance_title">Display distance</string>
     <string name="distance_show">Displays distance from user location to center of screen</string>
     <string name="distance_hide">Distance is not displayed or computed</string>
+    <string name="heading_title">Display heading</string>
+    <string name="heading_show">Displays heading from user location to center of screen</string>
+    <string name="heading_hide">Heading is not displayed or computed</string>
     <string name="safety_reminder_title">Show safety reminder</string>
     <string name="safety_reminder_show">Safety reminder will be shown when map is changed</string>
     <string name="safety_reminder_hide">
@@ -174,10 +185,12 @@
     <!-- about dialog -->
     <string name="version_label">version</string>
     <string name="credits_text">
-        <b>Special thanks</b>\n
-        \u2022 Harlan Hile (pinch zoom, user location icon)\n
-        \u2022 Patrick Steiner (internationalization, German translation)\n
-        \u2022 Francesco Terribile (Italian translation)
+        <b>Special thanks</b>
+        \n\u2022 Harlan Hile (pinch zoom, user location icon)
+        \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Francesco Terribile (Italian translation)
+        \n\u2022 Dorin Hongu (Romanian translation)
+        \n\u2022 Germain Zouein (testing)
     </string>
     
     <!-- button items -->

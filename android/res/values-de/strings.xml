@@ -123,8 +123,8 @@
     
     <!-- map geo point selection -->
     <string name="geo_point_help">
-        Zoome und schwenke die Google Karte um das Zentrum des Vorschaubildes anzupassen.\n\n
-        Verwende die Regler um das Vorschaubild zu rotieren, zu schwenken und die Transparenz
+        Zoome und schwenke die Google Karte um das Zentrum des Vorschaubildes anzupassen.\n
+        \nVerwende die Regler um das Vorschaubild zu rotieren, zu schwenken und die Transparenz
         einzustellen.\n\nKarten Buttons wächseln zwischen Karten udn Satelliten Ansicht.
     </string>
     <string name="geo_point_mapview_failure">
@@ -172,6 +172,9 @@
     <string name="distance_title">Distanz anzeigen</string>
     <string name="distance_show">Distanz vom Benutzer zur Bildschirmmitte wird angezeigt</string>
     <string name="distance_hide">Distanz wird nicht angezeigt bzw. berechnet</string>
+    <string name="heading_title">Richtung anzeigen</string>
+    <string name="heading_show">Richtung vom Benutzer zur Bildschirmmitte wird angezeigt</string>
+    <string name="heading_hide">Richtung wird night angezeigt bzw. berechnet</string>
     <string name="safety_reminder_title">Sicherheitsinfo anzeigen</string>
     <string name="safety_reminder_show">Sicherheitsinfo wird beim Kartenwechsel angezeigt</string>
     <string name="safety_reminder_hide">
@@ -187,10 +190,12 @@
     <!-- about dialog -->
     <string name="version_label">Version</string>
     <string name="credits_text">
-        <b>Spezieller Dank</b>\n
-        \u2022 Harlan Hile (Zwei-Finger-Zoom, Benutzerlokalisierungs-Icon)\n
-        \u2022 Patrick Steiner (Internationalisierung , Deutsche Übersetzung)\n
-        \u2022 Francesco Terribile (Italienische Übersetzung)
+        <b>Spezieller Dank</b>
+        \n\u2022 Harlan Hile (Zwei-Finger-Zoom, Benutzerlokalisierungs-Icon)
+        \n\u2022 Patrick Steiner (Internationalisierung, Deutsche Übersetzung)
+        \n\u2022 Francesco Terribile (Italienische Übersetzung)
+        \n\u2022 Dorin Hongu (Rumänisch Übersetzung)
+        \n\u2022 Germain Zouein (testing)
     </string>
     
     <!-- button items -->

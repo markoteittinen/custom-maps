@@ -57,9 +57,9 @@
     <ScrollView
         android:id="@+id/credits"
         android:layout_width="fill_parent"
-        android:layout_height="90dp"
+        android:layout_height="150dp"
         android:layout_below="@id/appLogo"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="14dp"
         android:background="#f4f4ff" >
         <TextView
             android:layout_width="fill_parent"

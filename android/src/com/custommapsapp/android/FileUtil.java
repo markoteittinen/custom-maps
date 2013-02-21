@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -40,67 +41,82 @@ import java.io.OutputStream;
  * @author Marko Teittinen
  */
 public class FileUtil {
-  public static final String SD_ROOT_PATH = "/sdcard";
-  public static final String DATA_DIR = SD_ROOT_PATH + "/CustomMaps";
-  public static final String IMAGE_DIR = DATA_DIR + "/images";
-  public static final String CACHE_DIR = DATA_DIR + "/cache";
-  public static final String TMP_IMAGE = IMAGE_DIR + "/mapimage.jpg";
-  private static final String SD_PHOTOS = SD_ROOT_PATH + "/DCIM/Camera";
-  private static final String SD_PHOTOS_2 = SD_ROOT_PATH + "/DCIM/100MEDIA";
-  private static final String SD_DOWNLOADS = SD_ROOT_PATH + "/download";
-  private static final String SD_DOWNLOADS_2 = SD_ROOT_PATH + "/downloads";
+  private static final String DATA_DIR = "CustomMaps";          // relative to sd root
+  private static final String IMAGE_DIR = DATA_DIR + "/images"; // relative to sd root
+  private static final String CACHE_DIR = DATA_DIR + "/cache";  // relative to sd root
+  private static final String SD_PHOTOS = "DCIM/Camera";        // relative to sd root
+  private static final String SD_PHOTOS_2 = "DCIM/100MEDIA";    // relative to sd root
+  private static final String SD_DOWNLOADS = "download";        // relative to sd root
+  private static final String SD_DOWNLOADS_2 = "downloads";     // relative to sd root
+  private static final String TMP_IMAGE_NAME = "mapimage.jpg";
 
   public static final String KMZ_IMAGE_DIR = "images/";
 
   public static File getSdRoot() {
-    return new File(SD_ROOT_PATH);
+    return Environment.getExternalStorageDirectory();
   }
 
   public static File getPhotosDirectory() {
     // G1, Nexus One, and Nexus S use this folder
-    File photoDir = new File(SD_PHOTOS);
+    File photoDir = new File(getSdRoot(), SD_PHOTOS);
     if (photoDir.exists() && photoDir.isDirectory()) {
       return photoDir;
     }
     // At least Droid Eris uses this folder
-    return new File(SD_PHOTOS_2);
+    return new File(getSdRoot(), SD_PHOTOS_2);
   }
 
   public static File getDownloadsDirectory() {
-    File downloadDir = new File(SD_DOWNLOADS);
+    File downloadDir = new File(getSdRoot(), SD_DOWNLOADS);
     if (downloadDir.exists() && downloadDir.isDirectory()) {
       return downloadDir;
     }
-    return new File(SD_DOWNLOADS_2);
+    return new File(getSdRoot(), SD_DOWNLOADS_2);
   }
 
   public static File getDataDirectory() {
-    return verifyDir(DATA_DIR);
+    File dataDir = new File(getSdRoot(), DATA_DIR);
+    verifyDir(dataDir);
+    return dataDir;
   }
 
   public static File getImageDirectory() {
-    return verifyDir(IMAGE_DIR);
+    File imageDir = new File(getSdRoot(), IMAGE_DIR);
+    verifyDir(imageDir);
+    return imageDir;
+  }
+
+  public static File getTmpImageFile() {
+    return new File(getImageDirectory(), TMP_IMAGE_NAME);
+  }
+
+  public static String getTmpImagePath() {
+    return getTmpImageFile().getAbsolutePath();
   }
 
   public static File getCacheDirectory() {
-    return verifyDir(CACHE_DIR);
+    File cacheDir = new File(getSdRoot(), CACHE_DIR);
+    verifyDir(cacheDir);
+    return cacheDir;
   }
 
   /**
-   * Helper method to initialize directory. If a directory with given path does
-   * not exist, the directory is created and a .nomedia file is created in it
-   * to prevent internal resources from appearing in Android Gallery.
+   * Helper method to initialize directory. If a given directory does not exist,
+   * the directory is created and a .nomedia file is created in it to prevent
+   * internal resources from appearing in Android Gallery.
    *
-   * @param pathToDir String path to directory that needs to exist
-   * @return File object referring to the directory that was created if necessary
+   * @param dir File object pointing to directory that needs to exist.
+   * @return Boolean value indicating if the directory now exists.
    */
-  private static File verifyDir(String pathToDir) {
-    File dir = new File(pathToDir);
+  private static boolean verifyDir(File dir) {
     if (!dir.exists()) {
-      dir.mkdirs();
+      if (!dir.mkdirs()) {
+        Log.w(CustomMaps.LOG_TAG, "Failed to create dir: " + dir.getAbsolutePath());
+        return false;
+      }
     }
     addNoMediaFile(dir);
-    return dir;
+    return true;
   }
 
   /**
@@ -134,7 +150,7 @@ public class FileUtil {
    * @param file
    * @return Canonical path for file, or if that fails, absolute path for it
    */
-  private static String getBestPath(File file) {
+  public static String getBestPath(File file) {
     if (file == null) {
       return null;
     }
@@ -175,7 +191,8 @@ public class FileUtil {
   }
 
   /**
-   * Copies file to data directory if it is not there already.
+   * Copies file to data directory if it is not there already. Overwrites any
+   * existing file with the same name.
    *
    * @param file
    * @return File pointing at the file in data directory, or 'null' in case of
@@ -185,12 +202,18 @@ public class FileUtil {
     if (isInDataDirectory(file)) {
       return file;
     }
+    long timestamp = file.lastModified();
     InputStream in = null;
     OutputStream out = null;
+    File destination = null;
+    File tmpDestination = null;
     try {
-      File destination = new File(getDataDirectory(), file.getName());
+      destination = new File(getDataDirectory(), file.getName());
+      if (destination.exists()) {
+        tmpDestination = newFileInDataDirectory("%d_" + file.getName());
+      }
       in = new FileInputStream(file);
-      out = new FileOutputStream(destination);
+      out = new FileOutputStream(tmpDestination != null ? tmpDestination : destination);
 
       copyContents(in, out);
 
@@ -200,6 +223,14 @@ public class FileUtil {
     } finally {
       tryToClose(in);
       tryToClose(out);
+
+      if (tmpDestination != null) {
+        // Delete old file, and rename new to replace it
+        destination.delete();
+        tmpDestination.renameTo(destination);
+      }
+      // Copy timestamp from original
+      destination.setLastModified(timestamp);
     }
     return null;
   }
@@ -337,14 +368,22 @@ public class FileUtil {
     sendMap.setAction(Intent.ACTION_SEND);
     sendMap.setType("application/vnd.google-earth.kmz");
     sendMap.putExtra(Intent.EXTRA_SUBJECT, sender.getString(R.string.share_message_subject));
-    File mapFile = map.getKmlInfo().getFile();
-    sendMap.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(mapFile));
     try {
+      File mapFile = map.getKmlInfo().getFile();
+      sendMap.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(mapFile));
       sender.startActivity(Intent.createChooser(sendMap,
                                                 sender.getString(R.string.share_chooser_title)));
       return true;
     } catch (Exception e) {
-      Log.w(CustomMaps.LOG_TAG, "Sharing of map failed", e);
+      String moreInfo;
+      if (map == null) {
+        moreInfo = "null map";
+      } else if (map.getKmlInfo() == null) {
+        moreInfo = "null KmlInfo for KmlFolder named " + map.getName();
+      } else {
+        moreInfo = map.getKmlInfo().getFile().getAbsolutePath();
+      }
+      Log.w(CustomMaps.LOG_TAG, String.format("Sharing of map failed (%s)", moreInfo), e);
       return false;
     }
   }

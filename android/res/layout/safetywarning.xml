@@ -3,35 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="2pt"
+    android:padding="4dp"
     >
     <TextView
+        style="@style/HugeText"
         android:id="@+id/header"
         android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/safety_warning_title"
         android:textColor="#ffffffff"
-        android:textSize="12pt"
     />
     <ScrollView
         android:id="@+id/textArea"
         android:layout_below="@id/header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2pt"
-        android:layout_marginTop="4pt"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="8dp"
         >
         <TextView 
+            style="@style/NormalText"
             android:id="@+id/warningBody"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/safety_warning"
             android:textColor="#ffffffff"
-            android:textSize="8pt"
         />
     </ScrollView>
     <CheckBox
+        style="@style/NormalText"
         android:id="@+id/showAgain"
         android:layout_below="@id/textArea"
         android:layout_width="wrap_content"
@@ -40,13 +41,15 @@
         android:checked="true"
     />
     <Button
+        style="@style/NormalText"
         android:id="@+id/okButton"
         android:layout_below="@id/showAgain"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="20pt"
-        android:paddingRight="20pt"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:textColor="#000"
         android:text="@string/button_ok"
     />
 </RelativeLayout>

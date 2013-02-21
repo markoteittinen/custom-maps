@@ -20,11 +20,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.util.AttributeSet;
 import android.view.View;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * LocationLayer is responsible for drawing the user's location icon on the map.
@@ -32,6 +37,10 @@ import android.view.View;
  * @author Marko Teittinen
  */
 public class LocationLayer extends View {
+  private static final int COLOR_DISC_EDGE = 0xE00080FF;
+  private static final int COLOR_TEXT = 0xFFFFFFFF;
+  private static final int COLOR_TEXT_BACK = 0x80000000;
+
   private Paint solidPaint;
   private Paint fillPaint;
   private DisplayState displayState;
@@ -39,6 +48,7 @@ public class LocationLayer extends View {
 
   private float accuracy;
   private AnimationDrawable animation;
+  private String warningMessage = null;
 
   private boolean locationSet = false;
   private float[] geoLocation = new float[2];
@@ -52,12 +62,14 @@ public class LocationLayer extends View {
     super(context, attrs);
 
     solidPaint = new Paint();
-    solidPaint.setColor(0xE00080FF);
+    solidPaint.setColor(COLOR_DISC_EDGE);
     solidPaint.setStrokeWidth(2.0f);
     solidPaint.setAntiAlias(true);
     solidPaint.setFilterBitmap(true);
     solidPaint.setStyle(Paint.Style.STROKE);
     solidPaint.setStrokeCap(Paint.Cap.SQUARE);
+    solidPaint.setTypeface(Typeface.DEFAULT);
+    solidPaint.setTextAlign(Paint.Align.CENTER);
 
     fillPaint = new Paint();
     fillPaint.setColor(0x400080FF);
@@ -129,6 +141,10 @@ public class LocationLayer extends View {
 
   @Override
   public void onDraw(Canvas canvas) {
+    if (warningMessage != null) {
+      displayWarning(canvas);
+    }
+
     if (!locationSet) {
       return;
     }
@@ -183,6 +199,7 @@ public class LocationLayer extends View {
   private Runnable animationStep = new Runnable() {
     private int idx = 0;
 
+    @Override
     public void run() {
       idx = (idx + 1) % animation.getNumberOfFrames();
       animation.selectDrawable(idx);
@@ -201,5 +218,102 @@ public class LocationLayer extends View {
 
   private void cancelAnimation() {
     removeCallbacks(animationStep);
+  }
+
+  // --------------------------------------------------------------------------
+  // Possible warning message about location not being available
+  // This does not happen with official Android builds, but is apparently
+  // possible with some open source variants of Android.
+
+  private class WarningInfo {
+    Paint paint;
+    RectF textBox;
+    List<String> rows;
+    float firstRowY;
+    float rowHeight;
+  }
+
+  private transient WarningInfo warningInfo = null;
+
+  public void setWarningMessage(String message) {
+    warningMessage = message;
+    warningInfo = null;
+  }
+
+  private void displayWarning(Canvas canvas) {
+    if (warningMessage == null || canvas == null) {
+      return;
+    }
+    if (warningInfo == null) {
+      // Create an object to store warning message display info to avoid
+      // recomputing values constantly
+      prepareWarningInfo(canvas);
+    }
+    warningInfo.paint.setColor(COLOR_TEXT_BACK);
+    canvas.drawRect(warningInfo.textBox, warningInfo.paint);
+    warningInfo.paint.setColor(COLOR_TEXT);
+    float x = 2 * warningInfo.textBox.left; //canvas.getWidth() / 2f;
+    float y = warningInfo.firstRowY;
+    for (String row : warningInfo.rows) {
+      canvas.drawText(row, x, y, warningInfo.paint);
+      y += warningInfo.rowHeight;
+    }
+  }
+
+  private void prepareWarningInfo(Canvas canvas) {
+    if (warningMessage == null || canvas == null) {
+      return;
+    }
+    warningInfo = new WarningInfo();
+    warningInfo.paint = new Paint();
+    warningInfo.paint.setColor(COLOR_TEXT);
+    warningInfo.paint.setStrokeWidth(1.0f);
+    warningInfo.paint.setAntiAlias(true);
+    warningInfo.paint.setStyle(Paint.Style.FILL_AND_STROKE);
+    warningInfo.paint.setTypeface(Typeface.DEFAULT);
+    warningInfo.paint.setTextAlign(Paint.Align.LEFT);
+
+    // Use 8pt font size (convert to pixel size)
+    float fontSizePx = canvas.getDensity() * 8f / 72f;
+    warningInfo.paint.setTextSize(fontSizePx);
+
+    float margin = canvas.getDensity() / 8f;
+    float textWidth = this.getWidth() - 4 * margin;
+
+    warningInfo.rows = new LinkedList<String>();
+    String[] messageRows = warningMessage.split("\\n");
+    for (int i = 0; i < messageRows.length; i++) {
+      if (!warningInfo.rows.isEmpty()) {
+        warningInfo.rows.add("");
+      }
+      breakIntoLines(warningInfo.rows, messageRows[i], textWidth);
+    }
+
+    warningInfo.firstRowY = 2 * margin + fontSizePx;
+    warningInfo.rowHeight = 1.25f * fontSizePx;
+    float textHeight = warningInfo.rows.size() * warningInfo.rowHeight;
+    warningInfo.textBox =
+        new RectF(margin, margin, this.getWidth() - margin, textHeight + 3 * margin);
+  }
+
+  private void breakIntoLines(List<String> rows, String line, float width) {
+    while (line.length() > 0) {
+      // Find maximum fitting length, try to break at last space
+      int eol = warningInfo.paint.breakText(line, true, width, null);
+      int preferred = eol;
+      while (0 < preferred && preferred < line.length() && line.charAt(preferred) != ' ') {
+        preferred--;
+      }
+      if (preferred == 0) {
+        // no word breaks before eol, break the word
+        preferred = eol;
+      }
+      rows.add(line.substring(0, preferred).trim());
+      if (preferred < line.length()) {
+        line = line.substring(preferred);
+      } else {
+        line = "";
+      }
+    }
   }
 }

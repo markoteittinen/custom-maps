@@ -16,14 +16,18 @@
 package com.custommapsapp.android;
 
 import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.GroundOverlay.Tiepoint;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.location.Location;
 import android.util.FloatMath;
 import android.util.Log;
 
 import java.io.InputStream;
+
+import com.google.android.maps.GeoPoint;
 
 /**
  * GeoToImageConverter converts coordinates between geographical (long, lat) and
@@ -321,28 +325,52 @@ public class GeoToImageConverter {
   }
 
   private void initGeoToImageMatrixTiePoints() {
-    float[] geoCorners = new float[8];
+    float[] geoPoints = new float[8];
+    float[] imagePoints = new float[8];
+    // If mapData contains tiepoints, build matrix from them
+    if (!mapData.getTiepoints().isEmpty()) {
+      int n = 0;
+      for (Tiepoint pt : mapData.getTiepoints()) {
+        GeoPoint geoPt = pt.getGeoPoint();
+        geoPoints[2 * n] = geoPt.getLongitudeE6() / 1e6f;
+        geoPoints[2 * n + 1] = geoPt.getLatitudeE6() / 1e6f;
+        Point imagePt = pt.getImagePoint();
+        imagePoints[2 * n] = imagePt.x;
+        imagePoints[2 * n + 1] = imagePt.y;
+        n++;
+      }
+      geoToImageMatrix = new Matrix();
+      if (geoToImageMatrix.setPolyToPoly(geoPoints, 0, imagePoints, 0, n)) {
+        // Successfully created matrix
+        return;
+      }
+      // Matrix initialization failed, fall back to using image corner points
+    }
     float[] corner = mapData.getNorthWestCornerLocation();
-    geoCorners[0] = corner[0];
-    geoCorners[1] = corner[1];
+    geoPoints[0] = corner[0];
+    geoPoints[1] = corner[1];
     corner = mapData.getNorthEastCornerLocation();
-    geoCorners[2] = corner[0];
-    geoCorners[3] = corner[1];
+    geoPoints[2] = corner[0];
+    geoPoints[3] = corner[1];
     corner = mapData.getSouthEastCornerLocation();
-    geoCorners[4] = corner[0];
-    geoCorners[5] = corner[1];
+    geoPoints[4] = corner[0];
+    geoPoints[5] = corner[1];
     corner = mapData.getSouthWestCornerLocation();
-    geoCorners[6] = corner[0];
-    geoCorners[7] = corner[1];
+    geoPoints[6] = corner[0];
+    geoPoints[7] = corner[1];
 
-    float[] imageCorners = { 0, 0,
-                             imageWidth, 0,
-                             imageWidth, imageHeight,
-                             0, imageHeight };
+    imagePoints[0] = 0;
+    imagePoints[1] = 0;
+    imagePoints[2] = imageWidth;
+    imagePoints[3] = 0;
+    imagePoints[4] = imageWidth;
+    imagePoints[5] = imageHeight;
+    imagePoints[6] = 0;
+    imagePoints[7] = imageHeight;
 
-    // Find matrix mapping geoCorners to imageCorners
+    // Find matrix mapping geoPoints to imagePoints (corners)
     geoToImageMatrix = new Matrix();
-    if (!geoToImageMatrix.setPolyToPoly(geoCorners, 0, imageCorners, 0, 4)) {
+    if (!geoToImageMatrix.setPolyToPoly(geoPoints, 0, imagePoints, 0, 4)) {
       Log.w(CustomMaps.LOG_TAG, "FAILED to initialize geoToImageMatrix from tie points");
     }
   }

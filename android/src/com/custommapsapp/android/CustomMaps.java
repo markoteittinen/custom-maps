@@ -45,14 +45,14 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * CustomMaps is the main activity of the application. It displays a bitmap
@@ -74,6 +74,10 @@ public class CustomMaps extends Activity {
   private static final String SAVED_SAFETY_REMINDER = PREFIX + ".SafetyReminder";
 
   private static final String DOWNLOAD_URL_PREFIX = "http://www.custommapsapp.com/qr?";
+
+  private enum MapError {
+    NO_ERROR, IMAGE_TOO_LARGE, IMAGE_NOT_FOUND, INVALID_IMAGE
+  };
 
   private static final int SELECT_MAP = 1;
   private static final int DOWNLOAD_MAP = 2;
@@ -107,8 +111,11 @@ public class CustomMaps extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.i(LOG_TAG, "App memory available (MB): " + MemoryUtil.getTotalAppMemoryMB(this));
-
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     reloadUI();
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(detailsDisplay.getRootView());
+    }
 
     // Initialize disk cache properly
     ImageDiskCache.instance(this);
@@ -222,10 +229,34 @@ public class CustomMaps extends Activity {
     }
     locationTracker.setContext(getApplicationContext());
     locationTracker.setDisplay(getWindowManager().getDefaultDisplay());
-    locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0.0f, locationTracker);
-    locator.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 0f, locationTracker);
-    Sensor orientation = sensors.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-    sensors.registerListener(locationTracker, orientation, SensorManager.SENSOR_DELAY_UI);
+    locationTracker.setQuitting(false);
+    locationTracker.resetCompass();
+
+    // Avoid crashing on some systems where location providers are disabled
+    // This is possible on some open source Android variants.
+    boolean gpsAvailable = false;
+    if (locator.getProvider(LocationManager.GPS_PROVIDER) != null) {
+      locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0.0f, locationTracker);
+      gpsAvailable = true;
+    }
+    boolean locationAvailable = gpsAvailable;
+    if (locator.getProvider(LocationManager.NETWORK_PROVIDER) != null) {
+      locator.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 0f, locationTracker);
+      locationAvailable = true;
+    }
+    String message = null;
+    if (!gpsAvailable) {
+      message = getString(R.string.gps_not_available);
+      if (!locationAvailable) {
+        message = getString(R.string.location_not_available);
+      }
+    }
+    locationLayer.setWarningMessage(message);
+
+    Sensor sensor = sensors.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    sensors.registerListener(locationTracker, sensor, 50000);
+    sensor = sensors.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+    sensors.registerListener(locationTracker, sensor, 50000);
     PreferenceStore prefs = PreferenceStore.instance(getApplicationContext());
     detailsDisplay.setUseMetric(prefs.isMetric());
     inertiaScroller.setUseMultitouch(prefs.useMultitouch());
@@ -233,10 +264,12 @@ public class CustomMaps extends Activity {
     detailsDisplay.setVisibility(visibility);
     visibility = (prefs.isShowDistance() ? View.VISIBLE : View.GONE);
     distanceLayer.setVisibility(visibility);
+    distanceLayer.setShowHeading(prefs.isShowHeading());
   }
 
   @Override
   protected void onPause() {
+    locationTracker.setQuitting(true);
     sensors.unregisterListener(locationTracker);
     locator.removeUpdates(locationTracker);
     loadMapForDisplay(null, null);
@@ -250,7 +283,7 @@ public class CustomMaps extends Activity {
   public void onSaveInstanceState(Bundle outState) {
     outState.putParcelable(SAVED_LOCATION, locationTracker.getCurrentLocation(null));
     outState.putSerializable(SAVED_MAP, selectedMap);
-    outState.putBoolean(SAVED_FOLLOWMODE, mapDisplay.getFollowMode());
+    outState.putBoolean(SAVED_FOLLOWMODE, displayState.getFollowMode());
     float[] geoCenter = mapDisplay.getScreenCenterGeoLocation();
     if (geoCenter != null) {
       outState.putSerializable(SAVED_CENTER, geoCenter);
@@ -279,7 +312,7 @@ public class CustomMaps extends Activity {
     KmlFolder savedMap = (KmlFolder) inState.getSerializable(SAVED_MAP);
     if (savedMap != null) {
       initializeMapVariables(savedMap);
-      if (loadMapForDisplay(mapImage, null)) {
+      if (loadMapForDisplay(mapImage, null) == MapError.NO_ERROR) {
         selectedMap = savedMap;
         mapDisplay.addMapMarkers(placemarks);
         float[] geoCenter = (float[]) inState.getSerializable(SAVED_CENTER);
@@ -287,13 +320,22 @@ public class CustomMaps extends Activity {
           mapDisplay.centerOnLocation(geoCenter[0], geoCenter[1]);
         }
         mapDisplay.zoomMap(inState.getFloat(SAVED_ZOOMLEVEL, 1f));
-        mapDisplay.setFollowMode(inState.getBoolean(SAVED_FOLLOWMODE));
+        displayState.setFollowMode(inState.getBoolean(SAVED_FOLLOWMODE));
         Location savedLocation = inState.getParcelable(SAVED_LOCATION);
         if (savedLocation != null) {
           locationTracker.onLocationChanged(savedLocation);
         }
       } else {
-        displayMapLoadWarning();
+        // TODO: Do we need a failure message by error result from loadMap...()?
+        if (savedMap.getKmlInfo().getFile().exists()) {
+          // map image exists but is too large, notify user
+          displayMapLoadWarning();
+        } else {
+          // map has been deleted, remove its info
+          inState.remove(SAVED_MAP);
+          savedMap = null;
+          selectedMap = null;
+        }
       }
     }
     // Remove from original intent (might have been saved there)
@@ -362,6 +404,10 @@ public class CustomMaps extends Activity {
       menu.findItem(MENU_PREFERENCES).setTitle(R.string.settings);
       updateMenuItems = false;
     }
+    // Can't share a null map or one that doesn't contain KmlInfo
+    if (selectedMap == null || selectedMap.getKmlInfo() == null) {
+      menu.findItem(MENU_SHARE_MAP).setEnabled(false);
+    }
     return super.onPrepareOptionsMenu(menu);
   }
 
@@ -392,7 +438,7 @@ public class CustomMaps extends Activity {
     if (!mapDisplay.centerOnGpsLocation()) {
       displayUserMessage(getString(R.string.gps_outside_map));
     } else {
-      mapDisplay.setFollowMode(true);
+      displayState.setFollowMode(true);
     }
   }
 
@@ -411,7 +457,7 @@ public class CustomMaps extends Activity {
   }
 
   private void shareMap() {
-    if (!FileUtil.shareMap(this, selectedMap)) {
+    if (selectedMap == null || !FileUtil.shareMap(this, selectedMap)) {
       displayUserMessage(getString(R.string.share_map_failed));
     }
   }
@@ -511,11 +557,21 @@ public class CustomMaps extends Activity {
 
   private void processSelectMapResult(Intent data) {
     if (data == null) {
-      Log.w(LOG_TAG, String.format("User did not select a map."));
+      Log.w(LOG_TAG, "User did not select a map.");
       Bundle instanceState = getIntent().getBundleExtra(SAVED_INSTANCESTATE);
       if (instanceState != null && instanceState.containsKey(SAVED_MAP)) {
         selectedMap = null;
         onRestoreInstanceState(instanceState);
+        if (selectedMap == null) {
+          // Previous map is no longer available, auto-select another one
+          mapDisplay.post(new Runnable() {
+            @Override
+            public void run() {
+              launchSelectMap(locator.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+            }
+          });
+          return;
+        }
       }
       if (selectedMap == null) {
         // User canceled initial selection, exit app
@@ -523,13 +579,15 @@ public class CustomMaps extends Activity {
       }
     } else {
       initializeMapVariables((KmlFolder) data.getSerializableExtra(SelectMap.SELECTED_MAP));
-      if (!loadMapForDisplay(mapImage, mapDisplay.getMap())) {
-        displayMapLoadWarning();
-      } else {
+      MapError status = loadMapForDisplay(mapImage, mapDisplay.getMap());
+      if (status == MapError.NO_ERROR) {
         mapDisplay.addMapMarkers(placemarks);
         if (PreferenceStore.instance(this).isReminderRequested()) {
           displaySafetyReminder(null);
         }
+      } else {
+        // TODO: display error message based on errorCode
+        displayMapLoadWarning();
       }
       // Start with last known location if it is fresher than 15 minutes
       long _15MinutesAgo = System.currentTimeMillis() - 15 * 60 * 1000;
@@ -543,12 +601,12 @@ public class CustomMaps extends Activity {
       locationTracker.onLocationChanged(location);
       if (location == null) {
         displayUserMessage(getString(R.string.waiting_for_gps));
-        mapDisplay.setFollowMode(true);
+        displayState.setFollowMode(true);
         mapDisplay.centerOnMapCenterLocation();
       } else {
         // Location known, center on user location if within map boundaries
-        mapDisplay.setFollowMode(mapDisplay.centerOnGpsLocation());
-        if (!mapDisplay.getFollowMode()) {
+        displayState.setFollowMode(mapDisplay.centerOnGpsLocation());
+        if (!displayState.getFollowMode()) {
           mapDisplay.centerOnMapCenterLocation();
         }
       }
@@ -598,15 +656,20 @@ public class CustomMaps extends Activity {
    *
    * @param newMap to be displayed
    * @param oldMap to be restored if newMap fails to display
-   * @return {@code true} if the newMap was loaded successfully
+   * @return MapError.NO_ERROR if newMap was loaded successfully, otherwise some
+   *     other MapError value indicating nature of problem
    */
-  private boolean loadMapForDisplay(GroundOverlay newMap, GroundOverlay oldMap) {
+  private MapError loadMapForDisplay(GroundOverlay newMap, GroundOverlay oldMap) {
     try {
       mapDisplay.setMap(newMap);
       if (newMap != null) {
+        // Force failure if map file has been deleted
+        if (!newMap.getKmlInfo().getFile().exists()) {
+          return MapError.IMAGE_NOT_FOUND;
+        }
         locationLayer.updateMapAngle();
       }
-      return true;
+      return MapError.NO_ERROR;
     } catch (MapImageTooLargeException ex) {
       // map was too large, restore old map
       if (newMap != null) {
@@ -614,7 +677,7 @@ public class CustomMaps extends Activity {
         if (oldMap != null) {
           locationLayer.updateMapAngle();
         }
-        return false;
+        return MapError.IMAGE_TOO_LARGE;
       } else {
         throw new OutOfMemoryError("Can't load even 'null' map. Giving up.");
       }
@@ -646,33 +709,6 @@ public class CustomMaps extends Activity {
 
   // --------------------------------------------------------------------------
   // License handling
-
-  private void showLicenseDialog() {
-    AboutDialog licenseDialog = new AboutDialog(this);
-    String version = PreferenceStore.instance(this).getVersion();
-    licenseDialog.setVersion(version);
-    licenseDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-      @Override
-      public void onDismiss(DialogInterface dialog) {
-        AboutDialog aboutDialog = (AboutDialog) dialog;
-        if (aboutDialog.wasButtonPressed()) {
-          // Dialog dismissed with the "accept" button
-          if (aboutDialog.isLicenseAccepted()) {
-            licenseAccepted();
-          } else {
-            // License rejected, exit app
-            Log.i(LOG_TAG, "User rejected software license, exiting app");
-            finish();
-          }
-        } else {
-          // License dialog dismissed without button (phone rotate?)
-          aboutDialog.setOnDismissListener(null);
-          aboutDialog = null;
-        }
-      }
-    });
-    licenseDialog.show();
-  }
 
   @Override
   protected Dialog onCreateDialog(int id) {
@@ -808,10 +844,10 @@ public class CustomMaps extends Activity {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-      if (event.sensor.getType() != Sensor.TYPE_ORIENTATION) {
+      super.onSensorChanged(event);
+      if (isQuitting) {
         return;
       }
-      super.onSensorChanged(event);
       locationLayer.setHeading(compassHeading);
       if (detailsDisplay.isShown()) {
         detailsDisplay.setHeading(locationLayer.getHeading());

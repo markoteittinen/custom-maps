@@ -33,8 +33,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -90,22 +92,18 @@ public class MapCatalog {
           KmlFolder folder = (KmlFolder) feature;
           for (KmlFeature folderFeature : folder.getFeatures()) {
             if (folderFeature instanceof GroundOverlay) {
-              // Found a candidate map, verify the name
-              foundMap = (GroundOverlay) folderFeature;
-              if (mapName == null || foundMap.getName().equals(mapName)) {
+              // Select this map if the name matches
+              if (mapName == null || folderFeature.getName().equals(mapName)) {
+                foundMap = (GroundOverlay) folderFeature;
                 foundFolder = folder;
                 break; // folder scan
-              } else {
-                // name didn't match, not the map we're looking for
-                foundMap = null;
               }
             }
           }
         } else if (feature instanceof GroundOverlay) {
-          foundMap = (GroundOverlay) feature;
-          if (mapName == null || !foundMap.getName().equals(mapName)) {
-            // name didn't match, not the map we're looking for
-            foundMap = null;
+          // Select this map if the name matches
+          if (mapName == null || feature.getName().equals(mapName)) {
+            foundMap = (GroundOverlay) feature;
           }
         }
       }
@@ -174,6 +172,7 @@ public class MapCatalog {
 
   private File dataDir;
   private Collator stringComparer = Collator.getInstance();
+  private Set<String> createdFiles = new HashSet<String>();
   private List<KmlFolder> allMaps = new ArrayList<KmlFolder>();
   private List<KmlFolder> inMaps = new ArrayList<KmlFolder>();
   private List<KmlFolder> nearMaps = new ArrayList<KmlFolder>();
@@ -187,6 +186,16 @@ public class MapCatalog {
   public MapCatalog(File dataDir) {
     this.dataDir = dataDir;
     refreshCatalog();
+  }
+
+  /**
+   * Adds a known created filename to catalog since some versions of Android
+   * have issues refreshing map catalog after new maps are created.
+   *
+   * @param filename Name of a map file in data directory (w/o path).
+   */
+  public void addCreatedFile(String filename) {
+    createdFiles.add(filename);
   }
 
   /**
@@ -332,44 +341,63 @@ public class MapCatalog {
    * Updates the contents of this catalog by re-reading files in data directory.
    */
   public void refreshCatalog() {
+    clearCatalog();
+    Iterable<KmlInfo> kmlEntries = findKmlData();
+    KmlParser parser = new KmlParser();
+    for (KmlInfo kmlInfo : kmlEntries) {
+      allMaps.addAll(parseMapsFrom(kmlInfo, parser));
+    }
+  }
+
+  public void clearCatalog() {
+    // Close all ZipFiles in kmz files
+    for (KmlFolder map : allMaps) {
+      KmlInfo info = map.getKmlInfo();
+      if (info instanceof KmzFile) {
+        ((KmzFile) info).close();
+      }
+    }
     allMaps.clear();
     inMaps.clear();
     nearMaps.clear();
     farMaps.clear();
-    KmlParser parser = new KmlParser();
-    List<KmlFolder> fileMaps = new ArrayList<KmlFolder>();
-    List<Placemark> sharedPlacemarks = new ArrayList<Placemark>();
-    for (KmlInfo kmlInfo : findKmlData()) {
-      try {
-        Iterable<KmlFeature> features = parser.readFile(kmlInfo.getKmlReader());
-        fileMaps.clear();
-        sharedPlacemarks.clear();
-        for (KmlFeature feature : features) {
-          feature.setKmlInfo(kmlInfo);
-          if (feature instanceof KmlFolder) {
-            // Scan folder for maps, assign kmlinfo to them
-            KmlFolder folder = (KmlFolder) feature;
-            for (KmlFeature folderFeature : folder.getFeatures()) {
-              folderFeature.setKmlInfo(kmlInfo);
-              if (folderFeature instanceof GroundOverlay) {
-                folder.setKmlInfo(kmlInfo);
-                fileMaps.add(createResultFolder(folder, (GroundOverlay) folderFeature));
-              }
-            }
-          } else if (feature instanceof GroundOverlay) {
-            fileMaps.add(createResultFolder(null, (GroundOverlay) feature));
-          } else if (feature instanceof Placemark) {
-            sharedPlacemarks.add((Placemark) feature);
-          }
-        }
-        for (KmlFolder map : fileMaps) {
-          map.addFeatures(sharedPlacemarks);
-          allMaps.add(map);
-        }
-      } catch (Exception ex) {
-        Log.w(CustomMaps.LOG_TAG, "Failed to parse KML file: " + kmlInfo.toString(), ex);
-      }
+  }
+
+  private Collection<KmlFolder> parseMapsFrom(KmlInfo kmlInfo, KmlParser parser) {
+    if (parser == null) {
+      parser = new KmlParser();
     }
+    List<KmlFolder> maps = new ArrayList<KmlFolder>();
+    List<Placemark> sharedPlacemarks = new ArrayList<Placemark>();
+    try {
+      Iterable<KmlFeature> features = parser.readFile(kmlInfo.getKmlReader());
+      for (KmlFeature feature : features) {
+        feature.setKmlInfo(kmlInfo);
+        if (feature instanceof KmlFolder) {
+          // Scan folder for maps, assign kmlinfo to them
+          KmlFolder folder = (KmlFolder) feature;
+          for (KmlFeature folderFeature : folder.getFeatures()) {
+            folderFeature.setKmlInfo(kmlInfo);
+            if (folderFeature instanceof GroundOverlay) {
+              folder.setKmlInfo(kmlInfo);
+              maps.add(createResultFolder(folder, (GroundOverlay) folderFeature));
+            }
+          }
+        } else if (feature instanceof GroundOverlay) {
+          maps.add(createResultFolder(null, (GroundOverlay) feature));
+        } else if (feature instanceof Placemark) {
+          sharedPlacemarks.add((Placemark) feature);
+        }
+      }
+      if (!sharedPlacemarks.isEmpty()) {
+        for (KmlFolder map : maps) {
+          map.addFeatures(sharedPlacemarks);
+        }
+      }
+    } catch (Exception ex) {
+      Log.w(CustomMaps.LOG_TAG, "Failed to parse KML file: " + kmlInfo.toString(), ex);
+    }
+    return maps;
   }
 
   /**
@@ -389,29 +417,55 @@ public class MapCatalog {
     if (directory == null || !directory.exists() || !directory.isDirectory()) {
       return kmlData;
     }
+    // Add all files in given directory
     File[] files = directory.listFiles();
     for (File file : files) {
-      if (file.getName().endsWith(".kml")) {
+      String filename = file.getName();
+      // Remove file from newly created files if it was found in listing
+      createdFiles.remove(filename);
+      if (filename.endsWith(".kml")) {
         kmlData.add(new KmlFile(file));
-      } else if (file.getName().endsWith(".kmz")) {
-        ZipFile kmzFile;
-        try {
-          kmzFile = new ZipFile(file);
-        } catch (Exception ex) {
-          // TODO: Add a notification dialog (?)
-          Log.w(CustomMaps.LOG_TAG, "Not a valid KMZ file: " + file.getName(), ex);
-          continue;
-        }
-        Enumeration<? extends ZipEntry> kmzContents = kmzFile.entries();
-        while (kmzContents.hasMoreElements()) {
-          ZipEntry kmzItem = kmzContents.nextElement();
-          if (kmzItem.getName().endsWith(".kml")) {
-            kmlData.add(new KmzFile(kmzFile, kmzItem));
-          }
-        }
+      } else if (filename.endsWith(".kmz")) {
+        kmlData.addAll(scanKmz(file));
+      }
+    }
+    // If we know of any created files that were not listed, add them too
+    for (String name : createdFiles) {
+      File file = new File(directory, name);
+      if (name.endsWith(".kml")) {
+        kmlData.add(new KmlFile(file));
+      } else if (name.endsWith(".kmz")) {
+        kmlData.addAll(scanKmz(file));
       }
     }
     return kmlData;
+  }
+
+  /**
+   * Finds all kml entries inside a kmz file.
+   *
+   * @param file Kmz file to scan for kml entries.
+   * @return Collection<KmzFile> containing all kml entries in the kmz file.
+   *         Returns an empty list if the file is not a zip file.
+   */
+  private Collection<KmzFile> scanKmz(File file) {
+    ZipFile kmzFile;
+    try {
+      kmzFile = new ZipFile(file);
+    } catch (Exception ex) {
+      // TODO: Add a notification dialog (?)
+      Log.w(CustomMaps.LOG_TAG, "Not a valid KMZ file: " + file.getName(), ex);
+      return Collections.emptyList();
+    }
+    List<KmzFile> kmlEntries = new ArrayList<KmzFile>();
+    Enumeration<? extends ZipEntry> kmzContents = kmzFile.entries();
+    while (kmzContents.hasMoreElements()) {
+      ZipEntry kmzItem = kmzContents.nextElement();
+      if (kmzItem.getName().endsWith(".kml")) {
+        kmlEntries.add(new KmzFile(kmzFile, kmzItem));
+      }
+    }
+    return kmlEntries;
   }
 
   /**

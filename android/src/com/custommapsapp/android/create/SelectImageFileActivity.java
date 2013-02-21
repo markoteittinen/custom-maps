@@ -20,6 +20,7 @@ import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.MemoryUtil;
+import com.custommapsapp.android.PtSizeFixer;
 import com.custommapsapp.android.R;
 
 import android.app.Activity;
@@ -79,11 +80,15 @@ public class SelectImageFileActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.selectfile);
 
     currentDir = FileUtil.getSdRoot();
 
     prepareUI();
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(fileListView.getRootView());
+    }
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_SELECT_IMAGE_FILE,
                                               getString(R.string.select_image_help));
@@ -109,7 +114,9 @@ public class SelectImageFileActivity extends Activity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     helpDialogManager.onSaveInstanceState(outState);
-    outState.putString(SAVED_CURRENTDIR, currentDir.getAbsolutePath());
+    if (currentDir != null) {
+      outState.putString(SAVED_CURRENTDIR, currentDir.getAbsolutePath());
+    }
   }
 
   @Override
@@ -211,7 +218,7 @@ public class SelectImageFileActivity extends Activity {
    * Overrides back button behavior on Android 2.0 and later. Ignored in 1.6.
    */
   public void onBackPressed() {
-    if (isSdRootDir(currentDir)) {
+    if (currentDir == null || isSdRootDir(currentDir)) {
       setResult(RESULT_CANCELED);
       finish();
     } else {
@@ -325,7 +332,9 @@ public class SelectImageFileActivity extends Activity {
    * Checks if a file points to root of SD card
    */
   private boolean isSdRootDir(File f) {
-    return f.getAbsolutePath().equals(FileUtil.SD_ROOT_PATH);
+    String filePath = FileUtil.getBestPath(f);
+    String sdRootPath = FileUtil.getSdRoot().getAbsolutePath();
+    return filePath.equals(sdRootPath);
   }
 
   /**
@@ -371,7 +380,7 @@ public class SelectImageFileActivity extends Activity {
     // Need to resize image, but first verify target directory exists
     if (!FileUtil.verifyImageDir()) {
       Log.e(CustomMaps.LOG_TAG, "Failed to create directory for resized image file " +
-            FileUtil.TMP_IMAGE);
+            FileUtil.getTmpImagePath());
       // Attempt to use full size image
       return origImage;
     }
@@ -392,15 +401,20 @@ public class SelectImageFileActivity extends Activity {
     try {
       // Load resized image (may throw OutOfMemoryError)
       image = BitmapFactory.decodeFile(origImage.getAbsolutePath(), options);
+      if (image == null) {
+        Log.e(CustomMaps.LOG_TAG, String.format("Failed to read image: %s, size: %.2f MP",
+            origImage.getAbsolutePath(), pixelCount / 1e6f));
+        return origImage;
+      }
       // Successfully resized, save into temporary file
-      FileOutputStream out = new FileOutputStream(FileUtil.TMP_IMAGE);
+      FileOutputStream out = new FileOutputStream(FileUtil.getTmpImageFile());
       image.compress(Bitmap.CompressFormat.JPEG, 85, out);
       out.close();
       // Release memory used by the image
       image.recycle();
       image = null;
       // Copy orientation information, and return resized image
-      File resizedImage = new File(FileUtil.TMP_IMAGE);
+      File resizedImage = FileUtil.getTmpImageFile();
       copyImageOrientation(origImage, resizedImage);
       return resizedImage;
     } catch (OutOfMemoryError err) {
@@ -583,6 +597,9 @@ public class SelectImageFileActivity extends Activity {
     public View getView(int position, View convertView, ViewGroup parent) {
       if (convertView == null) {
         convertView = LayoutInflater.from(getContext()).inflate(R.layout.imagefilelist, null);
+        if (PtSizeFixer.isFixNeeded((Activity) null)) {
+          PtSizeFixer.fixView(convertView);
+        }
       }
       ImageView imageView = (ImageView) convertView.findViewById(R.id.thumbnail);
       TextView textView = (TextView) convertView.findViewById(R.id.nameField);
@@ -670,6 +687,7 @@ public class SelectImageFileActivity extends Activity {
 
   // Simple runnable to hide progress bar
   private Runnable hideProgressBar = new Runnable() {
+    @Override
     public void run() {
       showProgress(false);
     }

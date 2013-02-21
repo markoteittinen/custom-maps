@@ -15,8 +15,10 @@
  */
 package com.custommapsapp.android.create;
 
+import com.custommapsapp.android.PtSizeFixer;
 import com.custommapsapp.android.R;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.view.LayoutInflater;
@@ -58,6 +60,9 @@ public class TiePointAdapter extends ArrayAdapter<TiePoint> {
     }
     if (convertView == null) {
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.tiepointitem, null);
+      if (PtSizeFixer.isFixNeeded((Activity) null)) {
+        PtSizeFixer.fixView(convertView);
+      }
     }
     TiePoint tiepoint = getItem(position);
     ImageView thumbnail = (ImageView) convertView.findViewById(R.id.tiepointImage);

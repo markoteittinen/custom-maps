@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Custom Maps/Selectează hartă</string>
+    <string name="create_map_name">Custom Maps/Crează hartă</string>
+    <string name="edit_prefs_name" tools:ignore="UnusedResources">Custom Maps/Setări</string>
+    <string name="author">De Marko Teittinen</string>
+    <string name="open_source">
+       Aplicația Custom Maps și codul ei sursă sunt publicate sub licența Apache versiunea 2.0.
+    </string>
+    <string name="apache_license">Read Apache License 2.0</string>
+    <string name="google_code">Vizitați situl proiectului open source</string>
+    <string name="app_home">Vizitați situl aplicație Custom Maps</string>
+
+    <!-- CustomMaps.java -->
+    <string name="gps_outside_map">Locația GPS nu este în interiorul graniților de hartă</string>
+    <string name="share_map_failed">A eșuat trimiterea hărții</string>
+    <string name="external_content_failed">
+        Custom Maps nu a reușit să afișeze conținutul KMZ
+    </string>
+    <string name="waiting_for_gps">Locație curentă necunoscută.\nCăutare selnal GPS…</string>
+    <string name="map_too_large">
+        Harta selectată nu a putut fi încărcate, deoarece a este prea mare.
+    </string>
+    
+    <!-- sharing -->
+    <string name="share_message_subject">Aș dori să vă distribuii o hartă</string>
+    <string name="share_chooser_title">Trimite harta cu…</string>
+
+    <!-- safety warning -->
+    <string name="safety_warning_title">IMPORTANT!</string>
+    <string name="safety_warning">
+        Multe imagini pot fi utilizate de Custom Maps dar nu sunt trase cu precizie suficientă
+        pentru a arăta locații exacte GPS. Locul de amplasare afișat ar trebui să fie considerate
+        cu aproximație în orice moment.\n\nE posibil ca într-o anumită hartă unele zone să fie mai
+        bine aliniate GPS decât altele.
+    </string>
+    <string name="remind_me_again">Adu-mi aminte din nou data viitoare</string>
+    
+    <!-- select map -->
+    <string name="select_map_to_use">Selectați o hartă pentru utilizare</string>
+    <string name="no_maps_found_on_sd">
+        Nu au fost găsite hărți pe cardul SD în dosarul CustomMaps.\n\nFolosiți meniu pentru a crea
+        hărți și pentru a obține ajutor să le găsiți.\n\n Sau apăsați \'inapoi\' pentru a ieși.
+    </string>
+    <string name="create_map_help">
+        Utilizați meniul pentru a crea hărți din fotografii sau din imagini descărcate\n\nApăsați
+        pe o hartă și mențineți pentru a o modifica sau șterge.
+    </string>
+    <string name="create_map_help_link">
+        Click aici pentru a vizita site-ul Custom Maps pentru hărți de probă și tutorial.
+    </string>
+    <string name="select_cannot_modify_map_set">
+        Această hartă este o parte dintr-o hartă set. Ea nu poate fi modificată sau ștersă.
+    </string>
+    <string name="select_cannot_modify_placemarks">
+        Această hartă conține marcatorii de locație. Ea nu poate fi modificată.
+    </string>
+    <string name="no_map_sharing_apps">
+        Nu există aplicații instalate care puteți distribui hărți
+    </string>
+    <string name="delete_map_dialog_title">Confirmați ștergerea</string>
+    <string name="delete_map_dialog">Sunteți sigur că doriți să ștergeți harta\n\"%s\"?</string>
+    <string name="delete_map_dialog_positive">Da - șterge</string>
+    <string name="delete_map_dialog_negative">Nu - păstrează</string>
+    <string name="deleting_map_failed">A eșuat ștergerea hărții \"%s\"</string>
+    <string name="local_maps">Hărți locale</string>
+    <string name="nearby_maps">Hărți în zonă</string>
+    <string name="other_maps">Alte hărți</string>
+    <string name="all_maps">Toate hărțile</string>
+
+    <!-- downloading -->
+    <string name="progress_format">Dimenziune hară necunosută. Descărcată %,d kB.</string>
+    <string name="download_canceled">A fost anulată descărcarea hărții</string>
+    <string name="download_failed">A eșuat descărcarea hărții din %s</string>
+    <string name="download_successful">Hartă descărcată cu succes</string>
+    <string name="download_no_datadir">
+        Custom Maps nu poate găsi cardul SD pentru a salva harta.\nDescărcare anulată.
+    </string>
+    <string name="download_title_label">Descărcare hartă de pe internet</string>
+    <string name="download_progress_label">Progres</string>
+    <string name="download_starting">Descărcare începută…</string>
+    <string name="download_info">
+        Vă rugăm să așteptați până când se termină descărcarea sau anulați descărcarea cu butonul
+        de mai jos
+    </string>
+    
+    <!-- map image display -->
+    <string name="unnamed_map">Hartă fără titlu</string>
+    <string name="map_image_load_failed">A eșuat incărcare imaginii hartă pentru %s.</string>
+    
+    <!-- help manager -->
+    <string name="help_menu_title">Ajutor</string>
+    <string name="help_redisplay">Puteți afișa din nou aceasta folosind meniul</string>
+    
+    <!-- details display -->
+    <string name="latitude">Latitudine</string>
+    <string name="longitude">Longitudine</string>
+    <string name="altitude">Altitudine</string>
+    <string name="heading">Poziție</string>
+    <string name="speed">Viteză</string>
+    <string name="accuracy">Acuratețe</string>
+    <string name="no_data_available">N/A</string>
+    
+    <!-- map image selection -->
+    <string name="select_image_help">
+        Selectați un fișier care conține o imagine hartă \n\nFolosiți numai imagini pentru care
+        aveți permisiunea.\n\nMeniul conține link-uri către dosarele care conțin fotografii și
+        descărcări de pe internet.
+    </string>
+    <string name="select_image_invalid">
+        %s nu este un fișier imagine valid.\nTrebuie să selectați un fișier imagine
+    </string>
+    <string name="select_image_select_file">Selectați fișierul imagine hartă</string>
+    
+    <!-- map image point selection -->
+    <string name="image_point_help">
+        Selectați un punct care urmează să fie amplasat pe o hartă Google.\n\nSelectați puncte
+        depărtate pentru rezultate mai bune.departe cel mai bun pentru.\n\nEvită selectarea
+        punctelor între puncte precente.
+    </string>
+    <string name="image_point_no_image">
+        Nici o imagine harta selectată. Nu puteți selecta punte.
+    </string>
+    <string name="image_point_select_for_matching">Selectați un punct pentru a fi protivit</string>
+    
+    <!-- map geo point selection -->
+    <string name="geo_point_help">
+        Măriți sau micșorați și trageți de harta Google pentru a se potivi cu centrul pictogramei.
+        \n\nFolosiți glisoarele pentru a roti și scala miniatura, precum și pentru a regla
+        transparența acesteia.\n\nButonul hartă comută între vedere hartă și vedere din satelit. 
+    </string>
+    <string name="geo_point_mapview_failure">
+        Nu a reușit crearea hărții.\nCrearea hărții nu este disponibilă.
+    </string>
+    <string name="geo_point_rotate">Rotire</string>
+    <string name="geo_point_scale">Scalare</string>
+    <string name="geo_point_transparency">Transparența</string>
+    
+    <!-- map editor -->
+    <string name="editor_help">	
+        Denumiți harta dvs. și descrieți-o pentru lista de hărți.\n\nAdugați 2-4 punte pentru a
+        localiza și scară harta imagine.\n\nAdjustați sau șterge puntele prin apăsarea lungă pe
+        intrări.\n\nHărțile pot fi salvate după vizualizare.
+    </string>
+    <string name="editor_image_load_failed">A eșuat încărcarea imaginii hartă</string>
+    <string name="editor_need_two_points">
+        Trebuie să adăugați cel puțin 2 puncte înainte de a previzualiza.
+    </string>
+    <string name="editor_map_save_failed">A eșuat salvare hărții</string>
+    <string name="editor_map_name">Nume hartă</string>
+    <string name="editor_new_map">Hartă nouă</string>
+    <string name="editor_description">Descriere</string>
+    <string name="editor_tiepoints">Puncte</string>
+    
+    <!-- map preview -->
+    <string name="preview_help">
+        Verificați alinierea imaginii hartă prin scalare și panoramare harta.\n\nButonul înapoi
+        permite să reglați sau să adăugați puncte.\n\nNOTĂ: Anumite imagini hartă nu pot fi
+        aliniate perfect.
+    </string>
+    <string name="preview_mapview_failure">
+         Nu a reușit crearea hărții.\nPrevizualizarea hărții nu este disponibilă.
+    </string>
+    <string name="preview_transparency">Transparența</string>
+    
+    <!-- edit preferences -->
+    <string name="metric_title">Utlizați sistemul metric</string>
+    <string name="metric_use_metric">Acum utilizați sistemul metric</string>
+    <string name="metric_use_english">Acum utilizați sistemul englezesc</string>
+    <string name="multitouch_title">Permite pinch zoom</string>
+    <string name="multitouch_enable_pinch">Pinch zooming activat</string>
+    <string name="multitouch_disable_pinch">Pinch zooming dezactivat</string>
+    <string name="distance_title">Afișează distanța</string>
+    <string name="distance_show">
+        Afișează distanța de la locația curentă la centrul ecranului
+    </string>
+    <string name="distance_hide">Distanța nu este afișată sau calulată</string>
+    <string name="heading_title">Afișează poziție</string>
+    <string name="heading_show">Afișează poziție de la locația curentă la centrul ecranului</string>
+    <string name="heading_hide">Poziție nu este afișată sau calulată</string>
+    <string name="safety_reminder_title">Afișare detalii siguranță</string>
+    <string name="safety_reminder_show">
+        Detaliile de siguranță vor fi afișate când harta este schimbată
+    </string>
+    <string name="safety_reminder_hide">
+        Detalii siguranță nu vor fi afișate când harta este schimbată</string>
+    <string name="language_title">Selectați limbă</string>
+    <string name="language_default">Implicit</string>
+    <string name="language_selected_format">Utilizarea %s</string>
+    <string name="max_map_img_size_title">Dimenziune maximă imagine hartă</string>
+    <string name="max_map_img_size">%.1f megapixels</string>
+    <string name="about_custom_maps">Despre Custom Maps</string>
+    
+    <!-- about dialog -->
+    <string name="version_label">version</string>
+    <string name="credits_text">
+        <b>Special thanks</b>
+        \n\u2022 Harlan Hile (pinch zoom, user location icon)
+        \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Francesco Terribile (Italian translation)
+	    \n\u2022 Dorin Hongu (Romanian translation)
+        \n\u2022 Germain Zouein (testing)
+    </string>
+    
+    <!-- button items -->
+    <string name="button_ok">OK</string>
+    <string name="button_close">Închide</string>
+    <string name="button_accept_license">Acceptați licența </string>
+    <string name="button_cancel">Anulare</string>
+    <string name="button_save">Salvați </string>
+    <string name="button_add_point">Adaugă punct</string>
+    <string name="button_preview">Vizualizați</string>
+    <string name="button_accept">Acceptați</string>
+    
+    <!-- menu items -->
+    <string name="select_map">Selectare hartă</string>
+    <string name="my_location">Locația mea</string>
+    <string name="location_details">Detalii locație</string>
+    <string name="share_map">Distribuie haartă</string>
+    <string name="settings">Setări</string>
+    <string name="create_map">Creați hartă</string>
+    <string name="modify_map">Modifică harta</string>
+    <string name="delete_map">Ștergere hartă</string>
+    <string name="select_point">Slectare punct</string>
+    <string name="adjust_tiepoint">Ajustare punct</string>
+    <string name="delete_tiepoint">Ștergere punct</string>
+    <string name="photos">Fotografii</string>
+    <string name="downloads">Descărcări</string>
+    <string name="sdcard">Card SD</string>
+
+</resources>

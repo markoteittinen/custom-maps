@@ -14,36 +14,42 @@
     >
     <TableRow>
       <TextView
+        style="@style/SmallText"
         android:layout_marginRight="4dp"
         android:text="@string/longitude"
         android:textStyle="bold"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/SmallText"
         android:id="@+id/longitudeField"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView
+        style="@style/SmallText"
         android:layout_marginRight="4dp"
         android:textStyle="bold"
         android:text="@string/latitude"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/SmallText"
         android:id="@+id/latitudeField"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView
+        style="@style/SmallText"
         android:layout_marginRight="4dp"
         android:text="@string/altitude"
         android:textStyle="bold"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/SmallText"
         android:id="@+id/altitudeField"
         android:textColor="#ffffff"
         />
@@ -57,36 +63,42 @@
     >
     <TableRow>
       <TextView
+        style="@style/SmallText"
         android:layout_marginRight="4dp"
         android:text="@string/heading"
         android:textStyle="bold"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/SmallText"
         android:id="@+id/headingField"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView
+        style="@style/SmallText"
         android:layout_marginRight="4dp"
         android:text="@string/speed"
         android:textStyle="bold"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/SmallText"
         android:id="@+id/speedField"
         android:textColor="#ffffff"
         />
     </TableRow>
     <TableRow>
       <TextView 
+        style="@style/SmallText"
         android:layout_marginRight="4dp"
         android:text="@string/accuracy"
         android:textStyle="bold"
         android:textColor="#eeeeee"
         />
       <TextView 
+        style="@style/SmallText"
         android:id="@+id/accuracyField"
         android:textColor="#ffffff"
         />

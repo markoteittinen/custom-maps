@@ -21,6 +21,7 @@ import com.custommapsapp.android.kml.KmlFolder;
 import com.custommapsapp.android.storage.EditPreferences;
 import com.custommapsapp.android.storage.PreferenceStore;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -96,12 +97,16 @@ public class SelectMap extends ListActivity {
     super.onCreate(savedInstanceState);
     File dataDir = FileUtil.getDataDirectory();
     if (!dataDir.exists()) {
-      Log.e(CustomMaps.LOG_TAG, "Creation of data dir failed. Name: " + FileUtil.DATA_DIR);
+      Log.e(CustomMaps.LOG_TAG, "Creation of data dir failed. Name: " + dataDir.getAbsolutePath());
     }
     // Update default map name in case language has changed
     MapCatalog.setDefaultMapName(getString(R.string.unnamed_map));
     mapCatalog = new MapCatalog(dataDir);
+    boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.selectmap);
+    if (ptSizeFixNeeded) {
+      PtSizeFixer.fixView(getListView().getRootView());
+    }
 
     autoSelectRequested = getIntent().getBooleanExtra(AUTO_SELECT, false);
     localPathRequest = getIntent().getStringExtra(LOCAL_FILE);
@@ -152,8 +157,15 @@ public class SelectMap extends ListActivity {
     if (last != null && isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
       locationTracker.onLocationChanged(last);
     }
-    locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationTracker);
-    locator.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationTracker);
+    locationTracker.setQuitting(false);
+    // Avoid crashing on some systems without GPS_PROVIDER
+    if (locator.getProvider(LocationManager.GPS_PROVIDER) != null) {
+      locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationTracker);
+    }
+    // Avoid crashing on some systems without NETWORK_PROVIDER
+    if (locator.getProvider(LocationManager.NETWORK_PROVIDER) != null) {
+      locator.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationTracker);
+    }
 
     if (autoSelectRequested) {
       // If specific file was requested, open it
@@ -178,7 +190,9 @@ public class SelectMap extends ListActivity {
   protected void onPause() {
     super.onPause();
     helpDialogManager.onPause();
+    locationTracker.setQuitting(true);
     locator.removeUpdates(locationTracker);
+    mapCatalog.clearCatalog();
   }
 
   private boolean isNewerThan(long time, long ageInMillis) {
@@ -289,6 +303,7 @@ public class SelectMap extends ListActivity {
 
   private void displayMessage(final String message, final boolean showLong) {
     Runnable postMessage = new Runnable() {
+      @Override
       public void run() {
         int duration = (showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         Toast.makeText(SelectMap.this, message, duration).show();
@@ -339,8 +354,13 @@ public class SelectMap extends ListActivity {
     }
     switch (requestCode) {
       case CREATE_MAP:
-        // New map created, refresh catalog
-        runOnUiThread(refreshCatalog);
+        // New map created, refresh catalog, and include just edited file
+        String mapFilename = data.getStringExtra(MapEditor.KMZ_FILE);
+        if (mapFilename != null) {
+          File file = new File(mapFilename);
+          mapCatalog.addCreatedFile(file.getName());
+        }
+        getListView().post(refreshCatalog);
         break;
     }
   }
@@ -501,6 +521,7 @@ public class SelectMap extends ListActivity {
     getIntent().putExtra(SELECTED_MAP, mapHolder);
     setResult(RESULT_OK, getIntent());
     locator.removeUpdates(locationTracker);
+    mapCatalog.clearCatalog();
     finish();
   }
 
@@ -518,6 +539,9 @@ public class SelectMap extends ListActivity {
     public View getView(int position, View convertView, ViewGroup parent) {
       if (convertView == null) {
         convertView = LayoutInflater.from(getContext()).inflate(R.layout.listrow, parent, false);
+        if (PtSizeFixer.isFixNeeded((Activity) null)) {
+          PtSizeFixer.fixView(convertView);
+        }
       }
       TextView title = (TextView) convertView.findViewById(R.id.titleField);
       TextView description = (TextView) convertView.findViewById(R.id.descriptionField);
@@ -634,6 +658,9 @@ public class SelectMap extends ListActivity {
         if (convertView == null) {
           convertView =
               LayoutInflater.from(SelectMap.this).inflate(R.layout.listrow, parent, false);
+          if (PtSizeFixer.isFixNeeded((Activity) null)) {
+            PtSizeFixer.fixView(convertView);
+          }
         }
         title = (TextView) convertView.findViewById(R.id.titleField);
         description = (TextView) convertView.findViewById(R.id.descriptionField);
@@ -649,6 +676,9 @@ public class SelectMap extends ListActivity {
         if (convertView == null) {
           convertView =
               LayoutInflater.from(SelectMap.this).inflate(R.layout.listheader, parent, false);
+          if (PtSizeFixer.isFixNeeded((Activity) null)) {
+            PtSizeFixer.fixView(convertView);
+          }
         }
         title = (TextView) convertView;
         titleText = (String) item;

@@ -7,21 +7,21 @@
     >
     
     <TextView android:id="@+id/titleField"
+        style="@style/LargeText"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="10pt"
         android:text=""
         />
 
     <TextView android:id="@+id/descriptionField"
+        style="@style/SmallText"
         android:layout_below="@id/titleField"
         android:layout_alignLeft="@id/titleField"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:textSize="6pt"
+        android:paddingLeft="20dp"
         android:text=""
         />
 </RelativeLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NormalText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">8pt</item>
+    </style>
+    <style name="SmallText" parent="@style/NormalText">
+        <item name="android:textSize">6pt</item>
+    </style>
+    <style name="LargeText" parent="@style/NormalText">
+        <item name="android:textSize">10pt</item>
+    </style>
+    <style name="HugeText" parent="@style/NormalText">
+        <item name="android:textSize">12pt</item>
+    </style>
+</resources>

@@ -15,16 +15,13 @@
  */
 package com.custommapsapp.android.create;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapView;
-import com.google.android.maps.MyLocationOverlay;
-
 import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.MapApiKeys;
+import com.custommapsapp.android.PtSizeFixer;
 import com.custommapsapp.android.R;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +40,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 
 /**
  * TiePointActivity allows users to tie points on bitmap images to geo
@@ -95,6 +97,9 @@ public class TiePointActivity extends MapActivity {
     userLocation = new MyLocationOverlay(this, mapView);
 
     prepareUI();
+    if (PtSizeFixer.isFixNeeded((Activity) null)) {
+      PtSizeFixer.fixView(doneButton.getRootView());
+    }
 
     mapView.setBuiltInZoomControls(true);
     mapView.setReticleDrawMode(MapView.ReticleDrawMode.DRAW_RETICLE_NEVER);
