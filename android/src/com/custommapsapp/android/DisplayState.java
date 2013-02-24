@@ -190,8 +190,8 @@ public class DisplayState {
   public boolean centerOnGeoLocation(float longitude, float latitude) {
     // Check that the location is within the map boundaries
     float[] location = new float[] { longitude, latitude };
-    geoToImage.convertGeoToImageCoordinates(location);
-    if (location[0] < 0 || geoToImage.getImageWidth() < location[0] ||
+    location = geoToImage.convertGeoToImageCoordinates(location);
+    if (location == null || location[0] < 0 || geoToImage.getImageWidth() < location[0] ||
         location[1] < 0 || geoToImage.getImageHeight() < location[1]) {
       return false;
     }
@@ -207,22 +207,28 @@ public class DisplayState {
   /**
    * Converts geo coordinates (lon, lat) to screen coordinates in place.
    *
-   * @return the original float array containing screen coordinates (x, y)
+   * @return The original float array containing screen coordinates (x, y) or
+   *         null if the conversion cannot be performed at this time because
+   *         either geo-to-image or image-to-screen conversion has not been
+   *         initialized.
    */
   public float[] convertGeoToScreenCoordinates(float[] location) {
-    geoToImage.convertGeoToImageCoordinates(location);
-    imageToScreen.convertImageToScreenCoordinates(location);
-    return location;
+    if (geoToImage.convertGeoToImageCoordinates(location) == null) {
+      return null;
+    }
+    return imageToScreen.convertImageToScreenCoordinates(location);
   }
 
   /**
    * Converts screen coordinates (x, y) to geo coordinates (lon, lat) in place.
    *
-   * @return the original float array containing geo coordinates (lon, lat)
+   * @return The original float array containing geo coordinates (lon, lat) or
+   *         null if the conversion cannot be performed at this time.
    */
   public float[] convertScreenToGeoCoordinates(float[] location) {
-    imageToScreen.convertScreenToImageCoordinates(location);
-    geoToImage.convertImageToGeoCoordinates(location);
-    return location;
+    if (imageToScreen.convertScreenToImageCoordinates(location) == null) {
+      return null;
+    }
+    return geoToImage.convertImageToGeoCoordinates(location);
   }
 }

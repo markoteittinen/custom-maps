@@ -12,5 +12,9 @@
         android:lines="1"
         android:text="A quick brown fox jumps over the lazy dog"
         android:textSize="20pt" />
-
+  
+    <ListView android:id="@id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp" />
+    
 </LinearLayout>
