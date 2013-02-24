@@ -322,7 +322,6 @@ public class GeoToImageConverter {
 
   private void initGeoToImageMatrixTiePoints() {
     float[] geoPoints = new float[8];
-    float[] imagePoints = new float[8];
     float[] corner = mapData.getNorthWestCornerLocation();
     geoPoints[0] = corner[0];
     geoPoints[1] = corner[1];
@@ -336,14 +335,7 @@ public class GeoToImageConverter {
     geoPoints[6] = corner[0];
     geoPoints[7] = corner[1];
 
-    imagePoints[0] = 0;
-    imagePoints[1] = 0;
-    imagePoints[2] = imageWidth;
-    imagePoints[3] = 0;
-    imagePoints[4] = imageWidth;
-    imagePoints[5] = imageHeight;
-    imagePoints[6] = 0;
-    imagePoints[7] = imageHeight;
+    float[] imagePoints = { 0, 0, imageWidth, 0, imageWidth, imageHeight, 0, imageHeight };
 
     // Find matrix mapping geoPoints to imagePoints (corners)
     geoToImageMatrix = new Matrix();

@@ -282,7 +282,9 @@ public class CustomMaps extends Activity {
   @Override
   public void onSaveInstanceState(Bundle outState) {
     outState.putParcelable(SAVED_LOCATION, locationTracker.getCurrentLocation(null));
-    outState.putSerializable(SAVED_MAP, selectedMap);
+    if (selectedMap != null) {
+      outState.putSerializable(SAVED_MAP, selectedMap);
+    }
     outState.putBoolean(SAVED_FOLLOWMODE, displayState.getFollowMode());
     float[] geoCenter = mapDisplay.getScreenCenterGeoLocation();
     if (geoCenter != null) {
