@@ -140,6 +140,16 @@ public class ImageToScreenConverter {
     return result;
   }
 
+  /**
+   * Converts image coordinates to screen coordinates in place.
+   *
+   * @param imageCoords Array of image coordinates to be converted to screen
+   *     space. The even indexes are x coordinates of the points, each of which
+   *     should be followed by the y coordinate of the same point. That is, for
+   *     three points the array would contain [x0, y0, x1, y1, x2, y2].
+   * @return Passed-in float array containing screen coordinates, or null if the
+   *     conversion cannot be computed.
+   */
   public float[] convertImageToScreenCoordinates(float[] imageCoords) {
     if (imageToScreenMatrix == null) {
       return null;

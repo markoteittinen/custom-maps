@@ -70,8 +70,11 @@ public class MemoryUtil {
    */
   public static int getMaxImagePixelCount(Context context) {
     int memMB = getTotalAppMemoryMB(context);
-    if (memMB >= 64) {
-      // Honeycomb tablets & Ice Cream Sandwich and later phones
+    if (memMB >= 96) {
+      // Jelly bean devices
+      return 24000000;
+    } else if (memMB >= 64) {
+      // Honeycomb & Ice Cream Sandwich tablets and phones
       return 12000000;
     } else if (memMB >= 32) {
       // Gingerbread phones

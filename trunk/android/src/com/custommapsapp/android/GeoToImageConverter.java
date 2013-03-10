@@ -16,14 +16,18 @@
 package com.custommapsapp.android;
 
 import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.GroundOverlay.Tiepoint;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.location.Location;
 import android.util.FloatMath;
 import android.util.Log;
 
 import java.io.InputStream;
+
+import com.google.android.maps.GeoPoint;
 
 /**
  * GeoToImageConverter converts coordinates between geographical (long, lat) and
@@ -342,6 +346,42 @@ public class GeoToImageConverter {
     if (!geoToImageMatrix.setPolyToPoly(geoPoints, 0, imagePoints, 0, 4)) {
       Log.w(CustomMaps.LOG_TAG, "FAILED to initialize geoToImageMatrix from tie points");
     }
+    // The matrix solved by Android library is inaccurate. Improve accuracy
+    improveAccuracy();
+  }
+
+  /**
+   * Improves accuracy of the current conversion matrix. It seems that
+   * Matrix.setPolyToPoly() method call generates a matrix that leaves all the
+   * points somewhat offset to the same direction from the accurate location.
+   * This function computes the average error and minimizes it.
+   */
+  private void improveAccuracy() {
+    float[] location = new float[2];
+    int n = 0;
+    float xDiffTotal = 0;
+    float yDiffTotal = 0;
+    for (Tiepoint pt : mapData.getTiepoints()) {
+      // Measure geo to image conversion error
+      GeoPoint geo = pt.getGeoPoint();
+      location[0] = e6ToFloat(geo.getLongitudeE6());
+      location[1] = e6ToFloat(geo.getLatitudeE6());
+      convertGeoToImageCoordinates(location);
+      Point img = pt.getImagePoint();
+      xDiffTotal += img.x - location[0];
+      yDiffTotal += img.y - location[1];
+      // Use at most 4 tiepoints
+      if (++n == 4) {
+        break;
+      }
+    }
+    geoToImageMatrix.postTranslate(xDiffTotal / n, yDiffTotal / n);
+//    if (imageToGeoMatrix == null) {
+//      imageToGeoMatrix = new Matrix();
+//    } else {
+//      imageToGeoMatrix.reset();
+//    }
+//    geoToImageMatrix.invert(imageToGeoMatrix);
   }
 
   /**
