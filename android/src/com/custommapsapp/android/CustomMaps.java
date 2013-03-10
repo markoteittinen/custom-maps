@@ -207,7 +207,7 @@ public class CustomMaps extends Activity {
     } else if (selectedMap != null) {
       loadKmlFile();
     } else {
-      launchSelectMap(locator.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+      launchSelectMap(getLastKnownLocation(0));
     }
   }
 
@@ -569,7 +569,7 @@ public class CustomMaps extends Activity {
           mapDisplay.post(new Runnable() {
             @Override
             public void run() {
-              launchSelectMap(locator.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+              launchSelectMap(getLastKnownLocation(0));
             }
           });
           return;
@@ -592,14 +592,8 @@ public class CustomMaps extends Activity {
         displayMapLoadWarning();
       }
       // Start with last known location if it is fresher than 15 minutes
-      long _15MinutesAgo = System.currentTimeMillis() - 15 * 60 * 1000;
-      Location location = locator.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      if (location == null || location.getTime() < _15MinutesAgo) {
-        location = locator.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if (location != null && location.getTime() < _15MinutesAgo) {
-          location = null;
-        }
-      }
+      long _15Minutes = 15 * 60 * 1000;
+      Location location = getLastKnownLocation(_15Minutes);
       locationTracker.onLocationChanged(location);
       if (location == null) {
         displayUserMessage(getString(R.string.waiting_for_gps));
@@ -755,6 +749,34 @@ public class CustomMaps extends Activity {
   }
 
   // --------------------------------------------------------------------------
+
+  /**
+   * Get last known location that is not older than given maximum age. Age
+   * value 0 is considered unlimited.
+   *
+   * @param maxAgeMs Maximum age of acceptable known location in milliseconds.
+   * @return Last known location that is not older than maxAgeMs, or null if
+   *         there is no known location that is fresh enough. GPS location is
+   *         preferred over network location.
+   */
+  private Location getLastKnownLocation(long maxAgeMs) {
+    long oldestAllowed = (maxAgeMs == 0 ? 0 : System.currentTimeMillis() - maxAgeMs);
+    Location lastKnown = null;
+    // Some Android versions can hide GPS and NETWORK location providers from
+    // apps: must check availability despite manifest requiring them :-(
+    if (locator.getProvider(LocationManager.GPS_PROVIDER) != null) {
+      lastKnown = locator.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
+    // Try to use network location if GPS wasn't available, or it was too old
+    if ((lastKnown == null || lastKnown.getTime() < oldestAllowed) &&
+        locator.getProvider(LocationManager.NETWORK_PROVIDER) != null) {
+      lastKnown = locator.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+      if (lastKnown != null && lastKnown.getTime() < oldestAllowed) {
+        lastKnown = null;
+      }
+    }
+    return lastKnown;
+  }
 
   private void loadKmlFile() {
     try {

@@ -185,7 +185,6 @@ public class MapCatalog {
    */
   public MapCatalog(File dataDir) {
     this.dataDir = dataDir;
-    refreshCatalog();
   }
 
   /**
@@ -297,15 +296,69 @@ public class MapCatalog {
       if (map == null) {
         continue;
       }
-      float distance = map.getDistanceFrom(longitude, latitude);
-      if (distance == 0f) {
-        inMaps.add(mapHolder);
-      } else if (distance < 50000f) {
-        nearMaps.add(mapHolder);
-      } else {
+      if (mapIsFartherAway(50000, map, latitude, longitude)) {
         farMaps.add(mapHolder);
+      } else {
+        float distance = map.getDistanceFrom(longitude, latitude);
+        if (distance == 0f) {
+          inMaps.add(mapHolder);
+        } else if (distance < 50000f) {
+          nearMaps.add(mapHolder);
+        } else {
+          farMaps.add(mapHolder);
+        }
       }
     }
+  }
+
+  /**
+   * Quickly check if a map is certainly farther away than given distance. Even
+   * if this function returns false, it is still possible that the map is
+   * farther away than the distance. This function only quickly determines maps
+   * that certainly are farther away.
+   *
+   * @param distanceM Distance in meters to compare to.
+   * @param map Map to measure distance to.
+   * @param lat Latitude of the location to measure from.
+   * @param lon Longitude of the location to measure from.
+   * @return true if the map is at least given distance away from the closest
+   *     point of the map.
+   */
+  private boolean mapIsFartherAway(double distanceM, GroundOverlay map, float lat, float lon) {
+    float latMin = 90;
+    float latMax = -90;
+    float lonMin = 180;
+    float lonMax = -180;
+    if (!map.hasCornerTiePoints()) {
+      latMin = map.getSouth();
+      latMax = map.getNorth();
+      lonMin = map.getWest();
+      lonMax = map.getEast();
+    } else {
+      float[] point = map.getNorthEastCornerLocation();
+      latMax = Math.max(latMax, point[1]);
+      lonMax = Math.max(lonMax, point[0]);
+      point = map.getSouthEastCornerLocation();
+      latMin = Math.min(latMin, point[1]);
+      lonMax = Math.max(lonMax, point[0]);
+      point = map.getSouthWestCornerLocation();
+      latMin = Math.min(latMin, point[1]);
+      lonMin = Math.min(lonMin, point[0]);
+      point = map.getNorthWestCornerLocation();
+      latMax = Math.max(latMax, point[1]);
+      lonMin = Math.min(lonMin, point[0]);
+    }
+    // Check if location is farther in straight North-South direction
+    // * in latitudes, 90 degrees ~ 10,000 km = 10,000,000 m
+    double distanceInLatDegrees = 90.0 * distanceM / 10000000;
+    if (lat < latMin - distanceInLatDegrees || lat > latMax + distanceInLatDegrees) {
+      return true;
+    }
+    // Check if location is farther in straight East-West direction
+    // * at equator, 90 degrees ~ 10,000 km
+    // * at latitude x, 90 degrees ~ cos(x) * 10,000 km
+    double distanceInLonDegrees = 90.0 * distanceM / (Math.cos(Math.toRadians(lat)) * 10000000);
+    return (lon < lonMin - distanceInLonDegrees || lon > lonMax + distanceInLonDegrees);
   }
 
   /**

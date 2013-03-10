@@ -15,12 +15,13 @@
  */
 package com.custommapsapp.android.kml;
 
-import com.google.android.maps.GeoPoint;
+import com.custommapsapp.android.CustomMaps;
 
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
 import android.util.FloatMath;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.android.maps.GeoPoint;
 
 /**
  * GroundOverlay is a Java representation of the GroundOverlay tag used in KML.
@@ -255,13 +258,19 @@ public class GroundOverlay extends KmlFeature {
    *         the point is within the map boundaries
    */
   public float getDistanceFrom(float longitude, float latitude) {
-    // Return 0 if user is within map area
+    // Return 0 distance if user is within map area
     if (this.contains(longitude, latitude)) {
+      Log.d(CustomMaps.LOG_TAG,
+          String.format("Map %s contains location (%.6f, %.6f)", getName(), latitude, longitude));
       return 0f;
     }
     // TODO: This initial implementation doesn't consider 180 longitude
     if (geoToMetric == null) {
       initializeGeoToMetricMatrix();
+    }
+    if (tiepoints != null && tiepoints.size() > 3) {
+      Log.d(CustomMaps.LOG_TAG, "Estimating distance to map " + getName());
+      return estimateDistanceFrom(longitude, latitude);
     }
     final int X = 0;
     final int Y = 1;
@@ -272,10 +281,10 @@ public class GroundOverlay extends KmlFeature {
       // User is past left edge of map
       if (location[Y] < 0) {
         // above and left: closest map point is (0, 0)
-        return getGeometricDistance(location[X], location[Y]);
+        return computeGeometricDistance(location[X], location[Y]);
       } else if (location[Y] > metricSize[Y]) {
         // below and left: closest map point is (0, metricSize[Y])
-        return getGeometricDistance(location[X], location[Y] - metricSize[Y]);
+        return computeGeometricDistance(location[X], location[Y] - metricSize[Y]);
       } else {
         // straight left: straight distance to left edge
         return -location[X];
@@ -285,10 +294,10 @@ public class GroundOverlay extends KmlFeature {
       // User is past right edge of map
       if (location[Y] < 0) {
         // above and right: closest map point is (metricSize[X], 0)
-        return getGeometricDistance(location[X] - metricSize[X], location[Y]);
+        return computeGeometricDistance(location[X] - metricSize[X], location[Y]);
       } else if (location[Y] > metricSize[Y]) {
         // below and right: closest map point is (metricSize[X], metricSize[Y])
-        return getGeometricDistance(location[X] - metricSize[X], location[Y] - metricSize[Y]);
+        return computeGeometricDistance(location[X] - metricSize[X], location[Y] - metricSize[Y]);
       } else {
         // straight right: straight distance to right edge
         return location[X] - metricSize[X];
@@ -304,9 +313,32 @@ public class GroundOverlay extends KmlFeature {
     }
   }
 
-  // Finds shortest distance from point (x, y) to line connecting points (x0, y0) and (x1, y1)
-  public float getGeometricDistance(float xDiff, float yDiff) {
+  // Computes distance from (0, 0) to (xDiff, yDiff)
+  private float computeGeometricDistance(float xDiff, float yDiff) {
     return FloatMath.sqrt(xDiff * xDiff + yDiff * yDiff);
+  }
+
+  // Finds shortest distance from xy-point (p) to line segment connecting
+  // xy-points a & b
+  private float computeDistanceToLine(float[] p, float[] a, float[] b) {
+    float lineLength = computeGeometricDistance(b[0] - a[0], b[1] - a[1]);
+    if (lineLength == 0) {
+      // a == b, distance to a
+      return computeGeometricDistance(p[0] - a[0], p[1] - a[1]);
+    }
+    // Find closest point on line segment a-b (a = 0, b = 1)
+    float linePos = ((p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1])) / lineLength;
+    if (linePos < 0) {
+      // a is closest to p
+      return computeGeometricDistance(p[0] - a[0], p[1] - a[1]);
+    } else if (linePos > 1) {
+      // b is closest to p
+      return computeGeometricDistance(p[0] - b[0], p[1] - b[1]);
+    }
+    // closest point is between a and b
+    float x = a[0] + lineLength * (b[0] - a[0]);
+    float y = a[1] + lineLength * (b[1] - a[1]);
+    return computeGeometricDistance(p[0] - x, p[1] - y);
   }
 
   private void initializeGeoToMetricMatrix() {
@@ -335,6 +367,52 @@ public class GroundOverlay extends KmlFeature {
       matrix.postRotate(getRotateAngle(), metricWidth / 2, metricHeight / 2);
     }
     geoToMetric = matrix;
+  }
+
+  private float estimateDistanceFrom(float longitude, float latitude) {
+    if (!hasCornerTiePoints()) {
+      throw new IllegalStateException("estimateDistanceFrom() requires corner tie points");
+    }
+    // To make this quick, use coordinate system aligned with latitudes and
+    // longitudes, but assume flat area, and use distance based xy-coordinates
+    // using meters as units. Obviously this is not accurate for large areas,
+    // but it is good enough to estimate distance to map for grouping.
+    // Use middle of the map as origin
+    if (geoToMetric == null) {
+      initializeGeoToMetricMatrix();
+    }
+    // Find out approximate center geo coordinates for map image
+    float[] center = new float[2];
+    center[0] = (Math.max(northEastCornerLonLat[0], southEastCornerLonLat[0]) +
+        Math.min(northWestCornerLonLat[0], southWestCornerLonLat[0])) / 2;
+    center[1] = (Math.max(northWestCornerLonLat[1], northEastCornerLonLat[1]) +
+        Math.min(southWestCornerLonLat[1], southEastCornerLonLat[1])) / 2;
+    // Generate conversion from geo to metric coordinates
+    float yMetersPerDegree = 10000e3f / 90f;
+    float xMetersPerDegree = (float) (Math.cos(Math.toRadians(center[1])) * 10000e3 / 90.0);
+    Matrix matrix = new Matrix();
+    matrix.postTranslate(center[0], center[1]);
+    matrix.postScale(xMetersPerDegree, yMetersPerDegree);
+    // Convert corners and location to metric coordinates
+    float[] nw = new float[2];
+    float[] ne = new float[2];
+    float[] se = new float[2];
+    float[] sw = new float[2];
+    float[] user = new float[] { longitude, latitude };
+    matrix.mapPoints(nw, 0, northWestCornerLonLat, 0, 1);
+    matrix.mapPoints(ne, 0, northEastCornerLonLat, 0, 1);
+    matrix.mapPoints(se, 0, southEastCornerLonLat, 0, 1);
+    matrix.mapPoints(sw, 0, southWestCornerLonLat, 0, 1);
+    matrix.mapPoints(user);
+    // Compute distance to each edge of map
+    float minDistance = computeDistanceToLine(user, nw, ne);
+    float distance = computeDistanceToLine(user, ne, se);
+    minDistance = Math.min(minDistance, distance);
+    distance = computeDistanceToLine(user, se, sw);
+    minDistance = Math.min(minDistance, distance);
+    distance = computeDistanceToLine(user, sw, nw);
+    minDistance = Math.min(minDistance, distance);
+    return minDistance;
   }
 
   // Returns the map image size (width, height) in meters

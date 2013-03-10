@@ -147,24 +147,34 @@ public class SelectMap extends ListActivity {
     super.onResume();
     mapCatalog.refreshCatalog();
     helpDialogManager.onResume();
+    // Some system don't allow access to location providers despite manifest.xml
+    boolean hasGpsProvider = (locator.getProvider(LocationManager.GPS_PROVIDER) != null);
+    boolean hasNetworkProvider = (locator.getProvider(LocationManager.NETWORK_PROVIDER) != null);
     // Use latest GPS location only if it is fresh enough
-    Location last = locator.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    if (last != null && isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
-      locationTracker.onLocationChanged(last);
+    Location last = null;
+    if (hasGpsProvider) {
+      last = locator.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+      if (last != null && !isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
+        last = null;
+      }
     }
-    // Use latest network location only if it is fresh enough
-    last = locator.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    if (last != null && isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
+    // Use network location only if it is fresh enough and if GPS was not used
+    if (last == null && hasNetworkProvider) {
+      last = locator.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+      if (last != null && !isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
+        last = null;
+      }
+    }
+    if (last != null) {
       locationTracker.onLocationChanged(last);
     }
     locationTracker.setQuitting(false);
-    // Avoid crashing on some systems without GPS_PROVIDER
-    if (locator.getProvider(LocationManager.GPS_PROVIDER) != null) {
-      locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationTracker);
+    // Listen to location updates if they are available
+    if (hasGpsProvider) {
+      locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1000, locationTracker);
     }
-    // Avoid crashing on some systems without NETWORK_PROVIDER
-    if (locator.getProvider(LocationManager.NETWORK_PROVIDER) != null) {
-      locator.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationTracker);
+    if (hasNetworkProvider) {
+      locator.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 1000, locationTracker);
     }
 
     if (autoSelectRequested) {
