@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/select_point"
-        android:textColor="#000"
         />
     <view
         class="com.custommapsapp.android.create.ImageDisplay"
@@ -43,6 +42,7 @@
         android:paddingTop="5dp"
         android:src="@drawable/zoomout"
         android:background="#00000000"
+        android:contentDescription="@string/zoom_out"
         />
     <ImageButton 
         android:id="@+id/zoomIn"
@@ -56,6 +56,7 @@
         android:paddingTop="5dp"
         android:src="@drawable/zoomin"
         android:background="#00000000"
+        android:contentDescription="@string/zoom_in"
         />
     <TextView
         style="@style/NormalText"

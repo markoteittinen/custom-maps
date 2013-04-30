@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -99,6 +100,11 @@ public class TiePointActivity extends MapActivity {
     prepareUI();
     if (PtSizeFixer.isFixNeeded((Activity) null)) {
       PtSizeFixer.fixView(doneButton.getRootView());
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.create_map_name);
     }
 
     mapView.setBuiltInZoomControls(true);

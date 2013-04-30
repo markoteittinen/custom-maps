@@ -61,7 +61,7 @@ public class DistanceLayer extends View {
     backgroundPaint = new Paint();
     backgroundPaint.setColor(0xC0FFFFFF);
     backgroundPaint.setAntiAlias(true);
-    backgroundPaint.setStrokeWidth(4);
+    backgroundPaint.setAlpha(192);
     textPaint = new Paint();
     textPaint.setColor(0xFF000000);
     textPaint.setAntiAlias(true);
@@ -144,7 +144,6 @@ public class DistanceLayer extends View {
     int margin = Math.round(canvas.getDensity() * 4f / 72f);  // 4pt margin
     infoBox.offset((getWidth() - infoBox.width()) / 2, getHeight() - infoBox.height() - margin);
     float baseline = infoBox.bottom - padding;
-    backgroundPaint.setAlpha(192);
     backgroundPaint.setStyle(Paint.Style.FILL);
     textPaint.setStrokeWidth(1f);
     textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -155,12 +154,13 @@ public class DistanceLayer extends View {
     // Draw center circles
     int x = getWidth() / 2;
     int y = getHeight() / 2;
-    backgroundPaint.setAlpha(255);
     backgroundPaint.setStyle(Paint.Style.STROKE);
-    textPaint.setStrokeWidth(2f);
+    backgroundPaint.setStrokeWidth(ptsToPixels(2, canvas));
+    textPaint.setStrokeWidth(ptsToPixels(.75f, canvas));
     textPaint.setStyle(Paint.Style.STROKE);
-    canvas.drawCircle(x, y, 5, backgroundPaint);
-    canvas.drawCircle(x, y, 5, textPaint);
+    float radius = ptsToPixels(2, canvas);
+    canvas.drawCircle(x, y, radius, backgroundPaint);
+    canvas.drawCircle(x, y, radius, textPaint);
   }
 
   /**

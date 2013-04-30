@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Custom Maps</string>
-    <string name="select_map_name">Custom Maps/Selectează hartă</string>
-    <string name="create_map_name">Custom Maps/Crează hartă</string>
-    <string name="edit_prefs_name" tools:ignore="UnusedResources">Custom Maps/Setări</string>
+    <string name="select_map_name">Selectează hartă</string>
+    <string name="create_map_name">Crează hartă</string>
+    <string name="edit_prefs_name">Setări</string>
     <string name="author">De Marko Teittinen</string>
     <string name="open_source">
        Aplicația Custom Maps și codul ei sursă sunt publicate sub licența Apache versiunea 2.0.
@@ -13,6 +13,14 @@
     <string name="app_home">Vizitați situl aplicație Custom Maps</string>
 
     <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS location is not available to this app.
+        \nPlease allow this app to access GPS location to improve location accuracy.
+    </string>
+    <string name="location_not_available">
+        Your location is not available to this app.
+        \nPlease enable access to GPS or network location in system settings.
+    </string>
     <string name="gps_outside_map">Locația GPS nu este în interiorul graniților de hartă</string>
     <string name="share_map_failed">A eșuat trimiterea hărții</string>
     <string name="external_content_failed">
@@ -112,6 +120,9 @@
         %s nu este un fișier imagine valid.\nTrebuie să selectați un fișier imagine
     </string>
     <string name="select_image_select_file">Selectați fișierul imagine hartă</string>
+    <string name="select_image_processing">
+        Prelucrarea imaginii selectate.\nVă rugăm să așteptați…
+    </string>
     
     <!-- map image point selection -->
     <string name="image_point_help">
@@ -201,6 +212,7 @@
         \n\u2022 Francesco Terribile (Italian translation)
 	    \n\u2022 Dorin Hongu (Romanian translation)
         \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (Polish translation)
     </string>
     
     <!-- button items -->
@@ -228,5 +240,9 @@
     <string name="photos">Fotografii</string>
     <string name="downloads">Descărcări</string>
     <string name="sdcard">Card SD</string>
-
+    <string name="use_picker">Selectorul de alternativă</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="menu">Menu</string>
+    
 </resources>

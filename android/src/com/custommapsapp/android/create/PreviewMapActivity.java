@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -41,6 +42,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +108,11 @@ public class PreviewMapActivity extends MapActivity {
       PtSizeFixer.fixView(saveButton.getRootView());
     }
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.create_map_name);
+    }
+
     mapView.setBuiltInZoomControls(true);
     mapView.setReticleDrawMode(MapView.ReticleDrawMode.DRAW_RETICLE_NEVER);
 
@@ -113,7 +120,11 @@ public class PreviewMapActivity extends MapActivity {
     String fileName = getIntent().getStringExtra(BITMAP_FILE);
     Bitmap mapImage = ImageHelper.loadImage(fileName, true);
     if (mapImage == null) {
-      // TODO: failed to load image, cancel
+      // Failed to load image, cancel activity
+      Toast.makeText(this, R.string.editor_image_load_failed, Toast.LENGTH_LONG).show();
+      setResult(RESULT_CANCELED);
+      finish();
+      return;
     }
     imageOverlay = new WarpedImageOverlay(mapImage);
 

@@ -26,10 +26,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -88,6 +90,11 @@ public class BitmapPointActivity extends Activity {
 
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(imageDisplay.getRootView());
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.create_map_name);
     }
 
     String fileName = getIntent().getStringExtra(BITMAP_FILE);
@@ -191,6 +198,24 @@ public class BitmapPointActivity extends Activity {
     super.onCreateOptionsMenu(menu);
     menu.add(Menu.NONE, MENU_SELECT_POINT, Menu.NONE, R.string.select_point);
     helpDialogManager.onCreateOptionsMenu(menu);
+
+    // When using holo theme, move help label down to below translucent action bar
+    // This cannot be done in onCreate() or in onResume() as actionbar height is still 0
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      int actionBarHeight = getActionBar().getHeight();
+      // Use top margin of help label to move it from under actionbar
+      View v = this.findViewById(R.id.help);
+      if (v != null) {
+        ViewGroup.MarginLayoutParams params =
+            (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+        if (params.topMargin != actionBarHeight) {
+          params.topMargin = actionBarHeight;
+          v.setLayoutParams(params);
+          v.getParent().requestLayout();
+        }
+      }
+    }
+
     return true;
   }
 

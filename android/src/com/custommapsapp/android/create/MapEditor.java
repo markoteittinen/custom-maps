@@ -37,6 +37,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -117,6 +118,11 @@ public class MapEditor extends Activity {
     prepareUI();
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(nameField.getRootView());
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.create_map_name);
     }
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_MAP_EDITOR,

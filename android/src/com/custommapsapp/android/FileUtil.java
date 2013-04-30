@@ -41,15 +41,17 @@ import java.io.OutputStream;
  * @author Marko Teittinen
  */
 public class FileUtil {
-  private static final String DATA_DIR = "CustomMaps";          // relative to sd root
-  private static final String IMAGE_DIR = DATA_DIR + "/images"; // relative to sd root
-  private static final String CACHE_DIR = DATA_DIR + "/cache";  // relative to sd root
-  private static final String SD_PHOTOS = "DCIM/Camera";        // relative to sd root
-  private static final String SD_PHOTOS_2 = "DCIM/100MEDIA";    // relative to sd root
-  private static final String SD_DOWNLOADS = "download";        // relative to sd root
-  private static final String SD_DOWNLOADS_2 = "downloads";     // relative to sd root
-  private static final String TMP_IMAGE_NAME = "mapimage.jpg";
+  // All these are relative to SD root
+  private static final String DATA_DIR = "CustomMaps";
+  private static final String IMAGE_DIR = DATA_DIR + "/images";
+  private static final String CACHE_DIR = DATA_DIR + "/cache";
+  private static final String SD_DCIM = "DCIM";
+  private static final String SD_PHOTOS = SD_DCIM + "/Camera";
+  private static final String SD_PHOTOS_2 = SD_DCIM + "/100MEDIA";
+  private static final String SD_DOWNLOADS = "download";
+  private static final String SD_DOWNLOADS_2 = "downloads";
 
+  private static final String TMP_IMAGE_NAME = "mapimage.jpg";
   public static final String KMZ_IMAGE_DIR = "images/";
 
   public static File getSdRoot() {
@@ -64,6 +66,12 @@ public class FileUtil {
     }
     // At least Droid Eris uses this folder
     return new File(getSdRoot(), SD_PHOTOS_2);
+  }
+
+  public static boolean isPhotosDirectory(File dir) {
+    // Some devices use other directory names under sdcard/DCIM
+    String photoRootPath = new File(getSdRoot(), SD_DCIM).getAbsolutePath();
+    return dir != null && dir.getAbsolutePath().startsWith(photoRootPath);
   }
 
   public static File getDownloadsDirectory() {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Custom Maps</string>
-    <string name="select_map_name">Custom Maps/Select map</string>
-    <string name="create_map_name">Custom Maps/Create map</string>
-    <string name="edit_prefs_name" tools:ignore="UnusedResources">Custom Maps/Settings</string>
+    <string name="select_map_name">Select map</string>
+    <string name="create_map_name">Create map</string>
+    <string name="edit_prefs_name">Preferences</string>
     <string name="author">By Marko Teittinen</string>
     <string name="open_source">
         Custom Maps app and its source code are published under Apache License, version 2.0.
@@ -111,7 +111,8 @@
         %s is not a valid image file.\nYou must select an image file
     </string>
     <string name="select_image_select_file">Select the map image file</string>
-    
+    <string name="select_image_processing">Processing selected image.\nPlease wait…</string>
+
     <!-- map image point selection -->
     <string name="image_point_help">
         Select a point to be located on a Google map.\n\nSelect points far apart for best 
@@ -191,6 +192,7 @@
         \n\u2022 Francesco Terribile (Italian translation)
         \n\u2022 Dorin Hongu (Romanian translation)
         \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (Polish translation)
     </string>
     
     <!-- button items -->
@@ -206,9 +208,9 @@
     <!-- menu items -->
     <string name="select_map">Select map</string>
     <string name="my_location">My location</string>
-    <string name="location_details">Location Details</string>
+    <string name="location_details">Location details</string>
     <string name="share_map">Share map</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Preferences</string>
     <string name="create_map">Create map</string>
     <string name="modify_map">Modify map</string>
     <string name="delete_map">Delete map</string>
@@ -218,5 +220,9 @@
     <string name="photos">Photos</string>
     <string name="downloads">Downloads</string>
     <string name="sdcard">SD card</string>
-
+    <string name="use_picker">Alternative selector</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="menu">Menu</string>
+    
 </resources>

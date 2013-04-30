@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Custom Maps</string>
-    <string name="select_map_name">Custom Maps/Wähle Karte</string>
-    <string name="create_map_name">Custom Maps/Erstelle Karte</string>
-    <string name="edit_prefs_name">Custom Maps/Einstellungen</string>
+    <string name="select_map_name">Wähle Karte</string>
+    <string name="create_map_name">Erstelle Karte</string>
+    <string name="edit_prefs_name">Einstellungen</string>
     <string name="author">By Marko Teittinen</string>
     <string name="open_source">
         Custom Maps App und der Quellcode stehen unter der Apache Lizenz, Version 2.0.
@@ -13,6 +13,14 @@
     <string name="app_home">Besuche Custom Maps App Webseite</string>
 
     <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS location is not available to this app.
+        \nPlease allow this app to access GPS location to improve location accuracy.
+    </string>
+    <string name="location_not_available">
+        Your location is not available to this app.
+        \nPlease enable access to GPS or network location in system settings.
+    </string>
     <string name="gps_outside_map">
         GPS Position befindet sich nicht in der aktuellen Kartengrenzen
     </string>
@@ -48,7 +56,7 @@
         \n\nDrücke und halte einen Kartennamen um ihn zu verändern oder zu löschen.
     </string>
     <string name="create_map_help_link">
-        Hier klicken umd die Webseite von Custom Maps für Exemplarkarten und Anleitungen zu
+        Hier klicken und die Webseite von Custom Maps für Exemplarkarten und Anleitungen zu
         besuchen.
     </string>
     <string name="select_cannot_modify_map_set">
@@ -110,6 +118,7 @@
         %s ist keine gültige Bilddatei.\nDu musst eine Bilddatei wählen
     </string>
     <string name="select_image_select_file">Wähle die Karten Bilddatei</string>
+    <string name="select_image_processing">Verarbeitung ausgewählte Bild.\nBitte warten…</string>
     
     <!-- map image point selection -->
     <string name="image_point_help">
@@ -138,7 +147,7 @@
     <string name="editor_help">
         Benenne deine Karten und füge eine Beschreibung dazu für die Kartenliste.\n\nFüge 2-4
         Kalibrierungspunkte hinzu um die Karte richtig zu positionieren und skalieren.\n\nÄndere 
-        oder lösche mit einen langem Druck auf den Kalibrierungspunkt.\n\nKarte nach nahc der 
+        oder lösche mit einem langem Druck auf den Kalibrierungspunkt.\n\nKarte nach der 
         Vorschau gespeichert werden.
     </string>
     <string name="editor_image_load_failed">Laden des Kartenbildes fehlgeschlagen</string>
@@ -196,6 +205,7 @@
         \n\u2022 Francesco Terribile (Italienische Übersetzung)
         \n\u2022 Dorin Hongu (Rumänisch Übersetzung)
         \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (Polnisch Übersetzung)
     </string>
     
     <!-- button items -->
@@ -223,5 +233,9 @@
     <string name="photos">Photos</string>
     <string name="downloads">Downloads</string>
     <string name="sdcard">SD card</string>
-
+    <string name="use_picker">Alternative Wähler</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="menu">Menu</string>
+    
 </resources>
