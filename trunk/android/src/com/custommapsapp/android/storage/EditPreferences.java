@@ -15,13 +15,14 @@
  */
 package com.custommapsapp.android.storage;
 
-import com.custommapsapp.android.AboutDialog;
+import com.custommapsapp.android.AboutDisplay;
 import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.InertiaScroller;
 import com.custommapsapp.android.MemoryUtil;
 import com.custommapsapp.android.R;
 
-import android.app.Dialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -54,13 +55,12 @@ public class EditPreferences extends PreferenceActivity {
   private static final String PREFIX = "com.custommapsapp.android";
   public static final String LANGUAGE_CHANGED = PREFIX + ".LanguageChanged";
 
-  private boolean aboutDialogCreated = false;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getPreferenceManager().setSharedPreferencesName(PreferenceStore.SHARED_PREFS_NAME);
     reloadUI();
+
     // Prepare result so that calling activity will be notified on exit
     getIntent().putExtra(LANGUAGE_CHANGED, false);
     setResult(RESULT_OK, getIntent());
@@ -71,9 +71,10 @@ public class EditPreferences extends PreferenceActivity {
     // heading to screen center can be shown only with distance
     getPreferenceScreen().findPreference(PreferenceStore.PREFS_SHOW_HEADING)
         .setDependency(PreferenceStore.PREFS_SHOW_DISTANCE);
-    if (aboutDialogCreated) {
-      removeDialog(DIALOG_ABOUT);
-      aboutDialogCreated = false;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.edit_prefs_name);
     }
   }
 
@@ -152,7 +153,7 @@ public class EditPreferences extends PreferenceActivity {
     aboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
       @Override
       public boolean onPreferenceClick(Preference preference) {
-        showDialog(DIALOG_ABOUT);
+        launchAboutDisplay();
         return true;
       }
     });
@@ -168,6 +169,7 @@ public class EditPreferences extends PreferenceActivity {
     languages.add(Locale.ENGLISH);
     languages.add(Locale.GERMAN);
     languages.add(Locale.ITALIAN);
+    languages.add(new Locale("pl"));
     languages.add(new Locale("ro"));
     languages.add(new Locale("fi"));
     // Sort languages by their localized display name
@@ -236,27 +238,11 @@ public class EditPreferences extends PreferenceActivity {
   }
 
   // --------------------------------------------------------------------------
-  // About dialog
+  // About activity
 
-  private static final int DIALOG_ABOUT = 1;
-
-  @Override
-  protected Dialog onCreateDialog(int id) {
-    if (id == DIALOG_ABOUT) {
-      aboutDialogCreated = true;
-      return new AboutDialog(this);
-    }
-    return super.onCreateDialog(id);
-  }
-
-  @Override
-  protected void onPrepareDialog(int id, Dialog dialog) {
-    super.onPrepareDialog(id, dialog);
-    if (id == DIALOG_ABOUT) {
-      AboutDialog aboutDialog = (AboutDialog) dialog;
-      String version = PreferenceStore.instance(this).getVersion();
-      aboutDialog.setVersion(version);
-      aboutDialog.useSingleButton();
-    }
+  private void launchAboutDisplay() {
+    Intent aboutDisplay = new Intent(this, AboutDisplay.class);
+    aboutDisplay.putExtra(AboutDisplay.CANCELLABLE, true);
+    startActivity(aboutDisplay);
   }
 }

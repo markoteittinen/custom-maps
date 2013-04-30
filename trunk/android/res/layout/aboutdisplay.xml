@@ -1,154 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@android:style/Theme.Light.NoTitleBar"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFFFF"
     android:padding="8dp"
-    >
+    tools:context=".AboutDisplay" >
+
     <ImageView
         android:id="@+id/appLogo"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
-        android:src="@drawable/icon"
         android:scaleType="fitCenter"
-        />
+        android:src="@drawable/icon" />
+
     <TextView
         android:id="@+id/appTitle"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/appLogo"
-        android:layout_alignTop="@id/appLogo"
+        style="@style/LargeText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/appLogo"
+        android:layout_toRightOf="@id/appLogo"
         android:inputType="none"
         android:text="@string/app_name"
-        style="@style/LargeText"
-        android:textStyle="bold"
         android:textColor="#ff000000"
-        />
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/version"
+        style="@style/SmallText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@id/appTitle"
         android:layout_below="@id/appTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:inputType="none"
-        style="@style/SmallText"
-        android:textColor="#ff000000"
         android:text="@string/version_label"
-        android:visibility="visible"
-        />
+        android:textColor="#ff000000"
+        android:visibility="visible" />
+
     <TextView
         android:id="@+id/author"
-        android:layout_below="@id/version"
-        android:layout_alignLeft="@id/appTitle"
+        style="@style/SmallText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/appTitle"
+        android:layout_below="@id/version"
         android:layout_marginTop="8dp"
         android:inputType="none"
-        style="@style/SmallText"
-        android:textColor="#ff000000"
         android:text="@string/author"
-        />
-    
-    <ScrollView
+        android:textColor="#ff000000" />
+
+    <TextView
         android:id="@+id/credits"
+        style="@style/SmallText"
         android:layout_width="fill_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/appLogo"
         android:layout_marginTop="4dp"
-        android:background="#f4f4ff" >
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:padding="4dp"
-            android:text="@string/credits_text"
-            android:textColor="#000000"
-            style="@style/SmallText"
-            />
-    </ScrollView>
-    
+        android:background="#f4f4ff"
+        android:inputType="none"
+        android:padding="8dp"
+        android:text="@string/credits_text"
+        android:textColor="#000000" />
+
     <TextView
         android:id="@+id/open_source"
-        android:layout_below="@id/credits"
-        android:layout_alignParentLeft="true" 
+        style="@style/SmallText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/credits"
         android:layout_marginTop="8dp"
         android:inputType="none"
-        style="@style/SmallText"
-        android:textColor="#ff000000"
         android:text="@string/open_source"
-        />
+        android:textColor="#ff000000" />
+
     <LinearLayout
         android:id="@+id/weblinks"
-        android:orientation="vertical"
-        android:layout_below="@id/open_source"
-        android:layout_alignParentLeft="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/open_source"
         android:layout_marginBottom="12dp"
-        >
+        android:layout_marginTop="12dp"
+        android:orientation="vertical" >
+
         <TextView
             android:id="@+id/apache_license"
+            style="@style/SmallText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:inputType="none"
-            style="@style/SmallText"
-            android:textColor="#ff0000cc"
             android:text="@string/apache_license"
-            />
+            android:textColor="#ff0000cc" />
+
         <TextView
             android:id="@+id/google_code"
+            style="@style/SmallText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:inputType="none"
-            style="@style/SmallText"
-            android:textColor="#ff0000cc"
             android:text="@string/google_code"
-            />
+            android:textColor="#ff0000cc" />
+
         <TextView
             android:id="@+id/homepage"
+            style="@style/SmallText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:inputType="none"
-            style="@style/SmallText"
-            android:textColor="#ff0000cc"
             android:text="@string/app_home"
-            />
+            android:textColor="#ff0000cc" />
     </LinearLayout>
 
     <Button
         android:id="@+id/agreeButton"
-        android:layout_below="@id/weblinks"
-        android:layout_alignParentRight="true"
+        style="@style/NormalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/NormalText"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/weblinks"
+        android:layout_alignParentBottom="false"
         android:text="@string/button_accept_license"
-        android:textColor="#ff000000"
-    />
+        android:textColor="#ff000000" />
+
     <Button
         android:id="@+id/doNotAgreeButton"
-        android:layout_below="@id/weblinks"
-        android:layout_alignParentLeft="true"
+        style="@style/NormalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/NormalText"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/weblinks"
+        android:layout_alignParentBottom="false"
         android:text="@string/button_close"
-        android:textColor="#ff000000"
-    />
+        android:textColor="#ff000000" />
+
 </RelativeLayout>

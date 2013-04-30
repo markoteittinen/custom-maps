@@ -18,9 +18,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:singleLine="true"
-        android:textColor="#000"
         android:text="@string/editor_new_map"
         />
     <TextView
@@ -35,9 +34,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:singleLine="true"
-        android:textColor="#000"
         />
     <TextView
         style="@style/SmallText"
@@ -63,7 +61,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textColor="#000"
             android:text="@string/button_add_point"
             />
         <Button
@@ -72,7 +69,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textColor="#000"
             android:text="@string/button_preview"
             />
     </LinearLayout>

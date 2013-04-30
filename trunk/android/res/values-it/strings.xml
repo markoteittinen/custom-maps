@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Custom Maps</string>
-    <string name="select_map_name">Custom Maps/Seleziona mappa</string>
-    <string name="create_map_name">Custom Maps/Crea map</string>
-    <string name="edit_prefs_name" tools:ignore="UnusedResources">Custom Maps/Impostazioni</string>
+    <string name="select_map_name">Seleziona mappa</string>
+    <string name="create_map_name">Crea map</string>
+    <string name="edit_prefs_name">Impostazioni</string>
     <string name="author">Di Marko Teittinen</string>
     <string name="open_source">
         L\'app Custom Maps e il codice sorgente sono pubblicati sotto Licenza Apache, versione 2.0.
@@ -13,6 +13,14 @@
     <string name="app_home">Visita il sito di Custom Maps</string>
 
     <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS location is not available to this app.
+        \nPlease allow this app to access GPS location to improve location accuracy.
+    </string>
+    <string name="location_not_available">
+        Your location is not available to this app.
+        \nPlease enable access to GPS or network location in system settings.
+    </string>
     <string name="gps_outside_map">La posizione GPS è fuori dai confini della mappa</string>
     <string name="share_map_failed">Invio mappa non riuscito</string>
     <string name="external_content_failed">Visualizzazione contenuto KMZ fallita.</string>
@@ -112,7 +120,10 @@
         %s non è un file immagine valido.\nDevi selezionare un file immagine
     </string>
     <string name="select_image_select_file">Seleziona il file immagine mappa</string>
-    
+    <string name="select_image_processing">
+        Elaborazione delle immagini selezionate.\nPer favore attendi…
+    </string>
+
     <!-- map image point selection -->
     <string name="image_point_help">
         Seleziona un punto sulla mappa di Google.\n\nSelezionare punti abbastanza lontani per
@@ -205,6 +216,7 @@
         \n\u2022 Francesco Terribile (italiano)
         \n\u2022 Dorin Hongu (rumena)
         \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (polacca)
     </string>
     
     <!-- button items -->
@@ -232,5 +244,9 @@
     <string name="photos">Foto</string>
     <string name="downloads">Downloads</string>
     <string name="sdcard">Scheda SD</string>
-
+    <string name="use_picker">Selettore alternativa</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="menu">Menu</string>
+    
 </resources>

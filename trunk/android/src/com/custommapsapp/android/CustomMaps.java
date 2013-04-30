@@ -26,22 +26,25 @@ import com.custommapsapp.android.kml.Placemark;
 import com.custommapsapp.android.storage.EditPreferences;
 import com.custommapsapp.android.storage.PreferenceStore;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -79,6 +82,8 @@ public class CustomMaps extends Activity {
     NO_ERROR, IMAGE_TOO_LARGE, IMAGE_NOT_FOUND, INVALID_IMAGE
   };
 
+  // Activity IDs
+  private static final int ACCEPT_LICENSE = 10;
   private static final int SELECT_MAP = 1;
   private static final int DOWNLOAD_MAP = 2;
   private static final int EDIT_PREFS = 3;
@@ -88,8 +93,6 @@ public class CustomMaps extends Activity {
   private static final int MENU_LOCATION_DETAILS = 3;
   private static final int MENU_SHARE_MAP = 4;
   private static final int MENU_PREFERENCES = 5;
-
-  private static final int DIALOG_LICENSE = 1;
 
   private MapDisplay mapDisplay;
   private LocationLayer locationLayer;
@@ -103,7 +106,6 @@ public class CustomMaps extends Activity {
   private ImageButton zoomOut;
   private DisplayState displayState;
 
-  private boolean licenseDialogCreated = false;
   private SafetyWarningDialog safetyReminder = null;
   private boolean updateMenuItems = false;
 
@@ -111,16 +113,22 @@ public class CustomMaps extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.i(LOG_TAG, "App memory available (MB): " + MemoryUtil.getTotalAppMemoryMB(this));
+
+    // Initialize disk cache
+    ImageDiskCache.instance(this);
+    GeoidHeightEstimator.initialize(getAssets());
+
+    // Never display Holo actionbar in landscape mode
+    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE &&
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      requestWindowFeature(Window.FEATURE_NO_TITLE);
+    }
+
     boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     reloadUI();
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(detailsDisplay.getRootView());
     }
-
-    // Initialize disk cache properly
-    ImageDiskCache.instance(this);
-
-    GeoidHeightEstimator.initialize(getAssets());
 
     // Do not process launch intent if software license is not accepted yet
     if (PreferenceStore.instance(this).isLicenseAccepted()) {
@@ -216,10 +224,9 @@ public class CustomMaps extends Activity {
     super.onResume();
 
     // Do not display anything if license is not accepted yet
-    if (!PreferenceStore.instance(this).isLicenseAccepted() && !licenseDialogCreated) {
-      licenseDialogCreated = true;
-      Log.i(LOG_TAG, "Showing license dialog");
-      showDialog(DIALOG_LICENSE);
+    if (!PreferenceStore.instance(this).isLicenseAccepted() && !isFinishing()) {
+      Log.i(LOG_TAG, "Showing license activity");
+      launchLicenseActivity();
       return;
     }
 
@@ -265,6 +272,20 @@ public class CustomMaps extends Activity {
     visibility = (prefs.isShowDistance() ? View.VISIBLE : View.GONE);
     distanceLayer.setVisibility(visibility);
     distanceLayer.setShowHeading(prefs.isShowHeading());
+
+    // On honeycomb and newer, display a button to open options menu
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      ImageButton more = (ImageButton) findViewById(R.id.optionsMenuButton);
+      if (more != null) {
+        more.setVisibility(View.VISIBLE);
+        more.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            openOptionsMenu();
+          }
+        });
+      }
+    }
   }
 
   @Override
@@ -361,12 +382,12 @@ public class CustomMaps extends Activity {
    * @param map KmlFolder containing the data
    */
   private void initializeMapVariables(KmlFolder map) {
-    Log.d(LOG_TAG, "Initializing map variables");
     selectedMap = map;
     placemarks.clear();
     mapImage = null;
     if (map != null) {
       mapImage = map.getFirstMap();
+      Log.d(LOG_TAG, "Selected map: " + (mapImage == null ? "- none -" : mapImage.getName()));
       for (KmlFeature feature : map.getFeatures()) {
         if (feature instanceof Placemark) {
           placemarks.add((Placemark) feature);
@@ -380,13 +401,17 @@ public class CustomMaps extends Activity {
   // --------------------------------------------------------------------------
   // Menus
 
+  @SuppressLint("NewApi")
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     menu.add(Menu.NONE, MENU_SELECT_MAP, Menu.NONE, R.string.select_map)
         .setIcon(android.R.drawable.ic_menu_mapmode);
-    menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, R.string.my_location)
+    MenuItem item = menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, R.string.my_location)
         .setIcon(android.R.drawable.ic_menu_mylocation);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    }
     menu.add(Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, R.string.location_details)
         .setIcon(android.R.drawable.ic_menu_info_details);
     menu.add(Menu.NONE, MENU_SHARE_MAP, Menu.NONE, R.string.share_map)
@@ -407,9 +432,8 @@ public class CustomMaps extends Activity {
       updateMenuItems = false;
     }
     // Can't share a null map or one that doesn't contain KmlInfo
-    if (selectedMap == null || selectedMap.getKmlInfo() == null) {
-      menu.findItem(MENU_SHARE_MAP).setEnabled(false);
-    }
+    boolean enableShare = (selectedMap != null && selectedMap.getKmlInfo() != null);
+    menu.findItem(MENU_SHARE_MAP).setEnabled(enableShare);
     return super.onPrepareOptionsMenu(menu);
   }
 
@@ -630,15 +654,15 @@ public class CustomMaps extends Activity {
       return;
     }
     if (requestCode == SELECT_MAP) {
-      if (resultCode == RESULT_OK) {
-        processSelectMapResult(data);
-      } else {
-        processSelectMapResult(null);
-      }
+      processSelectMapResult(resultCode == RESULT_OK ? data : null);
       return;
     }
     if (requestCode == EDIT_PREFS) {
       processEditPreferencesResult(data);
+      return;
+    }
+    if (requestCode == ACCEPT_LICENSE) {
+      processLicenseActivityResult(resultCode, data);
       return;
     }
     Log.w(LOG_TAG, String.format(
@@ -706,38 +730,19 @@ public class CustomMaps extends Activity {
   // --------------------------------------------------------------------------
   // License handling
 
-  @Override
-  protected Dialog onCreateDialog(int id) {
-    if (id == DIALOG_LICENSE) {
-      return new AboutDialog(this);
-    }
-    return super.onCreateDialog(id);
+  private void launchLicenseActivity() {
+    Intent acceptLicense = new Intent(this, AboutDisplay.class);
+    acceptLicense.putExtra(AboutDisplay.CANCELLABLE, false);
+    startActivityForResult(acceptLicense, ACCEPT_LICENSE);
   }
 
-  @Override
-  protected void onPrepareDialog(int id, Dialog dialog) {
-    super.onPrepareDialog(id, dialog);
-    if (id == DIALOG_LICENSE) {
-      String version = PreferenceStore.instance(this).getVersion();
-      AboutDialog dlg = (AboutDialog) dialog;
-      dlg.setVersion(version);
-
-      dlg.setOnDismissListener(new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-          AboutDialog aboutDialog = (AboutDialog) dialog;
-          if (aboutDialog.wasButtonPressed()) {
-            // Dialog dismissed with the "accept" button
-            if (aboutDialog.isLicenseAccepted()) {
-              licenseAccepted();
-            } else {
-              // License rejected, exit app
-              Log.i(LOG_TAG, "User rejected software license, exiting app");
-              finish();
-            }
-          }
-        }
-      });
+  private void processLicenseActivityResult(int resultCode, Intent data) {
+    if (resultCode == RESULT_OK && data != null &&
+        data.getBooleanExtra(AboutDisplay.LICENSE_ACCEPTED, false)) {
+      licenseAccepted();
+    } else {
+      Log.i(LOG_TAG, "User rejected software license, exiting app");
+      finish();
     }
   }
 

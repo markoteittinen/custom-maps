@@ -30,6 +30,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -107,6 +108,15 @@ public class SelectMap extends ListActivity {
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(getListView().getRootView());
     }
+    // Remove select map prompt in when Holo theme is used
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      View v = findViewById(R.id.select_map_prompt);
+      if (v != null) {
+        v.setVisibility(View.GONE);
+      }
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.select_map_name);
+    }
 
     autoSelectRequested = getIntent().getBooleanExtra(AUTO_SELECT, false);
     localPathRequest = getIntent().getStringExtra(LOCAL_FILE);
@@ -147,7 +157,7 @@ public class SelectMap extends ListActivity {
     super.onResume();
     mapCatalog.refreshCatalog();
     helpDialogManager.onResume();
-    // Some system don't allow access to location providers despite manifest.xml
+    // Some systems don't allow access to location providers despite manifest.xml
     boolean hasGpsProvider = (locator.getProvider(LocationManager.GPS_PROVIDER) != null);
     boolean hasNetworkProvider = (locator.getProvider(LocationManager.NETWORK_PROVIDER) != null);
     // Use latest GPS location only if it is fresh enough
@@ -294,21 +304,23 @@ public class SelectMap extends ListActivity {
   }
 
   private void groupMapsList() {
-    Location current = locationTracker.getCurrentLocation(null);
-    if (current == null) {
-      return;
-    }
     // Verify the maps are sorted alphabetically
-    mapCatalog.getAllMapsSortedByName();
-    // Group maps by current location
-    float longitude = (float) current.getLongitude();
-    float latitude = (float) current.getLatitude();
-    mapCatalog.groupMapsByDistance(longitude, latitude);
-    GroupedMapAdapter listAdapter = new GroupedMapAdapter();
-    listAdapter.setLocalMaps(mapCatalog.getLocalMaps());
-    listAdapter.setNearMaps(mapCatalog.getNearMaps());
-    listAdapter.setFarMaps(mapCatalog.getFarMaps());
-    setListAdapter(listAdapter);
+    Iterable<KmlFolder> allMaps = mapCatalog.getAllMapsSortedByName();
+    Location current = locationTracker.getCurrentLocation(null);
+    if (current != null) {
+      // Group maps by current location
+      float longitude = (float) current.getLongitude();
+      float latitude = (float) current.getLatitude();
+      mapCatalog.groupMapsByDistance(longitude, latitude);
+      GroupedMapAdapter listAdapter = new GroupedMapAdapter();
+      listAdapter.setLocalMaps(mapCatalog.getLocalMaps());
+      listAdapter.setNearMaps(mapCatalog.getNearMaps());
+      listAdapter.setFarMaps(mapCatalog.getFarMaps());
+      setListAdapter(listAdapter);
+    } else {
+      // List all maps together
+      setListAdapter(new MapListAdapter(this, allMaps));
+    }
   }
 
   private void displayMessage(final String message, final boolean showLong) {

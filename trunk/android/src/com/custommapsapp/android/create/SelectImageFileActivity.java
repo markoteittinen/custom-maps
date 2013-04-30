@@ -28,8 +28,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -51,6 +54,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -70,6 +75,9 @@ public class SelectImageFileActivity extends Activity {
   private static final int MENU_PHOTOS = 1;
   private static final int MENU_DOWNLOADS = 2;
   private static final int MENU_SD_ROOT = 3;
+  private static final int MENU_USE_PICKER = 4;
+
+  private static final int SELECT_IMAGE = 4;
 
   private ProgressBar progress;
   private ListView fileListView;
@@ -88,6 +96,11 @@ public class SelectImageFileActivity extends Activity {
     prepareUI();
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(fileListView.getRootView());
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      // Update actionbar title to match selected locale
+      getActionBar().setTitle(R.string.create_map_name);
     }
 
     helpDialogManager = new HelpDialogManager(this, HelpDialogManager.HELP_SELECT_IMAGE_FILE,
@@ -146,6 +159,7 @@ public class SelectImageFileActivity extends Activity {
     }
     menu.add(Menu.NONE, MENU_SD_ROOT, Menu.NONE, R.string.sdcard)
         .setIcon(android.R.drawable.ic_menu_save);
+    menu.add(Menu.NONE, MENU_USE_PICKER, Menu.NONE, R.string.use_picker);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;
   }
@@ -164,6 +178,9 @@ public class SelectImageFileActivity extends Activity {
       case MENU_SD_ROOT:
         jumpTo = FileUtil.getSdRoot();
         break;
+      case MENU_USE_PICKER:
+        launchAlternatePicker();
+        break;
       default:
         helpDialogManager.onOptionsItemSelected(item);
         break;
@@ -174,6 +191,83 @@ public class SelectImageFileActivity extends Activity {
       updateImageFileList();
     }
     return true;
+  }
+
+  private void launchAlternatePicker() {
+    Intent pickerIntent = new Intent(Intent.ACTION_PICK);
+    pickerIntent.setType("image/*");
+    startActivityForResult(pickerIntent, SELECT_IMAGE);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == RESULT_OK && requestCode == SELECT_IMAGE) {
+      // Image was selected
+      final Uri selectedImage = data.getData();
+      Log.d(CustomMaps.LOG_TAG, "Selected image: " + selectedImage);
+
+      // Display spinner and copy image to data directory in a background thread
+      View v = findViewById(R.id.wait);
+      v.setVisibility(View.VISIBLE);
+      new Thread() {
+        @Override
+        public void run() {
+          prepareExternallyPickedImage(selectedImage);
+        }
+      }.start();
+    }
+  }
+
+  /**
+   * Copies the image pointed by the given Uri to image directory and returns
+   * it as a result to caller of this activity. If any errors occur, displays
+   * an error message to user and return false.
+   *
+   * @param selectedImage Uri to image selected by external picker.
+   * @return true, if image was successfully prepared, false in case of error.
+   */
+  private boolean prepareExternallyPickedImage(Uri selectedImage) {
+    File selectedFile = null;
+    InputStream from = null;
+    OutputStream to = null;
+    try {
+      // Read image to bitmap
+      from = getContentResolver().openInputStream(selectedImage);
+      Bitmap mapImage = BitmapFactory.decodeStream(from);
+      // Store as JPG to tmp directory
+      selectedFile = FileUtil.getTmpImageFile();
+      to = new FileOutputStream(selectedFile);
+      if (!mapImage.compress(CompressFormat.JPEG, 85, to)) {
+        selectedFile = null;
+      }
+    } catch (IOException ex) {
+      selectedFile = null;
+      Log.w(CustomMaps.LOG_TAG, "Failed to open alternately picked image", ex);
+    } finally {
+      FileUtil.tryToClose(from);
+      FileUtil.tryToClose(to);
+    }
+
+    final File returnFile = selectedFile;
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        if (returnFile != null) {
+          // Return successfully downloaded image
+          returnImageFile(returnFile);
+        } else {
+          // Failed to process selected image, display error
+          Context context = SelectImageFileActivity.this;
+          Toast.makeText(context, R.string.editor_image_load_failed, Toast.LENGTH_LONG).show();
+          // Hide spinner
+          View v = findViewById(R.id.wait);
+          v.setVisibility(View.GONE);
+        }
+      }
+    });
+
+    return (selectedFile != null);
   }
 
   // --------------------------------------------------------------------------
@@ -217,6 +311,7 @@ public class SelectImageFileActivity extends Activity {
   /**
    * Overrides back button behavior on Android 2.0 and later. Ignored in 1.6.
    */
+  @Override
   public void onBackPressed() {
     if (currentDir == null || isSdRootDir(currentDir)) {
       setResult(RESULT_CANCELED);
@@ -305,7 +400,7 @@ public class SelectImageFileActivity extends Activity {
     }
     // Sort image files by name except in photos dir list most recent first
     Comparator<ImageFile> sorter = imageFileNameSorter;
-    if (currentDir.getAbsolutePath().equals(FileUtil.getPhotosDirectory().getAbsolutePath())) {
+    if (FileUtil.isPhotosDirectory(currentDir)) {
       sorter = imageFileDateSorter;
     }
     Collections.sort(dirListing, sorter);

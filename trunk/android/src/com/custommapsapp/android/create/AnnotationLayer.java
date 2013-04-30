@@ -25,6 +25,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -49,11 +50,11 @@ public class AnnotationLayer extends View {
     blackPaint = new Paint();
     blackPaint.setAntiAlias(true);
     blackPaint.setStyle(Paint.Style.STROKE);
-    blackPaint.setColor(0x80000000);
-    blackPaint.setStrokeWidth(2f);
+    blackPaint.setColor(0xB0000000);
+    blackPaint.setStrokeWidth(ptsToPixels(.75f, context));
     whitePaint = new Paint(blackPaint);
     whitePaint.setColor(0x80FFFFFF);
-    whitePaint.setStrokeWidth(4f);
+    whitePaint.setStrokeWidth(ptsToPixels(2, context));
 
     tiePoints = new ArrayList<PointF>();
     drawMatrix = new Matrix();
@@ -92,9 +93,26 @@ public class AnnotationLayer extends View {
     // Draw selection circle in the center
     int x = getWidth() / 2;
     int y = getHeight() / 2;
-    canvas.drawCircle(x, y, 50, whitePaint);
-    canvas.drawCircle(x, y, 50, blackPaint);
-    canvas.drawCircle(x, y, 5, whitePaint);
-    canvas.drawCircle(x, y, 5, blackPaint);
+    float largeRadius = ptsToPixels(15, getContext());
+    float smallRadius = ptsToPixels(2, getContext());
+    canvas.drawCircle(x, y, largeRadius, whitePaint);
+    canvas.drawCircle(x, y, largeRadius, blackPaint);
+    canvas.drawCircle(x, y, smallRadius, whitePaint);
+    canvas.drawCircle(x, y, smallRadius, blackPaint);
+  }
+
+  /**
+   * Converts pt units to pixels on a given canvas (1 pt = 1/72 inch).
+   *
+   * @param pts number of pt units to convert
+   * @param canvas that is used for pixel density
+   * @return number of pixels matching 'pts' pt units
+   */
+  private float ptsToPixels(float pts, Context context) {
+    if (context == null) {
+      return pts;
+    }
+    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+    return metrics.densityDpi * pts / 72f;
   }
 }

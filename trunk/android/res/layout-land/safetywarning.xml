@@ -1,57 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="440dp"
     android:layout_height="wrap_content"
-    android:padding="4dp"
-    >
+    android:padding="4dp" >
+
     <TextView
-        style="@style/HugeText"
         android:id="@+id/header"
-        android:layout_alignParentTop="true"
+        style="@style/HugeText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:text="@string/safety_warning_title"
-        android:textColor="#ffffffff"
-    />
+        android:textColor="#ffffffff" />
+
     <ScrollView
         android:id="@+id/textArea"
-        android:layout_below="@id/header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/header"
         android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
-        >
-        <TextView 
-            style="@style/NormalText"
+        android:layout_marginTop="8dp" >
+
+        <TextView
             android:id="@+id/warningBody"
+            style="@style/NormalText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/safety_warning"
-            android:textColor="#ffffffff"
-        />
+            android:textColor="#ffffffff" />
     </ScrollView>
+
     <Button
-        style="@style/NormalText"
         android:id="@+id/okButton"
-        android:layout_below="@id/textArea"
-        android:layout_alignParentRight="true"
+        style="@style/NormalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:text="@string/button_ok"
-        android:textColor="#ff000000"
-    />
+        android:text="@string/button_ok" />
+
     <CheckBox
-        style="@style/SmallText"
         android:id="@+id/showAgain"
+        style="@style/SmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/okButton"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/remind_me_again"
         android:checked="true"
-    />
+        android:text="@string/remind_me_again" 
+        android:background="#A0000000"/>
+
 </RelativeLayout>

@@ -143,15 +143,16 @@ public class MapCatalog {
     KmlFolder result = new KmlFolder();
     result.addFeature(map);
 
-    // Initialize KmlInfo and description
+    // Initialize KmlInfo, name, and description
     KmlFeature basicInfo = (folder != null ? folder : map);
     result.setKmlInfo(basicInfo.getKmlInfo());
+    result.setName(basicInfo.getName());
     result.setDescription(basicInfo.getDescription());
 
     // Verify that the map and result folder have non-empty names
-    String folderName = (folder != null ? folder.getName().trim() : "");
-    String mapName = map.getName();
-    if (mapName == null || mapName.trim().length() == 0) {
+    String folderName = (folder != null && folder.getName() != null ? folder.getName().trim() : "");
+    String mapName = (map.getName() != null ? map.getName().trim() : null);
+    if (mapName == null || mapName.length() == 0) {
       map.setName(folderName.length() > 0 ? folderName : defaultMapName);
     }
     result.setName(folderName.length() > 0 ? folderName : map.getName());

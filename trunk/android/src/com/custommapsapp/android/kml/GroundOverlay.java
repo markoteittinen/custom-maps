@@ -15,13 +15,10 @@
  */
 package com.custommapsapp.android.kml;
 
-import com.custommapsapp.android.CustomMaps;
-
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
 import android.util.FloatMath;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -260,8 +257,6 @@ public class GroundOverlay extends KmlFeature {
   public float getDistanceFrom(float longitude, float latitude) {
     // Return 0 distance if user is within map area
     if (this.contains(longitude, latitude)) {
-      Log.d(CustomMaps.LOG_TAG,
-          String.format("Map %s contains location (%.6f, %.6f)", getName(), latitude, longitude));
       return 0f;
     }
     // TODO: This initial implementation doesn't consider 180 longitude
@@ -269,7 +264,6 @@ public class GroundOverlay extends KmlFeature {
       initializeGeoToMetricMatrix();
     }
     if (tiepoints != null && tiepoints.size() > 3) {
-      Log.d(CustomMaps.LOG_TAG, "Estimating distance to map " + getName());
       return estimateDistanceFrom(longitude, latitude);
     }
     final int X = 0;

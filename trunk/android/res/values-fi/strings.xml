@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Custom Maps</string>
-    <string name="select_map_name">Custom Maps/Valitse Kartta</string>
-    <string name="create_map_name">Custom Maps/Luo Kartta</string>
-    <string name="edit_prefs_name" tools:ignore="UnusedResources">Custom Maps/Asetukset</string>
+    <string name="select_map_name">Valitse Kartta</string>
+    <string name="create_map_name">Luo Kartta</string>
+    <string name="edit_prefs_name">Asetukset</string>
     <string name="author">By Marko Teittinen</string>
     <string name="open_source">
         Custom Maps ja sen lähdekoodi on julkaistu Apache Lisenssin version 2.0 alaisena.
     </string>
     <string name="apache_license">Lue Apache Lisenssi 2.0</string>
-    <string name="google_code">Avaa Custom Mapsin avoimen lähdekoodin projektisivu</string>
-    <string name="app_home">Avaa Custom Mapsin nettisivut</string>
+    <string name="google_code">Custom Mapsin avoin lähdekoodi</string>
+    <string name="app_home">Custom Mapsin nettisivut</string>
 
     <!-- CustomMaps.java -->
     <string name="gps_not_available">
@@ -127,7 +127,8 @@
         Kuvaa ei ole valittu, joten pisteitäkään ei voi valita.
     </string>
     <string name="image_point_select_for_matching">Valitse kiintopiste karttakuvasta</string>
-    
+    <string name="select_image_processing">Valittua kuvaa valmistellaan.\nOdota hetki…</string>
+
     <!-- map geo point selection -->
     <string name="geo_point_help">
         Voit zoomata ja siirtää Googlen karttaa löytääksesi valitun kiintopisteen.\n\nKäytä 
@@ -201,6 +202,7 @@
         \n\u2022 Francesco Terribile (Italian kieli)
         \n\u2022 Dorin Hongu (Romanian kieli)
         \n\u2022 Germain Zouein (testaus)
+        \n\u2022 Tomasz Kossakowski (Puolan kieli)
     </string>
     
     <!-- button items -->
@@ -228,5 +230,9 @@
     <string name="photos">Valokuvat</string>
     <string name="downloads">Nettilataukset</string>
     <string name="sdcard">SD-kortti</string>
-
+    <string name="use_picker">Valitse muulla ohjelmalla</string>
+    <string name="zoom_in">Suurenna</string>
+    <string name="zoom_out">Pienennä</string>
+    <string name="menu">Valikko</string>
+    
 </resources>

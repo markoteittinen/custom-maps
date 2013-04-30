@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Wybierz mapę</string>
+    <string name="create_map_name">Utwórz mapę</string>
+    <string name="edit_prefs_name">Ustawienia</string>
+    <string name="author">Autor: Marko Teittinen</string>
+    <string name="open_source">
+		Aplikacja Custom Maps i jej kod źródłowy publikowane są zgodnie z licencją Apache, wersja 2.0.
+	</string>
+    <string name="apache_license">Przeczytaj licencję Apache 2.0</string>
+    <string name="google_code">Odwiedź stronę projektu open source</string>
+    <string name="app_home">Odwiedź stronę aplikacji Custom Maps</string>
+
+    <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        Aplikacja nie może użyć położenia GPS.
+        \nAby zwiększyć dokładność położenia, powzwól aplikacji na określenie położenia przez GPS.
+    </string>
+    <string name="location_not_available">
+		Aplikacja nie może ustalić twojego położenia GPS.
+		\nPozwól aplikacji na określenie położenia przez GPS lub położenia sieciowego w ustawieniach systemu.
+	</string>
+    <string name="gps_outside_map">Położenie GPS jest poza mapą.</string>
+    <string name="share_map_failed">Nie można wysłać mapy.</string>
+    <string name="external_content_failed">Aplikacja Custom Maps nie może wyświetlić zawartości pliku KMZ.</string>
+    <string name="waiting_for_gps">Aktualne położenie nieustalone.\nSzukanie sygnału GPS…</string>
+    <string name="map_too_large">Wybrana mapa jest zbyt duża do pobrania.</string>
+    
+    <!-- sharing -->
+    <string name="share_message_subject">Chcę udostępnić tobie mapę.</string>
+    <string name="share_chooser_title">Wyślij mapę za pomocą…</string>
+
+    <!-- safety warning -->
+    <string name="safety_warning_title">WAŻNE!</string>
+    <string name="safety_warning">
+		Wiele map, które mogą być wykorzystane przez aplikację Custom Maps, nie jest tak dokłanych,
+		aby poprawnie wskazywać położenie GPS. Podane położenie należy traktować zawsze jako przybliżone.
+		\n\nNawet w obrębie jednej mapy niektóre obszary mogą być lepiej dostosowane do GPS niż inne.
+	</string>
+    <string name="remind_me_again">Przypomnij następnym razem.</string>
+    
+    <!-- select map -->
+    <string name="select_map_to_use">Wybierz mapę</string>
+    <string name="no_maps_found_on_sd">
+		Nie znaleziono mapy na karcie SD w folderze CustomMaps.\n\nUżyj menu, aby utworzyć mapę 
+		i uzyskać pomoc w wyszukiwaniu.\n\nAby wyjść użyj przycisku \'Cofnij\'.
+	</string>
+    <string name="create_map_help">
+        Użyj menu, aby utworzyć mapę ze zdjęcia lub z pobranych obrazów map.\n\nNaciśnij i przytrzymaj
+		nazwę mapy, aby ją modyfikować lub usunąć. 
+    </string>
+    <string name="create_map_help_link">
+		Kliknij tu, aby odwiedzić stronę aplikacji Custom Maps z przykładami map i poradnikiem.
+	</string>
+    <string name="select_cannot_modify_map_set">
+        Wybrana mapa jest częscią zbioru map. Nie można jej modyfikować i usunąć.
+    </string>
+    <string name="select_cannot_modify_placemarks">
+		Wybrana mapa zawiera oznaczone miejsca. Nie można jej modyfikować.
+	</string>
+    <string name="no_map_sharing_apps">Nie znaleziono aplikacji do udostępniania map.</string>
+    <string name="delete_map_dialog_title">Potwierdź usunięcie</string>
+    <string name="delete_map_dialog">Na pewno usunąć mapę\n\"%s\"?</string>
+    <string name="delete_map_dialog_positive">Tak - usuń</string>
+    <string name="delete_map_dialog_negative">Nie - zachowaj mapę</string>
+    <string name="deleting_map_failed">Nie można usunąć mapy \"%s\"</string>
+    <string name="local_maps">Mapy lokalne</string>
+    <string name="nearby_maps">Mapy w pobliżu</string>
+    <string name="other_maps">Mapy inne</string>
+    <string name="all_maps">Wszystkie mapy</string>
+
+    <!-- downloading -->
+    <string name="progress_format">Nieznany rozmiar mapy. Pobrano %,d kB.</string>
+    <string name="download_canceled">Anulowano pobieranie mapy</string>
+    <string name="download_failed">Nie można pobrać mapy %s</string>
+    <string name="download_successful">Mapa pobrana pomyślnie</string>
+    <string name="download_no_datadir">
+		Aplikacja Custom Maps nie może znaleźć karty SD, aby zapisać mapę.\nPobieranie anulowano.
+	</string>
+    <string name="download_title_label">Pobieranie mapy z sieci</string>
+    <string name="download_progress_label">Postęp</string>
+    <string name="download_starting">Rozpoczęcie pobierania…</string>
+    <string name="download_info">
+		Czekaj na zakończenie pobierania albo anuluj pobieranie za pomocą przycisku poniżej 
+	</string>
+    
+    <!-- map image display -->
+    <string name="unnamed_map">Mapa bez nazwy</string>
+    <string name="map_image_load_failed">Nie można pobrać obrazu mapy %s.</string>
+    
+    <!-- help manager -->
+    <string name="help_menu_title">Pomoc</string>
+    <string name="help_redisplay">Możesz ponownie wyświetlić tę informację używając menu</string>
+    
+    <!-- details display -->
+    <string name="latitude">Szerokość</string>
+    <string name="longitude">Długość</string>
+    <string name="altitude">Wysokość</string>
+    <string name="heading">Kurs</string>
+    <string name="speed">Prędkość</string>
+    <string name="accuracy">Dokładność</string>
+    <string name="no_data_available">N/D</string>
+    
+    <!-- map image selection -->
+    <string name="select_image_help">
+        Wybierz plik zawierający obraz mapy.\n\nUżywaj tylko obrazów, do których masz uprawnienia.\n
+        \nMenu zawiera odnośniki do folderów z twoimi zdjęciami i pobranymi obrazami.
+    </string>
+    <string name="select_image_invalid">
+        %s nie jest poprawnym plikiem obrazu.\nMusisz wybrać plik obrazu
+    </string>
+    <string name="select_image_select_file">Wybierz plik z obrazem mapy</string>
+    <string name="select_image_processing">Przetwarzanie wybrane zdjęcie.\nProszę czekać…</string>
+
+    <!-- map image point selection -->
+    <string name="image_point_help">
+        Wybierz punkty, aby ustalić położenie na mapie Google.\n\nAby uzyskać lepsze rezultaty, wybierz
+		odległe punkty.\n\nUnikaj wybierania punktów pomiędzy już wybranymi punktami.
+    </string>
+    <string name="image_point_no_image">Nie wybrano obrazu mapy. Nie można wybrać punktów.</string>
+    <string name="image_point_select_for_matching">Wybierz punkt, aby dopasować mapę</string>
+    
+    <!-- map geo point selection -->
+    <string name="geo_point_help">
+        Zmieniaj rozmiar i obracaj mapę Google, aby dopasować obraz mapy.\n\nUżyj suwaków do obracania 
+        i skalowania obrazu mapy oraz ustawienia przezroczystości.\n\nPrzycisk mapy przełącza widok mapy 
+        lub satelity.
+    </string>
+    <string name="geo_point_mapview_failure">
+		Nie można utworzyć widoku mapy.\nUtworzenie mapy niemożliwe.
+	</string>
+    <string name="geo_point_rotate">Obrót</string>
+    <string name="geo_point_scale">Skalowanie</string>
+    <string name="geo_point_transparency">Przezroczystość</string>
+    
+    <!-- map editor -->
+    <string name="editor_help">
+        Nazwij mapę i dodaj jej opis na liście map.\n\nDodaj 2-4 punkty, aby dowiązać i skalować obraz mapy.\n\n
+		Dopasuj albo usuń punkty, przytrzymując długo daną pozycję.\n\nMapa może być zapisana po wykonaniu podglądu.
+	</string>
+    <string name="editor_image_load_failed">Nie można załadować obrazu mapy</string>
+    <string name="editor_need_two_points">Przed wykonaniem podglądu musisz dodać co namniej 2 punkty</string>
+    <string name="editor_map_save_failed">Nie można zapisać mapy</string>
+    <string name="editor_map_name">Nazwa mapy</string>
+    <string name="editor_new_map">Nowa mapa</string>
+    <string name="editor_description">Opis</string>
+    <string name="editor_tiepoints">Punkty</string>
+    
+    <!-- map preview -->
+    <string name="preview_help">
+        Sprawdź wyrównanie mapy poprzez skalowanie i zmianę ujęcia.\n\nDopasuj lub dodaj punkt
+		używając przycisku powrotu (cofnij).\n\nUWAGA: Niektóre mapy mogą nie wyrównać się idealnie.
+	</string>
+    <string name="preview_mapview_failure">
+        Nie można utworzyć widoku mapy. Podgląd mapy niedostępny.
+    </string>
+    <string name="preview_transparency">Przezroczystość</string>
+    
+    <!-- edit preferences -->
+    <string name="metric_title">Użyj jednostek metrycznych</string>
+    <string name="metric_use_metric">W użyciu jednostki metryczne</string>
+    <string name="metric_use_english">W użyciu jednostki angielskie</string>
+    <string name="multitouch_title">Pozwól na skalowanie poprzez przesuwanie palcami</string>
+    <string name="multitouch_enable_pinch">Skalowanie poprzez przesuwanie palcami aktywne</string>
+    <string name="multitouch_disable_pinch">Skalowanie poprzez przesuwanie palcami nieaktywne</string>
+    <string name="distance_title">Wyświetlaj odległość</string>
+    <string name="distance_show">Wyświetla odległość od położenia użytkownika do środka ekranu</string>
+    <string name="distance_hide">Odległość nie jest wyświetlana ani przeliczana</string>
+    <string name="heading_title">Wyświetlaj kurs</string>
+    <string name="heading_show">Wyświetla kurs od położenia użytkownika do środka ekranu</string>
+    <string name="heading_hide">Kurs nie jest wyświetlany ani przeliczany</string>
+    <string name="safety_reminder_title">Wyświetlaj ostrzeżenie</string>
+    <string name="safety_reminder_show">Ostrzeżenie będzie wyświetlane po zmianie mapy</string>
+    <string name="safety_reminder_hide">
+		Ostrzeżenie nie będzie wyświetlane po zmianie mapy
+	</string>
+    <string name="language_title">Wybierz język</string>
+    <string name="language_default">Domyślny</string>
+    <string name="language_selected_format">Używany %s</string>
+    <string name="max_map_img_size_title">Maksymalny rozmia mapy</string>
+    <string name="max_map_img_size">%.1f megapixeli</string>
+    <string name="about_custom_maps">Informacje o Custom Maps</string>
+    
+    <!-- about dialog -->
+    <string name="version_label">wersja</string>
+    <string name="credits_text">
+        <b>Specjalne podziękowania</b>
+		\n\u2022 Harlan Hile (skalowanie poprzez przesuwanie palcami, ikona położenia użytkownika)
+		\n\u2022 Patrick Steiner (przystosowanie do innych języków, niemieckie tłumaczenie)
+		\n\u2022 Francesco Terribile (włoskie tłumaczenie)
+		\n\u2022 Dorin Hongu (rumuńskie tłumaczenie)
+		\n\u2022 Germain Zouein (testowanie)
+		\n\u2022 Tomasz Kossakowski (polskie tłumaczenie)
+	</string>
+    
+    <!-- button items -->
+    <string name="button_ok">OK</string>
+    <string name="button_close">Zamknij</string>
+    <string name="button_accept_license">Akceptuj licencję</string>
+    <string name="button_cancel">Anuluj</string>
+    <string name="button_save">Zapisz</string>
+    <string name="button_add_point">Dodaj punkt</string>
+    <string name="button_preview">Podgląd</string>
+    <string name="button_accept">Akceptuj</string>
+    
+    <!-- menu items -->
+    <string name="select_map">Wybierz mapę</string>
+    <string name="my_location">Moje położenie</string>
+    <string name="location_details">Szczegóły położenia</string>
+    <string name="share_map">Udostępnij mapę</string>
+    <string name="settings">Ustawienia</string>
+    <string name="create_map">Utwórz mapę</string>
+    <string name="modify_map">Modyfikuj mapę</string>
+    <string name="delete_map">Usuń mapę</string>
+    <string name="select_point">Wybierz punkt</string>
+    <string name="adjust_tiepoint">Dostosuj punkt</string>
+    <string name="delete_tiepoint">Usuń punkt</string>
+    <string name="photos">Fotografie</string>
+    <string name="downloads">Pobrane</string>
+    <string name="sdcard">Karta SD</string>
+    <string name="use_picker">Alternatywą selektor</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
+    <string name="menu">Menu</string>
+    
+</resources>

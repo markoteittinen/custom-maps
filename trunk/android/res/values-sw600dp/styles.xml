@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NormalText" parent="@android:style/TextAppearance.Medium">
+    <style name="NormalText">
         <item name="android:textSize">10pt</item>
     </style>
     <style name="SmallText" parent="@style/NormalText">

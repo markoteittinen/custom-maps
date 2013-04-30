@@ -51,7 +51,6 @@
         android:layout_margin="8dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:textColor="#000"
         android:text="@string/button_ok"
     />
 </RelativeLayout>

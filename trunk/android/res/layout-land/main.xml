@@ -34,6 +34,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     />
+
+  <ImageButton
+      android:id="@+id/optionsMenuButton"
+      style="@style/Overflow"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignRight="@id/mapDisplay"
+      android:layout_alignTop="@id/mapDisplay"
+      android:layout_marginRight="8dp"
+      android:layout_marginTop="8dp"
+      android:background="#60000000"
+      android:contentDescription="@string/menu"
+      android:visibility="gone" />
+
   <ImageButton
     android:id="@+id/zoomOut"
     android:layout_alignBottom="@id/mapDisplay"
@@ -46,7 +60,7 @@
     android:layout_height="wrap_content"
     android:src="@drawable/zoomout"
     android:background="#00000000"
-    />
+    android:contentDescription="@string/zoom_out"/>
   <ImageButton
     android:id="@+id/zoomIn"
     android:layout_alignBottom="@id/mapDisplay"
@@ -59,5 +73,6 @@
     android:layout_height="wrap_content"
     android:src="@drawable/zoomin"
     android:background="#00000000"
+    android:contentDescription="@string/zoom_in"
     />
 </RelativeLayout>

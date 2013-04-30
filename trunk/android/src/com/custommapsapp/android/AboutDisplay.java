@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Google Inc. All Rights Reserved.
+ * Copyright 2013 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  */
 package com.custommapsapp.android;
 
-import android.app.Dialog;
-import android.content.Context;
+import com.custommapsapp.android.storage.PreferenceStore;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,59 +27,66 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * AboutDialog displays a software license to the user and will not let
+ * AboutDisplay shows a software license to the user and will not let
  * the user continue until the license is accepted or rejected. The app is
- * responsible for terminating if the dialog is closed without the license
+ * responsible for terminating if the activity is closed without the license
  * having been accepted.
  *
  * @author Marko Teittinen
  */
-public class AboutDialog extends Dialog {
+public class AboutDisplay extends Activity {
   private static final String APACHE_LICENSE_URL =
       "http://www.apache.org/licenses/LICENSE-2.0";
   private static final String GOOGLE_CODE_URL = "http://code.google.com/p/custom-maps";
   private static final String HOMEPAGE_URL = "http://www.custommapsapp.com/";
-  private static final String VERSION_KEY = "com.custommaps.version";
 
-  private boolean buttonPressed = false;
+  private static final String EXTRA_PREFIX = "com.custommapsapp.android";
+  public static final String CANCELLABLE = EXTRA_PREFIX + ".Cancellable";
+  public static final String LICENSE_ACCEPTED = EXTRA_PREFIX + ".LicenseAccepted";
+
   private boolean licenseAccepted = false;
+  private boolean cancellable = false;
   private TextView versionLabel;
-
-  public AboutDialog(Context context) {
-    super(context);
-    setCancelable(false);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     super.onCreate(savedInstanceState);
 
+    cancellable = getIntent().getBooleanExtra(CANCELLABLE, false);
+
     boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
-    setContentView(R.layout.aboutdialog);
+    setContentView(R.layout.aboutdisplay);
     prepareUI();
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(versionLabel.getRootView());
     }
-
-    if (savedInstanceState != null) {
-      String version = savedInstanceState.getString(VERSION_KEY);
-      setVersion(version);
-    }
   }
 
   @Override
-  public Bundle onSaveInstanceState() {
-    Bundle bundle = super.onSaveInstanceState();
-    if (versionLabel.getVisibility() == View.VISIBLE) {
-      bundle.putString(VERSION_KEY, versionLabel.getText().toString());
-    }
-    return bundle;
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(CANCELLABLE, cancellable);
+    outState.putBoolean(LICENSE_ACCEPTED, licenseAccepted);
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle savedState) {
+    super.onRestoreInstanceState(savedState);
+    cancellable = savedState.getBoolean(CANCELLABLE, false);
+    licenseAccepted = savedState.getBoolean(LICENSE_ACCEPTED, false);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    prepareUI();
   }
 
   private void prepareUI() {
     versionLabel = (TextView) findViewById(R.id.version);
-    versionLabel.setVisibility(View.GONE);
+    String version = PreferenceStore.instance(this).getVersion();
+    versionLabel.setText(version);
 
     TextView webLink = (TextView) findViewById(R.id.apache_license);
     webLink.setOnClickListener(new LinkActivator(APACHE_LICENSE_URL));
@@ -90,34 +98,20 @@ public class AboutDialog extends Dialog {
     Button agreeButton = (Button) findViewById(R.id.agreeButton);
     agreeButton.setOnClickListener(new ButtonListener(true));
     Button doNotAgreeButton = (Button) findViewById(R.id.doNotAgreeButton);
-    doNotAgreeButton.setOnClickListener(new ButtonListener(false));
-  }
-
-  public void setVersion(String text) {
-    if (text != null) {
-      versionLabel.setText(text);
-      versionLabel.setVisibility(View.VISIBLE);
+    if (!cancellable) {
+      doNotAgreeButton.setOnClickListener(new ButtonListener(false));
     } else {
-      versionLabel.setVisibility(View.GONE);
+      doNotAgreeButton.setVisibility(View.GONE);
+      agreeButton.setText(R.string.button_close);
     }
   }
 
-  public void useSingleButton() {
-    Button doNotAgreeButton = (Button) findViewById(R.id.doNotAgreeButton);
-    doNotAgreeButton.setVisibility(View.GONE);
-
-    Button agreeButton = (Button) findViewById(R.id.agreeButton);
-    agreeButton.setText(R.string.button_close);
-
-    setCancelable(true);
-  }
-
-  public boolean wasButtonPressed() {
-    return buttonPressed;
-  }
-
-  public boolean isLicenseAccepted() {
-    return licenseAccepted;
+  private void finishActivity() {
+    if (!cancellable) {
+      getIntent().putExtra(LICENSE_ACCEPTED, licenseAccepted);
+    }
+    setResult(RESULT_OK, getIntent());
+    finish();
   }
 
   private class ButtonListener implements View.OnClickListener {
@@ -130,8 +124,7 @@ public class AboutDialog extends Dialog {
     @Override
     public void onClick(View v) {
       licenseAccepted = accepting;
-      buttonPressed = true;
-      dismiss();
+      finishActivity();
     }
   }
 
@@ -149,7 +142,7 @@ public class AboutDialog extends Dialog {
       }
       Intent browserIntent = new Intent(Intent.ACTION_VIEW);
       browserIntent.setData(Uri.parse(url));
-      getContext().startActivity(browserIntent);
+      startActivity(browserIntent);
     }
   }
 }

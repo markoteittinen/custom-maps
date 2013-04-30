@@ -375,13 +375,9 @@ public class GeoToImageConverter {
         break;
       }
     }
-    geoToImageMatrix.postTranslate(xDiffTotal / n, yDiffTotal / n);
-//    if (imageToGeoMatrix == null) {
-//      imageToGeoMatrix = new Matrix();
-//    } else {
-//      imageToGeoMatrix.reset();
-//    }
-//    geoToImageMatrix.invert(imageToGeoMatrix);
+    if (n > 0) {
+      geoToImageMatrix.postTranslate(xDiffTotal / n, yDiffTotal / n);
+    }
   }
 
   /**
