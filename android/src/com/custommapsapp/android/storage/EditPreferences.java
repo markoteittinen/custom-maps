@@ -172,6 +172,8 @@ public class EditPreferences extends PreferenceActivity {
     languages.add(new Locale("pl"));
     languages.add(new Locale("ro"));
     languages.add(new Locale("fi"));
+    languages.add(new Locale("ru"));
+    languages.add(new Locale("hr"));
     // Sort languages by their localized display name
     final Collator stringComparator = Collator.getInstance(Locale.getDefault());
     Collections.sort(languages, new Comparator<Locale>() {

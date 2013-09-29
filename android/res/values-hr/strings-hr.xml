@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Odaberi kartu</string>
+    <string name="create_map_name">Kreiraj kartu</string>
+    <string name="edit_prefs_name">Postavke</string>
+    <string name="author">autor: Marko Teittinen</string>
+    <string name="open_source">
+        Custom Maps aplikacija i njen izvorni kod su objavljeni pod Apache License, verzija 2.0.
+    </string>
+    <string name="apache_license">Pročitaj Apache License 2.0</string>
+    <string name="google_code">Posjeti web stranicu s open source kodom projekta</string>
+    <string name="app_home">Posjeti web stranicu Custom Maps aplikacije</string>
+    
+    <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS lokacija je nedostupna ovoj aplikaciji\nMolim omogući ovoj aplikaciji pristup GPS
+        lociranju kako bi poboljšali točnost određivanja lokacije.
+    </string>
+    <string name="location_not_available">
+        Vaša lokacija je nedostupna ovoj aplikaciji\nMolim omogući u sistemskim postavkama pristup
+        GPS-u ili mrežnom lociranju.</string>
+    <string name="gps_outside_map">GPS lokacija se nalazi izvan karte</string>
+    <string name="share_map_failed">Neuspješno slanje karte</string>
+    <string name="external_content_failed">Custom Maps ne može prikazati KMZ sadržaj.</string>
+    <string name="waiting_for_gps">
+        Nepoznata trenutna lokacija.\nTraženje GPS signala u tijeku…
+    </string>
+    <string name="map_too_large">Odabrana karta se ne može učitati, jer je prevelika.</string>
+    
+    <!-- sharing -->
+    <string name="share_message_subject">Želim podijeliti kartu s Vama</string>
+    <string name="share_chooser_title">Pošalji kartu pomoću …</string>
+    
+    <!-- safety warning -->
+    <string name="safety_warning_title">VAŽNO!</string>
+    <string name="safety_warning">
+        Mnoge kartografske slike, koje mogu biti korištene u Custom Maps, nisu dovoljno precizne za
+        prikaz točnih GPS lokacija. Treba uzeti u obzir da je prikazana lokacija uvijek približna.
+        \n\nNa pojedinim područjima karte točnost GPS lokacije može varirati.
+    </string>
+    <string name="remind_me_again">Podsjeti me opet slijedeći put</string>
+    
+    <!-- select map -->
+    <string name="select_map_to_use">Odaberi kartu za korištenje</string>
+    <string name="no_maps_found_on_sd">
+        Nema karata na SD kartici u CustomMaps folderu.\n\nKoristi izbornik za kreiranje karata
+        i pomoć u pronalaženju.\n\nili pritisni \'back\' za izlaz.
+    </string>
+    <string name="create_map_help">
+        Koristi izbornik za kreiranje karata iz fotografija ili preuzetih kartografskih slika.
+        \n\nPritisni na ime karte i drži neko vrijeme, ako ju želiš modificirati ili izbrisati.
+    </string>
+    <string name="create_map_help_link">
+        Klikni ovdje želiš li posjetiti Custom Maps web stranicu s primjerima karata i priručnikom
+    </string>
+    <string name="select_cannot_modify_map_set">
+        Ova karta je u skupu karata. Ne može biti mijenjana ili brisana.</string>
+    <string name="select_cannot_modify_placemarks">
+        Na karti se nalaze označena mjesta. Ne može biti mijenjana.
+    </string>
+    <string name="no_map_sharing_apps">Nema instaliranih aplikacija za dijeljenje karata</string>
+    <string name="delete_map_dialog_title">Potvrdi brisanje</string>
+    <string name="delete_map_dialog">Da li sigurno želiš obrisati kartu\n\"%s\“?</string>
+    <string name="delete_map_dialog_positive">Da - obriši</string>
+    <string name="delete_map_dialog_negative">Ne - ostavi kartu</string>
+    <string name="deleting_map_failed">Neuspjelo brisanje karte\"%s\"</string>
+    <string name="local_maps">Lokalne karte</string>
+    <string name="nearby_maps">Susjedne karte</string>
+    <string name="other_maps">Ostale karte</string>
+    <string name="all_maps">Sve karte</string>
+    
+    <!-- downloading -->
+    <string name="progress_format">Nepoznata veličina karte. Preuzeto %,d kB.</string>
+    <string name="download_canceled">Preuzimanje karte poništeno</string>
+    <string name="download_failed">Neuspjelo preuzimanje karte s %s</string>
+    <string name="download_successful">Preuzimanje karte uspješno</string>
+    <string name="download_no_datadir">
+        Custom Maps ne može pronaći SD karticu za spremiti kartu.\nPreuzimanje prekinuto.
+    </string>
+    <string name="download_title_label">Preuzimanje karte s weba</string>
+    <string name="download_progress_label">Napredak</string>
+    <string name="download_starting">Pokrećem preuzimanje…</string>
+    <string name="download_info">
+        Molim pričekaj dok se preuzimanje završi ili prekini preuzimanje pritiskom na donju tipku.
+    </string>
+    
+    <!-- map image display -->
+    <string name="unnamed_map">Karta bez naslova</string>
+    <string name="map_image_load_failed">Neuspjelo čitanje slike za %s.</string>
+    
+    <!-- help manager -->
+    <string name="help_menu_title">Pomoć</string>
+    <string name="help_redisplay">
+        Možeš ponovno prikazati ovu informaciju koristeći izbornik
+    </string>
+    
+    <!-- details display -->
+    <string name="latitude">Širina</string>
+    <string name="longitude">Dužina</string>
+    <string name="altitude">Visina</string>
+    <string name="heading">Smjer</string>
+    <string name="speed">Brzina</string>
+    <string name="accuracy">Točnost</string>
+    <string name="no_data_available">N/A</string>
+    
+    <!-- map image selection -->
+    <string name="select_image_help">
+        Odaberi datoteku koja sadrži sliku karte.\n\nKoristi samo one slike za koje imaš dozvolu.
+        \n\nIzbornik sadrži linkove na slike s tvojim fotografijama i slikama preuzetih s interneta
+    </string>
+    <string name="select_image_invalid">
+        %s nije valjana slikovna datoteka.\nMoraš odabrati datoteku slike.
+    </string>
+    <string name="select_image_select_file">Odaberi datoteku sa slikom karte</string>
+    <string name="select_image_processing">Obrađujem odabranu sliku\n.Molim pričekaj…</string>
+    
+    <!-- map image point selection -->
+    <string name="image_point_help">
+        Odaberi točku za lociranje na Google karti.\n\nZa najbolje rezultate odaberi točke udaljene
+        jedna od druge.\n\nIzbjegavaj odabirati točke između prethodno izabranih točaka.
+    </string>
+    <string name="image_point_no_image">
+        Slika karte nije odabrana. Ne mogu se odabirati točke.
+    </string>
+    <string name="image_point_select_for_matching">Odaberi točku za usklađivanje.</string>
+    
+    <!-- map geo point selection -->
+    <string name="geo_point_help">
+        Zumiraj ili pomakni Google kartu da se poklopi sa središtem thumbnaila\n\n Koristi klizače
+        za rotiranje i mijenjanje veličine thumbnaila, te za prilagodbu prozirnosti.\n\nTipka karte
+        izmjenjuje prikaz karte sa satelitskim prikazom.
+    </string>
+    <string name="geo_point_mapview_failure">
+        Neuspjelo kreiranje prikaza karte.\nKreiranje nije moguće.
+    </string>
+    <string name="geo_point_rotate">Rotiranje</string>
+    <string name="geo_point_scale">Skaliranje</string>
+    <string name="geo_point_transparency">Prozirnost</string>
+    
+    <!-- map editor -->
+    <string name="editor_help">
+        Imenuj i opiši svoju kartu za listu karti.\n\nDodaj 2-4 vezne točke za lociranje i
+        skaliranje slike karte.\n\nPrilagodi ili obriši veznu točku duljim pritiskom na nju.
+        \n\nSlike mogu biti spremljene tek nakon pregleda.
+    </string>
+    <string name="editor_image_load_failed">Neuspjeli prikaz slike</string>
+    <string name="editor_need_two_points">
+        Moraju se upisati najmanje dvije točke prije pregleda
+    </string>
+    <string name="editor_map_save_failed">Neuspjelo spremanje karte</string>
+    <string name="editor_map_name">Ime karte</string>
+    <string name="editor_new_map">Nova karta</string>
+    <string name="editor_description">Opis</string>
+    <string name="editor_tiepoints">Vezne točke</string>
+    
+    <!-- map preview -->
+    <string name="preview_help">
+        Provjeri poravnanje slike karte pomoću zumiranja i pomicanja slike.\n\nCrna tipka
+        dozvoljava podešavanje ili dodavanje veznih točaka.\n\nNAPOMENA: Neke slike ne mogu biti
+        savršeno podešene.
+    </string>
+    <string name="preview_mapview_failure">
+        Neuspjelo kreiranje prikaza karte.\nPregled slike nije dostupan.
+    </string>
+    <string name="preview_transparency">Prozirnost</string>
+    
+    <!-- edit preferences -->
+    <string name="metric_title">Koristi metričke jedinice</string>
+    <string name="metric_use_metric">Sada koristim metričke jedinice</string>
+    <string name="metric_use_english">Sada koristim Engleske jedinice</string>
+    <string name="multitouch_title">Dozvoli zumiranje hvatanjem</string>
+    <string name="multitouch_enable_pinch">Omogućeno zumiranje hvatanjem</string>
+    <string name="multitouch_disable_pinch">Onemogućeno zumiranje hvatanjem</string>
+    <string name="distance_title">Prikaži udaljenost</string>
+    <string name="distance_show">Prikaži udaljenost od korisničke lokacije do centra ekrana</string>                             
+    <string name="distance_hide">
+        Udaljenost od korisničke lokacije do centra ekrana nije prikazana
+    </string>
+    <string name="heading_title">Prikaži smjer</string>
+    <string name="heading_show">Prikaži smjer od korisničke lokacije do centra ekrana</string>
+    <string name="heading_hide">Smjer od korisničke lokacije do centra ekrana nije prikazan</string>
+    <string name="safety_reminder_title">Pokaži sigurnosni podsjetnik</string>
+    <string name="safety_reminder_show">
+        Sigurnosni podsjetnik će biti prikazan kada se slika promijeni
+    </string>
+    <string name="safety_reminder_hide">
+        Sigurnosni podsjetnik ne će biti prikazan kada se slika promijeni
+    </string>
+    <string name="language_title">Odaberi jezik</string>
+    <string name="language_default">Zadani</string>
+    <string name="language_selected_format">Koristim %s</string>
+    <string name="max_map_img_size_title">Maksimalna veličina slike</string>
+    <string name="max_map_img_size">%.1f megapiksela</string>
+    <string name="about_custom_maps">O Custom Maps</string>
+    
+    <!-- about dialog -->
+    <string name="version_label">verzija</string>
+    <string name="credits_text"><b>Posebne zahvale</b>
+        \n\u2022 Harlan Hile (zumiranje hvatanjem, ikona lokacije korisnika)
+        \n\u2022 Patrick Steiner (internacionalizacija, Njemački prijevod)
+        \n\u2022 Francesco Terribile (Talijanski prijevod)
+        \n\u2022 Dorin Hongu (Rumunjski prijevod)
+        \n\u2022 Germain Zouein (testiranje)
+        \n\u2022 Tomasz Kossakowski (Poljski prijevod)
+        \n\u2022 Dmitry Kandin (Ruski prijevod)
+        \n\u2022 Vladimira Šantek (Hrvatski prijevod)
+    </string>
+    
+    <!-- button items -->
+    <string name="button_ok">U redu</string>
+    <string name="button_close">Zatvori</string>
+    <string name="button_accept_license">Prihvati licencu</string>
+    <string name="button_cancel">Odustani</string>
+    <string name="button_save">Spremi</string>
+    <string name="button_add_point">Dodaj točku</string>
+    <string name="button_preview">Pregled</string>
+    <string name="button_accept">Prihvati</string>
+    
+    <!-- menu items -->
+    <string name="select_map">Odaberi kartu</string>
+    <string name="my_location">Moja lokacija</string>
+    <string name="location_details">Detalji lokacije</string>
+    <string name="share_map">Dijeli kartu</string>
+    <string name="settings">Postavke</string>
+    <string name="create_map">Kreiraj kartu</string>
+    <string name="modify_map">Modificiraj kartu</string>
+    <string name="delete_map">Izbriši kartu</string>
+    <string name="select_point">Odaberi točku</string>
+    <string name="adjust_tiepoint">Podesi veznu točku</string>
+    <string name="delete_tiepoint">Obriši veznu točku</string>
+    <string name="photos">Fotografije</string>
+    <string name="downloads">Preuzimanja</string>
+    <string name="sdcard">SD kartica</string>
+    <string name="use_picker">Alternativni selektor</string>
+    <string name="zoom_in">Povećaj</string>
+    <string name="zoom_out">Smanji</string>
+    <string name="menu">Izbornik</string></resources>
