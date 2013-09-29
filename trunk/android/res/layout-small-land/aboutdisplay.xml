@@ -156,7 +156,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/button_accept_license" />
+        android:text="@string/button_accept_license"
+        android:textColor="#ff000000" />
 
     <Button
         android:id="@+id/doNotAgreeButton"
@@ -165,6 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/button_close" />
+        android:text="@string/button_close"
+        android:textColor="#ff000000" />
 
 </RelativeLayout>

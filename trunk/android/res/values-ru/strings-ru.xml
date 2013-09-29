@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Custom Maps</string>
+    <string name="select_map_name">Выбрать карту</string>
+    <string name="create_map_name">Создать карту</string>
+    <string name="edit_prefs_name">Настройки</string>
+    <string name="author">Создатель Marko Teittinen</string>
+    <string name="open_source">
+        Приложение Custom Maps и исходные коды публикуются на условиях Apache License, версии 2.0.
+    </string>
+    <string name="apache_license">Читайте Apache License 2.0</string>
+    <string name="google_code">Сайт с исходными кодами Custom Maps</string>
+    <string name="app_home">Сайт приложения Custom Maps</string>
+
+    <!-- CustomMaps.java -->
+    <string name="gps_not_available">
+        GPS недоступен. Приложение не знает, где Вы находитесь.
+	    \nВключите GPS чтобы повысить точность ориентирования.    
+    </string>
+    <string name="location_not_available">
+        Приложение не знает, где Вы находитесь.
+        \nПожалуйста, включите GPS и/или определение положения по сетям.
+    </string>
+    <string name="gps_outside_map">По данным GPS, Вы вне границ Вашей карты</string>
+    <string name="share_map_failed">Попытка отправить карту не удалась</string>
+    <string name="external_content_failed">Custom Maps не смогло отобразить данные KMZ.</string>
+    <string name="waiting_for_gps">Местоположение не ясно.\nПытаемся поймать сигналы GPS.</string>
+    <string name="map_too_large">Выберите карту меньшего размера, пожалуйста!</string>
+    
+    <!-- sharing -->
+    <string name="share_message_subject">
+        Хочу поделиться своей картой созданной в Custom Maps
+    </string>
+    <string name="share_chooser_title">Как отправить карту?</string>
+
+    <!-- safety warning -->
+    <string name="safety_warning_title">ВНИМАНИЕ!</string>
+    <string name="safety_warning">
+        Зачастую изображения, которые Вы можете использовать в этом приложении для создания карт
+        нарисованы недостаточно точно, чтобы ваше положение, определённое GPS, совпало бы с тем, что
+        отображается на созданной Вами карте. Пожалуйста, помните об этом и не пользуйтесь этими
+        картами для парковки, например.\n\nИ даже на одной карте некоторые зоны будут точнее
+        позиционироваться GPS чем другие.
+    </string>
+    <string name="remind_me_again">Напомнить ещё раз?</string>
+    
+    <!-- select map -->
+    <string name="select_map_to_use">Выберите нужную карту</string>
+    <string name="no_maps_found_on_sd">
+        В папке CustomMaps на карте памяти пусто.\n\nСоздайте через Меню новую карту 
+        \n\nИли нажмите \'назад\' чтобы выйти.
+    </string>
+    <string name="create_map_help">
+        Через Меню создайте карту из фотографии или изображения карты\n\nНажмите и держите название
+        карты чтобы изменить его или удалить карту.
+    </string>
+    <string name="create_map_help_link">
+        Здесь переход на англоязычный сайт Custom Maps. Там есть образцы карты и подробный учебник.
+    </string>
+    <string name="select_cannot_modify_map_set">
+        Эта карта является частью подборки. Её нельзя не изменить, не удалить.
+    </string>
+    <string name="select_cannot_modify_placemarks">
+        Эта карта содержит дополнительные метки. Её не изменить.
+    </string>
+    <string name="no_map_sharing_apps">
+        Не таких приложений, которые могли бы отправить карту
+    </string>
+    <string name="delete_map_dialog_title">Действительно удалить?</string>
+    <string name="delete_map_dialog">Вы действительно хотите удалить карту?\n\"%s\"?</string>
+    <string name="delete_map_dialog_positive">Да - удалить</string>
+    <string name="delete_map_dialog_negative">Нет - пусть остаётся</string>
+    <string name="deleting_map_failed">Невозможно удалить карту \"%s\"</string>
+    <string name="local_maps">Местные карты</string>
+    <string name="nearby_maps">Карты окрестностей</string>
+    <string name="other_maps">Остальные карты</string>
+    <string name="all_maps">Все карты</string>
+    
+    <!-- downloading -->
+    <string name="progress_format">Размер неизвестен. Загружено %,d kB.</string>
+    <string name="download_canceled">Загрузка отменена</string>
+    <string name="download_failed">Загрузка не удалась %s</string>
+    <string name="download_successful">Карта успешно загружена</string>
+    <string name="download_no_datadir">
+        Custom Maps не может найти карту памяти.\nЗагрузка отменена.
+    </string>
+    <string name="download_title_label">Загрузить карту из сети</string>
+    <string name="download_progress_label">Процесс идёт…</string>
+    <string name="download_starting">Загрузка началась!вЂ¦</string>
+    <string name="download_info">
+        Подождите, пожалуйста. Скоро всё загрузится. Можете отменить загрузку нижерасположенной кнопкой.
+    </string>
+    
+    <!-- map image display -->
+    <string name="unnamed_map">Безымянная карта</string>
+    <string name="map_image_load_failed">Ошибка загрузки карты %s.</string>
+    
+    <!-- help manager -->
+    <string name="help_menu_title">Помощь</string>
+    <string name="help_redisplay">Эта информация доступна в Меню</string>
+    
+    <!-- details display -->
+    <string name="latitude">Широта</string>
+    <string name="longitude">Долгота</string>
+    <string name="altitude">Высота</string>
+    <string name="heading">Курс</string>
+    <string name="speed">Скорость</string>
+    <string name="accuracy">Точность</string>
+    <string name="no_data_available">Данных нет</string>
+    
+    <!-- map image selection -->
+    <string name="select_image_help">
+        Выберите файл с изображением карты.\n\У многих изображений есть правообдадатели.\n
+        \nВ Меню есть ссылки на папки с фотографиями и загруженными изображениями.
+    </string>
+    <string name="select_image_invalid">
+        %s это не файл с изображением.\nВыберите файл именно с изображением.
+    </string>
+    <string name="select_image_select_file">Выберите файл с изображением карты.</string>
+    <string name="select_image_processing">
+        Обработка выбранного изображения.\nНемного терпения…
+    </string>
+    
+    <!-- map image point selection -->
+    <string name="image_point_help">
+        Выберите точку которую нужно будет найти на карте Google.\n\nДля лучшего результата
+        выбирайте удалённые точки.\n\nИзбегайте выбирать точки на одной линии.
+    </string>
+    <string name="image_point_no_image">
+        Изображение карты не выбрано. Поэтому и точки не выбрать.
+    </string>
+    <string name="image_point_select_for_matching">
+        Выберите точки для последующего совмещения.
+    </string>
+    
+    <!-- map geo point selection -->
+    <string name="geo_point_help">
+        Увеличивайте и сдвигайте карту Google до совмещения с центром эскиза.\n\nПользуйтесь
+        ползунками чтобы вращать, масштабировать эскиз и управлять его прозрачностью.\n\nКнопка с
+        картой переключает вид карты: схема или спутник.
+    </string>
+    <string name="geo_point_mapview_failure">Не удалось создать карту</string>
+    <string name="geo_point_rotate">Вращать</string>
+    <string name="geo_point_scale">Масштабировать</string>
+    <string name="geo_point_transparency">Прозрачность</string>
+    
+    <!-- map editor -->
+    <string name="editor_help">
+        Назовите Вашу карту и дайте ей описание.\n\nДобавьте 2-4 точки привязки чтобы соотнести
+        изображение с реальной картой.\n\nУточните или удалите точки привязки долгим нажатием на
+        них.\n\nКарты могут быть сохранены после просмотра.
+    </string>
+    <string name="editor_image_load_failed">Не удалось загрузить изображение карты</string>
+    <string name="editor_need_two_points">
+        Необходимы как минимум две точки привязки для создания эскиза
+    </string>
+    <string name="editor_map_save_failed">Карту сохранить не удалось</string>
+    <string name="editor_map_name">Имя карты</string>
+    <string name="editor_new_map">Новая карта</string>
+    <string name="editor_description">Описание</string>
+    <string name="editor_tiepoints">Точки привязки</string>
+    
+    <!-- map preview -->
+    <string name="preview_help">
+        Проверьте точность привязки зуммируя и перемещая Вашу карту.\n\nКнопка Назад позволяет
+        изменять и/или добавлять точки привязки\n\nУчтите, что не все изображения карт можно точно
+        привязать.
+    </string>
+    <string name="preview_mapview_failure">
+        Невозможно создать Вашу карту.\nПредпросмотр невозможен.
+    </string>
+    <string name="preview_transparency">Прозрачность</string>
+    
+    <!-- edit preferences -->
+    <string name="metric_title">Метрические единицы</string>
+    <string name="metric_use_metric">Используются метрические единицы</string>
+    <string name="metric_use_english">Используются неметрические единицы</string>
+    <string name="multitouch_title">Разрешить мультитач</string>
+    <string name="multitouch_enable_pinch">Зуммирование мультитачем включено</string>
+    <string name="multitouch_disable_pinch">Зуммирование мультитачем выключено</string>
+    <string name="distance_title">Показывать расстояние</string>
+    <string name="distance_show">Показывать расстояние от Вашего положения до центра экрана</string>
+    <string name="distance_hide">Расстояние не показывается или не определено</string>
+    <string name="heading_title">Показывать курс</string>
+    <string name="heading_show">Показывать курс от Вашего положения к центру экрана</string>
+    <string name="heading_hide">Курс не показывается или не определён</string>
+    <string name="safety_reminder_title">Показывать предупреждение</string>
+    <string name="safety_reminder_show">Предупреждение будет показано при смене карты</string>
+    <string name="safety_reminder_hide">
+        Предупреждение не будет показано при смене карты
+    </string>
+    <string name="language_title">Выбор языка</string>
+    <string name="language_default">Основной язык</string>
+    <string name="language_selected_format">Используемый %s</string>
+    <string name="max_map_img_size_title">Максимальный размер карты</string>
+    <string name="max_map_img_size">%.1f мегапикселей</string>
+    <string name="about_custom_maps">О приложении Custom Maps</string>
+    
+    <!-- about dialog -->
+    <string name="version_label">Версия</string>
+    <string name="credits_text">
+        <b>Хочется поблагодарить:</b>
+        \n\u2022 Harlan Hile (мультитач, иконка пользователя)
+        \n\u2022 Patrick Steiner (интернациализация, перевод на немецкий)
+        \n\u2022 Francesco Terribile (перевод на итальянский)
+        \n\u2022 Dorin Hongu (перевод на румынский)
+        \n\u2022 Germain Zouein (тестирование)
+        \n\u2022 Tomasz Kossakowski (перевод на польский)
+        \n\u2022 Dmitry Kandin (перевод на русский)
+        \n\u2022 Vladimira Šantek (перевод на хорватский)
+    </string>
+    
+    <!-- button items -->
+    <string name="button_ok">OK</string>
+    <string name="button_close">Закрыть</string>
+    <string name="button_accept_license">Принимаю условия</string>
+    <string name="button_cancel">Отменить</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_add_point">Добавить точку</string>
+    <string name="button_preview">Просмотр</string>
+    <string name="button_accept">Меня это устраивает</string>
+
+    <!-- menu items -->
+    <string name="select_map">Выбрать карту</string>
+    <string name="my_location">Моё место</string>
+    <string name="location_details">Точные данные моего места</string>
+    <string name="share_map">Поделиться картой</string>
+    <string name="settings">Настройки</string>
+    <string name="create_map">Создать карту</string>
+    <string name="modify_map">Изменить карту</string>
+    <string name="delete_map">Удалить карту</string>
+    <string name="select_point">Выбрать точку привязки</string>
+    <string name="adjust_tiepoint">Уточнить точку привязки</string>
+    <string name="delete_tiepoint">Удалить точку привязки</string>
+    <string name="photos">Фотографии</string>
+    <string name="downloads">Загрузки</string>
+    <string name="sdcard">Карта памяти</string>
+    <string name="use_picker">Выберите место</string>
+    <string name="zoom_in">Приблизить</string>
+    <string name="zoom_out">Отодвинуть</string>
+    <string name="menu">Меню</string>
+    
+</resources>

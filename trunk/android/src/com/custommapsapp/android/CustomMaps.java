@@ -46,6 +46,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import java.io.File;
@@ -281,7 +282,7 @@ public class CustomMaps extends Activity {
         more.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            openOptionsMenu();
+            displayPopupMenu(v);
           }
         });
       }
@@ -402,14 +403,32 @@ public class CustomMaps extends Activity {
   // Menus
 
   @SuppressLint("NewApi")
+  private void displayPopupMenu(View v) {
+    PopupMenu menu = new PopupMenu(this, v);
+    createMenuItems(menu.getMenu(), false);
+    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+      @Override
+      public boolean onMenuItemClick(MenuItem item) {
+        return triggerMenuAction(item);
+      }
+    });
+    menu.show();
+  }
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
+    createMenuItems(menu, true);
+    return true;
+  }
+
+  @SuppressLint("NewApi")
+  private void createMenuItems(Menu menu, boolean forActionBar) {
     menu.add(Menu.NONE, MENU_SELECT_MAP, Menu.NONE, R.string.select_map)
         .setIcon(android.R.drawable.ic_menu_mapmode);
     MenuItem item = menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, R.string.my_location)
         .setIcon(android.R.drawable.ic_menu_mylocation);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && forActionBar) {
       item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
     menu.add(Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, R.string.location_details)
@@ -418,7 +437,6 @@ public class CustomMaps extends Activity {
         .setIcon(android.R.drawable.ic_menu_share);
     menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, R.string.settings)
         .setIcon(android.R.drawable.ic_menu_preferences);
-    return true;
   }
 
   @Override
@@ -439,7 +457,13 @@ public class CustomMaps extends Activity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    super.onOptionsItemSelected(item);
+    if (!triggerMenuAction(item)) {
+      return super.onOptionsItemSelected(item);
+    }
+    return true;
+  }
+
+  private boolean triggerMenuAction(MenuItem item) {
     switch (item.getItemId()) {
       case MENU_SELECT_MAP:
         launchSelectMap();
@@ -456,6 +480,8 @@ public class CustomMaps extends Activity {
       case MENU_PREFERENCES:
         launchEditPreferences();
         break;
+      default:
+        return false;
     }
     return true;
   }

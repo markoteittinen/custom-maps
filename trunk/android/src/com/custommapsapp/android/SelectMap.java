@@ -35,7 +35,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -560,7 +559,7 @@ public class SelectMap extends ListActivity {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       if (convertView == null) {
-        convertView = LayoutInflater.from(getContext()).inflate(R.layout.listrow, parent, false);
+        convertView = getLayoutInflater().inflate(R.layout.listrow, parent, false);
         if (PtSizeFixer.isFixNeeded((Activity) null)) {
           PtSizeFixer.fixView(convertView);
         }
@@ -678,8 +677,7 @@ public class SelectMap extends ListActivity {
       if (item instanceof KmlFolder) {
         // Map item in the list
         if (convertView == null) {
-          convertView =
-              LayoutInflater.from(SelectMap.this).inflate(R.layout.listrow, parent, false);
+          convertView = getLayoutInflater().inflate(R.layout.listrow, parent, false);
           if (PtSizeFixer.isFixNeeded((Activity) null)) {
             PtSizeFixer.fixView(convertView);
           }
@@ -696,8 +694,7 @@ public class SelectMap extends ListActivity {
       } else {
         // Section header in the list
         if (convertView == null) {
-          convertView =
-              LayoutInflater.from(SelectMap.this).inflate(R.layout.listheader, parent, false);
+          convertView = getLayoutInflater().inflate(R.layout.listheader, parent, false);
           if (PtSizeFixer.isFixNeeded((Activity) null)) {
             PtSizeFixer.fixView(convertView);
           }

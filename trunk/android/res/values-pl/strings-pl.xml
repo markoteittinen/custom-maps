@@ -111,7 +111,7 @@
         %s nie jest poprawnym plikiem obrazu.\nMusisz wybrać plik obrazu
     </string>
     <string name="select_image_select_file">Wybierz plik z obrazem mapy</string>
-    <string name="select_image_processing">Przetwarzanie wybrane zdjęcie.\nProszę czekać…</string>
+    <string name="select_image_processing">Przetwarzanie wybranego obrazu.\nProszę czekać…</string>
 
     <!-- map image point selection -->
     <string name="image_point_help">
@@ -192,6 +192,8 @@
 		\n\u2022 Dorin Hongu (rumuńskie tłumaczenie)
 		\n\u2022 Germain Zouein (testowanie)
 		\n\u2022 Tomasz Kossakowski (polskie tłumaczenie)
+        \n\u2022 Dmitry Kandin (rosyjskie tłumaczenie)
+        \n\u2022 Vladimira Šantek (chorwacki tłumaczenie)
 	</string>
     
     <!-- button items -->
