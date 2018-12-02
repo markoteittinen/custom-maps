@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Custom Maps</string>
     <string name="select_map_name">Odaberi kartu</string>
@@ -11,7 +11,7 @@
     <string name="apache_license">Pročitaj Apache License 2.0</string>
     <string name="google_code">Posjeti web stranicu s open source kodom projekta</string>
     <string name="app_home">Posjeti web stranicu Custom Maps aplikacije</string>
-    
+
     <!-- CustomMaps.java -->
     <string name="gps_not_available">
         GPS lokacija je nedostupna ovoj aplikaciji\nMolim omogući ovoj aplikaciji pristup GPS
@@ -27,11 +27,11 @@
         Nepoznata trenutna lokacija.\nTraženje GPS signala u tijeku…
     </string>
     <string name="map_too_large">Odabrana karta se ne može učitati, jer je prevelika.</string>
-    
+
     <!-- sharing -->
     <string name="share_message_subject">Želim podijeliti kartu s Vama</string>
     <string name="share_chooser_title">Pošalji kartu pomoću …</string>
-    
+
     <!-- safety warning -->
     <string name="safety_warning_title">VAŽNO!</string>
     <string name="safety_warning">
@@ -40,7 +40,7 @@
         \n\nNa pojedinim područjima karte točnost GPS lokacije može varirati.
     </string>
     <string name="remind_me_again">Podsjeti me opet slijedeći put</string>
-    
+
     <!-- select map -->
     <string name="select_map_to_use">Odaberi kartu za korištenje</string>
     <string name="no_maps_found_on_sd">
@@ -69,7 +69,7 @@
     <string name="nearby_maps">Susjedne karte</string>
     <string name="other_maps">Ostale karte</string>
     <string name="all_maps">Sve karte</string>
-    
+
     <!-- downloading -->
     <string name="progress_format">Nepoznata veličina karte. Preuzeto %,d kB.</string>
     <string name="download_canceled">Preuzimanje karte poništeno</string>
@@ -84,17 +84,17 @@
     <string name="download_info">
         Molim pričekaj dok se preuzimanje završi ili prekini preuzimanje pritiskom na donju tipku.
     </string>
-    
+
     <!-- map image display -->
     <string name="unnamed_map">Karta bez naslova</string>
     <string name="map_image_load_failed">Neuspjelo čitanje slike za %s.</string>
-    
+
     <!-- help manager -->
     <string name="help_menu_title">Pomoć</string>
     <string name="help_redisplay">
         Možeš ponovno prikazati ovu informaciju koristeći izbornik
     </string>
-    
+
     <!-- details display -->
     <string name="latitude">Širina</string>
     <string name="longitude">Dužina</string>
@@ -103,7 +103,7 @@
     <string name="speed">Brzina</string>
     <string name="accuracy">Točnost</string>
     <string name="no_data_available">N/A</string>
-    
+
     <!-- map image selection -->
     <string name="select_image_help">
         Odaberi datoteku koja sadrži sliku karte.\n\nKoristi samo one slike za koje imaš dozvolu.
@@ -114,7 +114,7 @@
     </string>
     <string name="select_image_select_file">Odaberi datoteku sa slikom karte</string>
     <string name="select_image_processing">Obrađujem odabranu sliku\n.Molim pričekaj…</string>
-    
+
     <!-- map image point selection -->
     <string name="image_point_help">
         Odaberi točku za lociranje na Google karti.\n\nZa najbolje rezultate odaberi točke udaljene
@@ -124,7 +124,7 @@
         Slika karte nije odabrana. Ne mogu se odabirati točke.
     </string>
     <string name="image_point_select_for_matching">Odaberi točku za usklađivanje.</string>
-    
+
     <!-- map geo point selection -->
     <string name="geo_point_help">
         Zumiraj ili pomakni Google kartu da se poklopi sa središtem thumbnaila\n\n Koristi klizače
@@ -137,7 +137,7 @@
     <string name="geo_point_rotate">Rotiranje</string>
     <string name="geo_point_scale">Skaliranje</string>
     <string name="geo_point_transparency">Prozirnost</string>
-    
+
     <!-- map editor -->
     <string name="editor_help">
         Imenuj i opiši svoju kartu za listu karti.\n\nDodaj 2-4 vezne točke za lociranje i
@@ -153,7 +153,7 @@
     <string name="editor_new_map">Nova karta</string>
     <string name="editor_description">Opis</string>
     <string name="editor_tiepoints">Vezne točke</string>
-    
+
     <!-- map preview -->
     <string name="preview_help">
         Provjeri poravnanje slike karte pomoću zumiranja i pomicanja slike.\n\nCrna tipka
@@ -164,7 +164,7 @@
         Neuspjelo kreiranje prikaza karte.\nPregled slike nije dostupan.
     </string>
     <string name="preview_transparency">Prozirnost</string>
-    
+
     <!-- edit preferences -->
     <string name="metric_title">Koristi metričke jedinice</string>
     <string name="metric_use_metric">Sada koristim metričke jedinice</string>
@@ -173,7 +173,7 @@
     <string name="multitouch_enable_pinch">Omogućeno zumiranje hvatanjem</string>
     <string name="multitouch_disable_pinch">Onemogućeno zumiranje hvatanjem</string>
     <string name="distance_title">Prikaži udaljenost</string>
-    <string name="distance_show">Prikaži udaljenost od korisničke lokacije do centra ekrana</string>                             
+    <string name="distance_show">Prikaži udaljenost od korisničke lokacije do centra ekrana</string>
     <string name="distance_hide">
         Udaljenost od korisničke lokacije do centra ekrana nije prikazana
     </string>
@@ -193,7 +193,7 @@
     <string name="max_map_img_size_title">Maksimalna veličina slike</string>
     <string name="max_map_img_size">%.1f megapiksela</string>
     <string name="about_custom_maps">O Custom Maps</string>
-    
+
     <!-- about dialog -->
     <string name="version_label">verzija</string>
     <string name="credits_text"><b>Posebne zahvale</b>
@@ -205,8 +205,9 @@
         \n\u2022 Tomasz Kossakowski (Poljski prijevod)
         \n\u2022 Dmitry Kandin (Ruski prijevod)
         \n\u2022 Vladimira Šantek (Hrvatski prijevod)
+        \n\u2022 András Hegedűs Juju (Mađarski prijevod)
     </string>
-    
+
     <!-- button items -->
     <string name="button_ok">U redu</string>
     <string name="button_close">Zatvori</string>
@@ -216,7 +217,7 @@
     <string name="button_add_point">Dodaj točku</string>
     <string name="button_preview">Pregled</string>
     <string name="button_accept">Prihvati</string>
-    
+
     <!-- menu items -->
     <string name="select_map">Odaberi kartu</string>
     <string name="my_location">Moja lokacija</string>

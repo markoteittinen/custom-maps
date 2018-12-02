@@ -15,13 +15,6 @@
  */
 package com.custommapsapp.android.create;
 
-import com.custommapsapp.android.CustomMaps;
-import com.custommapsapp.android.HelpDialogManager;
-import com.custommapsapp.android.ImageHelper;
-import com.custommapsapp.android.MapApiKeys;
-import com.custommapsapp.android.PtSizeFixer;
-import com.custommapsapp.android.R;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -44,12 +37,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.custommapsapp.android.CustomMaps;
+import com.custommapsapp.android.HelpDialogManager;
+import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.MapApiKeys;
+import com.custommapsapp.android.PtSizeFixer;
+import com.custommapsapp.android.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * PreviewMapActivity shows the created map aligned on top of Google Map.
@@ -81,6 +80,8 @@ public class PreviewMapActivity extends MapActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.createpreview);
+
+    ImageHelper.initializePreferredBitmapConfig(this);
 
     TextView mapViewLocation = (TextView) findViewById(R.id.mapviewlocation);
     ViewParent p = mapViewLocation.getParent();

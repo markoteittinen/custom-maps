@@ -98,7 +98,7 @@
         android:text="@string/download_info" />
 
     <Button
-        style="@style/NormalText"
+        style="@style/NormalButton"
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

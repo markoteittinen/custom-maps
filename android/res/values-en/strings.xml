@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="argb_8888_summary_off">Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.</string>
+    <string name="argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
+    <string name="argb_8888_title">Use 32-bit color</string>
+    <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string>
+    <string name="use_gpu_summary_off">Using software rendering (allows largest map image size). But app crashes on some LG devices.</string>
+    <string name="use_gpu_summary_on">Using GPU rendering (reduces maximum map image size).</string>
+    <string name="use_gpu_title">Use GPU rendering</string>
+</resources>

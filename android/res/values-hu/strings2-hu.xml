@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="argb_8888_summary_off">16 bites szín használata (a legnagyobb térképmérethez). Használatakor az alkalmazás összeomolhat egyes Motorola készülékeken.</string>
+    <string name="argb_8888_summary_on">32 bites szín használata (korlátozhatja a maximális térképméretet).</string>
+    <string name="argb_8888_title">32 bites szín használat</string>
+    <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixel) vagy 2048x2048 (4 megapixel)</string>
+    <string name="use_gpu_summary_off">Szoftveres renderelés (a legnagyobb térképképmérethez). Az alkalmazás öszeomolhat nénhány LG eszközön.</string>
+    <string name="use_gpu_summary_on">GPU renderelés használat (csökkenti a maximális képméretet).</string>
+    <string name="use_gpu_title">GPU renderelés használata</string>
+</resources>

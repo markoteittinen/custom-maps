@@ -15,9 +15,6 @@
  */
 package com.custommapsapp.android.create;
 
-import com.custommapsapp.android.ImageHelper;
-import com.custommapsapp.android.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -25,8 +22,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
+
+import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,10 +50,10 @@ public class AnnotationLayer extends View {
     blackPaint.setAntiAlias(true);
     blackPaint.setStyle(Paint.Style.STROKE);
     blackPaint.setColor(0xB0000000);
-    blackPaint.setStrokeWidth(ptsToPixels(.75f, context));
+    blackPaint.setStrokeWidth(ptsToPixels(.75f));
     whitePaint = new Paint(blackPaint);
     whitePaint.setColor(0x80FFFFFF);
-    whitePaint.setStrokeWidth(ptsToPixels(2, context));
+    whitePaint.setStrokeWidth(ptsToPixels(2));
 
     tiePoints = new ArrayList<PointF>();
     drawMatrix = new Matrix();
@@ -93,8 +92,8 @@ public class AnnotationLayer extends View {
     // Draw selection circle in the center
     int x = getWidth() / 2;
     int y = getHeight() / 2;
-    float largeRadius = ptsToPixels(15, getContext());
-    float smallRadius = ptsToPixels(2, getContext());
+    float largeRadius = ptsToPixels(15);
+    float smallRadius = ptsToPixels(2);
     canvas.drawCircle(x, y, largeRadius, whitePaint);
     canvas.drawCircle(x, y, largeRadius, blackPaint);
     canvas.drawCircle(x, y, smallRadius, whitePaint);
@@ -102,17 +101,12 @@ public class AnnotationLayer extends View {
   }
 
   /**
-   * Converts pt units to pixels on a given canvas (1 pt = 1/72 inch).
+   * Converts pt units to pixels for current screen.
    *
    * @param pts number of pt units to convert
-   * @param canvas that is used for pixel density
    * @return number of pixels matching 'pts' pt units
    */
-  private float ptsToPixels(float pts, Context context) {
-    if (context == null) {
-      return pts;
-    }
-    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-    return metrics.densityDpi * pts / 72f;
+  private float ptsToPixels(float pts) {
+    return pts * getResources().getDimension(R.dimen.pt1);
   }
 }

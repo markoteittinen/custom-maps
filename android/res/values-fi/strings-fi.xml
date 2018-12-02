@@ -15,7 +15,7 @@
     <!-- CustomMaps.java -->
     <string name="gps_not_available">
         GPS järjestelmää ei löytynyt. Ohjelma ei voi näyttää tarkkaa sijaintiasi.
-        \nAnna tälle ohjelmalle lupa GPS:n käyttöön laitteesi asetuksissa. 
+        \nAnna tälle ohjelmalle lupa GPS:n käyttöön laitteesi asetuksissa.
     </string>
     <string name="location_not_available">
         Sijaintisi ei ole tämän ohjelman käytettävissä.
@@ -36,13 +36,13 @@
     <!-- safety warning -->
     <string name="safety_warning_title">TÄRKEÄÄ!</string>
     <string name="safety_warning">
-        Monia karttakuvia ei ole piirretty niin tarkasti, että niissä voisi nähdä tarkan GPS 
+        Monia karttakuvia ei ole piirretty niin tarkasti, että niissä voisi nähdä tarkan GPS
         sijaintinsa edes Custom Mapsin avulla. Oleta, että Custom Mapsin näyttämä sijaintisi
         kartalla on aina suurinpiirteinen.\n\nJopa saman karttakuvan eri puolilla sijaintisi
-        tarkkuus voi vaihdella huomattavasti. 
+        tarkkuus voi vaihdella huomattavasti.
     </string>
     <string name="remind_me_again">Muistuta uudestaan ensi kerralla</string>
-    
+
     <!-- select map -->
     <string name="select_map_to_use">Valitse kartta</string>
     <string name="no_maps_found_on_sd">
@@ -55,7 +55,7 @@
         poistaa sen.
     </string>
     <string name="create_map_help_link">
-        Tämä linkki johtaa Custom Mapsin nettisivuille, missä on esimerkkikarttoja ja 
+        Tämä linkki johtaa Custom Mapsin nettisivuille, missä on esimerkkikarttoja ja
         yksityiskohtaiset kartan teko-ohjeet.
     </string>
     <string name="select_cannot_modify_map_set">
@@ -89,15 +89,15 @@
     <string name="download_info">
         Odota kunnes koko kartta on ladattu tai peru lataus alla olevalla napilla
     </string>
-    
+
     <!-- map image display -->
     <string name="unnamed_map">Nimeämätön kartta</string>
     <string name="map_image_load_failed">Kartan %s kuvan lataaminen epäonnistui.</string>
-    
+
     <!-- help manager -->
     <string name="help_menu_title">Ohje</string>
     <string name="help_redisplay">Voit avata tämän ohjeen uudestaan valikon avulla</string>
-    
+
     <!-- details display -->
     <string name="latitude">Leveyspiiri</string>
     <string name="longitude">Pituuspiiri</string>
@@ -106,7 +106,7 @@
     <string name="speed">Nopeus</string>
     <string name="accuracy">Tarkkuus</string>
     <string name="no_data_available">--</string>
-    
+
     <!-- map image selection -->
     <string name="select_image_help">
         Valitse karttakuvan sisältävä tiedosto.\n\nKäytä vain kuvia, joita sinulla on oikeus
@@ -116,7 +116,7 @@
         %s ei ole kuvatiedosto.\nValitse kuvatiedosto.
     </string>
     <string name="select_image_select_file">Valitse karttakuva</string>
-    
+
     <!-- map image point selection -->
     <string name="image_point_help">
         Valitse piste, minkä osaat löytää Googlen kartalta.\n\nParhaat tulokset saat valitsemalla
@@ -131,7 +131,7 @@
 
     <!-- map geo point selection -->
     <string name="geo_point_help">
-        Voit zoomata ja siirtää Googlen karttaa löytääksesi valitun kiintopisteen.\n\nKäytä 
+        Voit zoomata ja siirtää Googlen karttaa löytääksesi valitun kiintopisteen.\n\nKäytä
         liukusäätimiä kiintopistekuvan kulman, koon, ja läpinäkyvyyden säätämiseen.\n
         \nKarttapainike vaihtaa Googlen kartan sateliittikuvaksi ja takaisin.
     </string>
@@ -141,7 +141,7 @@
     <string name="geo_point_rotate">Kulma</string>
     <string name="geo_point_scale">Koko</string>
     <string name="geo_point_transparency">Läpinäkyvyys</string>
-    
+
     <!-- map editor -->
     <string name="editor_help">
         Nimeä karttasi, ja lisää kuvaus sen tunnistamiseksi karttalistassa.\n\nValitse 2-4
@@ -158,18 +158,18 @@
     <string name="editor_new_map">Uusi kartta</string>
     <string name="editor_description">Kuvaus</string>
     <string name="editor_tiepoints">Kiintopisteet</string>
-    
+
     <!-- map preview -->
     <string name="preview_help">
         Tarkista karttakuvan kohdennus zoomaamalla ja siirtämällä näkymää.\n\n\'Peru\'-napilla voit
-        palata säätämään tai lisäämään kiintopisteitä.\n\nHUOMAA: Joitakin karttakuvia ei ole 
+        palata säätämään tai lisäämään kiintopisteitä.\n\nHUOMAA: Joitakin karttakuvia ei ole
         mahdollista kohdentaa kovin hyvin.
     </string>
     <string name="preview_mapview_failure">
         Google kartan näyttäminen epäonnistui.\nKartan esikatselu ei ole mahdollista.
     </string>
     <string name="preview_transparency">Läpinäkyvyys</string>
-    
+
     <!-- edit preferences -->
     <string name="metric_title">Käytä metrijärjestelmää</string>
     <string name="metric_use_metric">Metrijärjestelmä käytössä</string>
@@ -192,7 +192,7 @@
     <string name="max_map_img_size_title">Maksimi karttakuvan koko</string>
     <string name="max_map_img_size">%.1f miljoonaa pistettä</string>
     <string name="about_custom_maps">Tietoja Custom Mapsistä</string>
-    
+
     <!-- about dialog -->
     <string name="version_label">Versio</string>
     <string name="credits_text">
@@ -205,8 +205,9 @@
         \n\u2022 Tomasz Kossakowski (Puolan kieli)
         \n\u2022 Dmitry Kandin (Venäjän kieli)
         \n\u2022 Vladimira Šantek (Kroatian kieli)
+        \n\u2022 András Hegedűs Juju (Unkarin kieli)
     </string>
-    
+
     <!-- button items -->
     <string name="button_ok">OK</string>
     <string name="button_close">Sulje</string>
@@ -216,7 +217,7 @@
     <string name="button_add_point">Lisää piste</string>
     <string name="button_preview">Esikatselu</string>
     <string name="button_accept">Hyväksy</string>
-    
+
     <!-- menu items -->
     <string name="select_map">Valitse kartta</string>
     <string name="my_location">Sijaintini</string>
@@ -236,5 +237,5 @@
     <string name="zoom_in">Suurenna</string>
     <string name="zoom_out">Pienennä</string>
     <string name="menu">Valikko</string>
-    
+
 </resources>

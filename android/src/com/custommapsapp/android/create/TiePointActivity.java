@@ -15,12 +15,6 @@
  */
 package com.custommapsapp.android.create;
 
-import com.custommapsapp.android.CustomMaps;
-import com.custommapsapp.android.HelpDialogManager;
-import com.custommapsapp.android.MapApiKeys;
-import com.custommapsapp.android.PtSizeFixer;
-import com.custommapsapp.android.R;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -42,6 +36,11 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.custommapsapp.android.CustomMaps;
+import com.custommapsapp.android.HelpDialogManager;
+import com.custommapsapp.android.MapApiKeys;
+import com.custommapsapp.android.PtSizeFixer;
+import com.custommapsapp.android.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
@@ -89,6 +88,7 @@ public class TiePointActivity extends MapActivity {
         mapView.setClickable(true);
       } catch (IllegalArgumentException ex) {
         Log.e(CustomMaps.LOG_TAG, "Failed to create a map matching the signature key");
+        layout.removeView(mapViewLocation);
         setContentView(mapViewLocation);
         mapViewLocation.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
         mapViewLocation.setText(R.string.geo_point_mapview_failure);
@@ -137,6 +137,9 @@ public class TiePointActivity extends MapActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    if (userLocation == null) {
+      return;
+    }
     userLocation.enableMyLocation();
     Bundle extras = getIntent().getExtras();
     if (extras.containsKey(GEO_POINT_E6)) {
@@ -155,6 +158,10 @@ public class TiePointActivity extends MapActivity {
 
   @Override
   protected void onPause() {
+    if (userLocation == null) {
+      super.onPause();
+      return;
+    }
     helpDialogManager.onPause();
     userLocation.disableMyLocation();
     if (isFinishing() && imageOverlay != null) {
@@ -170,14 +177,18 @@ public class TiePointActivity extends MapActivity {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    helpDialogManager.onSaveInstanceState(outState);
+    if (helpDialogManager != null) {
+      helpDialogManager.onSaveInstanceState(outState);
+    }
     // GUI widget states are automatically stored, no need to add anything
   }
 
   @Override
   protected void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
-    helpDialogManager.onRestoreInstanceState(savedInstanceState);
+    if (helpDialogManager != null) {
+      helpDialogManager.onRestoreInstanceState(savedInstanceState);
+    }
   }
 
   private void returnGeoPoint(GeoPoint location) {

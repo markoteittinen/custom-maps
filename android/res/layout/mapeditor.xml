@@ -56,19 +56,21 @@
         android:orientation="horizontal"
         >
         <Button
-            style="@style/NormalText"
+            style="@style/NormalButton"
             android:id="@+id/addPoint"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:layout_marginRight="2dp"
             android:text="@string/button_add_point"
             />
         <Button
-            style="@style/NormalText"
+            style="@style/NormalButton"
             android:id="@+id/preview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:layout_marginLeft="2dp"
             android:text="@string/button_preview"
             />
     </LinearLayout>

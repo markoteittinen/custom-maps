@@ -128,24 +128,22 @@
 
     <Button
         android:id="@+id/agreeButton"
-        style="@style/NormalText"
+        style="@style/NormalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/weblinks"
         android:layout_alignParentBottom="false"
-        android:text="@string/button_accept_license"
-        android:textColor="#ff000000" />
+        android:text="@string/button_accept_license" />
 
     <Button
         android:id="@+id/doNotAgreeButton"
-        style="@style/NormalText"
+        style="@style/NormalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/weblinks"
         android:layout_alignParentBottom="false"
-        android:text="@string/button_close"
-        android:textColor="#ff000000" />
+        android:text="@string/button_close" />
 
 </RelativeLayout>

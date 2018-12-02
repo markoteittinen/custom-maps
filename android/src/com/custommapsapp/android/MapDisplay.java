@@ -15,11 +15,6 @@
  */
 package com.custommapsapp.android;
 
-import com.custommapsapp.android.kml.GroundOverlay;
-import com.custommapsapp.android.kml.IconStyle;
-import com.custommapsapp.android.kml.KmlInfo;
-import com.custommapsapp.android.kml.Placemark;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,13 +23,17 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.IconStyle;
+import com.custommapsapp.android.kml.KmlInfo;
+import com.custommapsapp.android.kml.Placemark;
+import com.google.android.maps.GeoPoint;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.android.maps.GeoPoint;
 
 /**
  * MapDisplay is a base class for different kinds of MapDisplays. Nowadays there
@@ -47,6 +46,7 @@ public abstract class MapDisplay extends View {
   protected GroundOverlay mapData;
   protected List<Placemark> mapMarkers = new ArrayList<Placemark>();
   protected DisplayState displayState;
+  protected View overlay;
 
   public MapDisplay(Context context) {
     super(context);
@@ -58,6 +58,10 @@ public abstract class MapDisplay extends View {
 
   public MapDisplay(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
+  }
+
+  public void setOverlay(View overlay) {
+    this.overlay = overlay;
   }
 
   /**
@@ -134,11 +138,21 @@ public abstract class MapDisplay extends View {
         public void run() {
           loadable.getIcon();
           MapDisplay.this.postInvalidate();
+          if (overlay != null) {
+            overlay.postInvalidate();
+          }
         }
       };
       Thread t = new Thread(loadIcon);
       t.setDaemon(true);
       t.start();
+    }
+  }
+
+  protected void triggerRepaint() {
+    invalidate();
+    if (overlay != null) {
+      overlay.invalidate();
     }
   }
 
@@ -166,7 +180,7 @@ public abstract class MapDisplay extends View {
    */
   public void setZoomLevel(float zoomLevel) {
     displayState.setZoomLevel(zoomLevel);
-    invalidate();
+    triggerRepaint();
   }
 
   /**
@@ -177,7 +191,7 @@ public abstract class MapDisplay extends View {
    */
   public void zoomMap(float factor) {
     displayState.zoom(factor);
-    invalidate();
+    triggerRepaint();
   }
 
   /**

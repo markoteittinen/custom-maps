@@ -15,13 +15,13 @@
  */
 package com.custommapsapp.android;
 
-import com.custommapsapp.android.kml.GroundOverlay;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.custommapsapp.android.kml.GroundOverlay;
 
 import java.io.IOException;
 
@@ -55,7 +55,7 @@ public class MapUpMapDisplay extends MapDisplay {
   @Override
   public boolean translateMap(float tx, float ty) {
     boolean result = displayState.translate(tx, ty);
-    invalidate();
+    triggerRepaint();
     return result;
   }
 
@@ -120,7 +120,7 @@ public class MapUpMapDisplay extends MapDisplay {
 
     displayState.setMapData(mapData);
     displayState.setScreenView(this);
-    invalidate();
+    triggerRepaint();
   }
 
   @Override
@@ -146,7 +146,7 @@ public class MapUpMapDisplay extends MapDisplay {
   public boolean centerOnLocation(float longitude, float latitude) {
     boolean result = displayState.centerOnGeoLocation(longitude, latitude);
     if (result) {
-      invalidate();
+      triggerRepaint();
     }
     return result;
   }
@@ -186,6 +186,7 @@ public class MapUpMapDisplay extends MapDisplay {
     if (displayState.getFollowMode()) {
       displayState.setFollowMode(centerOnGpsLocation());
       invalidate();
+      overlay.invalidate();
     }
   }
 }

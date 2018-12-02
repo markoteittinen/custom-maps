@@ -30,11 +30,11 @@
     <string name="map_too_large">
         Die aktuelle Karte konnte nicht geladen werden, da sie zu groß war.
     </string>
-    
+
     <!-- sharing -->
     <string name="share_message_subject">Ich möchte eine Karte mit dir teilen</string>
     <string name="share_chooser_title">Sende Karte mit…</string>
-    
+
     <!-- safety warning -->
     <string name="safety_warning_title">WICHTIG!</string>
     <string name="safety_warning">
@@ -75,7 +75,7 @@
     <string name="nearby_maps">Karten in der Nähe</string>
     <string name="other_maps">Andere Karten</string>
     <string name="all_maps">Alle Karten</string>
-    
+
     <!-- downloading -->
     <string name="progress_format">Unbekannte Kartengröße. Downloaded %,d kB.</string>
     <string name="download_canceled">Karten Download abgebrochen</string>
@@ -90,15 +90,15 @@
     <string name="download_info">
         Bitte warte bis der Download komplett ist oder breche den Download mit den Button unten ab
     </string>
-    
+
     <!-- map image display -->
     <string name="unnamed_map">Unbenannte Karte</string>
     <string name="map_image_load_failed">Laden des Kartenbildes für %s fehlgeschlagen.</string>
-    
+
     <!-- help manager -->
     <string name="help_menu_title">Hilfe</string>
     <string name="help_redisplay">Du kann diese Infos über das Menü erneut anzeigen</string>
-    
+
     <!-- details display -->
     <string name="latitude">Breitengrad</string>
     <string name="longitude">Längengrad</string>
@@ -107,7 +107,7 @@
     <string name="speed">Geschwindigkeit</string>
     <string name="accuracy">Genauigkeit</string>
     <string name="no_data_available">N/A</string>
-    
+
     <!-- map image selection -->
     <string name="select_image_help">
         Wähle eine Datei die ein Kartenbild beinhaltet.\n\nVerwende nur Bilder bei denen du die
@@ -119,7 +119,7 @@
     </string>
     <string name="select_image_select_file">Wähle die Karten Bilddatei</string>
     <string name="select_image_processing">Verarbeitung ausgewählte Bild.\nBitte warten…</string>
-    
+
     <!-- map image point selection -->
     <string name="image_point_help">
         Wähle einen Punkt auf der Google map.\n\nFür die beste Qualität wähle eine weit entfernten
@@ -129,7 +129,7 @@
         Keine Kartendatei gewählt. Kann keine Punkte wählen.
     </string>
     <string name="image_point_select_for_matching">Wählen Punkt zum Vergleich.</string>
-    
+
     <!-- map geo point selection -->
     <string name="geo_point_help">
         Zoome und schwenke die Google Karte um das Zentrum des Vorschaubildes anzupassen.\n
@@ -142,12 +142,12 @@
     <string name="geo_point_rotate">Rotieren</string>
     <string name="geo_point_scale">Skalieren</string>
     <string name="geo_point_transparency">Transparenz</string>
-    
+
     <!-- map editor -->
     <string name="editor_help">
         Benenne deine Karten und füge eine Beschreibung dazu für die Kartenliste.\n\nFüge 2-4
-        Kalibrierungspunkte hinzu um die Karte richtig zu positionieren und skalieren.\n\nÄndere 
-        oder lösche mit einem langem Druck auf den Kalibrierungspunkt.\n\nKarte nach der 
+        Kalibrierungspunkte hinzu um die Karte richtig zu positionieren und skalieren.\n\nÄndere
+        oder lösche mit einem langem Druck auf den Kalibrierungspunkt.\n\nKarte nach der
         Vorschau gespeichert werden.
     </string>
     <string name="editor_image_load_failed">Laden des Kartenbildes fehlgeschlagen</string>
@@ -159,10 +159,10 @@
     <string name="editor_new_map">Neue Karte</string>
     <string name="editor_description">Beschreibung</string>
     <string name="editor_tiepoints">Kalibrierungspunkte</string>
-    
+
     <!-- map preview -->
     <string name="preview_help">
-        Prüfe die Lage des Kartenbildes indem du zoomst.\n\nZurück Buttons erlauben dir 
+        Prüfe die Lage des Kartenbildes indem du zoomst.\n\nZurück Buttons erlauben dir
         Kalibrierungspunkte zu ändern oder hinzuzufügen.\n\nINFO: Einige Kartenbilder können nicht
         perfekt ausgerichtet werden.
     </string>
@@ -170,7 +170,7 @@
         Kartenansicht kann nicht erstellt werden.\nKartenvorschau ist nicht möglich.
     </string>
     <string name="preview_transparency">Transparenz</string>
-    
+
     <!-- edit preferences -->
     <string name="metric_title">Metrische Einheiten verwenden</string>
     <string name="metric_use_metric">Metrische Einheiten werden verwendet</string>
@@ -195,7 +195,7 @@
     <string name="max_map_img_size_title">Maximale Bildgrösse der Karte</string>
     <string name="max_map_img_size">%.1f Megapixel</string>
     <string name="about_custom_maps">Über Custom Maps</string>
-    
+
     <!-- about dialog -->
     <string name="version_label">Version</string>
     <string name="credits_text">
@@ -208,8 +208,9 @@
         \n\u2022 Tomasz Kossakowski (Polnisch Übersetzung)
         \n\u2022 Dmitry Kandin (Russisch Übersetzung)
         \n\u2022 Vladimira Šantek (Kroatisch Übersetzung)
+        \n\u2022 András Hegedűs Juju (Ungarische Übersetzung)
     </string>
-    
+
     <!-- button items -->
     <string name="button_ok">OK</string>
     <string name="button_close">Schließen</string>
@@ -219,7 +220,7 @@
     <string name="button_add_point">Punkt hinzufügen</string>
     <string name="button_preview">Vorschau</string>
     <string name="button_accept">Akzeptieren</string>
-    
+
     <!-- menu items -->
     <string name="select_map">Wähle Karte</string>
     <string name="my_location">Meine Position</string>
@@ -239,5 +240,5 @@
     <string name="zoom_in">Zoom in</string>
     <string name="zoom_out">Zoom out</string>
     <string name="menu">Menu</string>
-    
+
 </resources>

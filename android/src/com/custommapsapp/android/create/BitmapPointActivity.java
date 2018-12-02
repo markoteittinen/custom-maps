@@ -15,11 +15,6 @@
  */
 package com.custommapsapp.android.create;
 
-import com.custommapsapp.android.HelpDialogManager;
-import com.custommapsapp.android.ImageHelper;
-import com.custommapsapp.android.PtSizeFixer;
-import com.custommapsapp.android.R;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -32,20 +27,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.custommapsapp.android.HelpDialogManager;
+import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.PtSizeFixer;
+import com.custommapsapp.android.R;
+import com.custommapsapp.android.storage.PreferenceStore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * BitmapPointActivity allows user to select a point on a bitmap to be matched
- * to a geo coordinates on a map. This Activity needs as parameters both a full
+ * to geo coordinates on a map. This Activity needs as parameters both a full
  * path to a bitmap file (jpg or png), and a list of already existing tie
  * points.
- * <p>
  *
+ * <p>
  * BitmapPointActivity returns a PNG compressed {@code byte[]} in {@code
  * BITMAP_DATA} containing a small image surrounding the selected point. The
  * selected point itself is returned in an {@code int[]} in {@code
@@ -73,8 +75,15 @@ public class BitmapPointActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    // Use GPU hardware acceleration is selected (only available on SDK 11 and later)
+    if (Build.VERSION.SDK_INT >= 11 && PreferenceStore.instance(this).isUseGpu()) {
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+          WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+    }
     boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.bitmappoint);
+
+    ImageHelper.initializePreferredBitmapConfig(this);
 
     imageDisplay = (ImageDisplay) findViewById(R.id.imageDisplay);
     AnnotationLayer dataLayer = (AnnotationLayer) findViewById(R.id.bitmapOverlay);

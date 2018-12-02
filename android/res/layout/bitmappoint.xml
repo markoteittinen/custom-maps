@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     >
     <Button
-        style="@style/LargeText"
+        style="@style/LargeButton"
         android:id="@+id/selectPoint"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:layout_above="@id/selectPoint"
         android:background="#00000000"
         />
-    <ImageButton 
+    <ImageButton
         android:id="@+id/zoomOut"
         android:layout_alignBottom="@id/imageDisplay"
         android:layout_alignLeft="@id/imageDisplay"
@@ -44,7 +44,7 @@
         android:background="#00000000"
         android:contentDescription="@string/zoom_out"
         />
-    <ImageButton 
+    <ImageButton
         android:id="@+id/zoomIn"
         android:layout_alignBottom="@id/imageDisplay"
         android:layout_alignRight="@id/imageDisplay"

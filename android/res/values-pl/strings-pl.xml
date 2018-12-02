@@ -26,7 +26,7 @@
     <string name="external_content_failed">Aplikacja Custom Maps nie może wyświetlić zawartości pliku KMZ.</string>
     <string name="waiting_for_gps">Aktualne położenie nieustalone.\nSzukanie sygnału GPS…</string>
     <string name="map_too_large">Wybrana mapa jest zbyt duża do pobrania.</string>
-    
+
     <!-- sharing -->
     <string name="share_message_subject">Chcę udostępnić tobie mapę.</string>
     <string name="share_chooser_title">Wyślij mapę za pomocą…</string>
@@ -39,16 +39,16 @@
 		\n\nNawet w obrębie jednej mapy niektóre obszary mogą być lepiej dostosowane do GPS niż inne.
 	</string>
     <string name="remind_me_again">Przypomnij następnym razem.</string>
-    
+
     <!-- select map -->
     <string name="select_map_to_use">Wybierz mapę</string>
     <string name="no_maps_found_on_sd">
-		Nie znaleziono mapy na karcie SD w folderze CustomMaps.\n\nUżyj menu, aby utworzyć mapę 
+		Nie znaleziono mapy na karcie SD w folderze CustomMaps.\n\nUżyj menu, aby utworzyć mapę
 		i uzyskać pomoc w wyszukiwaniu.\n\nAby wyjść użyj przycisku \'Cofnij\'.
 	</string>
     <string name="create_map_help">
         Użyj menu, aby utworzyć mapę ze zdjęcia lub z pobranych obrazów map.\n\nNaciśnij i przytrzymaj
-		nazwę mapy, aby ją modyfikować lub usunąć. 
+		nazwę mapy, aby ją modyfikować lub usunąć.
     </string>
     <string name="create_map_help_link">
 		Kliknij tu, aby odwiedzić stronę aplikacji Custom Maps z przykładami map i poradnikiem.
@@ -82,17 +82,17 @@
     <string name="download_progress_label">Postęp</string>
     <string name="download_starting">Rozpoczęcie pobierania…</string>
     <string name="download_info">
-		Czekaj na zakończenie pobierania albo anuluj pobieranie za pomocą przycisku poniżej 
+		Czekaj na zakończenie pobierania albo anuluj pobieranie za pomocą przycisku poniżej
 	</string>
-    
+
     <!-- map image display -->
     <string name="unnamed_map">Mapa bez nazwy</string>
     <string name="map_image_load_failed">Nie można pobrać obrazu mapy %s.</string>
-    
+
     <!-- help manager -->
     <string name="help_menu_title">Pomoc</string>
     <string name="help_redisplay">Możesz ponownie wyświetlić tę informację używając menu</string>
-    
+
     <!-- details display -->
     <string name="latitude">Szerokość</string>
     <string name="longitude">Długość</string>
@@ -101,7 +101,7 @@
     <string name="speed">Prędkość</string>
     <string name="accuracy">Dokładność</string>
     <string name="no_data_available">N/D</string>
-    
+
     <!-- map image selection -->
     <string name="select_image_help">
         Wybierz plik zawierający obraz mapy.\n\nUżywaj tylko obrazów, do których masz uprawnienia.\n
@@ -120,11 +120,11 @@
     </string>
     <string name="image_point_no_image">Nie wybrano obrazu mapy. Nie można wybrać punktów.</string>
     <string name="image_point_select_for_matching">Wybierz punkt, aby dopasować mapę</string>
-    
+
     <!-- map geo point selection -->
     <string name="geo_point_help">
-        Zmieniaj rozmiar i obracaj mapę Google, aby dopasować obraz mapy.\n\nUżyj suwaków do obracania 
-        i skalowania obrazu mapy oraz ustawienia przezroczystości.\n\nPrzycisk mapy przełącza widok mapy 
+        Zmieniaj rozmiar i obracaj mapę Google, aby dopasować obraz mapy.\n\nUżyj suwaków do obracania
+        i skalowania obrazu mapy oraz ustawienia przezroczystości.\n\nPrzycisk mapy przełącza widok mapy
         lub satelity.
     </string>
     <string name="geo_point_mapview_failure">
@@ -133,7 +133,7 @@
     <string name="geo_point_rotate">Obrót</string>
     <string name="geo_point_scale">Skalowanie</string>
     <string name="geo_point_transparency">Przezroczystość</string>
-    
+
     <!-- map editor -->
     <string name="editor_help">
         Nazwij mapę i dodaj jej opis na liście map.\n\nDodaj 2-4 punkty, aby dowiązać i skalować obraz mapy.\n\n
@@ -146,7 +146,7 @@
     <string name="editor_new_map">Nowa mapa</string>
     <string name="editor_description">Opis</string>
     <string name="editor_tiepoints">Punkty</string>
-    
+
     <!-- map preview -->
     <string name="preview_help">
         Sprawdź wyrównanie mapy poprzez skalowanie i zmianę ujęcia.\n\nDopasuj lub dodaj punkt
@@ -156,7 +156,7 @@
         Nie można utworzyć widoku mapy. Podgląd mapy niedostępny.
     </string>
     <string name="preview_transparency">Przezroczystość</string>
-    
+
     <!-- edit preferences -->
     <string name="metric_title">Użyj jednostek metrycznych</string>
     <string name="metric_use_metric">W użyciu jednostki metryczne</string>
@@ -181,7 +181,7 @@
     <string name="max_map_img_size_title">Maksymalny rozmia mapy</string>
     <string name="max_map_img_size">%.1f megapixeli</string>
     <string name="about_custom_maps">Informacje o Custom Maps</string>
-    
+
     <!-- about dialog -->
     <string name="version_label">wersja</string>
     <string name="credits_text">
@@ -194,8 +194,9 @@
 		\n\u2022 Tomasz Kossakowski (polskie tłumaczenie)
         \n\u2022 Dmitry Kandin (rosyjskie tłumaczenie)
         \n\u2022 Vladimira Šantek (chorwacki tłumaczenie)
+        \n\u2022 András Hegedűs Juju (węgierski tłumaczenie)
 	</string>
-    
+
     <!-- button items -->
     <string name="button_ok">OK</string>
     <string name="button_close">Zamknij</string>
@@ -205,7 +206,7 @@
     <string name="button_add_point">Dodaj punkt</string>
     <string name="button_preview">Podgląd</string>
     <string name="button_accept">Akceptuj</string>
-    
+
     <!-- menu items -->
     <string name="select_map">Wybierz mapę</string>
     <string name="my_location">Moje położenie</string>
@@ -225,5 +226,5 @@
     <string name="zoom_in">Zoom in</string>
     <string name="zoom_out">Zoom out</string>
     <string name="menu">Menu</string>
-    
+
 </resources>

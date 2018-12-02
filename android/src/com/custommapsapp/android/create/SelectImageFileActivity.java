@@ -15,14 +15,6 @@
  */
 package com.custommapsapp.android.create;
 
-import com.custommapsapp.android.CustomMaps;
-import com.custommapsapp.android.FileUtil;
-import com.custommapsapp.android.HelpDialogManager;
-import com.custommapsapp.android.ImageHelper;
-import com.custommapsapp.android.MemoryUtil;
-import com.custommapsapp.android.PtSizeFixer;
-import com.custommapsapp.android.R;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -50,6 +42,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.custommapsapp.android.CustomMaps;
+import com.custommapsapp.android.FileUtil;
+import com.custommapsapp.android.HelpDialogManager;
+import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.MemoryUtil;
+import com.custommapsapp.android.PtSizeFixer;
+import com.custommapsapp.android.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -90,6 +90,8 @@ public class SelectImageFileActivity extends Activity {
     super.onCreate(savedInstanceState);
     boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.selectfile);
+
+    ImageHelper.initializePreferredBitmapConfig(this);
 
     currentDir = FileUtil.getSdRoot();
 
@@ -482,7 +484,7 @@ public class SelectImageFileActivity extends Activity {
 
     // Prepare factory options to scale image into suitable size
     options = new BitmapFactory.Options();
-    options.inPreferredConfig = Bitmap.Config.RGB_565;
+    options.inPreferredConfig = ImageHelper.getPreferredBitmapConfig();
     // Compute necessary scaling factor
     DisplayMetrics metrics = new DisplayMetrics();
     getWindowManager().getDefaultDisplay().getMetrics(metrics);

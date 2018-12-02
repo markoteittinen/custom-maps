@@ -15,12 +15,6 @@
  */
 package com.custommapsapp.android.storage;
 
-import com.custommapsapp.android.AboutDisplay;
-import com.custommapsapp.android.CustomMapsApp;
-import com.custommapsapp.android.InertiaScroller;
-import com.custommapsapp.android.MemoryUtil;
-import com.custommapsapp.android.R;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +24,12 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+
+import com.custommapsapp.android.AboutDisplay;
+import com.custommapsapp.android.CustomMapsApp;
+import com.custommapsapp.android.InertiaScroller;
+import com.custommapsapp.android.MemoryUtil;
+import com.custommapsapp.android.R;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -54,6 +54,8 @@ import java.util.Locale;
 public class EditPreferences extends PreferenceActivity {
   private static final String PREFIX = "com.custommapsapp.android";
   public static final String LANGUAGE_CHANGED = PREFIX + ".LanguageChanged";
+
+  private Preference imageSizeInfo;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,33 @@ public class EditPreferences extends PreferenceActivity {
     safetyReminder.setSummaryOff(R.string.safety_reminder_hide);
     root.addPreference(safetyReminder);
 
+    // Usage of 32-bit color in bitmaps
+    CheckBoxPreference color32bit = new CheckBoxPreference(this);
+    color32bit.setDefaultValue(PreferenceStore.getArgb8888Default());
+    color32bit.setKey(PreferenceStore.PREFS_USE_ARGB_8888);
+    color32bit.setTitle(R.string.argb_8888_title);
+    color32bit.setSummaryOn(R.string.argb_8888_summary_on);
+    color32bit.setSummaryOff(R.string.argb_8888_summary_off);
+    root.addPreference(color32bit);
+
+    // Allow toggling of GPU acceleration from SDK 11 forwards (not possible before)
+    if (Build.VERSION.SDK_INT >= 11) {
+      CheckBoxPreference useGpu = new CheckBoxPreference(this);
+      useGpu.setDefaultValue(PreferenceStore.getGpuDefault());
+      useGpu.setKey(PreferenceStore.PREFS_USE_GPU);
+      useGpu.setTitle(R.string.use_gpu_title);
+      useGpu.setSummaryOn(R.string.use_gpu_summary_on);
+      useGpu.setSummaryOff(R.string.use_gpu_summary_off);
+      useGpu.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+          updateImageSizeInfo((Boolean) newValue);
+          return true;
+        }
+      });
+      root.addPreference(useGpu);
+    }
+
     // Display language selection option
     Preference language = createLanguagePreference();
     root.addPreference(language);
@@ -139,7 +168,7 @@ public class EditPreferences extends PreferenceActivity {
     }
 
     // Maximum image size info
-    Preference imageSizeInfo = createImageSizeInfo();
+    imageSizeInfo = createImageSizeInfo();
     if (imageSizeInfo != null) {
       root.addPreference(imageSizeInfo);
     }
@@ -174,6 +203,7 @@ public class EditPreferences extends PreferenceActivity {
     languages.add(new Locale("fi"));
     languages.add(new Locale("ru"));
     languages.add(new Locale("hr"));
+    languages.add(new Locale("hu"));
     // Sort languages by their localized display name
     final Collator stringComparator = Collator.getInstance(Locale.getDefault());
     Collections.sort(languages, new Comparator<Locale>() {
@@ -234,9 +264,22 @@ public class EditPreferences extends PreferenceActivity {
     Preference imageSizeInfo = new Preference(this);
     imageSizeInfo.setSelectable(false);
     imageSizeInfo.setTitle(R.string.max_map_img_size_title);
-    float megaPixels = MemoryUtil.getMaxImagePixelCount(this) / 1E6f;
-    imageSizeInfo.setSummary(getString(R.string.max_map_img_size, megaPixels));
+    if (PreferenceStore.instance(this).isUseGpu()) {
+      imageSizeInfo.setSummary(R.string.max_map_img_size_gpu_on);
+    } else {
+      float megaPixels = MemoryUtil.getMaxImagePixelCount(this) / 1E6f;
+      imageSizeInfo.setSummary(getString(R.string.max_map_img_size, megaPixels));
+    }
     return imageSizeInfo;
+  }
+
+  private void updateImageSizeInfo(boolean useGpu) {
+    if (useGpu) {
+      imageSizeInfo.setSummary(R.string.max_map_img_size_gpu_on);
+    } else {
+      float megaPixels = MemoryUtil.getMaxImagePixelCount(this) / 1E6f;
+      imageSizeInfo.setSummary(getString(R.string.max_map_img_size, megaPixels));
+    }
   }
 
   // --------------------------------------------------------------------------

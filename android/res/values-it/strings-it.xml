@@ -28,7 +28,7 @@
     <string name="map_too_large">
         La mappa selezionata non può essere caricata. Dimensioni troppo grandi.
     </string>
-    
+
     <!-- sharing -->
     <string name="share_message_subject">Vorrei condividere una mappa con te</string>
     <string name="share_chooser_title">Invio mappa con…</string>
@@ -42,7 +42,7 @@
         risultare meglio allineate con il GPS rispetto ad altre.
     </string>
     <string name="remind_me_again">Ricordamelo al prossimo avvio</string>
-    
+
     <!-- select map -->
     <string name="select_map_to_use">Seleziona mappa da usare</string>
     <string name="no_maps_found_on_sd">
@@ -88,19 +88,19 @@
     <string name="download_starting">Inizio download…</string>
     <string name="download_info">
         Prego attendere il completamento del download oppure annullare il download con il bottone
-        qui sotto 
+        qui sotto
     </string>
-    
+
     <!-- map image display -->
     <string name="unnamed_map">Mappa senza nome</string>
     <string name="map_image_load_failed">Caricamento immagine mappa fallito per %s.</string>
-    
+
     <!-- help manager -->
     <string name="help_menu_title">Aiuto</string>
     <string name="help_redisplay">
         E\' possibile visualizzare di nuovo questa info usando il menu
     </string>
-    
+
     <!-- details display -->
     <string name="latitude">Latitudine</string>
     <string name="longitude">Longitudine</string>
@@ -109,7 +109,7 @@
     <string name="speed">Velocità</string>
     <string name="accuracy">Precisione</string>
     <string name="no_data_available">N/A</string>
-    
+
     <!-- map image selection -->
     <string name="select_image_help">
         Seleziona il file con l\'immagine della mappa.\n\nUtilizzare solo immagini per le quali si
@@ -134,7 +134,7 @@
         Nessuna immagine mappa selezionata. Non è possibile selezionare punti.
     </string>
     <string name="image_point_select_for_matching">Seleziona il punto da appaiare</string>
-    
+
     <!-- map geo point selection -->
     <string name="geo_point_help">
         Utilizzare lo zoom e lo scorrimento per allineare la mappa Google con il centro dell\'icona.
@@ -147,7 +147,7 @@
     <string name="geo_point_rotate">Rotazione</string>
     <string name="geo_point_scale">Scala</string>
     <string name="geo_point_transparency">Trasparenza</string>
-    
+
     <!-- map editor -->
     <string name="editor_help">
         Dai un nome ed una descrizione alla tua mappa per utilizzarla con la lista mappe.\n
@@ -164,7 +164,7 @@
     <string name="editor_new_map">Nuova mappa</string>
     <string name="editor_description">Descrizione</string>
     <string name="editor_tiepoints">Punti</string>
-    
+
     <!-- map preview -->
     <string name="preview_help">
         Verificare l\'allineamento della mappa tramite lo zoom e lo scorrimento.\n\nIl bottone Back
@@ -175,7 +175,7 @@
         Creazione visuale mappa fallita.\nAnteprima mappa non disponibile.
     </string>
     <string name="preview_transparency">Trasparenza</string>
-    
+
     <!-- edit preferences -->
     <string name="metric_title">Usa sistema metrico</string>
     <string name="metric_use_metric">Sto usando il sistema metrico</string>
@@ -206,7 +206,7 @@
     <string name="max_map_img_size_title">Dimensione massima mappa</string>
     <string name="max_map_img_size">%.1f megapixels</string>
     <string name="about_custom_maps">Informazioni su Custom Maps</string>
-    
+
     <!-- about dialog -->
     <string name="version_label">versione</string>
     <string name="credits_text">
@@ -219,8 +219,9 @@
         \n\u2022 Tomasz Kossakowski (polacca)
         \n\u2022 Dmitry Kandin (russa)
         \n\u2022 Vladimira Šantek (croata)
+        \n\u2022 András Hegedűs Juju (ungherese)
     </string>
-    
+
     <!-- button items -->
     <string name="button_ok">OK</string>
     <string name="button_close">Chiudi</string>
@@ -230,7 +231,7 @@
     <string name="button_add_point">Aggiungi punto</string>
     <string name="button_preview">Anteprima</string>
     <string name="button_accept">Accetta</string>
-    
+
     <!-- menu items -->
     <string name="select_map">Seleziona mappa</string>
     <string name="my_location">Mia posizione</string>
@@ -250,5 +251,5 @@
     <string name="zoom_in">Zoom in</string>
     <string name="zoom_out">Zoom out</string>
     <string name="menu">Menu</string>
-    
+
 </resources>

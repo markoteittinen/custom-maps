@@ -23,7 +23,6 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 
 /**
@@ -39,7 +38,6 @@ public class ImageDisplay extends View {
   private float centerX;    // in rotated image coordinates
   private float centerY;    // in rotated image coordinates
   private float scale = 1.0f;
-  private VelocityTracker velocityTracker = null;
   private AnnotationLayer annotations;
   private int rotation = 0;
   private Matrix imageRotation = new Matrix();
@@ -75,6 +73,7 @@ public class ImageDisplay extends View {
     scale = 1.0f;
     resetCenter();
     postInvalidate();
+    annotations.postInvalidate();
   }
 
   /**
@@ -111,6 +110,7 @@ public class ImageDisplay extends View {
         break;
     }
     postInvalidate();
+    annotations.postInvalidate();
   }
 
   /**
@@ -130,6 +130,7 @@ public class ImageDisplay extends View {
   public void setScale(float scale) {
     this.scale = scale;
     postInvalidate();
+    annotations.postInvalidate();
   }
 
   /**
@@ -158,6 +159,7 @@ public class ImageDisplay extends View {
     centerX = p.x;
     centerY = p.y;
     postInvalidate();
+    annotations.postInvalidate();
   }
 
   @Override
@@ -270,6 +272,7 @@ public class ImageDisplay extends View {
       centerX += xv / scale;
       centerY += yv / scale;
       invalidate();
+      annotations.invalidate();
 
       if (xv == 0 || (xv < 0 && xv >= xFriction) || (xv > 0 && xv <= xFriction)) {
         xv = yv = 0;
@@ -286,6 +289,10 @@ public class ImageDisplay extends View {
 
   private float lastMoveX = 0f;
   private float lastMoveY = 0f;
+
+  private float touchStartX = 0f;
+  private float touchStartY = 0f;
+  private long touchStartTime = 0L;
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
@@ -307,27 +314,28 @@ public class ImageDisplay extends View {
   private void startTouch(MotionEvent event) {
     float x = event.getX();
     float y = event.getY();
+    touchStartX = x;
+    touchStartY = y;
+    touchStartTime = event.getEventTime();
     lastMoveX = x;
     lastMoveY = y;
-    velocityTracker = VelocityTracker.obtain();
-    velocityTracker.clear();
-    velocityTracker.addMovement(event);
   }
 
   private void stopTouch(MotionEvent event) {
-    velocityTracker.addMovement(event);
-    velocityTracker.computeCurrentVelocity(50); // per 0.05 seconds (50 ms)
-    inertiaScroller.start(-velocityTracker.getXVelocity(), -velocityTracker.getYVelocity());
-    velocityTracker.recycle();
-    velocityTracker = null;
+    float xDistance = event.getX() - touchStartX;
+    float yDistance = event.getY() - touchStartY;
+    long timeElapsed = event.getEventTime() - touchStartTime;
+    float xVelocity = 50 * xDistance / timeElapsed;
+    float yVelocity = 50 * yDistance / timeElapsed;
+    inertiaScroller.start(-xVelocity, -yVelocity);
   }
 
   private void moveTouch(MotionEvent evt) {
-    velocityTracker.addMovement(evt);
     centerX += (lastMoveX - evt.getX()) / scale;
     centerY += (lastMoveY - evt.getY()) / scale;
     lastMoveX = evt.getX();
     lastMoveY = evt.getY();
     invalidate();
+    annotations.invalidate();
   }
 }

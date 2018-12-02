@@ -22,7 +22,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="8dp"
         >
-        <TextView 
+        <TextView
             style="@style/NormalText"
             android:id="@+id/warningBody"
             android:layout_width="fill_parent"
@@ -41,7 +41,7 @@
         android:checked="true"
     />
     <Button
-        style="@style/NormalText"
+        style="@style/NormalButton"
         android:id="@+id/okButton"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"

@@ -15,17 +15,6 @@
  */
 package com.custommapsapp.android;
 
-import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
-import com.custommapsapp.android.kml.GroundOverlay;
-import com.custommapsapp.android.kml.KmlFeature;
-import com.custommapsapp.android.kml.KmlFinder;
-import com.custommapsapp.android.kml.KmlFolder;
-import com.custommapsapp.android.kml.KmlInfo;
-import com.custommapsapp.android.kml.KmlParser;
-import com.custommapsapp.android.kml.Placemark;
-import com.custommapsapp.android.storage.EditPreferences;
-import com.custommapsapp.android.storage.PreferenceStore;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -45,9 +34,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
+import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
+import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.KmlFeature;
+import com.custommapsapp.android.kml.KmlFinder;
+import com.custommapsapp.android.kml.KmlFolder;
+import com.custommapsapp.android.kml.KmlInfo;
+import com.custommapsapp.android.kml.KmlParser;
+import com.custommapsapp.android.kml.Placemark;
+import com.custommapsapp.android.storage.EditPreferences;
+import com.custommapsapp.android.storage.PreferenceStore;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,8 +58,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * CustomMaps is the main activity of the application. It displays a bitmap
@@ -114,6 +115,11 @@ public class CustomMaps extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.i(LOG_TAG, "App memory available (MB): " + MemoryUtil.getTotalAppMemoryMB(this));
+    ImageHelper.initializePreferredBitmapConfig(this);
+    if (Build.VERSION.SDK_INT >= 11 && PreferenceStore.instance(this).isUseGpu()) {
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+          WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+    }
 
     // Initialize disk cache
     ImageDiskCache.instance(this);
@@ -160,6 +166,8 @@ public class CustomMaps extends Activity {
     distanceLayer = (DistanceLayer) findViewById(R.id.distanceLayer);
     distanceLayer.setDisplayState(displayState);
     detailsDisplay = (DetailsDisplay) findViewById(R.id.detailsDisplay);
+    inertiaScroller.setOverlayViews(locationLayer, distanceLayer);
+    mapDisplay.setOverlay(locationLayer);
 
     if (locator == null) {
       locator = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -287,6 +295,13 @@ public class CustomMaps extends Activity {
         });
       }
     }
+  }
+
+  @Override
+  protected void onPostResume() {
+    super.onPostResume();
+    mapDisplay.postInvalidate();
+    locationLayer.postInvalidate();
   }
 
   @Override

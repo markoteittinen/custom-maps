@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Custom Maps</string>
     <string name="select_map_name">Selectează hartă</string>
@@ -30,7 +30,7 @@
     <string name="map_too_large">
         Harta selectată nu a putut fi încărcate, deoarece a este prea mare.
     </string>
-    
+
     <!-- sharing -->
     <string name="share_message_subject">Aș dori să vă distribuii o hartă</string>
     <string name="share_chooser_title">Trimite harta cu…</string>
@@ -44,7 +44,7 @@
         bine aliniate GPS decât altele.
     </string>
     <string name="remind_me_again">Adu-mi aminte din nou data viitoare</string>
-    
+
     <!-- select map -->
     <string name="select_map_to_use">Selectați o hartă pentru utilizare</string>
     <string name="no_maps_found_on_sd">
@@ -92,15 +92,15 @@
         Vă rugăm să așteptați până când se termină descărcarea sau anulați descărcarea cu butonul
         de mai jos
     </string>
-    
+
     <!-- map image display -->
     <string name="unnamed_map">Hartă fără titlu</string>
     <string name="map_image_load_failed">A eșuat incărcare imaginii hartă pentru %s.</string>
-    
+
     <!-- help manager -->
     <string name="help_menu_title">Ajutor</string>
     <string name="help_redisplay">Puteți afișa din nou aceasta folosind meniul</string>
-    
+
     <!-- details display -->
     <string name="latitude">Latitudine</string>
     <string name="longitude">Longitudine</string>
@@ -109,7 +109,7 @@
     <string name="speed">Viteză</string>
     <string name="accuracy">Acuratețe</string>
     <string name="no_data_available">N/A</string>
-    
+
     <!-- map image selection -->
     <string name="select_image_help">
         Selectați un fișier care conține o imagine hartă \n\nFolosiți numai imagini pentru care
@@ -123,7 +123,7 @@
     <string name="select_image_processing">
         Prelucrarea imaginii selectate.\nVă rugăm să așteptați…
     </string>
-    
+
     <!-- map image point selection -->
     <string name="image_point_help">
         Selectați un punct care urmează să fie amplasat pe o hartă Google.\n\nSelectați puncte
@@ -134,12 +134,12 @@
         Nici o imagine harta selectată. Nu puteți selecta punte.
     </string>
     <string name="image_point_select_for_matching">Selectați un punct pentru a fi protivit</string>
-    
+
     <!-- map geo point selection -->
     <string name="geo_point_help">
         Măriți sau micșorați și trageți de harta Google pentru a se potivi cu centrul pictogramei.
         \n\nFolosiți glisoarele pentru a roti și scala miniatura, precum și pentru a regla
-        transparența acesteia.\n\nButonul hartă comută între vedere hartă și vedere din satelit. 
+        transparența acesteia.\n\nButonul hartă comută între vedere hartă și vedere din satelit.
     </string>
     <string name="geo_point_mapview_failure">
         Nu a reușit crearea hărții.\nCrearea hărții nu este disponibilă.
@@ -147,9 +147,9 @@
     <string name="geo_point_rotate">Rotire</string>
     <string name="geo_point_scale">Scalare</string>
     <string name="geo_point_transparency">Transparența</string>
-    
+
     <!-- map editor -->
-    <string name="editor_help">	
+    <string name="editor_help">
         Denumiți harta dvs. și descrieți-o pentru lista de hărți.\n\nAdugați 2-4 punte pentru a
         localiza și scară harta imagine.\n\nAdjustați sau șterge puntele prin apăsarea lungă pe
         intrări.\n\nHărțile pot fi salvate după vizualizare.
@@ -163,7 +163,7 @@
     <string name="editor_new_map">Hartă nouă</string>
     <string name="editor_description">Descriere</string>
     <string name="editor_tiepoints">Puncte</string>
-    
+
     <!-- map preview -->
     <string name="preview_help">
         Verificați alinierea imaginii hartă prin scalare și panoramare harta.\n\nButonul înapoi
@@ -174,7 +174,7 @@
          Nu a reușit crearea hărții.\nPrevizualizarea hărții nu este disponibilă.
     </string>
     <string name="preview_transparency">Transparența</string>
-    
+
     <!-- edit preferences -->
     <string name="metric_title">Utlizați sistemul metric</string>
     <string name="metric_use_metric">Acum utilizați sistemul metric</string>
@@ -202,7 +202,7 @@
     <string name="max_map_img_size_title">Dimenziune maximă imagine hartă</string>
     <string name="max_map_img_size">%.1f megapixels</string>
     <string name="about_custom_maps">Despre Custom Maps</string>
-    
+
     <!-- about dialog -->
     <string name="version_label">version</string>
     <string name="credits_text">
@@ -215,8 +215,9 @@
         \n\u2022 Tomasz Kossakowski (Polish translation)
         \n\u2022 Dmitry Kandin (Russian translation)
         \n\u2022 Vladimira Šantek (Croatian translation)
+        \n\u2022 András Hegedűs Juju (Hungarian translation)
     </string>
-    
+
     <!-- button items -->
     <string name="button_ok">OK</string>
     <string name="button_close">Închide</string>
@@ -226,7 +227,7 @@
     <string name="button_add_point">Adaugă punct</string>
     <string name="button_preview">Vizualizați</string>
     <string name="button_accept">Acceptați</string>
-    
+
     <!-- menu items -->
     <string name="select_map">Selectare hartă</string>
     <string name="my_location">Locația mea</string>
@@ -246,5 +247,5 @@
     <string name="zoom_in">Zoom in</string>
     <string name="zoom_out">Zoom out</string>
     <string name="menu">Menu</string>
-    
+
 </resources>

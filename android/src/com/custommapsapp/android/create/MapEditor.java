@@ -15,19 +15,6 @@
  */
 package com.custommapsapp.android.create;
 
-import com.custommapsapp.android.CustomMaps;
-import com.custommapsapp.android.FileUtil;
-import com.custommapsapp.android.HelpDialogManager;
-import com.custommapsapp.android.ImageHelper;
-import com.custommapsapp.android.PtSizeFixer;
-import com.custommapsapp.android.R;
-import com.custommapsapp.android.kml.GroundOverlay;
-import com.custommapsapp.android.kml.KmlFeature;
-import com.custommapsapp.android.kml.KmlFolder;
-import com.custommapsapp.android.kml.KmlInfo;
-import com.custommapsapp.android.kml.KmzFile;
-import com.custommapsapp.android.kml.Placemark;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -51,6 +38,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.custommapsapp.android.CustomMaps;
+import com.custommapsapp.android.FileUtil;
+import com.custommapsapp.android.HelpDialogManager;
+import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.PtSizeFixer;
+import com.custommapsapp.android.R;
+import com.custommapsapp.android.kml.GroundOverlay;
+import com.custommapsapp.android.kml.KmlFeature;
+import com.custommapsapp.android.kml.KmlFolder;
+import com.custommapsapp.android.kml.KmlInfo;
+import com.custommapsapp.android.kml.KmzFile;
+import com.custommapsapp.android.kml.Placemark;
+import com.google.android.maps.GeoPoint;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -67,8 +68,6 @@ import java.util.Properties;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import com.google.android.maps.GeoPoint;
 
 /**
  * MapEditor manages editing of a map and its tiepoints.
@@ -115,6 +114,7 @@ public class MapEditor extends Activity {
     super.onCreate(savedInstanceState);
     boolean ptSizeFixNeeded = PtSizeFixer.isFixNeeded(this);
     setContentView(R.layout.mapeditor);
+    ImageHelper.initializePreferredBitmapConfig(this);
     prepareUI();
     if (ptSizeFixNeeded) {
       PtSizeFixer.fixView(nameField.getRootView());

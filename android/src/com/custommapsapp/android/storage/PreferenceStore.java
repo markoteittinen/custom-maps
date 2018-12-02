@@ -15,17 +15,18 @@
  */
 package com.custommapsapp.android.storage;
 
-import com.custommapsapp.android.CustomMaps;
-import com.custommapsapp.android.InertiaScroller;
-import com.custommapsapp.android.MapApiKeys;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.util.Log;
+
+import com.custommapsapp.android.CustomMaps;
+import com.custommapsapp.android.InertiaScroller;
+import com.custommapsapp.android.MapApiKeys;
 
 import java.util.Locale;
 
@@ -44,6 +45,8 @@ public class PreferenceStore {
   public static final String PREFS_LICENSE_ACCEPTED = "licenseAccepted";
   public static final String PREFS_SHOW_REMINDER = "showReminder";
   public static final String PREFS_LANGUAGE = "language";
+  public static final String PREFS_USE_ARGB_8888 = "useArgb_8888";
+  public static final String PREFS_USE_GPU = "useGpu";
   public static final String SHARED_PREFS_NAME = "com.custommapsapp.android.prefs";
 
   private static PreferenceStore instance; // singleton
@@ -137,6 +140,39 @@ public class PreferenceStore {
 
   public void setShowHeading(boolean showHeading) {
     prefs.edit().putBoolean(PREFS_SHOW_HEADING, showHeading).commit();
+  }
+
+  public boolean isUseArgb_8888() {
+    boolean defaultValue = getArgb8888Default();
+    return prefs.getBoolean(PREFS_USE_ARGB_8888, defaultValue);
+  }
+
+  public void setUseArgb_8888(boolean useArgb_8888) {
+    prefs.edit().putBoolean(PREFS_USE_ARGB_8888, useArgb_8888).commit();
+  }
+
+  public boolean isUseGpu() {
+    boolean defaultValue = getGpuDefault();
+    return prefs.getBoolean(PREFS_USE_GPU, defaultValue);
+  }
+
+  public void setUseGpu(boolean useGpu) {
+    prefs.edit().putBoolean(PREFS_USE_GPU, useGpu).commit();
+  }
+
+  // Package access allowed (for EditPreferences activity)
+  static boolean getArgb8888Default() {
+    // RGB_565 allows use of larger images, but Motorola's Android 6 (SDK 23) has a bug in it
+    // at least in software rendering. Default to ARGB_8888 only on Motorola Android 6 devices.
+    return Build.MANUFACTURER.equalsIgnoreCase("motorola") && Build.VERSION.SDK_INT == 23;
+  }
+
+  // Package access allowed (for EditPreferences activity)
+  static boolean getGpuDefault() {
+    // Not using GPU saves memory and allows larger images, but many LG models running Android 5
+    // (SDK 21 or 22) have a bug in software rendering libraries. They should default to using GPU.
+    return Build.MANUFACTURER.equalsIgnoreCase("lge") &&
+        (Build.VERSION.SDK_INT == 21 || Build.VERSION.SDK_INT == 22);
   }
 
   /**

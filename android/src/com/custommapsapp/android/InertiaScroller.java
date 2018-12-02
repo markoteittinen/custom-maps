@@ -23,6 +23,9 @@ import android.view.View;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * InertiaScroller makes it possible for user to "throw" the map display and
@@ -34,6 +37,7 @@ public class InertiaScroller {
   private static final float FRICTION = 5f;
 
   private MapDisplay map;
+  private List<View> overlayViews = new ArrayList<View>();
   private float xv = 0f;
   private float yv = 0f;
   private float xFriction = 0f;
@@ -99,11 +103,18 @@ public class InertiaScroller {
   }
 
   public void setMap(MapDisplay map) {
-    if (map != null) {
-      map.setOnTouchListener(null);
+    if (this.map != null) {
+      this.map.setOnTouchListener(null);
     }
     this.map = map;
-    map.setOnTouchListener(touchListener);
+    if (map != null) {
+      map.setOnTouchListener(touchListener);
+    }
+  }
+
+  public void setOverlayViews(View... views) {
+    overlayViews.clear();
+    Collections.addAll(overlayViews, views);
   }
 
   public void setUseMultitouch(boolean useMultitouch) {
@@ -142,6 +153,9 @@ public class InertiaScroller {
         stopScrolling();
       }
       map.invalidate();
+      for (View overlay : overlayViews) {
+        overlay.invalidate();
+      }
 
       if (xv == 0 || (xv < 0 && xv >= xFriction) || (xv > 0 && xv <= xFriction)) {
         xv = yv = 0;

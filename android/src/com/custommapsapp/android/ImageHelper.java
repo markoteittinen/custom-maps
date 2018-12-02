@@ -15,8 +15,6 @@
  */
 package com.custommapsapp.android;
 
-import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +22,9 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.Log;
+
+import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
+import com.custommapsapp.android.storage.PreferenceStore;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -53,6 +54,9 @@ public class ImageHelper {
   private static Method EXIF_GET_ATTRIBUTE_INT;
   private static Method EXIF_SET_ATTRIBUTE;
   private static Method EXIF_SAVE_ATTRIBUTES;
+
+  // Default Bitmap.Config to be used for all images
+  private static Bitmap.Config preferredBitmapConfig = Bitmap.Config.RGB_565;
 
   static {
     try {
@@ -112,6 +116,30 @@ public class ImageHelper {
     }
     // Return "not rotated" image in all error cases
     return 0;
+  }
+
+  /**
+   * Gets the preferred BitmapConfig from the shared preferences.
+   *
+   * @param context Current context
+   */
+  public static void initializePreferredBitmapConfig(Context context) {
+    if (PreferenceStore.instance(context).isUseArgb_8888()) {
+      preferredBitmapConfig = Bitmap.Config.ARGB_8888;
+    } else {
+      preferredBitmapConfig = Bitmap.Config.RGB_565;
+    }
+  }
+
+  /**
+   * Returns the preferred Bitmap.Config. This value defaults to RGB_565 unless
+   * initializePreferredBitmapConfig() has been called. In that case this method returns the
+   * selected Bitmap.Config for current device.
+   *
+   * @return Bitmap.Config that should be used for all images
+   */
+  public static Bitmap.Config getPreferredBitmapConfig() {
+    return preferredBitmapConfig;
   }
 
   /**
@@ -193,7 +221,7 @@ public class ImageHelper {
       }
       bitmapOptions.inPurgeable = true;
       bitmapOptions.inInputShareable = true;
-      bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+      bitmapOptions.inPreferredConfig = getPreferredBitmapConfig();
       return BitmapFactory.decodeStream(in, null, bitmapOptions);
     } catch (OutOfMemoryError err) {
       Log.w(CustomMaps.LOG_TAG, "Out of memory loading map image", err);

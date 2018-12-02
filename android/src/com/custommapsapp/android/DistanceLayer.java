@@ -15,10 +15,7 @@
  */
 package com.custommapsapp.android;
 
-import com.custommapsapp.android.storage.PreferenceStore;
-
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -27,6 +24,10 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.custommapsapp.android.storage.PreferenceStore;
+
+import java.util.Locale;
 
 /**
  * DistanceLayer draws a translucent label on the bottom of the MapDisplay
@@ -127,18 +128,18 @@ public class DistanceLayer extends View {
     if (showHeading) {
       int heading = Math.round(userLocation.bearingTo(screenCenterLocation));
       heading = (heading + 360) % 360;
-      displayStr = String.format("%s, %d\u00B0", distanceStr, heading);
+      displayStr = String.format(Locale.getDefault(), "%s, %d\u00B0", distanceStr, heading);
     } else {
       displayStr = distanceStr;
     }
 
     // Compute the pixel size of the distanceStr
     // -- set font size based on canvas density (dpi)
-    textPaint.setTextSize(ptsToPixels(textSizePt, canvas));
+    textPaint.setTextSize(ptsToPixels(textSizePt));
     infoBox.setEmpty();
     textPaint.getTextBounds(displayStr, 0, displayStr.length(), infoBox);
     infoBox.offsetTo(0, 0);
-    int padding = Math.round(ptsToPixels(paddingPt, canvas));
+    int padding = Math.round(ptsToPixels(paddingPt));
     infoBox.right += 2 * padding;
     infoBox.bottom += 2 * padding;
     int margin = Math.round(canvas.getDensity() * 4f / 72f);  // 4pt margin
@@ -155,10 +156,10 @@ public class DistanceLayer extends View {
     int x = getWidth() / 2;
     int y = getHeight() / 2;
     backgroundPaint.setStyle(Paint.Style.STROKE);
-    backgroundPaint.setStrokeWidth(ptsToPixels(2, canvas));
-    textPaint.setStrokeWidth(ptsToPixels(.75f, canvas));
+    backgroundPaint.setStrokeWidth(ptsToPixels(2));
+    textPaint.setStrokeWidth(ptsToPixels(.75f));
     textPaint.setStyle(Paint.Style.STROKE);
-    float radius = ptsToPixels(2, canvas);
+    float radius = ptsToPixels(2);
     canvas.drawCircle(x, y, radius, backgroundPaint);
     canvas.drawCircle(x, y, radius, textPaint);
   }
@@ -174,7 +175,7 @@ public class DistanceLayer extends View {
     // Use 3 significant digits
     // -- less than 1 km
     if (distanceM < 1000) {
-      return String.format("%d \u00B1 %d m", distanceM, accuracyM);
+      return String.format(Locale.getDefault(), "%d \u00B1 %d m", distanceM, accuracyM);
     }
     // -- over 1 km, convert distance to km
     float distanceKm = distanceM / 1000f;
@@ -192,9 +193,9 @@ public class DistanceLayer extends View {
       showAccuracy = false;
     }
     if (showAccuracy) {
-      return String.format(format, distanceKm, accuracyM);
+      return String.format(Locale.getDefault(), format, distanceKm, accuracyM);
     }
-    return String.format(format, distanceKm);
+    return String.format(Locale.getDefault(), format, distanceKm);
   }
 
   /**
@@ -209,13 +210,13 @@ public class DistanceLayer extends View {
     if (distanceM < 100 * METERS_PER_FOOT) {
       int distanceFt = Math.round(distanceM / METERS_PER_FOOT);
       int accuracyFt = Math.round(accuracyM / METERS_PER_FOOT);
-      return String.format("%d \u00B1 %d ft", distanceFt, accuracyFt);
+      return String.format(Locale.getDefault(), "%d \u00B1 %d ft", distanceFt, accuracyFt);
     }
     // use yards for distances up to 1/2 mile
     if (distanceM < 0.5f * METERS_PER_MILE) {
       int distanceYds = Math.round(distanceM / (3 * METERS_PER_FOOT));
       int accuracyYds = Math.round(accuracyM / (3 * METERS_PER_FOOT));
-      return String.format("%d \u00B1 %d yds", distanceYds, accuracyYds);
+      return String.format(Locale.getDefault(), "%d \u00B1 %d yds", distanceYds, accuracyYds);
     }
     // use miles for longer distances
     float distanceMi = distanceM / METERS_PER_MILE;
@@ -234,22 +235,18 @@ public class DistanceLayer extends View {
       showAccuracy = false;
     }
     if (showAccuracy) {
-      return String.format(format, distanceMi, accuracyMi);
+      return String.format(Locale.getDefault(), format, distanceMi, accuracyMi);
     }
-    return String.format(format, distanceMi);
+    return String.format(Locale.getDefault(), format, distanceMi);
   }
 
   /**
-   * Converts pt units to pixels on a given canvas (1 pt = 1/72 inch).
+   * Converts pt units to pixels for current screen.
    *
    * @param pts number of pt units to convert
-   * @param canvas that is used for pixel density
    * @return number of pixels matching 'pts' pt units
    */
-  private float ptsToPixels(float pts, Canvas canvas) {
-    if (canvas == null || canvas.getDensity() == Bitmap.DENSITY_NONE) {
-      return pts;
-    }
-    return canvas.getDensity() * pts / 72f;
+  private float ptsToPixels(float pts) {
+    return pts * getResources().getDimension(R.dimen.pt1);
   }
 }
