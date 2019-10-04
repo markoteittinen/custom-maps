@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/googleMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_above="@+id/transparencyBar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="4dp" />
+
+    <com.custommapsapp.android.create.MapImageOverlay
+        android:id="@+id/mapImageOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignStart="@id/googleMap"
+        android:layout_alignTop="@id/googleMap"
+        android:layout_alignEnd="@id/googleMap"
+        android:layout_alignBottom="@id/googleMap" />
+
+    <Button
+        android:id="@+id/save"
+        style="@style/NormalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:minHeight="32dp"
+        android:tag="button_save"
+        android:text="@string/button_save" />
+
+    <TextView
+        android:id="@+id/transparencyLabel"
+        style="@style/NormalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toStartOf="@id/save"
+        android:tag="preview_transparency"
+        android:text="@string/preview_transparency" />
+
+    <SeekBar
+        android:id="@+id/transparencyBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/transparencyLabel"
+        android:layout_alignStart="@id/transparencyLabel"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toStartOf="@id/save"
+        android:minHeight="32dp"
+        android:max="100"
+        android:progress="0" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/primaryColorTranslucent"
+        app:titleTextColor="@color/primaryTextColor"
+        tools:title="Create map" />
+
+</RelativeLayout>

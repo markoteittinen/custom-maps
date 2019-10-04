@@ -1,0 +1,18 @@
+# Built application files
+build/
+/app/release/
+
+# Gradle generated files
+.gradle/
+
+# Signing files
+.signing/
+
+# Local configuration file (sdk path, etc)
+local.properties
+import-summary.txt
+
+# User-specific configurations
+.idea/
+google_maps_api.xml
+*.iml

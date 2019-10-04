@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@android:style/Theme.Light.NoTitleBar"
+    android:id="@+id/root_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFFFF"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
+    tools:context=".AboutDisplay" >
+
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon" />
+
+    <TextView
+        android:id="@+id/appTitle"
+        style="@style/LargeText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/appLogo"
+        android:layout_toEndOf="@id/appLogo"
+        android:inputType="none"
+        android:tag="app_name"
+        android:text="@string/app_name"
+        android:textColor="#ff000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/version"
+        style="@style/SmallText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/appTitle"
+        android:layout_below="@id/appTitle"
+        android:inputType="none"
+        android:tag="version_label"
+        android:text="@string/version_label"
+        android:textColor="#ff000000"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/author"
+        style="@style/SmallText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/appTitle"
+        android:layout_below="@id/version"
+        android:layout_marginTop="8dp"
+        android:inputType="none"
+        android:tag="author"
+        android:text="@string/author"
+        android:textColor="#ff000000" />
+
+    <ScrollView
+        android:id="@+id/credits"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/open_source"
+        android:layout_below="@id/appLogo"
+        android:layout_marginTop="4dp"
+        android:background="#f4f4ff"
+        android:minHeight="60dp" >
+
+        <TextView
+            style="@style/SmallText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:padding="8dp"
+            android:tag="credits_text"
+            android:text="@string/credits_text"
+            android:textColor="#000000" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/open_source"
+        style="@style/SmallText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/weblinks"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:inputType="none"
+        android:tag="open_source"
+        android:text="@string/open_source"
+        android:textColor="#ff000000" />
+
+    <LinearLayout
+        android:id="@+id/weblinks"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/agreeButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/apache_license"
+            style="@style/SmallText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:tag="apache_license"
+            android:text="@string/apache_license"
+            android:textColor="#ff0000cc" />
+
+        <TextView
+            android:id="@+id/google_code"
+            style="@style/SmallText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:tag="google_code"
+            android:text="@string/google_code"
+            android:textColor="#ff0000cc" />
+
+        <TextView
+            android:id="@+id/homepage"
+            style="@style/SmallText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:tag="app_home"
+            android:text="@string/app_home"
+            android:textColor="#ff0000cc" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/agreeButton"
+        style="@style/SmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:tag="button_accept_license"
+        android:text="@string/button_accept_license" />
+
+    <Button
+        android:id="@+id/doNotAgreeButton"
+        style="@style/SmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:tag="button_close"
+        android:text="@string/button_close" />
+
+</RelativeLayout>

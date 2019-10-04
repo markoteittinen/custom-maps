@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="440dp"
+    android:layout_height="wrap_content"
+    android:padding="4dp" >
+
+    <TextView
+        android:id="@+id/header"
+        style="@style/HugeText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:tag="safety_warning_title"
+        android:text="@string/safety_warning_title"
+        android:textColor="#ffffffff" />
+
+    <ScrollView
+        android:id="@+id/textArea"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="8dp" >
+
+        <TextView
+            android:id="@+id/warningBody"
+            style="@style/NormalText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:tag="safety_warning"
+            android:text="@string/safety_warning"
+            android:textColor="#ffffffff" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/okButton"
+        style="@style/NormalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="@string/button_ok" />
+
+    <CheckBox
+        android:id="@+id/showAgain"
+        style="@style/SmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/okButton"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/okButton"
+        android:checked="true"
+        android:tag="remind_me_again"
+        android:text="@string/remind_me_again"
+        android:background="#A0000000"/>
+
+</RelativeLayout>

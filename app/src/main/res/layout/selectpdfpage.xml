@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".create.SelectPdfPageActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/primaryColor"
+        android:gravity="end"
+        app:titleTextColor="@color/primaryTextColor"
+        tools:title="Select Page">
+
+        <TextView
+            android:id="@+id/pageNumber"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/primaryTextColor"
+            tools:text="4/12" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primaryColor">
+
+        <TextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/primaryTextColor"
+            android:tag="rotate_page"
+            android:text="@string/rotate_page" />
+
+        <ImageButton
+            android:id="@+id/rotateCcw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginEnd="24dp"
+            android:background="#0000"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_rotate_ccw_24dp" />
+
+        <ImageButton
+            android:id="@+id/rotateCw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:background="#0000"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_rotate_cw_24dp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/pageImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/bottombar"
+        android:layout_below="@id/toolbar"
+        android:background="@color/primaryLightColor" />
+
+    <ImageButton
+        android:id="@+id/prevPage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:background="#4000"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_prev_white_24dp" />
+
+    <ImageButton
+        android:id="@+id/nextPage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@id/prevPage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:background="#4000"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_next_white_24dp" />
+
+    <FrameLayout
+        android:id="@+id/scrim"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentBottom="true"
+        android:background="#8000"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/blank"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primaryLightColor"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+    </FrameLayout>
+
+</RelativeLayout>

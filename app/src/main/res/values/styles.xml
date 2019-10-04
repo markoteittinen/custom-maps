@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="AppThemeBase" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/primaryTextColor</item>
+        <item name="android:textColorTertiary">@color/primaryTextColor</item>
+        <item name="android:textAppearanceButton">@style/NormalButtonText</item>
+    </style>
+    <style name="AppTheme" parent="AppThemeBase"/>
+    <style name="Overflow" parent="Widget.AppCompat.ActionButton.Overflow"/>
+
+    <style name="AppTheme.MapView">
+        <item name="android:actionBarStyle">@style/MapActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+    <style name="MapActionBar"
+        parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">#80000000</item>
+    </style>
+
+    <style name="PrimaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primaryColor</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="SecondaryButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="NormalText">
+        <item name="android:textSize">18dp</item> <!-- 8pt -->
+    </style>
+    <style name="SmallText" parent="@style/NormalText">
+        <item name="android:textSize">13dp</item> <!-- 6pt -->
+    </style>
+    <style name="LargeText" parent="@style/NormalText">
+        <item name="android:textSize">22dp</item> <!-- 10pt -->
+    </style>
+    <style name="HugeText" parent="@style/NormalText">
+        <item name="android:textSize">27dp</item> <!-- 12pt -->
+    </style>
+    <style name="NormalButtonText" parent="NormalText">
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style name="NormalButton" parent="@style/PrimaryButton">
+        <item name="android:textSize">18dp</item> <!-- Normal text size -->
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+    <style name="LargeButton" parent="@style/PrimaryButton">
+        <item name="android:textSize">22dp</item> <!-- Large text size -->
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+</resources>
