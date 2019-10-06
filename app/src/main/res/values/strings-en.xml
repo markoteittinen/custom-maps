@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="en_app_name">Custom Maps</string>
+    <string name="en_select_map_name">Select map</string>
+    <string name="en_create_map_name">Create map</string>
+    <string name="en_edit_prefs_name">Preferences</string>
+    <string name="en_author">By Marko Teittinen</string>
+    <string name="en_open_source">
+        Custom Maps app and its source code are published under Apache License, version 2.0.
+    </string>
+    <string name="en_apache_license">Read Apache License 2.0</string>
+    <string name="en_google_code">Visit open source project website</string>
+    <string name="en_app_home">Visit Custom Maps app website</string>
+
+    <!-- CustomMaps.java -->
+    <string name="en_gps_not_available">
+        GPS location is not available to this app.
+        \nPlease allow this app to access GPS location to improve location accuracy.
+    </string>
+    <string name="en_location_not_available">
+        Your location is not available to this app.
+        \nPlease enable access to GPS or network location in system settings.
+    </string>
+    <string name="en_gps_outside_map">GPS location is not within map boundaries</string>
+    <string name="en_share_map_failed">Failed to send the map</string>
+    <string name="en_external_content_failed">Custom Maps failed to display the KMZ content.</string>
+    <string name="en_waiting_for_gps">Current location unknown.\nSearching for GPS signal…</string>
+    <string name="en_map_too_large">The selected map could not be loaded as it was too large.</string>
+
+    <!-- sharing -->
+    <string name="en_share_message_subject">I would like to share a map with you</string>
+    <string name="en_share_chooser_title">Send map with…</string>
+
+    <!-- safety warning -->
+    <string name="en_safety_warning_title">IMPORTANT!</string>
+    <string name="en_safety_warning">
+        Many map images that can be used with Custom Maps are not drawn accurately enough to show
+        exact GPS locations. Displayed location should be considered approximate at all times.
+        \n\nEven within a single map some areas may be better aligned with GPS than others.
+    </string>
+    <string name="en_remind_me_again">Remind me again next time</string>
+
+    <!-- select map -->
+    <string name="en_select_map_to_use">Select map to use</string>
+    <string name="en_no_maps_found_on_sd">
+        No maps found on SD card in CustomMaps folder.\n\nUse menu to create maps and to get help
+        finding them.\n\nOr press \'back\' to exit.
+    </string>
+    <string name="en_create_map_help">
+        Use menu to create maps from photos or from downloaded map images.\n\nTap and hold a map
+        name to modify or delete it.
+    </string>
+    <string name="en_create_map_help_link">
+        Click here to visit Custom Maps web site for sample maps and a tutorial.
+    </string>
+    <string name="en_select_cannot_modify_map_set">
+        This map is part of a map set. It cannot be modified or deleted.
+    </string>
+    <string name="en_select_cannot_modify_placemarks">
+        This map contains placemarks. It cannot be modified.
+    </string>
+    <string name="en_no_map_sharing_apps">There are no installed apps that can share maps</string>
+    <string name="en_delete_map_dialog_title">Confirm deletion</string>
+    <string name="en_delete_map_dialog">Are you sure you want to delete map\n\"%s\"?</string>
+    <string name="en_delete_map_dialog_positive">Yes - delete</string>
+    <string name="en_delete_map_dialog_negative">No - keep map</string>
+    <string name="en_deleting_map_failed">Failed to delete map \"%s\"</string>
+    <string name="en_local_maps">Local Maps</string>
+    <string name="en_nearby_maps">Nearby Maps</string>
+    <string name="en_other_maps">Other Maps</string>
+    <string name="en_all_maps">All Maps</string>
+
+    <!-- downloading -->
+    <string name="en_progress_format">Unknown map size. Downloaded %,d kB.</string>
+    <string name="en_download_canceled">Map download canceled</string>
+    <string name="en_download_failed">Failed to download map from %s</string>
+    <string name="en_download_successful">Map downloaded successfully</string>
+    <string name="en_download_no_datadir">
+        Custom Maps cannot find SD card to save map to.\nDownload canceled.
+    </string>
+    <string name="en_download_title_label">Downloading a map from the web</string>
+    <string name="en_download_progress_label">Progress</string>
+    <string name="en_download_starting">Starting download…</string>
+    <string name="en_download_info">
+        Please wait until the download completes or cancel download with the button below
+    </string>
+
+    <!-- map image display -->
+    <string name="en_unnamed_map">Untitled map</string>
+    <string name="en_map_image_load_failed">Failed to load map image for %s.</string>
+
+    <!-- help manager -->
+    <string name="en_help_menu_title">Help</string>
+    <string name="en_help_redisplay">You can redisplay this info using the menu</string>
+
+    <!-- details display -->
+    <string name="en_latitude">Latitude</string>
+    <string name="en_longitude">Longitude</string>
+    <string name="en_altitude">Altitude</string>
+    <string name="en_heading">Heading</string>
+    <string name="en_speed">Speed</string>
+    <string name="en_accuracy">Accuracy</string>
+    <string name="en_no_data_available">N/A</string>
+
+    <!-- map image selection -->
+    <string name="en_select_image_help">
+        Select a file containing a map image.\n\nOnly use images for which you have permission.\n
+        \nMenu contains links to folders containing your photos and internet downloads.
+    </string>
+    <string name="en_select_image_invalid">
+        %s is not a valid image file.\nYou must select an image file
+    </string>
+    <string name="en_select_image_select_file">Select the map image file</string>
+    <string name="en_select_image_processing">Processing selected image.\nPlease wait…</string>
+
+    <!-- map image point selection -->
+    <string name="en_image_point_help">
+        Select a point to be located on a Google map.\n\nSelect points far apart for best
+        results.\n\nAvoid selecting points between previous points.
+    </string>
+    <string name="en_image_point_no_image">No map image selected. Can\'t select points.</string>
+    <string name="en_image_point_select_for_matching">Select point to be matched</string>
+
+    <!-- map geo point selection -->
+    <string name="en_geo_point_help">
+        Zoom and pan Google map to match the center of the thumbnail.\n\nUse the sliders to rotate
+        and scale the thumbnail, and to adjust its transparency.\n\nMap button toggles map view
+        and satellite view.
+    </string>
+    <string name="en_geo_point_mapview_failure">
+        Failed to create a MapView.\nMap creation is not available.
+    </string>
+    <string name="en_geo_point_rotate">Rotate</string>
+    <string name="en_geo_point_scale">Scale</string>
+    <string name="en_geo_point_transparency">Transparency</string>
+    <string name="en_map_mode">Map mode</string>
+
+    <!-- map editor -->
+    <string name="en_editor_help">
+        Name your map and describe it for the map list.\n\nAdd 2-4 tiepoints to locate and scale
+        the map image.\n\nAdjust or delete tiepoints by long pressing the entries.\n\nMaps can be
+        saved after preview.
+    </string>
+    <string name="en_editor_image_load_failed">Failed to load map image</string>
+    <string name="en_editor_need_two_points">You must add at least 2 points before previewing</string>
+    <string name="en_editor_map_save_failed">Failed to save the map</string>
+    <string name="en_editor_map_name">Map Name</string>
+    <string name="en_editor_new_map">New Map</string>
+    <string name="en_editor_description">Description</string>
+    <string name="en_editor_tiepoints">Tiepoints</string>
+
+    <!-- map preview -->
+    <string name="en_preview_help">
+        Verify the alignment of the map image by zooming and panning the map.\n\nBack button allows
+        you to adjust or add tiepoints.\n\nNOTE: Some map images can not be aligned perfectly.
+    </string>
+    <string name="en_preview_mapview_failure">
+        Failed to create a MapView.\nMap preview is not available.
+    </string>
+    <string name="en_preview_transparency">Transparency</string>
+
+    <!-- edit preferences -->
+    <string name="en_metric_title">Use metric units</string>
+    <string name="en_metric_use_metric">Now using metric units</string>
+    <string name="en_metric_use_english">Now using English units</string>
+    <string name="en_distance_title">Display distance</string>
+    <string name="en_distance_show">Displays distance from user location to center of screen</string>
+    <string name="en_distance_hide">Distance is not displayed or computed</string>
+    <string name="en_heading_title">Display heading</string>
+    <string name="en_heading_show">Displays heading from user location to center of screen</string>
+    <string name="en_heading_hide">Heading is not displayed or computed</string>
+    <string name="en_safety_reminder_title">Show safety reminder</string>
+    <string name="en_safety_reminder_show">Safety reminder will be shown when map is changed</string>
+    <string name="en_safety_reminder_hide">
+        Safety reminder will not be shown when map is changed
+    </string>
+    <string name="en_language_title">Select language</string>
+    <string name="en_language_default">Default</string>
+    <string name="en_language_selected_format">Using %s</string>
+    <string name="en_max_map_img_size_title">Maximum map image size</string>
+    <string name="en_max_map_img_size">%.1f megapixels</string>
+    <string name="en_about_custom_maps">About Custom Maps</string>
+
+    <!-- about dialog -->
+    <string name="en_version_label">version</string>
+    <string name="en_credits_text">
+        <b>Special thanks</b>
+        \n\u2022 Harlan Hile (pinch zoom, user location icon)
+        \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Francesco Terribile (Italian translation)
+        \n\u2022 Dorin Hongu (Romanian translation)
+        \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (Polish translation)
+        \n\u2022 Dmitry Kandin (Russian translation)
+        \n\u2022 Vladimira Šantek (Croatian translation)
+        \n\u2022 András Hegedűs Juju (Hungarian translation)
+    </string>
+
+    <!-- button items -->
+    <string name="en_button_ok">OK</string>
+    <string name="en_button_close">Close</string>
+    <string name="en_button_accept_license">Accept License</string>
+    <string name="en_button_cancel">Cancel</string>
+    <string name="en_button_save">Save</string>
+    <string name="en_button_add_point">Add point</string>
+    <string name="en_button_preview">Preview</string>
+    <string name="en_button_accept">Accept</string>
+
+    <!-- menu items -->
+    <string name="en_select_map">Select map</string>
+    <string name="en_my_location">My location</string>
+    <string name="en_location_details">Location details</string>
+    <string name="en_share_map">Share map</string>
+    <string name="en_settings">Preferences</string>
+    <string name="en_create_map">Create map</string>
+    <string name="en_modify_map">Modify map</string>
+    <string name="en_delete_map">Delete map</string>
+    <string name="en_select_point">Select point</string>
+    <string name="en_adjust_tiepoint">Adjust tiepoint</string>
+    <string name="en_delete_tiepoint">Delete tiepoint</string>
+    <string name="en_photos">Photos</string>
+    <string name="en_downloads">Downloads</string>
+    <string name="en_sdcard">SD card</string>
+    <string name="en_use_picker">Alternative selector</string>
+    <string name="en_zoom_in">Zoom in</string>
+    <string name="en_zoom_out">Zoom out</string>
+    <string name="en_menu">Menu</string>
+
+    <string name="en_argb_8888_summary_off">Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.</string>
+    <string name="en_argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
+    <string name="en_argb_8888_title">Use 32-bit color</string>
+    <string name="en_max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string>
+    <string name="en_use_gpu_summary_off">Using software rendering (allows largest map image size). But app crashes on some LG devices.</string>
+    <string name="en_use_gpu_summary_on">Using GPU rendering (reduces maximum map image size).</string>
+    <string name="en_use_gpu_title">Use GPU rendering</string>
+
+    <!-- PDF map related -->
+    <string name="en_preparing_pdf_file">Preparing PDF file</string>
+    <string name="en_select_map_page">Select Map Page</string>
+    <string name="en_rotate_page">Rotate page</string>
+    <string name="en_select_action">Select</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectMap">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:background="@color/primaryColor"
+        app:titleTextColor="@color/primaryTextColor"
+        tools:title="Select Map"/>
+
+    <ListView
+        android:id="@+id/map_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:divider="@color/primaryLightColor"
+        android:dividerHeight="1dp"/>
+
+    <TextView
+        android:id="@+id/empty_list"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:gravity="center"
+        android:tag="no_maps_found_on_sd"
+        android:text="@string/no_maps_found_on_sd"
+        android:visibility="gone"/>
+
+</RelativeLayout>

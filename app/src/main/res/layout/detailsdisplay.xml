@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/defaultBackground"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_weight="1">
+
+        <TableRow>
+
+            <TextView
+                style="@style/SmallText"
+                android:layout_marginEnd="4dp"
+                android:tag="longitude"
+                android:text="@string/longitude"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/longitudeField"
+                style="@style/SmallText" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/SmallText"
+                android:layout_marginEnd="4dp"
+                android:tag="latitude"
+                android:text="@string/latitude"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/latitudeField"
+                style="@style/SmallText" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/SmallText"
+                android:layout_marginEnd="4dp"
+                android:tag="altitude"
+                android:text="@string/altitude"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/altitudeField"
+                style="@style/SmallText" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_weight="1">
+
+        <TableRow>
+
+            <TextView
+                style="@style/SmallText"
+                android:layout_marginEnd="4dp"
+                android:tag="heading"
+                android:text="@string/heading"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/headingField"
+                style="@style/SmallText" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/SmallText"
+                android:layout_marginEnd="4dp"
+                android:tag="speed"
+                android:text="@string/speed"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/speedField"
+                style="@style/SmallText" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/SmallText"
+                android:layout_marginEnd="4dp"
+                android:tag="accuracy"
+                android:text="@string/accuracy"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/accuracyField"
+                style="@style/SmallText" />
+
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

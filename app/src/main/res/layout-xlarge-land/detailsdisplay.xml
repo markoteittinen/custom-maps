@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/defaultBackground"
+    android:orientation="vertical"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
+
+    <TextView
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:tag="longitude"
+        android:text="@string/longitude"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/longitudeField"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="end" />
+
+    <TextView
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:tag="latitude"
+        android:text="@string/latitude"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/latitudeField"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="end" />
+
+    <TextView
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:tag="altitude"
+        android:text="@string/altitude"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/altitudeField"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="end" />
+
+    <TextView
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:tag="heading"
+        android:text="@string/heading"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/headingField"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="end" />
+
+    <TextView
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:tag="speed"
+        android:text="@string/speed"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/speedField"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="end" />
+
+    <TextView
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:tag="accuracy"
+        android:text="@string/accuracy"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/accuracyField"
+        style="@style/NormalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="end" />
+
+</LinearLayout>

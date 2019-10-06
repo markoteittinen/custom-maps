@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/selectPoint"
+        style="@style/LargeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:tag="select_point"
+        android:text="@string/select_point" />
+
+    <view
+        android:id="@+id/imageDisplay"
+        class="com.custommapsapp.android.create.ImageDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/selectPoint"
+        android:layout_alignParentTop="true" />
+
+    <view
+        android:id="@+id/bitmapOverlay"
+        class="com.custommapsapp.android.create.AnnotationLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/selectPoint"
+        android:layout_alignParentTop="true"
+        android:background="#00000000" />
+
+    <ImageButton
+        android:id="@+id/zoomOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/imageDisplay"
+        android:layout_alignBottom="@id/imageDisplay"
+        android:background="#00000000"
+        android:tag="zoom_out"
+        android:contentDescription="@string/zoom_out"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/zoomout" />
+
+    <ImageButton
+        android:id="@+id/zoomIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/imageDisplay"
+        android:layout_alignBottom="@id/imageDisplay"
+        android:background="#00000000"
+        android:tag="zoom_in"
+        android:contentDescription="@string/zoom_in"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/zoomin" />
+
+    <TextView
+        android:id="@+id/help"
+        style="@style/NormalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:background="#C0FFFFFF"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:tag="image_point_select_for_matching"
+        android:text="@string/image_point_select_for_matching"
+        android:textColor="#C0000000" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/primaryColorTranslucent"
+        app:titleTextColor="@color/primaryTextColor"
+        tools:title="Create map" />
+
+</RelativeLayout>

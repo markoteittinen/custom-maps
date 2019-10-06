@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp" >
+
+    <TextView
+        style="@style/NormalText"
+        android:id="@+id/titleLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:inputType="none"
+        android:tag="download_title_label"
+        android:text="@string/download_title_label"
+        />
+
+    <TextView
+        style="@style/SmallText"
+        android:id="@+id/urlLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/titleLabel"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:inputType="none"
+        android:text=""
+        />
+
+    <TextView
+        style="@style/SmallText"
+        android:id="@+id/progressLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/urlLabel"
+        android:inputType="none"
+        android:tag="download_progress_label"
+        android:text="@string/download_progress_label"
+        />
+
+    <ViewSwitcher
+        android:id="@+id/progressView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/progressLabel"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp" >
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ProgressBar
+                android:id="@+id/progressSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+
+            <TextView
+                style="@style/NormalText"
+                android:id="@+id/progressDetails"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="8dp"
+                android:gravity="start|center_vertical"
+                android:inputType="none"
+                android:tag="download_starting"
+                android:text="@string/download_starting"
+                />
+        </LinearLayout>
+    </ViewSwitcher>
+
+    <TextView
+        style="@style/NormalText"
+        android:id="@+id/instructionLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/progressView"
+        android:layout_marginTop="4dp"
+        android:inputType="none"
+        android:tag="download_info"
+        android:text="@string/download_info" />
+
+    <Button
+        style="@style/NormalButton"
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/instructionLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:tag="button_cancel"
+        android:text="@string/button_cancel" />
+
+</RelativeLayout>

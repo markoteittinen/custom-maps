@@ -1,0 +1,15 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<resources>
+    <color name="primaryColor">#009688</color>
+    <color name="primaryLightColor">#52c7b8</color>
+    <color name="primaryDarkColor">#00675b</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="primaryColorTranslucent">#D8009688</color>
+    <!-- Consider using primary colors only -->
+    <color name="secondaryColor">#0012a8</color>
+    <color name="secondaryLightColor">#583fdb</color>
+    <color name="secondaryDarkColor">#000077</color>
+    <color name="secondaryTextColor">#ffffff</color>
+    <!-- Avoid excessive brightness in background -->
+    <color name="defaultBackground">#f2f2f2</color>
+</resources>

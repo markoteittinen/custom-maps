@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="hu_app_name">Custom Maps</string>
+    <string name="hu_select_map_name">Térkép kiválasztása</string>
+    <string name="hu_create_map_name">Térkép készítése</string>
+    <string name="hu_edit_prefs_name">Beállítás</string>
+    <string name="hu_author">készítette Marko Teittinen</string>
+    <string name="hu_open_source">
+        A Custom Maps alkalmazás és annak forráskódja az Apache 2.0-s licenc alatt készült.
+	</string>
+    <string name="hu_apache_license">Az Apache License 2.0 megtekintése</string>
+    <string name="hu_google_code">Nyílt forráskódú szoftverek</string>
+    <string name="hu_app_home">A Custom Maps program weboldala</string>
+
+    <!-- CustomMaps.java -->
+    <string name="hu_gps_not_available">
+		A GPS nincs engedélyezve.
+        \nKérem engedélyezze, hogy az alkalmazás hozzáférjen a GPS adatokhoz.
+    </string>
+    <string name="hu_location_not_available">
+        A helyadatok nem elérhetőek az alkalmazásban.
+        \nKérem engedélyezze a GPS használatát a rendszerbeállításokban.
+    </string>
+    <string name="hu_gps_outside_map">A GPS szerinti helyzete nem a térkép határain beül van</string>
+    <string name="hu_share_map_failed">Nem sikerült elküldeni a térképet</string>
+    <string name="hu_external_content_failed">A Custom Maps nem tudta megjeleníteni a KMZ file-t.</string>
+    <string name="hu_waiting_for_gps">Jelenlegi helyzet nem ismert.\nGPS jel keresése…</string>
+    <string name="hu_map_too_large">A kiválasztott térképet nem lehetett betölteni, mert túl nagy.</string>
+
+    <!-- sharing -->
+    <string name="hu_share_message_subject">Szeretnék önnel megosztani egy térképet</string>
+    <string name="hu_share_chooser_title">Térkép küldése az alábbi módon…</string>
+
+    <!-- safety warning -->
+    <string name="hu_safety_warning_title">FONTOS FIGYELMEZTETÉS!</string>
+    <string name="hu_safety_warning">
+        Számos térképfile nem elég részletes vagy pontos ahhoz, hogy helyzetünket pontosan megjeleníthesse,
+        ezért azt hozzávetőlegesnek kell tekinteni.
+        \n\nElőfordulhat, hogy a térkép egyes részei pontosabbak, mások kevésbé.
+    </string>
+    <string name="hu_remind_me_again">Emlékeztessen legközelebb is</string>
+
+    <!-- select map -->
+    <string name="hu_select_map_to_use">Térkép kiválasztása</string>
+    <string name="hu_no_maps_found_on_sd">
+        Nem találhatóak térképek az SD kártyán a Custom Maps mappában.\n\nVálassza a menüt térképkészítéshez vagy a térképfile megtalálásához.
+        \n\nVagy nyomja meg a vissza gombot \'back\' a kilépéshez.
+    </string>
+    <string name="hu_create_map_help">
+        Válassza a menüt fotóból, vagy letöltött képből való térkép készítéséhez.\n\nTartsa nyomva a térkép
+        nevét annak módosításához vagy törléséhez.
+    </string>
+    <string name="hu_create_map_help_link">
+        Kattintson ide a Custom Maps weboldalának megtekintéséhez, minta térképekhez és bemutatóhoz.
+    </string>
+     <string name="hu_select_cannot_modify_map_set">
+        Ez a térkép egy térképkészlet része. Nem módosítható és nem törölhető.
+    </string>
+    <string name="hu_select_cannot_modify_placemarks">
+        Ez a térkép helyjelzőket tartalmaz. Nem módosítható.
+    </string>
+    <string name="hu_no_map_sharing_apps">Nincs olyan telepített alkalmazás, amellyel megoszthatja a térképeket</string>
+    <string name="hu_delete_map_dialog_title">Törlés megerősítése</string>
+    <string name="hu_delete_map_dialog">Valóban töröljem a térképet\n\"%s\"?</string>
+    <string name="hu_delete_map_dialog_positive">Igen - törlés</string>
+    <string name="hu_delete_map_dialog_negative">Nem - térkép megtartása</string>
+    <string name="hu_deleting_map_failed">Nem sikerült törölni a térképet \"%s\"</string>
+    <string name="hu_local_maps">Helyi térképek</string>
+    <string name="hu_nearby_maps">Közeli térképek</string>
+    <string name="hu_other_maps">Egyéb térképek</string>
+    <string name="hu_all_maps">Összes térkép</string>
+
+    <!-- downloading -->
+    <string name="hu_progress_format">Ismeretlen térképfile méret, letöltve: %,d kB.</string>
+    <string name="hu_download_canceled">Térkép letöltés megszakítva</string>
+    <string name="hu_download_failed">Sikertelen térképletöltés az alábbi helyről %s</string>
+    <string name="hu_download_successful">Térkép letöltése sikerült</string>
+    <string name="hu_download_no_datadir">
+        A Custom Maps nem találja az SD kártyát a térkép mentéséhez.\nLetöltés megszakítva.
+    </string>
+    <string name="hu_download_title_label">Térkép letöltése az internetről</string>
+    <string name="hu_download_progress_label">Folyamatban…</string>
+    <string name="hu_download_starting">Letöltés megkezdése…</string>
+    <string name="hu_download_info">
+        Kérjük várjon, amíg a letöltés befejeződik, vagy állítsa le a letöltést az alábbi gombra kattintva
+    </string>
+
+    <!-- map image display -->
+    <string name="hu_unnamed_map">Névtelen térkép</string>
+    <string name="hu_map_image_load_failed">Nem sikerült betölteni a térképképet %s.</string>
+
+    <!-- help manager -->
+    <string name="hu_help_menu_title">Súgó</string>
+    <string name="hu_help_redisplay">Ez az információ a menü segítségével újra megjeleníthető</string>
+
+    <!-- details display -->
+    <string name="hu_latitude">Szélesség</string>
+    <string name="hu_longitude">Hosszúság</string>
+    <string name="hu_altitude">Magasság</string>
+    <string name="hu_heading">Irány</string>
+    <string name="hu_speed">Sebesség</string>
+    <string name="hu_accuracy">Pontosság</string>
+    <string name="hu_no_data_available">Nincs adat</string>
+
+    <!-- map image selection -->
+    <string name="hu_select_image_help">
+        Válasszon ki egy térképet tartalmazó képfile-t.\n\nCsak olyan térképeket használjon, amire van engedélye.\n
+        \nA menüben linkeket talál a fényképekhez és internetes letöltésekhez tartalmazó mappákhoz.
+    </string>
+    <string name="hu_select_image_invalid">
+        %s nem érvényes képfile.\nVálasszon egy képfile-t
+    </string>
+    <string name="hu_select_image_select_file">Válassza ki a térképhez a képfile-t</string>
+    <string name="hu_select_image_processing">A kiválasztott file feldolgozása…\nKérem várjon…</string>
+
+    <!-- map image point selection -->
+    <string name="hu_image_point_help">
+        Válasszon egy pontot a Google térképen azonosításhoz.\n\nA pontosság érdekében lehetőleg távoli
+		pontokat válasszon.\n\nKerülje a meglévő pontok közé új pontok beszúrását.
+    </string>
+    <string name="hu_image_point_no_image">Nincs térképfile kiválasztva. Nem tud azonosító pontot választani.</string>
+    <string name="hu_image_point_select_for_matching">Jelölje ki a megfelelő pontot</string>
+
+    <!-- map geo point selection -->
+    <string name="hu_geo_point_help">
+        Zoomolja és húzza a Google térképet hogy a középpontja illeszkedjen az indexképre.\n\nA csúszkák segítségével elforgathatja
+		és nagyíthatja az indexképet, és módosíthatja annak átlátszóságát.\n\nA térkép gombbal a térképnézet
+		és a mûholdkép között válthat.
+    </string>
+    <string name="hu_geo_point_mapview_failure">
+        Nem sikerült a térképnézet létrehozása.\nA térkép létrehozása nem elérhető.
+    </string>
+    <string name="hu_geo_point_rotate">Forgatás</string>
+    <string name="hu_geo_point_scale">Nagyítás</string>
+    <string name="hu_geo_point_transparency">Átlátszóság</string>
+
+    <!-- map editor -->
+    <string name="hu_editor_help">
+        Nevezze el a térképet, és írja be a térképlistára.\n\nAdjon meg 2-4 illesztési pontot a
+        térkép georeferálásához.\n\nSzerkesztéshez vagy törléshez nyomja hosszan az illesztési pontokat.\n\nA térképek előnézet
+        után menthetők.
+    </string>
+    <string name="hu_editor_image_load_failed">Nem sikerült betölteni a térképképet</string>
+    <string name="hu_editor_need_two_points">Legalább 2 pontot kell hozzáadnia az előnézethez</string>
+    <string name="hu_editor_map_save_failed">Nem sikerült elmenteni a térképet</string>
+    <string name="hu_editor_map_name">Térkép neve</string>
+    <string name="hu_editor_new_map">Új térkép</string>
+    <string name="hu_editor_description">Leírás</string>
+    <string name="hu_editor_tiepoints">Illesztőpontok</string>
+
+    <!-- map preview -->
+    <string name="hu_preview_help">
+        Ellenőrizze a térképfile összehangolását a térkép nagyításával és pásztázásával.\n\nA vissza gommbbal pontosíthatja
+		a meglévő illesztőpontokat és hozzáadhat újat.\n\nMEGJEGYZÉS: néhány térkép nem illeszthető tökéletesen.
+    </string>
+    <string name="hu_preview_mapview_failure">
+        Nem sikerült a térképi nézet megjelenítése.\nTérképi nézet nem elérhető.
+    </string>
+    <string name="hu_preview_transparency">Átlátszóság</string>
+
+    <!-- edit preferences -->
+    <string name="hu_metric_title">Metrikus mértékegységek</string>
+    <string name="hu_metric_use_metric">Metrikus mértékegységek használata</string>
+    <string name="hu_metric_use_english">Angolszász mértékegységek használata</string>
+    <string name="hu_distance_title">Távolság megjelenítés</string>
+    <string name="hu_distance_show">Megjeleníti a jelenlegi helyzet és a képernyő közepe közötti távolságot</string>
+    <string name="hu_distance_hide">A távolság nem megjelenített</string>
+    <string name="hu_heading_title">Célirány megjelenítés</string>
+    <string name="hu_heading_show">Jelenlegi helyzet és a képernyő közepe közötti irány megjelenítése</string>
+    <string name="hu_heading_hide">Célirány nem megjelenített</string>
+    <string name="hu_safety_reminder_title">Biztonsági figyelmeztetés megjelenítés</string>
+    <string name="hu_safety_reminder_show">Biztonsági figyelmeztetés fog megjelenni a térkép módosításakor</string>
+    <string name="hu_safety_reminder_hide">
+        Biztonsági figyelmeztetés nem fog megjelenni a térkép módosításakor
+    </string>
+    <string name="hu_language_title">Nyelv kiválasztás</string>
+    <string name="hu_language_default">Alapértelmezett</string>
+    <string name="hu_language_selected_format">Használt nyelv: %s</string>
+    <string name="hu_max_map_img_size_title">Maximális térképlap méret</string>
+    <string name="hu_max_map_img_size">%.1f megapixel</string>
+    <string name="hu_about_custom_maps">Custom Maps névjegy</string>
+
+    <!-- about dialog -->
+    <string name="hu_version_label">verzió</string>
+    <string name="hu_credits_text">
+        <b>Külön köszönet</b>
+        \n\u2022 Harlan Hile (pinch zoom, user location icon)
+        \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Francesco Terribile (Italian translation)
+        \n\u2022 Dorin Hongu (Romanian translation)
+        \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (Polish translation)
+        \n\u2022 Dmitry Kandin (Russian translation)
+        \n\u2022 Vladimira Šantek (Croatian translation)
+        \n\u2022 András Hegedűs Juju (Hungarian translation)
+    </string>
+
+    <!-- button items -->
+    <string name="hu_button_ok">OK</string>
+    <string name="hu_button_close">Bezár</string>
+    <string name="hu_button_accept_license">Licenc elfogadása</string>
+    <string name="hu_button_cancel">Mégsem</string>
+    <string name="hu_button_save">Mentés</string>
+    <string name="hu_button_add_point">Pont hozzáadása</string>
+    <string name="hu_button_preview">Előnézet</string>
+    <string name="hu_button_accept">Elfogadás</string>
+
+    <!-- menu items -->
+    <string name="hu_select_map">Térkép kiválasztása</string>
+    <string name="hu_my_location">Saját pozíció</string>
+    <string name="hu_location_details">Pozíció részletei</string>
+    <string name="hu_share_map">Térkép megosztása</string>
+    <string name="hu_settings">Beállítások</string>
+    <string name="hu_create_map">Térkép létrehozása</string>
+    <string name="hu_modify_map">Térkép módosítása</string>
+    <string name="hu_delete_map">Térkép törlése</string>
+    <string name="hu_select_point">Válasszon ki egy pontot</string>
+    <string name="hu_adjust_tiepoint">Illesztőpont szerkesztése</string>
+    <string name="hu_delete_tiepoint">Illesztőpont törlése</string>
+    <string name="hu_photos">Fényképek</string>
+    <string name="hu_downloads">Letöltések</string>
+    <string name="hu_sdcard">SD kártya</string>
+    <string name="hu_use_picker">Alternatív választó</string>
+    <string name="hu_zoom_in">Nagyítás</string>
+    <string name="hu_zoom_out">Kicsinyítés</string>
+    <string name="hu_menu">Menü</string>
+
+    <string name="hu_argb_8888_summary_off">16 bites szín használata (a legnagyobb térképmérethez). Használatakor az alkalmazás összeomolhat egyes Motorola készülékeken.</string>
+    <string name="hu_argb_8888_summary_on">32 bites szín használata (korlátozhatja a maximális térképméretet).</string>
+    <string name="hu_argb_8888_title">32 bites szín használat</string>
+    <string name="hu_max_map_img_size_gpu_on">4096x4096 (16 megapixel) vagy 2048x2048 (4 megapixel)</string>
+    <string name="hu_use_gpu_summary_off">Szoftveres renderelés (a legnagyobb térképképmérethez). Az alkalmazás öszeomolhat nénhány LG eszközön.</string>
+    <string name="hu_use_gpu_summary_on">GPU renderelés használat (csökkenti a maximális képméretet).</string>
+    <string name="hu_use_gpu_title">GPU renderelés használata</string>
+
+    <string name="hu_preparing_pdf_file">PDF file előkészítése</string>
+    <string name="hu_select_map_page">Térképlap kiválaszása</string>
+    <string name="hu_rotate_page">Lap elforgatása</string>
+    <string name="hu_select_action">Kiválasztás</string>
+</resources>
