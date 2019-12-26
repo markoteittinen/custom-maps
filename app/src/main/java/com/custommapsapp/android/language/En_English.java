@@ -135,6 +135,9 @@ class En_English extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.safety_reminder_title, R.string.en_safety_reminder_title);
     resourceIdMap.put(R.string.safety_warning, R.string.en_safety_warning);
     resourceIdMap.put(R.string.safety_warning_title, R.string.en_safety_warning_title);
+    resourceIdMap.put(R.string.scale_hide, R.string.en_scale_hide);
+    resourceIdMap.put(R.string.scale_show, R.string.en_scale_show);
+    resourceIdMap.put(R.string.scale_title, R.string.en_scale_title);
     resourceIdMap.put(R.string.sdcard, R.string.en_sdcard);
     resourceIdMap.put(R.string.select_action, R.string.en_select_action);
     resourceIdMap.put(R.string.select_cannot_modify_map_set, R.string.en_select_cannot_modify_map_set);
@@ -161,6 +164,7 @@ class En_English extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.use_picker, R.string.en_use_picker);
     resourceIdMap.put(R.string.version_label, R.string.en_version_label);
     resourceIdMap.put(R.string.waiting_for_gps, R.string.en_waiting_for_gps);
+    resourceIdMap.put(R.string.watch_tutorial, R.string.en_watch_tutorial);
     resourceIdMap.put(R.string.zoom_in, R.string.en_zoom_in);
     resourceIdMap.put(R.string.zoom_out, R.string.en_zoom_out);
   }

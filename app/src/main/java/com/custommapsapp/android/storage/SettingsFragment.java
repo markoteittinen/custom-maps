@@ -25,6 +25,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -105,6 +106,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     isMetric.setSummaryOn(linguist.getString(R.string.metric_use_metric));
     root.addPreference(isMetric);
 
+    CheckBoxPreference scaleDisplay = new CheckBoxPreference(activity);
+    scaleDisplay.setDefaultValue(true);
+    scaleDisplay.setKey(PreferenceStore.PREFS_SHOW_SCALE);
+    scaleDisplay.setTitle(linguist.getString(R.string.scale_title));
+    scaleDisplay.setSummaryOn(linguist.getString(R.string.scale_show));
+    scaleDisplay.setSummaryOff(linguist.getString(R.string.scale_hide));
+    root.addPreference(scaleDisplay);
+
     // Display distance to center of screen
     CheckBoxPreference distanceDisplay = new CheckBoxPreference(activity);
     distanceDisplay.setDefaultValue(false);
@@ -156,6 +165,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     // Display language selection option
     Preference language = createLanguagePreference(linguist);
     root.addPreference(language);
+
+    // Tutorial link
+    Preference tutorial = new Preference(activity);
+    tutorial.setTitle(linguist.getString(R.string.watch_tutorial));
+    tutorial.setOnPreferenceClickListener(preference -> {
+      launchTutorial();
+      return true;
+    });
+    root.addPreference(tutorial);
 
     // About dialog
     Preference about = createAboutPreference(linguist);
@@ -276,5 +294,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     Intent aboutDisplay = new Intent(activity, AboutDisplay.class);
     aboutDisplay.putExtra(AboutDisplay.CANCELLABLE, true);
     startActivity(aboutDisplay);
+  }
+
+  // --------------------------------------------------------------------------
+  // Tutorial video
+
+  private void launchTutorial() {
+    Uri tutorialUrl = Uri.parse("https://youtu.be/-lTrUL3HXqU");
+    Intent showTutorial = new Intent(Intent.ACTION_VIEW, tutorialUrl);
+    startActivity(showTutorial);
   }
 }

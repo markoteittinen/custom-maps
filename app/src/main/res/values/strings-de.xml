@@ -176,6 +176,9 @@
     <string name="de_metric_title">Metrische Einheiten verwenden</string>
     <string name="de_metric_use_metric">Metrische Einheiten werden verwendet</string>
     <string name="de_metric_use_english">Englische Einheiten werden verwendet</string>
+    <string name="de_scale_title">Display scale on map</string>
+    <string name="de_scale_show">Scale is displayed</string>
+    <string name="de_scale_hide">Scale is not displayed</string>
     <string name="de_distance_title">Distanz anzeigen</string>
     <string name="de_distance_show">Distanz vom Benutzer zur Bildschirmmitte wird angezeigt</string>
     <string name="de_distance_hide">Distanz wird nicht angezeigt bzw. berechnet</string>
@@ -192,12 +195,14 @@
     <string name="de_language_selected_format">Ausgewählt %s</string>
     <string name="de_max_map_img_size_title">Maximale Bildgrösse der Karte</string>
     <string name="de_max_map_img_size">%.1f Megapixel</string>
+    <string name="de_watch_tutorial">Watch tutorial video</string>
     <string name="de_about_custom_maps">Über Custom Maps</string>
 
     <!-- about dialog -->
     <string name="de_version_label">Version</string>
     <string name="de_credits_text">
         <b>Spezieller Dank</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (Zwei-Finger-Zoom, Benutzerlokalisierungs-Icon)
         \n\u2022 Patrick Steiner (Internationalisierung, Deutsche Übersetzung)
         \n\u2022 Francesco Terribile (Italienische Übersetzung)

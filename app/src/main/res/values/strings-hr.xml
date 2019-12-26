@@ -170,6 +170,9 @@
     <string name="hr_metric_title">Koristi metričke jedinice</string>
     <string name="hr_metric_use_metric">Sada koristim metričke jedinice</string>
     <string name="hr_metric_use_english">Sada koristim Engleske jedinice</string>
+    <string name="hr_scale_title">Display scale on map</string>
+    <string name="hr_scale_show">Scale is displayed</string>
+    <string name="hr_scale_hide">Scale is not displayed</string>
     <string name="hr_distance_title">Prikaži udaljenost</string>
     <string name="hr_distance_show">Prikaži udaljenost od korisničke lokacije do centra ekrana</string>
     <string name="hr_distance_hide">
@@ -190,11 +193,13 @@
     <string name="hr_language_selected_format">Koristim %s</string>
     <string name="hr_max_map_img_size_title">Maksimalna veličina slike</string>
     <string name="hr_max_map_img_size">%.1f megapiksela</string>
+    <string name="hr_watch_tutorial">Watch tutorial video</string>
     <string name="hr_about_custom_maps">O Custom Maps</string>
 
     <!-- about dialog -->
     <string name="hr_version_label">verzija</string>
     <string name="hr_credits_text"><b>Posebne zahvale</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (zumiranje hvatanjem, ikona lokacije korisnika)
         \n\u2022 Patrick Steiner (internacionalizacija, Njemački prijevod)
         \n\u2022 Francesco Terribile (Talijanski prijevod)

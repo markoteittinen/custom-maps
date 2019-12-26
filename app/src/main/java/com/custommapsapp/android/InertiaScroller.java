@@ -35,6 +35,7 @@ public class InertiaScroller {
 
   private MapDisplay map;
   private List<View> overlayViews = new ArrayList<>();
+  private Runnable updateListener = null;
   private double xv = 0;
   private double yv = 0;
   private double xFriction = 0;
@@ -57,6 +58,10 @@ public class InertiaScroller {
   public void setOverlayViews(View... views) {
     overlayViews.clear();
     Collections.addAll(overlayViews, views);
+  }
+
+  public void setUpdateListener(Runnable r) {
+    updateListener = r;
   }
 
   private void startScrolling(float xv, float yv) {
@@ -87,6 +92,9 @@ public class InertiaScroller {
       map.invalidate();
       for (View overlay : overlayViews) {
         overlay.invalidate();
+      }
+      if (updateListener != null) {
+        map.post(updateListener);
       }
 
       if (xv == 0 || (xv < 0 && xv >= xFriction) || (xv > 0 && xv <= xFriction)) {
@@ -227,6 +235,9 @@ public class InertiaScroller {
         velocityTracker.addMovement(evt);
       }
       map.invalidate();
+      if (updateListener != null) {
+        map.post(updateListener);
+      }
     }
   };
 }

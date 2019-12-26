@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.custommapsapp.android"
-    android:versionCode="111"
-    android:versionName="1.5.2">
+    android:installLocation="auto"
+    android:versionCode="112"
+    android:versionName="1.6 beta 1">
     <!-- Version released to Play Store: 1.5.2/111 (2019-9-30) -->
     <!-- Target and min API versions now in build.gradle file
          uses-sdk android:targetSdkVersion="28"
@@ -15,7 +16,7 @@
         android:name=".CustomMapsApp"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:icon="@drawable/icon"
+        android:icon="@mipmap/appicon"
         android:installLocation="auto"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">

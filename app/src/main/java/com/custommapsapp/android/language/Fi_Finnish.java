@@ -134,6 +134,9 @@ class Fi_Finnish extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.safety_reminder_title, R.string.fi_safety_reminder_title);
     resourceIdMap.put(R.string.safety_warning, R.string.fi_safety_warning);
     resourceIdMap.put(R.string.safety_warning_title, R.string.fi_safety_warning_title);
+    resourceIdMap.put(R.string.scale_hide, R.string.fi_scale_hide);
+    resourceIdMap.put(R.string.scale_show, R.string.fi_scale_show);
+    resourceIdMap.put(R.string.scale_title, R.string.fi_scale_title);
     resourceIdMap.put(R.string.sdcard, R.string.fi_sdcard);
     resourceIdMap.put(R.string.select_action, R.string.fi_select_action);
     resourceIdMap.put(R.string.select_cannot_modify_map_set, R.string.fi_select_cannot_modify_map_set);
@@ -161,6 +164,7 @@ class Fi_Finnish extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.version_label, R.string.fi_version_label);
     resourceIdMap.put(R.string.waiting_for_gps, R.string.fi_waiting_for_gps);
     resourceIdMap.put(R.string.zoom_in, R.string.fi_zoom_in);
+    resourceIdMap.put(R.string.watch_tutorial, R.string.fi_watch_tutorial);
     resourceIdMap.put(R.string.zoom_out, R.string.fi_zoom_out);
   }
 }

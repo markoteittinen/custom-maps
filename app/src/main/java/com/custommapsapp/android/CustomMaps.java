@@ -26,7 +26,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
@@ -37,15 +36,19 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
@@ -110,6 +113,8 @@ public class CustomMaps extends AppCompatActivity {
   private GroundOverlay mapImage = null;
   private List<Placemark> placemarks = new ArrayList<>();
   private DetailsDisplay detailsDisplay;
+  private ScaleDisplay scaleDisplay = null;
+  private View scaleDisplayView;
   private InertiaScroller inertiaScroller;
   private ImageButton zoomIn;
   private ImageButton zoomOut;
@@ -179,6 +184,13 @@ public class CustomMaps extends AppCompatActivity {
     inertiaScroller.setOverlayViews(locationLayer, distanceLayer);
     mapDisplay.setOverlay(locationLayer);
 
+    scaleDisplayView = findViewById(R.id.scale_display);
+    ImageView scaleDisplayImage = findViewById(R.id.scale_icon);
+    TextView scaleDisplayLabel = findViewById(R.id.scale_text);
+    scaleDisplay = new ScaleDisplay(scaleDisplayImage, scaleDisplayLabel, displayState);
+
+    inertiaScroller.setUpdateListener(() -> scaleDisplay.update());
+
     if (locator == null) {
       locator = (LocationManager) getSystemService(LOCATION_SERVICE);
     }
@@ -194,8 +206,8 @@ public class CustomMaps extends AppCompatActivity {
     }
     zoomIn = findViewById(R.id.zoomIn);
     zoomOut = findViewById(R.id.zoomOut);
-    zoomIn.setOnClickListener(v -> mapDisplay.zoomMap(2.0f));
-    zoomOut.setOnClickListener(v -> mapDisplay.zoomMap(0.5f));
+    zoomIn.setOnClickListener(v -> zoomBy(2.0f));
+    zoomOut.setOnClickListener(v -> zoomBy(0.5f));
     if (selectedMap != null) {
       loadMapForDisplay(mapImage, null);
       if (screenCenter != null) {
@@ -203,6 +215,11 @@ public class CustomMaps extends AppCompatActivity {
         displayState.setZoomLevel(zoomLevel);
       }
     }
+  }
+
+  private void zoomBy(float factor) {
+    mapDisplay.zoomMap(factor);
+    scaleDisplay.update();
   }
 
   private void processLaunchIntent(Bundle savedInstanceState) {
@@ -254,6 +271,7 @@ public class CustomMaps extends AppCompatActivity {
     if (selectedMap != null) {
       loadMapForDisplay(mapImage, null);
       mapDisplay.centerOnGpsLocation();
+      scaleDisplay.setMetric(PreferenceStore.instance(this).isMetric());
     }
 
     if (mapDisplay.getMap() == null && getIntent().getBundleExtra(SAVED_INSTANCESTATE) != null) {
@@ -292,18 +310,29 @@ public class CustomMaps extends AppCompatActivity {
     sensors.registerListener(locationTracker, sensor, 50000);
     PreferenceStore prefs = PreferenceStore.instance(getApplicationContext());
     detailsDisplay.setUseMetric(prefs.isMetric());
-    int visibility = (prefs.isShowDetails() ? View.VISIBLE : View.GONE);
+    int visibility = prefs.isShowDetails() ? View.VISIBLE : View.GONE;
     detailsDisplay.setVisibility(visibility);
-    visibility = (prefs.isShowDistance() ? View.VISIBLE : View.GONE);
+    visibility = prefs.isShowDistance() ? View.VISIBLE : View.GONE;
     distanceLayer.setVisibility(visibility);
     distanceLayer.setShowHeading(prefs.isShowHeading());
+    visibility = prefs.isShowScale() ? View.VISIBLE : View.GONE;
+    scaleDisplayView.setVisibility(visibility);
   }
 
   @Override
   protected void onPostResume() {
     super.onPostResume();
-    mapDisplay.postInvalidate();
-    locationLayer.postInvalidate();
+    if (selectedMap != null) {
+      // Compute map scale once mapDisplay has been laid out
+      mapDisplay.post(() -> {
+        // Tell scaleDisplay to ignore height of actionBar vertically as it covers top of map
+        View actionBarView = findViewById(R.id.toolbar);
+        if (actionBarView != null && actionBarView.getVisibility() == View.VISIBLE) {
+          scaleDisplay.setTopPaddingPx(actionBarView.getHeight());
+        }
+        scaleDisplay.update();
+      });
+    }
   }
 
   @Override
@@ -434,7 +463,7 @@ public class CustomMaps extends AppCompatActivity {
     MenuItem item =
         menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, linguist.getString(R.string.my_location))
             .setIcon(R.drawable.ic_my_location_black_24dp);
-    item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     menu.add(
         Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, linguist.getString(R.string.location_details))
         .setIcon(android.R.drawable.ic_menu_info_details);
@@ -722,6 +751,11 @@ public class CustomMaps extends AppCompatActivity {
           return MapError.IMAGE_NOT_FOUND;
         }
         locationLayer.updateMapAngle();
+        // Update title bar to contain map title
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+          actionBar.setTitle(newMap.getName());
+        }
       }
       return MapError.NO_ERROR;
     } catch (MapImageTooLargeException ex) {

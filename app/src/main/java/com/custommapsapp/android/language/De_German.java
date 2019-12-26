@@ -137,6 +137,10 @@ class De_German extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.safety_reminder_title, R.string.de_safety_reminder_title);
     resourceIdMap.put(R.string.safety_warning, R.string.de_safety_warning);
     resourceIdMap.put(R.string.safety_warning_title, R.string.de_safety_warning_title);
+    // Missing translation
+//    resourceIdMap.put(R.string.scale_hide, R.string.de_scale_hide);
+//    resourceIdMap.put(R.string.scale_show, R.string.de_scale_show);
+//    resourceIdMap.put(R.string.scale_title, R.string.de_scale_title);
     resourceIdMap.put(R.string.sdcard, R.string.de_sdcard);
     resourceIdMap.put(R.string.select_action, R.string.de_select_action);
     resourceIdMap.put(R.string.select_cannot_modify_map_set, R.string.de_select_cannot_modify_map_set);
@@ -166,5 +170,7 @@ class De_German extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.waiting_for_gps, R.string.de_waiting_for_gps);
     resourceIdMap.put(R.string.zoom_in, R.string.de_zoom_in);
     resourceIdMap.put(R.string.zoom_out, R.string.de_zoom_out);
+    // Missing translation
+//    resourceIdMap.put(R.string.watch_tutorial, R.string.de_watch_tutorial);
   }
 }

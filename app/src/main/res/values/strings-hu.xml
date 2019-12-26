@@ -163,6 +163,9 @@
     <string name="hu_metric_title">Metrikus mértékegységek</string>
     <string name="hu_metric_use_metric">Metrikus mértékegységek használata</string>
     <string name="hu_metric_use_english">Angolszász mértékegységek használata</string>
+    <string name="hu_scale_title">Display scale on map</string>
+    <string name="hu_scale_show">Scale is displayed</string>
+    <string name="hu_scale_hide">Scale is not displayed</string>
     <string name="hu_distance_title">Távolság megjelenítés</string>
     <string name="hu_distance_show">Megjeleníti a jelenlegi helyzet és a képernyő közepe közötti távolságot</string>
     <string name="hu_distance_hide">A távolság nem megjelenített</string>
@@ -179,12 +182,14 @@
     <string name="hu_language_selected_format">Használt nyelv: %s</string>
     <string name="hu_max_map_img_size_title">Maximális térképlap méret</string>
     <string name="hu_max_map_img_size">%.1f megapixel</string>
+    <string name="hu_watch_tutorial">Watch tutorial video</string>
     <string name="hu_about_custom_maps">Custom Maps névjegy</string>
 
     <!-- about dialog -->
     <string name="hu_version_label">verzió</string>
     <string name="hu_credits_text">
         <b>Külön köszönet</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (pinch zoom, user location icon)
         \n\u2022 Patrick Steiner (internationalization, German translation)
         \n\u2022 Francesco Terribile (Italian translation)

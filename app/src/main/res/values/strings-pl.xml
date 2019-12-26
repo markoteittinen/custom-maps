@@ -162,6 +162,9 @@
     <string name="pl_metric_title">Użyj jednostek metrycznych</string>
     <string name="pl_metric_use_metric">W użyciu jednostki metryczne</string>
     <string name="pl_metric_use_english">W użyciu jednostki angielskie</string>
+    <string name="pl_scale_title">Display scale on map</string>
+    <string name="pl_scale_show">Scale is displayed</string>
+    <string name="pl_scale_hide">Scale is not displayed</string>
     <string name="pl_distance_title">Wyświetlaj odległość</string>
     <string name="pl_distance_show">Wyświetla odległość od położenia użytkownika do środka ekranu</string>
     <string name="pl_distance_hide">Odległość nie jest wyświetlana ani przeliczana</string>
@@ -178,12 +181,14 @@
     <string name="pl_language_selected_format">Używany %s</string>
     <string name="pl_max_map_img_size_title">Maksymalny rozmia mapy</string>
     <string name="pl_max_map_img_size">%.1f megapixeli</string>
+    <string name="pl_watch_tutorial">Watch tutorial video</string>
     <string name="pl_about_custom_maps">Informacje o Custom Maps</string>
 
     <!-- about dialog -->
     <string name="pl_version_label">wersja</string>
     <string name="pl_credits_text">
         <b>Specjalne podziękowania</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
 		\n\u2022 Harlan Hile (skalowanie poprzez przesuwanie palcami, ikona położenia użytkownika)
 		\n\u2022 Patrick Steiner (przystosowanie do innych języków, niemieckie tłumaczenie)
 		\n\u2022 Francesco Terribile (włoskie tłumaczenie)

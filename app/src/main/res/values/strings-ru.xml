@@ -176,6 +176,9 @@
     <string name="ru_metric_title">Метрические единицы</string>
     <string name="ru_metric_use_metric">Используются метрические единицы</string>
     <string name="ru_metric_use_english">Используются неметрические единицы</string>
+    <string name="ru_scale_title">Display scale on map</string>
+    <string name="ru_scale_show">Scale is displayed</string>
+    <string name="ru_scale_hide">Scale is not displayed</string>
     <string name="ru_distance_title">Показывать расстояние</string>
     <string name="ru_distance_show">Показывать расстояние от Вашего положения до центра экрана</string>
     <string name="ru_distance_hide">Расстояние не показывается или не определено</string>
@@ -192,12 +195,14 @@
     <string name="ru_language_selected_format">Используемый %s</string>
     <string name="ru_max_map_img_size_title">Максимальный размер карты</string>
     <string name="ru_max_map_img_size">%.1f мегапикселей</string>
+    <string name="ru_watch_tutorial">Watch tutorial video</string>
     <string name="ru_about_custom_maps">О приложении Custom Maps</string>
 
     <!-- about dialog -->
     <string name="ru_version_label">Версия</string>
     <string name="ru_credits_text">
         <b>Хочется поблагодарить:</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (мультитач, иконка пользователя)
         \n\u2022 Patrick Steiner (интернациализация, перевод на немецкий)
         \n\u2022 Francesco Terribile (перевод на итальянский)

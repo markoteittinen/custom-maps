@@ -169,6 +169,9 @@
     <string name="metric_title">Koristi metričke jedinice</string>
     <string name="metric_use_metric">Sada koristim metričke jedinice</string>
     <string name="metric_use_english">Sada koristim Engleske jedinice</string>
+    <string name="scale_title">Display scale on map</string>
+    <string name="scale_show">Scale is displayed</string>
+    <string name="scale_hide">Scale is not displayed</string>
     <string name="distance_title">Prikaži udaljenost</string>
     <string name="distance_show">Prikaži udaljenost od korisničke lokacije do centra ekrana</string>
     <string name="distance_hide">
@@ -189,11 +192,13 @@
     <string name="language_selected_format">Koristim %s</string>
     <string name="max_map_img_size_title">Maksimalna veličina slike</string>
     <string name="max_map_img_size">%.1f megapiksela</string>
+    <string name="watch_tutorial">Watch tutorial video</string>
     <string name="about_custom_maps">O Custom Maps</string>
 
     <!-- about dialog -->
     <string name="version_label">verzija</string>
     <string name="credits_text"><b>Posebne zahvale</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (zumiranje hvatanjem, ikona lokacije korisnika)
         \n\u2022 Patrick Steiner (internacionalizacija, Njemački prijevod)
         \n\u2022 Francesco Terribile (Talijanski prijevod)

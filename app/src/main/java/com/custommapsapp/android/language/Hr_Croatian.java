@@ -140,6 +140,10 @@ class Hr_Croatian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.safety_reminder_title, R.string.hr_safety_reminder_title);
     resourceIdMap.put(R.string.safety_warning, R.string.hr_safety_warning);
     resourceIdMap.put(R.string.safety_warning_title, R.string.hr_safety_warning_title);
+    // Missing translation
+//    resourceIdMap.put(R.string.scale_hide, R.string.hr_scale_hide);
+//    resourceIdMap.put(R.string.scale_show, R.string.hr_scale_show);
+//    resourceIdMap.put(R.string.scale_title, R.string.hr_scale_title);
     resourceIdMap.put(R.string.sdcard, R.string.hr_sdcard);
     // Missing translation
 //    resourceIdMap.put(R.string.select_action, R.string.hr_select_action);
@@ -169,6 +173,8 @@ class Hr_Croatian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.use_picker, R.string.hr_use_picker);
     resourceIdMap.put(R.string.version_label, R.string.hr_version_label);
     resourceIdMap.put(R.string.waiting_for_gps, R.string.hr_waiting_for_gps);
+    // Missing translation
+//    resourceIdMap.put(R.string.watch_tutorial, R.string.hr_watch_tutorial);
     resourceIdMap.put(R.string.zoom_in, R.string.hr_zoom_in);
     resourceIdMap.put(R.string.zoom_out, R.string.hr_zoom_out);
   }

@@ -181,6 +181,9 @@
     <string name="it_metric_title">Usa sistema metrico</string>
     <string name="it_metric_use_metric">Sto usando il sistema metrico</string>
     <string name="it_metric_use_english">Sto utilizzando il sistema anglosassone</string>
+    <string name="it_scale_title">Display scale on map</string>
+    <string name="it_scale_show">Scale is displayed</string>
+    <string name="it_scale_hide">Scale is not displayed</string>
     <string name="it_distance_title">Mostra distanza</string>
     <string name="it_distance_show">
         Mostra distanza dalla posizione dell\'utente al centro dello schermo
@@ -203,12 +206,14 @@
     <string name="it_language_selected_format">Sto usando %s</string>
     <string name="it_max_map_img_size_title">Dimensione massima mappa</string>
     <string name="it_max_map_img_size">%.1f megapixels</string>
+    <string name="it_watch_tutorial">Watch tutorial video</string>
     <string name="it_about_custom_maps">Informazioni su Custom Maps</string>
 
     <!-- about dialog -->
     <string name="it_version_label">versione</string>
     <string name="it_credits_text">
         <b>Ringraziamenti speciali</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (pinch zoom, posizione utente)
         \n\u2022 Patrick Steiner (internazionalizzazione, tedesco)
         \n\u2022 Francesco Terribile (italiano)

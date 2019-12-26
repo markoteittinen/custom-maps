@@ -164,6 +164,9 @@
     <string name="en_metric_title">Use metric units</string>
     <string name="en_metric_use_metric">Now using metric units</string>
     <string name="en_metric_use_english">Now using English units</string>
+    <string name="en_scale_title">Display scale on map</string>
+    <string name="en_scale_show">Scale is displayed</string>
+    <string name="en_scale_hide">Scale is not displayed</string>
     <string name="en_distance_title">Display distance</string>
     <string name="en_distance_show">Displays distance from user location to center of screen</string>
     <string name="en_distance_hide">Distance is not displayed or computed</string>
@@ -180,12 +183,14 @@
     <string name="en_language_selected_format">Using %s</string>
     <string name="en_max_map_img_size_title">Maximum map image size</string>
     <string name="en_max_map_img_size">%.1f megapixels</string>
+    <string name="en_watch_tutorial">Watch tutorial video</string>
     <string name="en_about_custom_maps">About Custom Maps</string>
 
     <!-- about dialog -->
     <string name="en_version_label">version</string>
     <string name="en_credits_text">
         <b>Special thanks</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (pinch zoom, user location icon)
         \n\u2022 Patrick Steiner (internationalization, German translation)
         \n\u2022 Francesco Terribile (Italian translation)

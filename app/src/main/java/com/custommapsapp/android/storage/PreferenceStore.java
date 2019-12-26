@@ -40,6 +40,7 @@ public class PreferenceStore {
   public static final String PREFS_SHOW_DETAILS = "showDetails";
   public static final String PREFS_SHOW_DISTANCE = "showDistance";
   public static final String PREFS_SHOW_HEADING = "showHeading";
+  public static final String PREFS_SHOW_SCALE = "showScale";
   public static final String PREFS_LICENSE_ACCEPTED = "licenseAccepted";
   public static final String PREFS_SHOW_REMINDER = "showReminder";
   public static final String PREFS_LANGUAGE = "language";
@@ -84,7 +85,7 @@ public class PreferenceStore {
       if (MapApiKeys.isReleasedVersion(context)) {
         version = info.versionName;
       } else {
-        version = String.format("%s (beta #%d)", info.versionName, info.versionCode);
+        version = String.format(Locale.US, "%s (beta #%d)", info.versionName, info.versionCode);
       }
     } catch (NameNotFoundException e) {
       Log.w(CustomMaps.LOG_TAG, "Failed to find version info for app", e);
@@ -134,6 +135,14 @@ public class PreferenceStore {
 
   public void setShowHeading(boolean showHeading) {
     prefs.edit().putBoolean(PREFS_SHOW_HEADING, showHeading).apply();
+  }
+
+  public boolean isShowScale() {
+    return prefs.getBoolean(PREFS_SHOW_SCALE, true);
+  }
+
+  public void setShowScale(boolean showScale) {
+    prefs.edit().putBoolean(PREFS_SHOW_SCALE, showScale).apply();
   }
 
   public boolean isUseArgb_8888() {

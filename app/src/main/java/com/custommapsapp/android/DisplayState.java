@@ -45,6 +45,14 @@ public class DisplayState {
     imageToScreen.setScreenView(view);
   }
 
+  public int getViewWidth() {
+    return imageToScreen.getScreenView().getWidth();
+  }
+
+  public int getViewHeight() {
+    return imageToScreen.getScreenView().getHeight();
+  }
+
   /**
    * Sets if the map display should keep the GPS location centered as it
    * gets updated.

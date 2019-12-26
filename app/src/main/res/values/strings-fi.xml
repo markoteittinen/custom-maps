@@ -176,6 +176,9 @@
     <string name="fi_metric_title">Käytä metrijärjestelmää</string>
     <string name="fi_metric_use_metric">Metrijärjestelmä käytössä</string>
     <string name="fi_metric_use_english">Englantilainen mittajärjestelmä käytössä</string>
+    <string name="fi_scale_title">Näytä mittakaava kartalla</string>
+    <string name="fi_scale_show">Mittakaava on näkyvissä</string>
+    <string name="fi_scale_hide">Mittakaava ei ole näkyvissä</string>
     <string name="fi_distance_title">Näytä etäisyys</string>
     <string name="fi_distance_show">Etäisyys näytetään näytön keskipisteeseen</string>
     <string name="fi_distance_hide">Etäisyyttä ei näytetä eikä lasketa</string>
@@ -190,12 +193,14 @@
     <string name="fi_language_selected_format">Käytössä %s</string>
     <string name="fi_max_map_img_size_title">Maksimi karttakuvan koko</string>
     <string name="fi_max_map_img_size">%.1f miljoonaa pistettä</string>
+    <string name="fi_watch_tutorial">Katso ohjelman opetusvideo</string>
     <string name="fi_about_custom_maps">Tietoja Custom Mapsistä</string>
 
     <!-- about dialog -->
     <string name="fi_version_label">Versio</string>
     <string name="fi_credits_text">
         <b>Erityiskiitokset</b>
+        \n\u2022 Bart Eisenberg (opastusvideo)
         \n\u2022 Harlan Hile (nipistyszoomi, käyttäjän sijaintikuvake)
         \n\u2022 Patrick Steiner (ohjelman käännettävyys, Saksan kieli)
         \n\u2022 Francesco Terribile (Italian kieli)

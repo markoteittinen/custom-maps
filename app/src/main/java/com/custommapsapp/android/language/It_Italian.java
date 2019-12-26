@@ -140,6 +140,10 @@ class It_Italian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.safety_reminder_title, R.string.it_safety_reminder_title);
     resourceIdMap.put(R.string.safety_warning, R.string.it_safety_warning);
     resourceIdMap.put(R.string.safety_warning_title, R.string.it_safety_warning_title);
+    // Missing translation
+//    resourceIdMap.put(R.string.scale_hide, R.string.it_scale_hide);
+//    resourceIdMap.put(R.string.scale_show, R.string.it_scale_show);
+//    resourceIdMap.put(R.string.scale_title, R.string.it_scale_title);
     resourceIdMap.put(R.string.sdcard, R.string.it_sdcard);
     // Missing translation
 //    resourceIdMap.put(R.string.select_action, R.string.it_select_action);
@@ -168,6 +172,8 @@ class It_Italian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.use_picker, R.string.it_use_picker);
     resourceIdMap.put(R.string.version_label, R.string.it_version_label);
     resourceIdMap.put(R.string.waiting_for_gps, R.string.it_waiting_for_gps);
+    // Missing translation
+//    resourceIdMap.put(R.string.watch_tutorial, R.string.it_watch_tutorial);
     resourceIdMap.put(R.string.zoom_in, R.string.it_zoom_in);
     resourceIdMap.put(R.string.zoom_out, R.string.it_zoom_out);
   }

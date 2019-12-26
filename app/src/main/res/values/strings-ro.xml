@@ -180,6 +180,9 @@
     <string name="ro_metric_title">Utlizați sistemul metric</string>
     <string name="ro_metric_use_metric">Acum utilizați sistemul metric</string>
     <string name="ro_metric_use_english">Acum utilizați sistemul englezesc</string>
+    <string name="ro_scale_title">Display scale on map</string>
+    <string name="ro_scale_show">Scale is displayed</string>
+    <string name="ro_scale_hide">Scale is not displayed</string>
     <string name="ro_distance_title">Afișează distanța</string>
     <string name="ro_distance_show">
         Afișează distanța de la locația curentă la centrul ecranului
@@ -199,12 +202,14 @@
     <string name="ro_language_selected_format">Utilizarea %s</string>
     <string name="ro_max_map_img_size_title">Dimenziune maximă imagine hartă</string>
     <string name="ro_max_map_img_size">%.1f megapixels</string>
+    <string name="ro_watch_tutorial">Watch tutorial video</string>
     <string name="ro_about_custom_maps">Despre Custom Maps</string>
 
     <!-- about dialog -->
     <string name="ro_version_label">version</string>
     <string name="ro_credits_text">
         <b>Special thanks</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (pinch zoom, user location icon)
         \n\u2022 Patrick Steiner (internationalization, German translation)
         \n\u2022 Francesco Terribile (Italian translation)
