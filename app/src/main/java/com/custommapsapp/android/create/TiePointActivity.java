@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -191,10 +193,12 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
     super.onCreateOptionsMenu(menu);
     MenuItem item =
         menu.add(Menu.NONE, MENU_USER_LOCATION, Menu.NONE, linguist.getString(R.string.my_location))
-            .setIcon(R.drawable.ic_my_location_black_24dp);
+            .setIcon(R.drawable.ic_my_location_white_24dp);
     item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    Drawable mapModeIcon = getResources().getDrawable(R.drawable.mapmode);
+    mapModeIcon.setColorFilter(0xffffffff, PorterDuff.Mode.SRC_ATOP);
     item = menu.add(Menu.NONE, MENU_MAP_MODE, Menu.NONE, linguist.getString(R.string.map_mode))
-        .setIcon(R.drawable.mapmode);
+        .setIcon(mapModeIcon);
     item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;

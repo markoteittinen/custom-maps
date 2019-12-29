@@ -115,6 +115,13 @@ public class Linguist {
     return resources.getString(resId, formatArgs);
   }
 
+  public String[] getStringArray(int resId) {
+    if (language != null) {
+      resId = language.translateResId(resId);
+    }
+    return resources.getStringArray(resId);
+  }
+
   public void translateView(View view) {
     if (view instanceof ViewGroup) {
       translateViewGroup((ViewGroup) view);

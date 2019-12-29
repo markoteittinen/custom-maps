@@ -61,6 +61,9 @@ class Ro_Romanian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.distance_hide, R.string.ro_distance_hide);
     resourceIdMap.put(R.string.distance_show, R.string.ro_distance_show);
     resourceIdMap.put(R.string.distance_title, R.string.ro_distance_title);
+    // Missing translation
+//    resourceIdMap.put(R.string.distance_units_title, R.string.ro_distance_units_title);
+//    resourceIdMap.put(R.array.distance_unit_entries, R.array.ro_distance_unit_entries);
     resourceIdMap.put(R.string.download_canceled, R.string.ro_download_canceled);
     resourceIdMap.put(R.string.download_failed, R.string.ro_download_failed);
     resourceIdMap.put(R.string.download_info, R.string.ro_download_info);

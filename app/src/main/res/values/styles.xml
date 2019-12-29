@@ -13,8 +13,7 @@
         <item name="android:actionBarStyle">@style/MapActionBar</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
-    <style name="MapActionBar"
-        parent="Widget.AppCompat.ActionBar">
+    <style name="MapActionBar" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">#80000000</item>
     </style>
 

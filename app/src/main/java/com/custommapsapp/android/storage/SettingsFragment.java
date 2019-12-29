@@ -41,18 +41,21 @@ import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.MemoryUtil;
 import com.custommapsapp.android.R;
+import com.custommapsapp.android.kml.IconStyle;
 import com.custommapsapp.android.language.Linguist;
 
 /**
  * SettingsFragment is PreferenceFragment for Custom Maps. Currently supported preferences:
  * <ul>
- * <li> isMetric (bool) - selects between metric and English units
+ * <li> distanceUnits (string) - selects user preferred units for distance (km, mi, nmi)
+ * <li> scaleDisplay (bool) - selects if map scale is displayed on the map
  * <li> distanceDisplay (bool) - selects if distance to center of map is displayed
  * <li> headingDisplay (bool) - selects if heading to center of map is displayed (requires distance)
  * <li> safetyReminder (bool) - selects if safety reminder is shown when a map is opened
  * <li> color32bit (bool) - selects if 32 bit color should be used (may limit image size)
  * <li> useGpu (bool) - selects if GPU acceleration is used (limits image size severely)
  * <li> language (string) - allows user to override system language preference
+ * <li> tutorial (void) - launches tutorial video about Custom Maps
  * </ul>
  *
  * @author Marko Teittinen
@@ -98,14 +101,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     PreferenceScreen root = getPreferenceManager().createPreferenceScreen(activity);
 
     // Units preference
-    CheckBoxPreference isMetric = new CheckBoxPreference(activity);
-    isMetric.setDefaultValue(PreferenceStore.isMetricLocale());
-    isMetric.setKey(PreferenceStore.PREFS_METRIC);
-    isMetric.setTitle(linguist.getString(R.string.metric_title));
-    isMetric.setSummaryOff(linguist.getString(R.string.metric_use_english));
-    isMetric.setSummaryOn(linguist.getString(R.string.metric_use_metric));
-    root.addPreference(isMetric);
+    ListPreference distanceUnits = new ListPreference(activity);
+    distanceUnits.setKey(PreferenceStore.PREFS_DISTANCE_UNITS);
+    distanceUnits.setTitle(linguist.getString(R.string.distance_units_title));
+    distanceUnits.setEntries(linguist.getStringArray(R.array.distance_unit_entries));
+    distanceUnits.setEntryValues(R.array.distance_unit_values);
+    String defUnits = PreferenceStore.instance(activity).getDistanceUnits().name();
+    distanceUnits.setDefaultValue(defUnits);
+    distanceUnits.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+    distanceUnits.setNegativeButtonText(linguist.getString(R.string.button_close));
+    root.addPreference(distanceUnits);
 
+    // Display scale of the map at current zoom level
     CheckBoxPreference scaleDisplay = new CheckBoxPreference(activity);
     scaleDisplay.setDefaultValue(true);
     scaleDisplay.setKey(PreferenceStore.PREFS_SHOW_SCALE);
@@ -177,15 +184,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     // About dialog
     Preference about = createAboutPreference(linguist);
-    if (about != null) {
-      root.addPreference(about);
-    }
+    root.addPreference(about);
 
     // Maximum image size info
     imageSizeInfo = createImageSizeInfo(linguist);
-    if (imageSizeInfo != null) {
-      root.addPreference(imageSizeInfo);
-    }
+    root.addPreference(imageSizeInfo);
 
     return root;
   }

@@ -60,6 +60,9 @@ class Hu_Hungarian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.distance_hide, R.string.hu_distance_hide);
     resourceIdMap.put(R.string.distance_show, R.string.hu_distance_show);
     resourceIdMap.put(R.string.distance_title, R.string.hu_distance_title);
+    // Missing translation
+//    resourceIdMap.put(R.string.distance_units_title, R.string.hu_distance_units_title);
+//    resourceIdMap.put(R.array.distance_unit_entries, R.array.hu_distance_unit_entries);
     resourceIdMap.put(R.string.download_canceled, R.string.hu_download_canceled);
     resourceIdMap.put(R.string.download_failed, R.string.hu_download_failed);
     resourceIdMap.put(R.string.download_info, R.string.hu_download_info);

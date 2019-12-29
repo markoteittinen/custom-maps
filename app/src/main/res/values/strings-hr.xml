@@ -170,6 +170,7 @@
     <string name="hr_metric_title">Koristi metričke jedinice</string>
     <string name="hr_metric_use_metric">Sada koristim metričke jedinice</string>
     <string name="hr_metric_use_english">Sada koristim Engleske jedinice</string>
+    <string name="hr_distance_units_title">Selected distance units</string>
     <string name="hr_scale_title">Display scale on map</string>
     <string name="hr_scale_show">Scale is displayed</string>
     <string name="hr_scale_hide">Scale is not displayed</string>
@@ -195,6 +196,13 @@
     <string name="hr_max_map_img_size">%.1f megapiksela</string>
     <string name="hr_watch_tutorial">Watch tutorial video</string>
     <string name="hr_about_custom_maps">O Custom Maps</string>
+
+    <!-- Selectable distance units labels. -->
+    <string-array name="hr_distance_unit_entries">
+        <item>Kilometers and meters (km, m)</item>
+        <item>Miles, yards, and feet (mi, yds, ft)</item>
+        <item>Nautical miles and feet (nmi, ft)</item>
+    </string-array>
 
     <!-- about dialog -->
     <string name="hr_version_label">verzija</string>

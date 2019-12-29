@@ -176,6 +176,7 @@
     <string name="de_metric_title">Metrische Einheiten verwenden</string>
     <string name="de_metric_use_metric">Metrische Einheiten werden verwendet</string>
     <string name="de_metric_use_english">Englische Einheiten werden verwendet</string>
+    <string name="de_distance_units_title">Selected distance units</string>
     <string name="de_scale_title">Display scale on map</string>
     <string name="de_scale_show">Scale is displayed</string>
     <string name="de_scale_hide">Scale is not displayed</string>
@@ -197,6 +198,13 @@
     <string name="de_max_map_img_size">%.1f Megapixel</string>
     <string name="de_watch_tutorial">Watch tutorial video</string>
     <string name="de_about_custom_maps">Über Custom Maps</string>
+
+    <!-- Selectable distance units labels. -->
+    <string-array name="de_distance_unit_entries">
+        <item>Kilometers and meters (km, m)</item>
+        <item>Miles, yards, and feet (mi, yds, ft)</item>
+        <item>Nautical miles and feet (nmi, ft)</item>
+    </string-array>
 
     <!-- about dialog -->
     <string name="de_version_label">Version</string>

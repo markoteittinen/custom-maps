@@ -176,6 +176,7 @@
     <string name="fi_metric_title">Käytä metrijärjestelmää</string>
     <string name="fi_metric_use_metric">Metrijärjestelmä käytössä</string>
     <string name="fi_metric_use_english">Englantilainen mittajärjestelmä käytössä</string>
+    <string name="fi_distance_units_title">Käytössä olevat mittayksiköt</string>
     <string name="fi_scale_title">Näytä mittakaava kartalla</string>
     <string name="fi_scale_show">Mittakaava on näkyvissä</string>
     <string name="fi_scale_hide">Mittakaava ei ole näkyvissä</string>
@@ -195,6 +196,13 @@
     <string name="fi_max_map_img_size">%.1f miljoonaa pistettä</string>
     <string name="fi_watch_tutorial">Katso ohjelman opetusvideo</string>
     <string name="fi_about_custom_maps">Tietoja Custom Mapsistä</string>
+
+    <!-- Selectable distance units labels. -->
+    <string-array name="fi_distance_unit_entries">
+        <item>Kilometrit ja metrit (km, m)</item>
+        <item>Mailit, jaardit, ja jalat (mi, yds, ft)</item>
+        <item>Meripeninkulmat ja jalat (nmi, ft)</item>
+    </string-array>
 
     <!-- about dialog -->
     <string name="fi_version_label">Versio</string>

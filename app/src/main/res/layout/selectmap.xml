@@ -15,7 +15,8 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:background="@color/primaryColor"
-        app:titleTextColor="@color/primaryTextColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:title="Select Map"/>
 
     <ListView

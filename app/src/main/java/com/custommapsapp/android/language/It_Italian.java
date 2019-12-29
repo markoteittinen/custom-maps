@@ -61,6 +61,9 @@ class It_Italian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.distance_hide, R.string.it_distance_hide);
     resourceIdMap.put(R.string.distance_show, R.string.it_distance_show);
     resourceIdMap.put(R.string.distance_title, R.string.it_distance_title);
+    // Missing translation
+//    resourceIdMap.put(R.string.distance_units_title, R.string.it_distance_units_title);
+//    resourceIdMap.put(R.array.distance_unit_entries, R.array.it_distance_unit_entries);
     resourceIdMap.put(R.string.download_canceled, R.string.it_download_canceled);
     resourceIdMap.put(R.string.download_failed, R.string.it_download_failed);
     resourceIdMap.put(R.string.download_info, R.string.it_download_info);

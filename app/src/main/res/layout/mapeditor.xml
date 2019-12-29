@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/primaryTextColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:title="Create Map" />
 
     <TextView
@@ -93,13 +94,13 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@id/tiepoints"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        app:tint="#000"/>
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/bottombar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

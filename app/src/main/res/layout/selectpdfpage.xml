@@ -15,7 +15,8 @@
         android:layout_alignParentTop="true"
         android:background="@color/primaryColor"
         android:gravity="end"
-        app:titleTextColor="@color/primaryTextColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:title="Select Page">
 
         <TextView
@@ -26,7 +27,6 @@
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="16dp"
             android:textAlignment="textEnd"
-            android:textColor="@color/primaryTextColor"
             tools:text="4/12" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/primaryColor">
+        android:background="@color/primaryColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <TextView
             style="@style/SmallText"
@@ -47,7 +48,6 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/primaryTextColor"
             android:tag="rotate_page"
             android:text="@string/rotate_page" />
 
@@ -59,6 +59,7 @@
             android:layout_marginEnd="24dp"
             android:background="#0000"
             android:scaleType="fitCenter"
+            android:tint="@color/secondaryTextColor"
             app:srcCompat="@drawable/ic_rotate_ccw_24dp" />
 
         <ImageButton
@@ -68,6 +69,7 @@
             android:layout_gravity="start|center_vertical"
             android:background="#0000"
             android:scaleType="fitCenter"
+            android:tint="@color/secondaryTextColor"
             app:srcCompat="@drawable/ic_rotate_cw_24dp" />
     </androidx.appcompat.widget.Toolbar>
 

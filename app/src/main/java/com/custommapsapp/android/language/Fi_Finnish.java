@@ -59,6 +59,8 @@ class Fi_Finnish extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.distance_hide, R.string.fi_distance_hide);
     resourceIdMap.put(R.string.distance_show, R.string.fi_distance_show);
     resourceIdMap.put(R.string.distance_title, R.string.fi_distance_title);
+    resourceIdMap.put(R.string.distance_units_title, R.string.fi_distance_units_title);
+    resourceIdMap.put(R.array.distance_unit_entries, R.array.fi_distance_unit_entries);
     resourceIdMap.put(R.string.download_canceled, R.string.fi_download_canceled);
     resourceIdMap.put(R.string.download_failed, R.string.fi_download_failed);
     resourceIdMap.put(R.string.download_info, R.string.fi_download_info);

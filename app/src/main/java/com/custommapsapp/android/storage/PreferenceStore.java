@@ -28,6 +28,7 @@ import android.util.Log;
 
 import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.MapApiKeys;
+import com.custommapsapp.android.UnitsManager;
 
 /**
  * PreferenceStore provides read access to Custom Maps application preferences.
@@ -36,6 +37,7 @@ import com.custommapsapp.android.MapApiKeys;
  */
 public class PreferenceStore {
   public static final String PREFS_METRIC = "isMetric";
+  public static final String PREFS_DISTANCE_UNITS = "distanceUnits";
   public static final String PREFS_LASTMAP = "lastMap";
   public static final String PREFS_SHOW_DETAILS = "showDetails";
   public static final String PREFS_SHOW_DISTANCE = "showDistance";
@@ -93,8 +95,48 @@ public class PreferenceStore {
     return version;
   }
 
+  /**
+   * This method is deprecated, use {@link #getDistanceUnits()} instead.
+   *
+   * @return boolean indicating if user prefers metric distance units over miles and feet.
+   */
+  @Deprecated
   public boolean isMetric() {
     return prefs.getBoolean(PREFS_METRIC, PreferenceStore.isMetricLocale());
+  }
+
+  /**
+   * Returns user's preferred distance units, one of KM, MI, or NMI.
+   */
+  public UnitsManager.DistanceUnits getDistanceUnits() {
+    if (prefs.contains(PREFS_METRIC)) {
+      // If old two-option preference exists, migrate its value
+      UnitsManager.DistanceUnits units = isMetric() ? UnitsManager.DistanceUnits.KM : UnitsManager.DistanceUnits.MI;
+      setDistanceUnits(units);
+      // Remove old preference value, and return
+      prefs.edit().remove(PREFS_METRIC).apply();
+      return units;
+    }
+    // Get new multi-option preference value
+    String undefined = "undefined";
+    String unitsName = prefs.getString(PREFS_DISTANCE_UNITS, undefined);
+    try {
+      return UnitsManager.DistanceUnits.valueOf(unitsName);
+    } catch (IllegalArgumentException ex) {
+      // Invalid unitsName, most likely value has never been saved
+      if (!undefined.equals(unitsName)) {
+        // Something unexpected was wrong, log a warning
+        Log.w(CustomMaps.LOG_TAG, "Invalid distance units preference: " + unitsName);
+      }
+    }
+    return isMetricLocale() ? UnitsManager.DistanceUnits.KM : UnitsManager.DistanceUnits.MI;
+  }
+
+  public void setDistanceUnits(UnitsManager.DistanceUnits distanceUnits) {
+    if (distanceUnits == null) {
+      return;
+    }
+    prefs.edit().putString(PREFS_DISTANCE_UNITS, distanceUnits.name()).apply();
   }
 
   public boolean isReminderRequested() {

@@ -116,12 +116,7 @@ public class DistanceLayer extends View {
     int accuracyM = Math.round(userLocation.getAccuracy());
 
     // Format the distance and accuracy nicely
-    String distanceStr;
-    if (PreferenceStore.instance(getContext()).isMetric()) {
-      distanceStr = getMetricDistanceString(distanceM, accuracyM);
-    } else {
-      distanceStr = getEnglishDistanceString(distanceM, accuracyM);
-    }
+    String distanceStr = UnitsManager.getDistanceToCenter(getContext(), distanceM, accuracyM);
 
     // Add heading to center if requested
     String displayStr;

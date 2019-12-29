@@ -36,31 +36,32 @@
         android:id="@+id/zoomOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/imageDisplay"
+        android:layout_alignEnd="@id/imageDisplay"
         android:layout_alignBottom="@id/imageDisplay"
         android:background="#00000000"
         android:tag="zoom_out"
         android:contentDescription="@string/zoom_out"
         android:paddingStart="10dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="5dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:src="@drawable/zoomout" />
+        android:src="@drawable/ic_zoom_out" />
 
     <ImageButton
         android:id="@+id/zoomIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@id/imageDisplay"
-        android:layout_alignBottom="@id/imageDisplay"
+        android:layout_above="@id/zoomOut"
+        android:layout_marginBottom="8dp"
         android:background="#00000000"
         android:tag="zoom_in"
         android:contentDescription="@string/zoom_in"
-        android:paddingStart="5dp"
-        android:paddingTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:src="@drawable/zoomin" />
+        android:src="@drawable/ic_zoom_in" />
 
     <TextView
         android:id="@+id/help"
@@ -82,7 +83,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/primaryColorTranslucent"
-        app:titleTextColor="@color/primaryTextColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:title="Create map" />
 
 </RelativeLayout>

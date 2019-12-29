@@ -163,6 +163,7 @@
     <string name="hu_metric_title">Metrikus mértékegységek</string>
     <string name="hu_metric_use_metric">Metrikus mértékegységek használata</string>
     <string name="hu_metric_use_english">Angolszász mértékegységek használata</string>
+    <string name="hu_distance_units_title">Selected distance units</string>
     <string name="hu_scale_title">Display scale on map</string>
     <string name="hu_scale_show">Scale is displayed</string>
     <string name="hu_scale_hide">Scale is not displayed</string>
@@ -184,6 +185,13 @@
     <string name="hu_max_map_img_size">%.1f megapixel</string>
     <string name="hu_watch_tutorial">Watch tutorial video</string>
     <string name="hu_about_custom_maps">Custom Maps névjegy</string>
+
+    <!-- Selectable distance units labels. -->
+    <string-array name="hu_distance_unit_entries">
+        <item>Kilometers and meters (km, m)</item>
+        <item>Miles, yards, and feet (mi, yds, ft)</item>
+        <item>Nautical miles and feet (nmi, ft)</item>
+    </string-array>
 
     <!-- about dialog -->
     <string name="hu_version_label">verzió</string>

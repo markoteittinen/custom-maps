@@ -176,6 +176,7 @@
     <string name="ru_metric_title">Метрические единицы</string>
     <string name="ru_metric_use_metric">Используются метрические единицы</string>
     <string name="ru_metric_use_english">Используются неметрические единицы</string>
+    <string name="ru_distance_units_title">Selected distance units</string>
     <string name="ru_scale_title">Display scale on map</string>
     <string name="ru_scale_show">Scale is displayed</string>
     <string name="ru_scale_hide">Scale is not displayed</string>
@@ -197,6 +198,13 @@
     <string name="ru_max_map_img_size">%.1f мегапикселей</string>
     <string name="ru_watch_tutorial">Watch tutorial video</string>
     <string name="ru_about_custom_maps">О приложении Custom Maps</string>
+
+    <!-- Selectable distance units labels. -->
+    <string-array name="ru_distance_unit_entries">
+        <item>Kilometers and meters (km, m)</item>
+        <item>Miles, yards, and feet (mi, yds, ft)</item>
+        <item>Nautical miles and feet (nmi, ft)</item>
+    </string-array>
 
     <!-- about dialog -->
     <string name="ru_version_label">Версия</string>

@@ -174,6 +174,7 @@
     <string name="metric_title">Käytä metrijärjestelmää</string>
     <string name="metric_use_metric">Metrijärjestelmä käytössä</string>
     <string name="metric_use_english">Englantilainen mittajärjestelmä käytössä</string>
+    <string name="distance_units_title">Käytössä olevat mittayksiköt</string>
     <string name="scale_title">Näytä mittakaava kartalla</string>
     <string name="scale_show">Mittakaava on näkyvissä</string>
     <string name="scale_hide">Mittakaava ei ole näkyvissä</string>
@@ -194,8 +195,15 @@
     <string name="watch_tutorial">Katso ohjelman opetusvideo</string>
     <string name="about_custom_maps">Tietoja Custom Mapsistä</string>
 
+    <!-- Selectable distance units labels. -->
+    <string-array name="distance_unit_entries">
+        <item>Kilometrit ja metrit (km, m)</item>
+        <item>Mailit, jaardit, ja jalat (mi, yds, ft)</item>
+        <item>Meripeninkulmat ja jalat (nmi, ft)</item>
+    </string-array>
+
     <!-- about dialog -->
-    <string name="version_label">Versio</string>
+    <string name="version_label">versio</string>
     <string name="credits_text">
         <b>Erityiskiitokset</b>
         \n\u2022 Bart Eisenberg (opastusvideo)

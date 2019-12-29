@@ -1,6 +1,19 @@
+/*
+ * Copyright 2019 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.custommapsapp.android;
-
-import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
@@ -39,10 +52,8 @@ public class ScaleDisplay {
     scaleText = label;
     this.displayState = displayState;
     scaleIcon.setImageResource(isHorizontal ? ICON_SPAN_SHORT : ICON_SPAN_LONG);
-    scaleIcon.setOnClickListener(v -> {
-      setHorizontal(!isHorizontal);
-      update();
-    });
+    scaleIcon.setOnClickListener(v -> toggleScaleDirection());
+    scaleText.setOnClickListener(v -> toggleScaleDirection());
   }
 
   public void setHorizontal(boolean horizontal) {
@@ -64,17 +75,6 @@ public class ScaleDisplay {
     this.topPaddingPx = topPaddingPx;
   }
 
-  public void setMetric(boolean metric) {
-    if (isMetric != metric) {
-      isMetric = metric;
-    }
-  }
-
-  public boolean isMetric() {
-    return isMetric;
-  }
-
-  @SuppressLint("SetTextI18n")
   public void update() {
     Location upperLeftGeo = getUpperLeftLocation();
     Location upperRightGeo = getUpperRightLocation();
@@ -94,41 +94,14 @@ public class ScaleDisplay {
       double distanceRightM = upperRightGeo.distanceTo(lowerRightGeo);
       distanceM = (distanceLeftM + distanceRightM) / 2.0;
     }
-    // Span distance in kilometers or miles
-    double distance;
-    if (isMetric()) {
-      distance = distanceM / 1000.0;
-    } else {
-      distance = metersToMiles(distanceM);
-    }
 
-    // Use two significant digits for label:
-    // -> No decimals if displayed value is 10 or larger
-    // -> One decimal if displayed value is [1.0, 9.9]
-    // -> Two decimals if displayed value is 0.99 or smaller
-    String distanceNumberText;
-    if (distance >= 1000) {
-      distance = Math.round(distance / 100) * 100;
-      distanceNumberText = String.format(Locale.getDefault(), "%.0f", distance);
-      updateMagnitude(4);
-    } else if (distance >= 100) {
-      distance = Math.round(distance / 10) * 10;
-      distanceNumberText = String.format(Locale.getDefault(), "%.0f", distance);
-      updateMagnitude(3);
-    } else if (distance >= 9.95) {
-      // Using no decimals for values [9.95, 10] prevents displaying "10.0" (3 significant digits)
-      distanceNumberText = String.format(Locale.getDefault(), "%.0f", distance);
-      updateMagnitude(2);
-    } else if (distance >= 0.995) {
-      // Using 1 decimal for values [0.995, 1.0] prevents displaying "1.00" (3 significant digits)
-      distanceNumberText = String.format(Locale.getDefault(), "%.1f", distance);
-      updateMagnitude(1);
-    } else {
-      distanceNumberText = String.format(Locale.getDefault(), "%.2f", distance);
-      updateMagnitude(0);
-    }
+    UnitsManager.updateScaleText(scaleText, distanceM);
+    updateMagnitude(scaleText.getText().length());
+  }
 
-    scaleText.setText(distanceNumberText + (isMetric() ? " km" : " mi"));
+  private void toggleScaleDirection() {
+    setHorizontal(!isHorizontal);
+    update();
   }
 
   private void updateMagnitude(int newMagnitude) {

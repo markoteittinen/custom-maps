@@ -271,7 +271,6 @@ public class CustomMaps extends AppCompatActivity {
     if (selectedMap != null) {
       loadMapForDisplay(mapImage, null);
       mapDisplay.centerOnGpsLocation();
-      scaleDisplay.setMetric(PreferenceStore.instance(this).isMetric());
     }
 
     if (mapDisplay.getMap() == null && getIntent().getBundleExtra(SAVED_INSTANCESTATE) != null) {
@@ -309,7 +308,6 @@ public class CustomMaps extends AppCompatActivity {
     sensor = sensors.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     sensors.registerListener(locationTracker, sensor, 50000);
     PreferenceStore prefs = PreferenceStore.instance(getApplicationContext());
-    detailsDisplay.setUseMetric(prefs.isMetric());
     int visibility = prefs.isShowDetails() ? View.VISIBLE : View.GONE;
     detailsDisplay.setVisibility(visibility);
     visibility = prefs.isShowDistance() ? View.VISIBLE : View.GONE;
@@ -462,7 +460,7 @@ public class CustomMaps extends AppCompatActivity {
         .setIcon(R.drawable.mapmode);
     MenuItem item =
         menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, linguist.getString(R.string.my_location))
-            .setIcon(R.drawable.ic_my_location_black_24dp);
+            .setIcon(R.drawable.ic_my_location_white_24dp);
     item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     menu.add(
         Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, linguist.getString(R.string.location_details))
