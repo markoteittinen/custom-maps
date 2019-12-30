@@ -101,6 +101,11 @@ public class MapImageOverlay extends View
     googleMap.setOnCameraIdleListener(this);
   }
 
+  /** Returns true if this instance has a reference to a GoogleMap. */
+  public boolean hasGoogleMap() {
+    return googleMap != null;
+  }
+
   public Bitmap getMapImage() {
     return mapImage;
   }
@@ -217,10 +222,11 @@ public class MapImageOverlay extends View
     double[] geoCorners = new double[8];
     imageMatrixDbl.mapPoints(geoCorners, imageCorners);
     Point p = new Point();
+    Projection projection = googleMap.getProjection();
     for (int i = 0; i < 8; i += 2) {
       p.x = (int) Math.round(geoCorners[i]);
       p.y = (int) Math.round(geoCorners[i + 1]);
-      LatLng geoPoint = googleMap.getProjection().fromScreenLocation(p);
+      LatLng geoPoint = projection.fromScreenLocation(p);
       // geoCorners store locations in longitude, latitude order
       geoCorners[i] = geoPoint.longitude;
       geoCorners[i + 1] = geoPoint.latitude;

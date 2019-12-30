@@ -191,10 +191,23 @@ public abstract class MapDisplay extends View {
    * Zooms the map image by a factor. Values larger than 1 make the image grow
    * and values smaller than 1 make the image shrink.
    *
-   * @param factor to to zoom the map by. Must be larger than 0.
+   * @param factor to zoom the map by. Must be larger than 0.
    */
   public void zoomMap(float factor) {
     displayState.zoom(factor);
+    triggerRepaint();
+  }
+
+  /**
+   * Zooms the map image by a factor around the given x,y point. Values larger than 1 make the
+   * image grow and values smaller than 1 make the image shrink.
+   *
+   * @param factor to zoom the map by. Must be larger than 0.
+   * @param focusX screen x-coordinate of the point that is at the center of the zoom
+   * @param focusY screen y-coordinate of the point that is at the center of the zoom
+   */
+  public void zoomMap(float factor, float focusX, float focusY) {
+    displayState.zoom(factor, focusX, focusY);
     triggerRepaint();
   }
 

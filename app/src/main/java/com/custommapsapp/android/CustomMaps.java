@@ -115,7 +115,7 @@ public class CustomMaps extends AppCompatActivity {
   private DetailsDisplay detailsDisplay;
   private ScaleDisplay scaleDisplay = null;
   private View scaleDisplayView;
-  private InertiaScroller inertiaScroller;
+  private ViewInertiaScroller inertiaScroller;
   private ImageButton zoomIn;
   private ImageButton zoomOut;
   private DisplayState displayState;
@@ -154,6 +154,18 @@ public class CustomMaps extends AppCompatActivity {
     } else {
       selectedMap = null;
     }
+    inertiaScroller = new ViewInertiaScroller(mapDisplay);
+    inertiaScroller.setListener(new ViewInertiaScroller.Listener() {
+      @Override
+      public boolean move(float xd, float yd) {
+        return moveMap(xd, yd);
+      }
+
+      @Override
+      public void scale(float factor, float focusX, float focusY) {
+        scaleMap(factor, focusX, focusY);
+      }
+    });
   }
 
   private void reloadUI() {
@@ -168,10 +180,8 @@ public class CustomMaps extends AppCompatActivity {
     linguist.translateView(findViewById(R.id.root_view));
     mapDisplay = findViewById(R.id.mapDisplay);
     mapDisplay.setLinguist(linguist);
-    if (inertiaScroller == null) {
-      inertiaScroller = new InertiaScroller(mapDisplay);
-    } else {
-      inertiaScroller.setMap(mapDisplay);
+    if (inertiaScroller != null) {
+      inertiaScroller.setView(mapDisplay);
     }
     locationLayer = findViewById(R.id.locationLayer);
     displayState = new DisplayState();
@@ -181,15 +191,12 @@ public class CustomMaps extends AppCompatActivity {
     distanceLayer.setDisplayState(displayState);
     detailsDisplay = findViewById(R.id.detailsDisplay);
     detailsDisplay.setLinguist(linguist);
-    inertiaScroller.setOverlayViews(locationLayer, distanceLayer);
     mapDisplay.setOverlay(locationLayer);
 
     scaleDisplayView = findViewById(R.id.scale_display);
     ImageView scaleDisplayImage = findViewById(R.id.scale_icon);
     TextView scaleDisplayLabel = findViewById(R.id.scale_text);
     scaleDisplay = new ScaleDisplay(scaleDisplayImage, scaleDisplayLabel, displayState);
-
-    inertiaScroller.setUpdateListener(() -> scaleDisplay.update());
 
     if (locator == null) {
       locator = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -217,9 +224,39 @@ public class CustomMaps extends AppCompatActivity {
     }
   }
 
-  private void zoomBy(float factor) {
-    mapDisplay.zoomMap(factor);
+  /**
+   * Moves the map image on display in x and y direction by given number of pixels. Positive values
+   * move the map image left and up (i.e. viewport moves right and down over the image).
+   *
+   * @param xd number of pixels to shift map image towards left
+   * @param yd number of pixels to shift map image upwards
+   * @return true if the full move was possible, false if the move reached the edge of the image
+   */
+  private boolean moveMap(float xd, float yd) {
+    mapDisplay.setFollowMode(false);
+    boolean canContinue = mapDisplay.translateMap(xd, yd);
+    locationLayer.invalidate();
+    distanceLayer.invalidate();
     scaleDisplay.update();
+    return canContinue;
+  }
+
+  /**
+   * Scales the map image on screen by given factor with given x,y point not moving during zoom.
+   *
+   * @param factor factor by which zooming is performed, values > 1.0 zoom in, (0.0, 1.0) zoom out
+   * @param focusX screen x-coordinate of the point that does not move during zoom
+   * @param focusY screen y-coordinate of the point that does not move during zoom
+   */
+  private void scaleMap(float factor, float focusX, float focusY) {
+    mapDisplay.setFollowMode(false);
+    mapDisplay.zoomMap(factor, focusX, focusY);
+    locationLayer.invalidate();
+    scaleDisplay.update();
+  }
+
+  private void zoomBy(float factor) {
+    scaleMap(factor, mapDisplay.getWidth() / 2f, mapDisplay.getHeight() / 2f);
   }
 
   private void processLaunchIntent(Bundle savedInstanceState) {

@@ -99,6 +99,14 @@ public class ImageToScreenConverter {
         screenView.getWidth() / 2f, screenView.getHeight() / 2f);
   }
 
+  public void zoom(float factor, float focusX, float focusY) {
+    if (imageToScreenMatrix == null) {
+      return;
+    }
+    zoomLevel *= factor;
+    imageToScreenMatrix.postScale(factor, factor, focusX, focusY);
+  }
+
   /**
    * Translates the image by (dx, dy). Returns 'true' if full translation was
    * performed, 'false' if the translation was limited to keep image from going

@@ -47,14 +47,14 @@ public class MapUpMapDisplay extends MapDisplay {
    * indicates the translation was truncated to avoid scrolling the map off
    * screen.
    *
-   * @param tx amount of translation in east-west direction
-   * @param ty amount of translation in north-south direction
+   * @param tx amount of translation in left-right direction (positive moves image to left)
+   * @param ty amount of translation in up-down direction (positive moves image up)
    * @return {@code true} if the full translation was allowed, {@code false}
    *         if the full translation was not allowed to keep map on screen
    */
   @Override
   public boolean translateMap(float tx, float ty) {
-    boolean result = displayState.translate(tx, ty);
+    boolean result = displayState.translate(-tx, -ty);
     triggerRepaint();
     return result;
   }

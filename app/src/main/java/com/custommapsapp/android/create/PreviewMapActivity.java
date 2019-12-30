@@ -178,6 +178,9 @@ public class PreviewMapActivity extends AppCompatActivity
       return;
     }
     mapImageOverlay.computeImageWarp(googleMap.getProjection());
+    if (!mapImageOverlay.hasGoogleMap()) {
+      mapImageOverlay.setGoogleMap(googleMap);
+    }
     imageToGeo = mapImageOverlay.computeImageToGeoMatrix();
     computeImageCornerGeoPoints();
 
@@ -337,14 +340,28 @@ public class PreviewMapActivity extends AppCompatActivity
 
   private void centerGoogleMapOnMapImageLocation() {
     if (googleMap != null) {
-      double latSpan_2 = latSpan / 2.0;
-      double lonSpan_2 = lonSpan / 2.0;
-      LatLngBounds mapImageBounds = new LatLngBounds(
-          new LatLng(mapImageCenter.latitude - latSpan_2, mapImageCenter.longitude - lonSpan_2),
-          new LatLng(mapImageCenter.latitude + latSpan_2, mapImageCenter.longitude + lonSpan_2));
-      CameraUpdate fullView =
-          CameraUpdateFactory.newLatLngBounds(mapImageBounds,
-              getResources().getDimensionPixelSize(R.dimen.quarter_inch));
+      // Keep latitude range values between [-85, 85] (away from the poles)
+      double minBoundsLat = Math.max(-85, mapImageCenter.latitude - latSpan / 2.0);
+      double maxBoundsLat = Math.min(85, mapImageCenter.latitude + latSpan / 2.0);
+      // Keep longitude values between [-180, 180) (prevent over/underflow)
+      double minBoundsLng = mapImageCenter.longitude - lonSpan / 2.0;
+      if (minBoundsLng < -180.0) {
+        minBoundsLng += 360;
+      }
+      double maxBoundsLng = mapImageCenter.longitude + lonSpan / 2.0;
+      if (maxBoundsLng >= 180.0) {
+        maxBoundsLng -= 360;
+      }
+      LatLngBounds mapImageBounds;
+      try {
+        mapImageBounds = new LatLngBounds(
+            new LatLng(minBoundsLat, minBoundsLng), new LatLng(maxBoundsLat, maxBoundsLng));
+      } catch (IllegalArgumentException ex) {
+        throw new IllegalArgumentException(String.format("SW: %.4f %.4f  NE: %.4f %.4f",
+            minBoundsLat, minBoundsLng, maxBoundsLat, maxBoundsLng), ex);
+      }
+      CameraUpdate fullView = CameraUpdateFactory.newLatLngBounds(
+          mapImageBounds, getResources().getDimensionPixelSize(R.dimen.quarter_inch));
       googleMap.moveCamera(fullView);
     }
   }

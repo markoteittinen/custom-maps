@@ -165,12 +165,23 @@ public class DisplayState {
   }
 
   /**
-   * Zooms the map image on screen by the given factor.
+   * Zooms the map image on screen by the given factor keeping screen center stationary.
    *
-   * @param factor to zoom the map. 0-1 zooms out, 1- zooms in
+   * @param factor to zoom the map. Range (0.0, 1.0) zooms out, > 1.0 zooms in
    */
   public void zoom(float factor) {
     imageToScreen.zoom(factor);
+  }
+
+  /**
+   * Zooms the map image on screen by the given factor keeping given x,y point stationary.
+   *
+   * @param factor to zoom the map. Range (0.0, 1.0) zooms out, > 1.0 zooms in
+   * @param focusX screen x-coordinate of the point that is the center of zoom
+   * @param focusY screen y-coordinate of the point that is the center of zoom
+   */
+  public void zoom(float factor, float focusX, float focusY) {
+    imageToScreen.zoom(factor, focusX, focusY);
   }
 
   /**

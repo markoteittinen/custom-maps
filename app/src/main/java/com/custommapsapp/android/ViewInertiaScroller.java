@@ -32,6 +32,8 @@ public class ViewInertiaScroller {
     /**
      * Notifies listener about moving the view (in screen pixels).
      *
+     * @param xd number of screen pixels to move image towards left
+     * @param yd number of screen pixels to move image upwards
      * @return boolean indicating whether the motion can continue, false indicates stop
      */
     boolean move(float xd, float yd);
