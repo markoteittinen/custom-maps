@@ -30,7 +30,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -47,6 +46,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.HelpDialogManager;
+import com.custommapsapp.android.MouseWheelZoom;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.language.Linguist;
 
@@ -65,13 +65,14 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
   public static final String GEO_POINT = EXTRA_PREFIX + ".GeoPoint";
 
   private GoogleMap googleMap;
-  private Linguist linguist;
+  private TiePointOverlay tiePointOverlay;
+  private MouseWheelZoom mouseWheelZoom;
 
   private SeekBar scaleBar;
   private SeekBar transparencyBar;
   private SeekBar rotateBar;
 
-  private TiePointOverlay tiePointOverlay;
+  private Linguist linguist;
   private HelpDialogManager helpDialogManager;
 
   @Override
@@ -307,6 +308,10 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
 
   private void prepareUI() {
     tiePointOverlay = findViewById(R.id.tiePointOverlay);
+    if (googleMap != null) {
+      mouseWheelZoom = new MouseWheelZoom(tiePointOverlay, googleMap);
+    }
+
     Button doneButton = findViewById(R.id.selectPoint);
     rotateBar = findViewById(R.id.rotateBar);
     scaleBar = findViewById(R.id.scaleBar);
@@ -348,6 +353,9 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
   @Override
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
+    if (tiePointOverlay != null) {
+      mouseWheelZoom = new MouseWheelZoom(tiePointOverlay, googleMap);
+    }
     UiSettings uiSettings = googleMap.getUiSettings();
     uiSettings.setRotateGesturesEnabled(false);
     uiSettings.setTiltGesturesEnabled(false);

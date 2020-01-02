@@ -17,6 +17,7 @@
 package com.custommapsapp.android;
 
 import android.view.GestureDetector;
+import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -43,6 +44,7 @@ public class ViewInertiaScroller {
   }
 
   private static final float FRICTION = 6.0f;
+  private static final float SQRT_2 = (float) Math.sqrt(2.0);
 
   private View view;
 
@@ -64,6 +66,11 @@ public class ViewInertiaScroller {
     setView(view);
   }
 
+  /** Returns an event listener that interprets mouse wheel events as zoom in/out events. */
+  public View.OnGenericMotionListener getGenericMotionListener() {
+    return (view, event) -> mouseWheelProcessor(event);
+  }
+
   public void setListener(Listener listener) {
     this.listener = listener;
   }
@@ -71,11 +78,41 @@ public class ViewInertiaScroller {
   public void setView(View view) {
     if (this.view != null) {
       this.view.setOnTouchListener(null);
+      this.view.setOnGenericMotionListener(null);
     }
     this.view = view;
     if (view != null) {
       view.setOnTouchListener(touchListener);
+      // Track mouse wheel events in the view for zooming in/out
+      view.setOnGenericMotionListener((v, event) -> mouseWheelProcessor(event));
     }
+  }
+
+  /** Processes mouse wheel scroll events as zoom in/out requests and ignores all other events. */
+  private boolean mouseWheelProcessor(MotionEvent event) {
+    // Ignore event if it is not a mouse scroll event
+    if (event.getSource() != InputDevice.SOURCE_MOUSE ||
+        event.getActionMasked() != MotionEvent.ACTION_SCROLL) {
+      return false;
+    }
+    float vScroll = event.getAxisValue(MotionEvent.AXIS_VSCROLL);
+    // Ignore event if it is not a vertical scroll event
+    if (vScroll == 0) {
+      return false;
+    }
+    // Depending on scroll direction, scroll by sqrt(2)
+    float scale;
+    if (vScroll > 0) {
+      // Zoom in by sqrt(2) ~ 1.414, two steps doubles the scale
+      scale = SQRT_2;
+    } else {
+      // Zoom out by 1 / sqrt(2) ~ 0.707, two steps halves the scale
+      scale = 1f / SQRT_2;
+    }
+    if (listener != null) {
+      listener.scale(scale, event.getX(), event.getY());
+    }
+    return true;
   }
 
   //------------------------------------------------------------------------------------------
@@ -91,6 +128,7 @@ public class ViewInertiaScroller {
   };
 
   /** gestureListener receives scroll (drag) and fling gestures from GestureDetector. */
+  @SuppressWarnings("FieldCanBeLocal")
   private final GestureDetector.OnGestureListener gestureListener =
       new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -127,6 +165,7 @@ public class ViewInertiaScroller {
       };
 
   /** scaleGestureListener listens to scale changing events, like pinch */
+  @SuppressWarnings("FieldCanBeLocal")
   private final ScaleGestureDetector.OnScaleGestureListener scaleGestureListener =
       new ScaleGestureDetector.SimpleOnScaleGestureListener() {
         @Override

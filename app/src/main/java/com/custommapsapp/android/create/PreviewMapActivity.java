@@ -25,6 +25,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -54,6 +56,7 @@ import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.DMatrix;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.MouseWheelZoom;
 import com.custommapsapp.android.PermissionFragment;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.language.Linguist;
@@ -80,6 +83,7 @@ public class PreviewMapActivity extends AppCompatActivity
   private GoogleMap googleMap;
   private SeekBar transparencyBar;
   private MapImageOverlay mapImageOverlay;
+  private MouseWheelZoom mouseWheelZoom;
 
   private DMatrix imageToGeo;
   private LatLng mapImageCenter;
@@ -228,9 +232,12 @@ public class PreviewMapActivity extends AppCompatActivity
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    // TODO(markot): Move "Map mode" to strings.xml and translate
-    MenuItem item = menu.add(Menu.NONE, MENU_MAP_MODE, Menu.NONE, "Map mode")
-        .setIcon(R.drawable.mapmode);
+    Linguist linguist = ((CustomMapsApp) getApplication()).getLinguist();
+    Drawable mapModeIcon = getResources().getDrawable(R.drawable.mapmode);
+    mapModeIcon.setColorFilter(0xffffffff, PorterDuff.Mode.SRC_ATOP);
+    MenuItem item =
+        menu.add(Menu.NONE, MENU_MAP_MODE, Menu.NONE, linguist.getString(R.string.map_mode))
+            .setIcon(mapModeIcon);
     item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     helpDialogManager.onCreateOptionsMenu(menu);
     return true;
@@ -371,6 +378,9 @@ public class PreviewMapActivity extends AppCompatActivity
 
   private void prepareUI() {
     mapImageOverlay = findViewById(R.id.mapImageOverlay);
+    if (googleMap != null) {
+      mouseWheelZoom = new MouseWheelZoom(mapImageOverlay, googleMap);
+    }
     transparencyBar = findViewById(R.id.transparencyBar);
 
     Button saveButton = findViewById(R.id.save);
@@ -407,6 +417,9 @@ public class PreviewMapActivity extends AppCompatActivity
   @Override
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
+    if (mapImageOverlay != null) {
+      mouseWheelZoom = new MouseWheelZoom(mapImageOverlay, googleMap);
+    }
     UiSettings uiSettings = googleMap.getUiSettings();
     uiSettings.setRotateGesturesEnabled(false);
     uiSettings.setTiltGesturesEnabled(false);

@@ -6,6 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/primaryColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:title="Create map" />
+
     <Button
         android:id="@+id/selectPoint"
         style="@style/LargeButton"
@@ -19,48 +29,45 @@
         android:id="@+id/imageDisplay"
         class="com.custommapsapp.android.create.ImageDisplay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/selectPoint"
-        android:layout_alignParentTop="true" />
+        android:layout_height="0dp"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/selectPoint" />
 
     <view
         android:id="@+id/bitmapOverlay"
         class="com.custommapsapp.android.create.AnnotationLayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
         android:layout_above="@id/selectPoint"
-        android:layout_alignParentTop="true"
-        android:background="#00000000" />
+        android:background="#0000" />
 
     <ImageButton
         android:id="@+id/zoomOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignEnd="@id/imageDisplay"
         android:layout_alignBottom="@id/imageDisplay"
-        android:background="#00000000"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="#0000"
         android:tag="zoom_out"
         android:contentDescription="@string/zoom_out"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_zoom_out" />
 
     <ImageButton
         android:id="@+id/zoomIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignEnd="@id/imageDisplay"
         android:layout_above="@id/zoomOut"
-        android:layout_marginBottom="8dp"
-        android:background="#00000000"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="#0000"
         android:tag="zoom_in"
         android:contentDescription="@string/zoom_in"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_zoom_in" />
 
     <TextView
@@ -68,7 +75,7 @@
         style="@style/NormalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
         android:background="#C0FFFFFF"
         android:paddingLeft="4dp"
@@ -76,15 +83,5 @@
         android:tag="image_point_select_for_matching"
         android:text="@string/image_point_select_for_matching"
         android:textColor="#C0000000" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/primaryColorTranslucent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:title="Create map" />
 
 </RelativeLayout>

@@ -15,6 +15,8 @@
  */
 package com.custommapsapp.android;
 
+import java.util.Locale;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -26,10 +28,6 @@ import android.location.Location;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.custommapsapp.android.storage.PreferenceStore;
-
-import java.util.Locale;
-
 /**
  * DistanceLayer draws a translucent label on the bottom of the MapDisplay
  * to display distance (and heading) to the center of the screen. It also draws
@@ -39,9 +37,6 @@ import java.util.Locale;
  * @author Marko Teittinen
  */
 public class DistanceLayer extends View {
-  private static final float METERS_PER_FOOT = 0.3048f;
-  private static final float METERS_PER_MILE = 1609.344f;
-
   private Paint backgroundPaint;
   private Paint textPaint;
   private DisplayState displayState;
@@ -65,7 +60,7 @@ public class DistanceLayer extends View {
     textPaint = new Paint();
     textPaint.setColor(0xFF000000);
     textPaint.setAntiAlias(true);
-    textPaint.setTypeface(Typeface.DEFAULT);
+    textPaint.setTypeface(Typeface.DEFAULT_BOLD);
     textPaint.setTextAlign(Paint.Align.CENTER);
     textPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.distance_layer_text_size));
   }
@@ -142,7 +137,7 @@ public class DistanceLayer extends View {
     infoBox.offset((getWidth() - infoBox.width()) / 2, getHeight() - infoBox.height() - marginPx);
     float baseline = infoBox.bottom - paddingPx;
     backgroundPaint.setStyle(Paint.Style.FILL);
-    textPaint.setStrokeWidth(1f);
+    textPaint.setStrokeWidth(0f);
     textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
     roundInfoBox.set(infoBox);
     canvas.drawRoundRect(roundInfoBox, paddingPx, paddingPx, backgroundPaint);
@@ -160,81 +155,5 @@ public class DistanceLayer extends View {
     float radius = res.getDimension(R.dimen.distance_layer_small_radius);
     canvas.drawCircle(x, y, radius, backgroundPaint);
     canvas.drawCircle(x, y, radius, textPaint);
-  }
-
-  /**
-   * Formats metric distance and accuracy into a text string.
-   *
-   * @param distanceM distance in meters
-   * @param accuracyM accuracy in meters
-   * @return User displayable string showing the distance and accuracy
-   */
-  private String getMetricDistanceString(int distanceM, int accuracyM) {
-    // Use 3 significant digits
-    // -- less than 1 km
-    if (distanceM < 1000) {
-      return String.format(Locale.getDefault(), "%d \u00B1 %d m", distanceM, accuracyM);
-    }
-    // -- over 1 km, convert distance to km
-    float distanceKm = distanceM / 1000f;
-    boolean showAccuracy = distanceM < 10 * accuracyM;
-    String format;
-    if (Math.round(distanceKm) < 10) {
-      // -- 1.00 - 9.99 km
-      format = showAccuracy ? "%.2f km \u00B1 %d m" : "%.2f km";
-    } else if (Math.round(distanceKm / 10) < 10) {
-      // -- 10.0 - 99.9 km
-      format = showAccuracy ? "%.1f km \u00B1 %d m" : "%.1f km";
-    } else {
-      // -- at least 100 km, don't show accuracy
-      format = "%.0f km";
-      showAccuracy = false;
-    }
-    if (showAccuracy) {
-      return String.format(Locale.getDefault(), format, distanceKm, accuracyM);
-    }
-    return String.format(Locale.getDefault(), format, distanceKm);
-  }
-
-  /**
-   * Formats distance and accuracy into a text string using English units.
-   *
-   * @param distanceM distance in meters
-   * @param accuracyM accuracy in meters
-   * @return User displayable string showing the distance and accuracy
-   */
-  private String getEnglishDistanceString(int distanceM, int accuracyM) {
-    // use feet for distances up to 100 ft
-    if (distanceM < 100 * METERS_PER_FOOT) {
-      int distanceFt = Math.round(distanceM / METERS_PER_FOOT);
-      int accuracyFt = Math.round(accuracyM / METERS_PER_FOOT);
-      return String.format(Locale.getDefault(), "%d \u00B1 %d ft", distanceFt, accuracyFt);
-    }
-    // use yards for distances up to 1/2 mile
-    if (distanceM < 0.5f * METERS_PER_MILE) {
-      int distanceYds = Math.round(distanceM / (3 * METERS_PER_FOOT));
-      int accuracyYds = Math.round(accuracyM / (3 * METERS_PER_FOOT));
-      return String.format(Locale.getDefault(), "%d \u00B1 %d yds", distanceYds, accuracyYds);
-    }
-    // use miles for longer distances
-    float distanceMi = distanceM / METERS_PER_MILE;
-    float accuracyMi = accuracyM / METERS_PER_MILE;
-    boolean showAccuracy = distanceM < 10 * accuracyM;
-    String format;
-    if (Math.round(distanceMi) < 10) {
-      // -- 0.5 - 9.99 miles
-      format = showAccuracy ? "%.2f \u00B1 %.2f mi" : "%.2f mi";
-    } else if (Math.round(distanceMi / 10) < 10) {
-      // -- 10.0 - 99.9 miles
-      format = showAccuracy ? "%.1f \u00B1 .1f mi" : "%.1f mi";
-    } else {
-      // -- at least 100 miles, don't show accuracy
-      format = "%.0f mi";
-      showAccuracy = false;
-    }
-    if (showAccuracy) {
-      return String.format(Locale.getDefault(), format, distanceMi, accuracyMi);
-    }
-    return String.format(Locale.getDefault(), format, distanceMi);
   }
 }

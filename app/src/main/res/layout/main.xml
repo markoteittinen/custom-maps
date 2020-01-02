@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/primaryColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:title="Custom Maps" />
+
     <view
         android:id="@+id/detailsDisplay"
         class="com.custommapsapp.android.DetailsDisplay"
@@ -20,30 +30,30 @@
         class="com.custommapsapp.android.MapUpMapDisplay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
         android:layout_above="@id/detailsDisplay"
-        android:layout_alignParentTop="true"
         android:background="@color/primaryDarkColor"/>
 
     <view
         android:id="@+id/locationLayer"
         class="com.custommapsapp.android.LocationLayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@id/mapDisplay"
+        android:layout_height="0dp"
+        android:layout_below="@id/toolbar"
         android:layout_alignBottom="@id/mapDisplay" />
 
     <view
         android:id="@+id/distanceLayer"
         class="com.custommapsapp.android.DistanceLayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@id/mapDisplay"
+        android:layout_height="0dp"
+        android:layout_below="@id/toolbar"
         android:layout_alignBottom="@id/mapDisplay" />
 
     <ImageButton
         android:id="@+id/zoomOut"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignEnd="@id/mapDisplay"
         android:layout_alignBottom="@id/mapDisplay"
         android:layout_marginEnd="12dp"
@@ -51,24 +61,22 @@
         android:background="#0000"
         android:contentDescription="@string/zoom_out"
         android:tag="zoom_out"
-        android:padding="4dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_zoom_out" />
 
     <ImageButton
         android:id="@+id/zoomIn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignEnd="@id/mapDisplay"
         android:layout_above="@id/zoomOut"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:background="#0000"
         android:contentDescription="@string/zoom_in"
         android:tag="zoom_in"
-        android:padding="4dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_zoom_in" />
+        android:src="@drawable/ic_zoom_in"/>
 
     <LinearLayout
         android:id="@+id/scale_display"
@@ -102,15 +110,5 @@
             android:textStyle="bold"
             tools:text="40mi" />
     </LinearLayout>
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/primaryColorTranslucent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:title="Custom Maps" />
 
 </RelativeLayout>

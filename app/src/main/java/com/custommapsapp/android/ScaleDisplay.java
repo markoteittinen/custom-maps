@@ -15,14 +15,12 @@
  */
 package com.custommapsapp.android;
 
-import android.annotation.SuppressLint;
 import android.location.Location;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ScaleDisplay {
-  private static final double METERS_PER_MILE = 1609.34;
   /** Index for X coordinate in arrays. */
   private static final int X = 0;
   /** Index of Y coordinate in arrays. */
@@ -35,9 +33,7 @@ public class ScaleDisplay {
   private ImageView scaleIcon;
   private TextView scaleText;
   private boolean isHorizontal = false;
-  private boolean isMetric = false;
   private int magnitude;
-  private int topPaddingPx = 0;
 
   /** screenPoint is reused whenever a screen point is converted to Location. */
   private float[] screenPoint = new float[2];
@@ -65,14 +61,6 @@ public class ScaleDisplay {
 
   public boolean isHorizontal() {
     return isHorizontal;
-  }
-
-  /**
-   * Sets the number of pixels to be ignored on top of the map view due to translucent ActionBar
-   * covering it. This area will be ignored in vertical scale distance calculation.
-   */
-  public void setTopPaddingPx(int topPaddingPx) {
-    this.topPaddingPx = topPaddingPx;
   }
 
   public void update() {
@@ -115,14 +103,14 @@ public class ScaleDisplay {
   /** Returns the geographic location of the upper left corner of map display. */
   private Location getUpperLeftLocation() {
     screenPoint[X] = 0f;
-    screenPoint[Y] = topPaddingPx;
+    screenPoint[Y] = 0f;
     return updateScreenPointLocation(screenPoint, upperLeft);
   }
 
   /** Returns the geographic location of the upper right corner of map display. */
   private Location getUpperRightLocation() {
     screenPoint[X] = displayState.getViewWidth();
-    screenPoint[Y] = topPaddingPx;
+    screenPoint[Y] = 0f;
     return updateScreenPointLocation(screenPoint, upperRight);
   }
 
@@ -146,9 +134,5 @@ public class ScaleDisplay {
     location.setLongitude(geoPoint[X]);
     location.setLatitude(geoPoint[Y]);
     return location;
-  }
-
-  private double metersToMiles(double meters) {
-    return meters / METERS_PER_MILE;
   }
 }

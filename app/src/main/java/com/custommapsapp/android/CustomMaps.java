@@ -166,6 +166,8 @@ public class CustomMaps extends AppCompatActivity {
         scaleMap(factor, focusX, focusY);
       }
     });
+    // Listen to mouse wheel events in location layer that covers MapDisplay
+    locationLayer.setOnGenericMotionListener(inertiaScroller.getGenericMotionListener());
   }
 
   private void reloadUI() {
@@ -183,10 +185,18 @@ public class CustomMaps extends AppCompatActivity {
     if (inertiaScroller != null) {
       inertiaScroller.setView(mapDisplay);
     }
+    if (locationLayer != null) {
+      // Remove event listener from previous location layer
+      locationLayer.setOnGenericMotionListener(null);
+    }
     locationLayer = findViewById(R.id.locationLayer);
     displayState = new DisplayState();
     mapDisplay.setDisplayState(displayState);
     locationLayer.setDisplayState(displayState);
+    if (inertiaScroller != null) {
+      // Listen to mouse wheel events in location layer that covers MapDisplay
+      locationLayer.setOnGenericMotionListener(inertiaScroller.getGenericMotionListener());
+    }
     distanceLayer = findViewById(R.id.distanceLayer);
     distanceLayer.setDisplayState(displayState);
     detailsDisplay = findViewById(R.id.detailsDisplay);
@@ -359,14 +369,7 @@ public class CustomMaps extends AppCompatActivity {
     super.onPostResume();
     if (selectedMap != null) {
       // Compute map scale once mapDisplay has been laid out
-      mapDisplay.post(() -> {
-        // Tell scaleDisplay to ignore height of actionBar vertically as it covers top of map
-        View actionBarView = findViewById(R.id.toolbar);
-        if (actionBarView != null && actionBarView.getVisibility() == View.VISIBLE) {
-          scaleDisplay.setTopPaddingPx(actionBarView.getHeight());
-        }
-        scaleDisplay.update();
-      });
+      mapDisplay.post(scaleDisplay::update);
     }
   }
 
