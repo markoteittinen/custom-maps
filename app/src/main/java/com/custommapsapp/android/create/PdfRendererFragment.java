@@ -143,7 +143,6 @@ public class PdfRendererFragment extends Fragment {
 
   @Override
   public void onAttach(@NonNull Context context) {
-    Log.d(LOG_TAG, "PdfRendererFragment.onAttach()");
     super.onAttach(context);
     pageCache = new PageCache(context);
     // Initialize page cache and pdfUri
@@ -205,27 +204,22 @@ public class PdfRendererFragment extends Fragment {
   public void rotateImage(Rotate direction) {
     if (currentPageImage == null) return;
     int degrees = direction == Rotate.CW ? 90 : -90;
-    Log.d(LOG_TAG, "Rotating image degrees: " + degrees);
     if (getCurrentPageRotation() == 0) {
       currentPageImage.exif.setAttribute(
           ExifInterface.TAG_ORIENTATION, "" + ExifInterface.ORIENTATION_NORMAL);
     }
     currentPageImage.exif.rotate(degrees);
-    Log.d(LOG_TAG, "Rotation now: " + getCurrentPageRotation() + ", saving...");
     // Update EXIF attributes of the image file
     try {
       currentPageImage.exif.saveAttributes();
       currentPageImage.setExif(new ExifInterface(currentPageImage.file));
-      Log.d(LOG_TAG, "Rotation info saved, rotation now: " + getCurrentPageRotation());
     } catch (IOException e) {
       Log.e(LOG_TAG, "Failed to rotate PDF page image");
     }
   }
 
   private void setPdfFileBg(Uri pdfUri, Runnable readyCallback) {
-    Log.d(LOG_TAG, "Setting renderer PDF URI to: " + pdfUri);
     if (pdfRenderer != null && pdfUri != null && pdfUri.equals(this.pdfUri)) {
-      Log.d(LOG_TAG, "PDF file didn't change, immediate callback");
       // PDF file did not change
       if (readyCallback != null) {
         mainThreadHandler.post(readyCallback);
@@ -305,7 +299,6 @@ public class PdfRendererFragment extends Fragment {
     }
     // If the page is in cache, return it from there
     if (fileName == null && pageCache.isPageCached(pageNum, dpi)) {
-      Log.d(LOG_TAG, "Cache contains page: " + pageNum);
       PageImage pageImage = pageCache.getCachedPage(pageNum, dpi);
       if (pageImage != null) {
         currentPageImage = pageImage;
@@ -313,14 +306,12 @@ public class PdfRendererFragment extends Fragment {
         mainThreadHandler.post(() -> callback.pageRendered(pageNum, pageImage.image));
         return;
       }
-      Log.d(LOG_TAG, "Failed to load cached page image");
     }
 
     // Notify listener that page needs to be rendered, and may take some time
     mainThreadHandler.post(() -> callback.pageRendering(pageNum));
 
     try {
-      Log.d(LOG_TAG, "Rendering page: " + pageNum);
       PdfRenderer.Page pdfPage = pdfRenderer.openPage(pageNum);
       PageData pageData = getPageBitmapByDpi(pdfPage, dpi);
       if (pageData == null) {
@@ -330,7 +321,6 @@ public class PdfRendererFragment extends Fragment {
       }
       pdfPage.render(pageData.image, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
       pdfPage.close();
-      Log.d(LOG_TAG, "Page rendered successfully: " + pageNum);
 
       if (fileName == null) {
         // Cache page generating a name for the cached page image
@@ -431,7 +421,6 @@ public class PdfRendererFragment extends Fragment {
       for (File f : cacheDir.listFiles()) {
         f.delete();
       }
-      Log.d(LOG_TAG, "PDF page cache cleared");
       pdfUri = null;
     }
 

@@ -17,6 +17,8 @@ package com.custommapsapp.android;
 
 import android.app.Application;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.custommapsapp.android.language.Linguist;
 import com.custommapsapp.android.storage.PreferenceStore;
 
@@ -30,6 +32,7 @@ public class CustomMapsApp extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
     PreferenceStore prefStore = PreferenceStore.instance(getApplicationContext());
     String language = prefStore.getLanguage();

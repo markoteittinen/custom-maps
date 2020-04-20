@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.custommapsapp.android;
 
 import android.app.Activity;
@@ -88,14 +103,12 @@ public class PermissionFragment extends Fragment {
     } catch (Exception ex) {
       throw new IllegalStateException("Context must implement PermissionResultCallback");
     }
-    Log.d(LOG_TAG, "PermissionFragment attached");
   }
 
   @Override
   public void onDetach() {
     callback = null;
     super.onDetach();
-    Log.d(LOG_TAG, "PermissionFragment detached");
   }
 
   @Override
@@ -143,7 +156,6 @@ public class PermissionFragment extends Fragment {
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
-    Log.d(LOG_TAG, "onRequestPermissionsResult()");
     // Filter our requests that were not triggered by PermissionFragment (should not happen?)
     if (requestCode != PERMISSION_REQ) {
       return;

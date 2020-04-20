@@ -89,7 +89,8 @@ class Ro_Romanian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.geo_point_scale, R.string.ro_geo_point_scale);
     resourceIdMap.put(R.string.geo_point_transparency, R.string.ro_geo_point_transparency);
     resourceIdMap.put(R.string.google_code, R.string.ro_google_code);
-    resourceIdMap.put(R.string.gps_not_available, R.string.ro_gps_not_available);
+    // Missing translation
+//    resourceIdMap.put(R.string.gps_not_available, R.string.ro_gps_not_available);
     resourceIdMap.put(R.string.gps_outside_map, R.string.ro_gps_outside_map);
     resourceIdMap.put(R.string.heading, R.string.ro_heading);
     resourceIdMap.put(R.string.heading_hide, R.string.ro_heading_hide);
@@ -106,7 +107,8 @@ class Ro_Romanian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.latitude, R.string.ro_latitude);
     resourceIdMap.put(R.string.local_maps, R.string.ro_local_maps);
     resourceIdMap.put(R.string.location_details, R.string.ro_location_details);
-    resourceIdMap.put(R.string.location_not_available, R.string.ro_location_not_available);
+    // Missing translation
+//    resourceIdMap.put(R.string.location_not_available, R.string.ro_location_not_available);
     resourceIdMap.put(R.string.longitude, R.string.ro_longitude);
     resourceIdMap.put(R.string.map_image_load_failed, R.string.ro_map_image_load_failed);
     // Missing translation

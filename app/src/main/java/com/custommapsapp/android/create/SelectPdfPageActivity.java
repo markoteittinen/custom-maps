@@ -87,7 +87,6 @@ public class SelectPdfPageActivity extends AppCompatActivity {
     setSupportActionBar(findViewById(R.id.toolbar));
 
     if (savedInstanceState != null) {
-      Log.d(LOG_TAG, "Restoring saved state");
       getSupportActionBar().setTitle(linguist.getString(R.string.select_map_page));
       pdfRendererFragment = (PdfRendererFragment) getSupportFragmentManager()
           .findFragmentByTag(CustomMaps.PDF_RENDERER_FRAGMENT_TAG);
@@ -100,7 +99,6 @@ public class SelectPdfPageActivity extends AppCompatActivity {
       currentPageNum = 0;
     }
     if (pdfRendererFragment == null) {
-      Log.d(LOG_TAG, "Creating a new PDF renderer");
       pdfRendererFragment = new PdfRendererFragment();
       pdfRendererFragment.setRetainInstance(true);
       getSupportFragmentManager().beginTransaction()
@@ -166,14 +164,12 @@ public class SelectPdfPageActivity extends AppCompatActivity {
 
   /** Rotate page image 90 degrees in clockwise direction. */
   private void rotateCw(View button) {
-    Log.d(LOG_TAG, "Rotating page CW");
     pdfRendererFragment.rotateImage(PdfRendererFragment.Rotate.CW);
     updateCurrentPage();
   }
 
   /** Rotate page image 90 degrees in counter-clockwise direction. */
   private void rotateCcw(View button) {
-    Log.d(LOG_TAG, "Rotating page CCW");
     pdfRendererFragment.rotateImage(PdfRendererFragment.Rotate.CCW);
     updateCurrentPage();
   }
@@ -181,6 +177,9 @@ public class SelectPdfPageActivity extends AppCompatActivity {
   private String generatePdfImageName() {
     File pdfFile = new File(pdfFilename);
     String filename = pdfFile.getName();
+    // Replace spaces in the PDF filename with underscores
+    filename = filename.replace(' ', '_');
+    // Drop suffix, and replace it with ".jpg"
     if (filename.lastIndexOf('.') > 0) {
       filename = filename.substring(0, filename.lastIndexOf('.'));
     }
@@ -192,7 +191,6 @@ public class SelectPdfPageActivity extends AppCompatActivity {
    * menu item is clicked.
    */
   private boolean selectCurrentPage(MenuItem item) {
-    Log.d(LOG_TAG, "PDF page selected: " + currentPageNum);
     // Disable the only menu item on screen
     Toolbar bottomBar = findViewById(R.id.bottombar);
     bottomBar.getMenu().getItem(0).setEnabled(false);
@@ -219,7 +217,6 @@ public class SelectPdfPageActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    Log.d(LOG_TAG, "User cancelled page selection");
     pdfRendererFragment.setPdfFile(null);
     getSupportFragmentManager().beginTransaction().remove(pdfRendererFragment).commit();
     setResult(RESULT_CANCELED);
@@ -258,7 +255,6 @@ public class SelectPdfPageActivity extends AppCompatActivity {
     @Override
     public void pageRendered(int pageNum, Bitmap pageImage) {
       displayScrim(false);
-      Log.d(LOG_TAG, "Rendered page received: " + pageNum);
       if (pageNum == currentPageNum) {
         int pageRotation = pdfRendererFragment.getCurrentPageRotation();
         if (pageRotation == 0) {
@@ -270,8 +266,6 @@ public class SelectPdfPageActivity extends AppCompatActivity {
         }
         pageDisplay.setImageBitmap(pageImage);
         pageDisplay.invalidate();
-      } else {
-        Log.d(LOG_TAG, "Non-current page, current page is: " + currentPageNum);
       }
     }
 

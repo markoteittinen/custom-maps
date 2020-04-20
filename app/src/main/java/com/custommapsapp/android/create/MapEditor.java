@@ -264,11 +264,13 @@ public class MapEditor extends AppCompatActivity {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected Dialog onCreateDialog(int id) {
     return helpDialogManager.onCreateDialog(id);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected void onPrepareDialog(int id, Dialog dialog) {
     helpDialogManager.onPrepareDialog(id, dialog);
   }
@@ -347,11 +349,9 @@ public class MapEditor extends AppCompatActivity {
 
     for (GroundOverlay.Tiepoint oldPoint : mapPoints) {
       Point imagePoint = oldPoint.getImagePoint();
-      byte[] snippet = ImageHelper.createPngSample(
-          mapImage, imagePoint, SNIPPET_SIZE, orientation);
+      byte[] snippet = ImageHelper.createPngSample(mapImage, imagePoint, SNIPPET_SIZE, orientation);
       Point snippetPoint = new Point();
-      snippetPoint.x = Math.min(imagePoint.x, SNIPPET_SIZE / 2);
-      snippetPoint.y = Math.min(imagePoint.y, SNIPPET_SIZE / 2);
+      snippetPoint.x = snippetPoint.y = SNIPPET_SIZE / 2;
       TiePoint newPoint = new TiePoint(oldPoint.getImagePoint(), snippet, snippetPoint);
       newPoint.setGeoPoint(oldPoint.getGeoPoint());
       tiepointAdapter.add(newPoint);

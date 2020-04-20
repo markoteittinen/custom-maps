@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Custom Maps</string>
     <string name="select_map_name">Térkép kiválasztása</string>
     <string name="create_map_name">Térkép készítése</string>
@@ -133,6 +133,7 @@
     <string name="geo_point_rotate">Forgatás</string>
     <string name="geo_point_scale">Nagyítás</string>
     <string name="geo_point_transparency">Átlátszóság</string>
+    <string name="map_mode">Térkép mód</string>
 
     <!-- map editor -->
     <string name="editor_help">
@@ -162,10 +163,10 @@
     <string name="metric_title">Metrikus mértékegységek</string>
     <string name="metric_use_metric">Metrikus mértékegységek használata</string>
     <string name="metric_use_english">Angolszász mértékegységek használata</string>
-    <string name="distance_units_title">Selected distance units</string>
-    <string name="scale_title">Display scale on map</string>
-    <string name="scale_show">Scale is displayed</string>
-    <string name="scale_hide">Scale is not displayed</string>
+    <string name="distance_units_title">Választott mértékegység</string>
+    <string name="scale_title">Lépték megjelenítése</string>
+    <string name="scale_show">Lépték megjelenítve</string>
+    <string name="scale_hide">Lépték elrejtve</string>
     <string name="distance_title">Távolság megjelenítés</string>
     <string name="distance_show">Megjeleníti a jelenlegi helyzet és a képernyő közepe közötti távolságot</string>
     <string name="distance_hide">A távolság nem megjelenített</string>
@@ -182,23 +183,24 @@
     <string name="language_selected_format">Használt nyelv: %s</string>
     <string name="max_map_img_size_title">Maximális térképlap méret</string>
     <string name="max_map_img_size">%.1f megapixel</string>
-    <string name="watch_tutorial">Watch tutorial video</string>
+    <string name="watch_tutorial">Oktatóvideó megtekintése</string>
     <string name="about_custom_maps">Custom Maps névjegy</string>
 
     <!-- Selectable distance units labels. -->
     <string-array name="distance_unit_entries">
-        <item>Kilometers and meters (km, m)</item>
-        <item>Miles, yards, and feet (mi, yds, ft)</item>
-        <item>Nautical miles and feet (nmi, ft)</item>
+        <item>Kilométer és méter (km, m)</item>
+        <item>Mérföld, yard és láb (mi, yds, ft)</item>
+        <item>Tengeri mérföld (nmi, ft)</item>
     </string-array>
 
     <!-- about dialog -->
     <string name="version_label">verzió</string>
     <string name="credits_text">
         <b>Külön köszönet</b>
-        \n\u2022 Bart Eisenberg (tutorial video)
+        \n\u2022 Bart Eisenberg (bemutató videó)
         \n\u2022 Harlan Hile (pinch zoom, user location icon)
         \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Michael Ganss (German translation)
         \n\u2022 Francesco Terribile (Italian translation)
         \n\u2022 Dorin Hongu (Romanian translation)
         \n\u2022 Germain Zouein (testing)
@@ -238,14 +240,16 @@
     <string name="zoom_out">Kicsinyítés</string>
     <string name="menu">Menü</string>
 
-    <string name="argb_8888_summary_off">16 bites szín használata (a legnagyobb térképmérethez). Használatakor az alkalmazás összeomolhat egyes Motorola készülékeken.</string>
-    <string name="argb_8888_summary_on">32 bites szín használata (korlátozhatja a maximális térképméretet).</string>
+    <!-- Preferences -->
     <string name="argb_8888_title">32 bites szín használat</string>
-    <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixel) vagy 2048x2048 (4 megapixel)</string>
-    <string name="use_gpu_summary_off">Szoftveres renderelés (a legnagyobb térképképmérethez). Az alkalmazás öszeomolhat nénhány LG eszközön.</string>
-    <string name="use_gpu_summary_on">GPU renderelés használat (csökkenti a maximális képméretet).</string>
+    <string name="argb_8888_summary_on">32 bites szín használata (korlátozhatja a maximális térképméretet).</string>
+    <string name="argb_8888_summary_off">16 bites szín használata (a legnagyobb térképmérethez). Használatakor az alkalmazás összeomolhat egyes Motorola készülékeken.</string>
     <string name="use_gpu_title">GPU renderelés használata</string>
+    <string name="use_gpu_summary_on">GPU renderelés használat (csökkenti a maximális képméretet).</string>
+    <string name="use_gpu_summary_off">Szoftveres renderelés (a legnagyobb térképképmérethez). Az alkalmazás öszeomolhat nénhány LG eszközön.</string>
+    <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixel) vagy 2048x2048 (4 megapixel)</string>
 
+    <!-- PDF map related -->
     <string name="preparing_pdf_file">PDF file előkészítése</string>
     <string name="select_map_page">Térképlap kiválaszása</string>
     <string name="rotate_page">Lap elforgatása</string>

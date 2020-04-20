@@ -76,6 +76,7 @@ public class LocationTracker implements LocationListener, SensorEventListener {
    * @return Location object passed in as parameter containing up to date
    *         location information, or 'null' if location info is not available
    */
+  @SuppressWarnings("deprecation")
   public Location getCurrentLocation(Location result) {
     if (currentLocation == null) {
       return null;
@@ -313,7 +314,7 @@ public class LocationTracker implements LocationListener, SensorEventListener {
           compassHeading = (compassHeading + compassDeclination) % 360f;
         }
         // Adjust to screen orientation
-        int screenOrientation = (display != null ? display.getOrientation() : 0);
+        int screenOrientation = (display != null ? display.getRotation() : 0);
         if (screenOrientation != 0) {
           compassHeading = (compassHeading + (90f * screenOrientation)) % 360f;
         }

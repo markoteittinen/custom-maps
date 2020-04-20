@@ -18,6 +18,7 @@ package com.custommapsapp.android;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -86,6 +87,9 @@ public class AboutDisplay extends AppCompatActivity {
     TextView versionLabel = findViewById(R.id.version);
     String version = PreferenceStore.instance(this).getVersion();
     versionLabel.setText(version);
+
+    TextView credits = findViewById(R.id.credits);
+    credits.setMovementMethod(new ScrollingMovementMethod());
 
     TextView webLink = findViewById(R.id.apache_license);
     webLink.setOnClickListener(new LinkActivator(APACHE_LICENSE_URL));

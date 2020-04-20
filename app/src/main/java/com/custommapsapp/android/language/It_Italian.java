@@ -89,7 +89,8 @@ class It_Italian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.geo_point_scale, R.string.it_geo_point_scale);
     resourceIdMap.put(R.string.geo_point_transparency, R.string.it_geo_point_transparency);
     resourceIdMap.put(R.string.google_code, R.string.it_google_code);
-    resourceIdMap.put(R.string.gps_not_available, R.string.it_gps_not_available);
+    // Missing translation
+//    resourceIdMap.put(R.string.gps_not_available, R.string.it_gps_not_available);
     resourceIdMap.put(R.string.gps_outside_map, R.string.it_gps_outside_map);
     resourceIdMap.put(R.string.heading, R.string.it_heading);
     resourceIdMap.put(R.string.heading_hide, R.string.it_heading_hide);
@@ -100,13 +101,15 @@ class It_Italian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.image_point_help, R.string.it_image_point_help);
     resourceIdMap.put(R.string.image_point_no_image, R.string.it_image_point_no_image);
     resourceIdMap.put(R.string.image_point_select_for_matching, R.string.it_image_point_select_for_matching);
-    resourceIdMap.put(R.string.language_default, R.string.it_language_default);
+    // Missing translation
+//    resourceIdMap.put(R.string.language_default, R.string.it_language_default);
     resourceIdMap.put(R.string.language_selected_format, R.string.it_language_selected_format);
     resourceIdMap.put(R.string.language_title, R.string.it_language_title);
     resourceIdMap.put(R.string.latitude, R.string.it_latitude);
     resourceIdMap.put(R.string.local_maps, R.string.it_local_maps);
     resourceIdMap.put(R.string.location_details, R.string.it_location_details);
-    resourceIdMap.put(R.string.location_not_available, R.string.it_location_not_available);
+    // Missing translation
+//    resourceIdMap.put(R.string.location_not_available, R.string.it_location_not_available);
     resourceIdMap.put(R.string.longitude, R.string.it_longitude);
     resourceIdMap.put(R.string.map_image_load_failed, R.string.it_map_image_load_failed);
     // Missing translation

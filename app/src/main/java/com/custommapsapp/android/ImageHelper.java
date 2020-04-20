@@ -18,6 +18,7 @@ package com.custommapsapp.android;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.util.Log;
@@ -173,6 +174,7 @@ public class ImageHelper {
    *
    * @throws MapImageTooLargeException if image is too large to be loaded.
    */
+  @SuppressWarnings("deprecation")
   public static Bitmap loadImage(InputStream in, boolean ignoreDpi)
       throws MapImageTooLargeException {
     System.gc();
@@ -208,6 +210,9 @@ public class ImageHelper {
    * @return byte[] containing PNG compressed sample at the point.
    */
   public static byte[] createPngSample(Bitmap image, Point p, int size, int rotation) {
+    Bitmap sample = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+    sample.eraseColor(0x00000000); // Transparent
+    // Grab content from map image
     int halfEdge = size / 2;
     int x = Math.max(0, p.x - halfEdge);
     int y = Math.max(0, p.y - halfEdge);
@@ -215,10 +220,42 @@ public class ImageHelper {
     int height = Math.min(p.y + halfEdge, image.getHeight()) - y;
     Matrix rotate = new Matrix();
     rotate.postRotate(rotation, p.x, p.y);
-    Bitmap sample = Bitmap.createBitmap(image, x, y, width, height, rotate, false);
+    Bitmap content = Bitmap.createBitmap(image, x, y, width, height, rotate, false);
+    // Draw content in sample bitmap (snippets from edge areas don't cover fully)
+    boolean shiftX = false;
+    boolean shiftY = false;
+    if (width < size || height < size) {
+      // Content doesn't cover full sample area, check for need to shift from top-left corner
+      switch (rotation) {
+        case 0:
+        default:
+          // No rotation (x grows right, y grows down)
+          shiftX = content.getWidth() < size && x == 0;
+          shiftY = content.getHeight() < size && y == 0;
+          break;
+        case 90:
+          // Left edge has been rotated to top (x grows down, y grows left)
+          shiftX = content.getWidth() < size && y > size;
+          shiftY = content.getHeight() < size && x == 0;
+          break;
+        case 180:
+          // Image is upside down (x grows left, y grows up)
+          shiftX = content.getWidth() < size && x > size;
+          shiftY = content.getHeight() < size && y > size;
+          break;
+        case 270:
+          // Left edge has been rotated to bottom (x grows up, y grows right)
+          shiftX = content.getWidth() < size && y == 0;
+          shiftY = content.getHeight() < size && x > size;
+      }
+    }
+    int contentX = shiftX ? size - content.getWidth() : 0;
+    int contentY = shiftY ? size - content.getHeight() : 0;
+    new Canvas(sample).drawBitmap(content, contentX, contentY, null);
     // Compress the sample into a byte[] of PNG data
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream(1024);
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream(2048);
     boolean success = sample.compress(Bitmap.CompressFormat.PNG, 100, buffer);
+    content.recycle();
     sample.recycle();
     return (success ? buffer.toByteArray() : null);
   }

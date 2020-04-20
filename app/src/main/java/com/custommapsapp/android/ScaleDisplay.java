@@ -33,7 +33,7 @@ public class ScaleDisplay {
   private ImageView scaleIcon;
   private TextView scaleText;
   private boolean isHorizontal = false;
-  private int magnitude;
+  private int textLength;
 
   /** screenPoint is reused whenever a screen point is converted to Location. */
   private float[] screenPoint = new float[2];
@@ -69,6 +69,13 @@ public class ScaleDisplay {
     Location lowerLeftGeo = getLowerLeftLocation();
     Location lowerRightGeo = getLowerRightLocation();
 
+    if (upperLeftGeo == null || upperRightGeo == null
+        || lowerLeftGeo == null || lowerRightGeo == null) {
+      scaleText.setText("--");
+      updateTextLength(2);
+      return;
+    }
+
     // Span distance in meters
     double distanceM;
     if (isHorizontal) {
@@ -84,7 +91,7 @@ public class ScaleDisplay {
     }
 
     UnitsManager.updateScaleText(scaleText, distanceM);
-    updateMagnitude(scaleText.getText().length());
+    updateTextLength(scaleText.getText().length());
   }
 
   private void toggleScaleDirection() {
@@ -92,10 +99,10 @@ public class ScaleDisplay {
     update();
   }
 
-  private void updateMagnitude(int newMagnitude) {
-    if (newMagnitude != magnitude) {
-      magnitude = newMagnitude;
-      // Magnitude of the scale value changed, trigger re-layout of the ScaleDisplay ViewGroup
+  private void updateTextLength(int newLength) {
+    if (newLength != textLength) {
+      textLength = newLength;
+      // Length of the scale text changed, trigger re-layout of the ScaleDisplay ViewGroup
       ((View) scaleText.getParent()).invalidate();
     }
   }
@@ -131,6 +138,10 @@ public class ScaleDisplay {
   /** Updates a given Location object with given screen point (x,y). */
   private Location updateScreenPointLocation(float[] xy, Location location) {
     float[] geoPoint = displayState.convertScreenToGeoCoordinates(xy);
+    if (geoPoint == null) {
+      // Screen coordinates cannot be converted to geo coordinates
+      return null;
+    }
     location.setLongitude(geoPoint[X]);
     location.setLatitude(geoPoint[Y]);
     return location;

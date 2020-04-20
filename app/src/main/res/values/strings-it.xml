@@ -14,14 +14,14 @@
     <string name="it_app_home">Visita il sito di Custom Maps</string>
 
     <!-- CustomMaps.java -->
-    <string name="it_gps_not_available">
+    <!-- string name="it_gps_not_available">
         GPS location is not available to this app.
         \nPlease allow this app to access GPS location to improve location accuracy.
     </string>
     <string name="it_location_not_available">
         Your location is not available to this app.
         \nPlease enable access to GPS or network location in system settings.
-    </string>
+    </string -->
     <string name="it_gps_outside_map">La posizione GPS è fuori dai confini della mappa</string>
     <string name="it_share_map_failed">Invio mappa non riuscito</string>
     <string name="it_external_content_failed">Visualizzazione contenuto KMZ fallita.</string>
@@ -57,18 +57,18 @@
     <string name="it_create_map_help_link">
         Clicca qui per visitare il sito di Custom Maps e per avere mappe di esempio e una guida.
     </string>
-    <string name="it_no_map_sharing_apps">
-        Non ci sono applicazioni installate che possano condividere mappe
-    </string>
     <string name="it_select_cannot_modify_map_set">
         Questa mappa è parte di un gruppo di mappe. Non può essere modificato o eliminato.
     </string>
     <string name="it_select_cannot_modify_placemarks">
         Questa mappa contiene segnaposto. Esso non può essere modificato.
     </string>
+    <string name="it_no_map_sharing_apps">
+        Non ci sono applicazioni installate che possano condividere mappe
+    </string>
     <string name="it_delete_map_dialog_title">Conferma la rimozione</string>
     <string name="it_delete_map_dialog">Sei sicuro di voler rimuovere la mappa\n\"%s\"?</string>
-    <string name="it_delete_map_dialog_positive">Si - cancella</string>
+    <string name="it_delete_map_dialog_positive">Si - rimuovi</string>
     <string name="it_delete_map_dialog_negative">No - mantieni mappa</string>
     <string name="it_deleting_map_failed">Errore rimozione mappa \"%s\"</string>
     <string name="it_local_maps">Mappe Locali</string>
@@ -148,6 +148,7 @@
     <string name="it_geo_point_rotate">Rotazione</string>
     <string name="it_geo_point_scale">Scala</string>
     <string name="it_geo_point_transparency">Trasparenza</string>
+    <!-- string name="it_map_mode">Map mode</string -->
 
     <!-- map editor -->
     <string name="it_editor_help">
@@ -181,10 +182,10 @@
     <string name="it_metric_title">Usa sistema metrico</string>
     <string name="it_metric_use_metric">Sto usando il sistema metrico</string>
     <string name="it_metric_use_english">Sto utilizzando il sistema anglosassone</string>
-    <string name="it_distance_units_title">Selected distance units</string>
+    <!-- string name="it_distance_units_title">Selected distance units</string>
     <string name="it_scale_title">Display scale on map</string>
     <string name="it_scale_show">Scale is displayed</string>
-    <string name="it_scale_hide">Scale is not displayed</string>
+    <string name="it_scale_hide">Scale is not displayed</string -->
     <string name="it_distance_title">Mostra distanza</string>
     <string name="it_distance_show">
         Mostra distanza dalla posizione dell\'utente al centro dello schermo
@@ -203,19 +204,19 @@
         Il promemoria non sarà visualizzato quando la mappa cambia
     </string>
     <string name="it_language_title">Seleziona lingua</string>
-    <string name="it_language_default">Default</string>
+    <!-- string name="it_language_default">Default</string -->
     <string name="it_language_selected_format">Sto usando %s</string>
     <string name="it_max_map_img_size_title">Dimensione massima mappa</string>
     <string name="it_max_map_img_size">%.1f megapixels</string>
-    <string name="it_watch_tutorial">Watch tutorial video</string>
+    <!-- string name="it_watch_tutorial">Watch tutorial video</string -->
     <string name="it_about_custom_maps">Informazioni su Custom Maps</string>
 
     <!-- Selectable distance units labels. -->
-    <string-array name="it_distance_unit_entries">
+    <!-- string-array name="it_distance_unit_entries">
         <item>Kilometers and meters (km, m)</item>
         <item>Miles, yards, and feet (mi, yds, ft)</item>
         <item>Nautical miles and feet (nmi, ft)</item>
-    </string-array>
+    </string-array -->
 
     <!-- about dialog -->
     <string name="it_version_label">versione</string>
@@ -224,6 +225,7 @@
         \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (pinch zoom, posizione utente)
         \n\u2022 Patrick Steiner (internazionalizzazione, tedesco)
+        \n\u2022 Michael Ganss (tedesco)
         \n\u2022 Francesco Terribile (italiano)
         \n\u2022 Dorin Hongu (rumena)
         \n\u2022 Germain Zouein (testing)
@@ -263,5 +265,24 @@
     <string name="it_zoom_out">Zoom out</string>
     <string name="it_menu">Menu</string>
 
+    <!-- Preferences -->
+    <!-- string name="it_argb_8888_title">Use 32-bit color</string>
+    <string name="it_argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
+    <string name="it_argb_8888_summary_off">
+        Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.
+    </string>
+    <string name="it_use_gpu_title">Use GPU rendering</string>
+    <string name="it_use_gpu_summary_on">
+        Using GPU rendering (reduces maximum map image size).
+    </string>
+    <string name="it_use_gpu_summary_off">
+        Using software rendering (allows largest map image size). But app crashes on some LG devices.
+    </string>
+    <string name="it_max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string -->
+
+    <!-- PDF related UI strings -->
+    <!-- string name="it_preparing_pdf_file">Preparing PDF file</string -->
     <string name="it_select_map_page">Seleziona la pagina della mappa</string>
+    <!-- string name="it_rotate_page">Rotate page</string>
+    <string name="it_select_action">Select</string -->
 </resources>

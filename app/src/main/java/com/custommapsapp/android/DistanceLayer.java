@@ -43,6 +43,7 @@ public class DistanceLayer extends View {
   private Location userLocation;
   private Location screenCenterLocation;
   private boolean showHeading = false;
+  private int labelOffset = 0;
 
   private transient Rect infoBox = new Rect();
   private transient RectF roundInfoBox = new RectF();
@@ -93,6 +94,20 @@ public class DistanceLayer extends View {
     userLocation.set(location);
   }
 
+  /**
+   * Allows the horizontal positioning of the distance label to center between widgets in lower left
+   * and right corners of the map display.
+   *
+   * @param leftUsed rightmost edge of displayed widgets in lower left corner
+   * @param rightUsed leftmost edge of displayed widgets in lower right corner
+   */
+  public void setUsedPixels(int leftUsed, int rightUsed) {
+    int updatedOffset = (leftUsed - rightUsed) / 2;
+    if (updatedOffset != labelOffset) {
+      labelOffset = updatedOffset;
+    }
+  }
+
   @Override
   protected void onDraw(Canvas canvas) {
     // Don't display if user location is missing or user location is centered
@@ -118,6 +133,7 @@ public class DistanceLayer extends View {
     if (showHeading) {
       int heading = Math.round(userLocation.bearingTo(screenCenterLocation));
       heading = (heading + 360) % 360;
+      // \u00B0 is degree symbol
       displayStr = String.format(Locale.getDefault(), "%s, %d\u00B0", distanceStr, heading);
     } else {
       displayStr = distanceStr;
@@ -135,6 +151,7 @@ public class DistanceLayer extends View {
     infoBox.bottom += 2 * paddingPx;
     int marginPx = res.getDimensionPixelOffset(R.dimen.distance_layer_padding);
     infoBox.offset((getWidth() - infoBox.width()) / 2, getHeight() - infoBox.height() - marginPx);
+    infoBox.offset(labelOffset, 0);
     float baseline = infoBox.bottom - paddingPx;
     backgroundPaint.setStyle(Paint.Style.FILL);
     textPaint.setStrokeWidth(0f);

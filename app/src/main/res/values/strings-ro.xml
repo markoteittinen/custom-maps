@@ -14,14 +14,14 @@
     <string name="ro_app_home">Vizitați situl aplicație Custom Maps</string>
 
     <!-- CustomMaps.java -->
-    <string name="ro_gps_not_available">
+    <!-- string name="ro_gps_not_available">
         GPS location is not available to this app.
         \nPlease allow this app to access GPS location to improve location accuracy.
-    </string>
-    <string name="ro_location_not_available">
+    </string -->
+    <!-- string name="ro_location_not_available">
         Your location is not available to this app.
         \nPlease enable access to GPS or network location in system settings.
-    </string>
+    </string -->
     <string name="ro_gps_outside_map">Locația GPS nu este în interiorul graniților de hartă</string>
     <string name="ro_share_map_failed">A eșuat trimiterea hărții</string>
     <string name="ro_external_content_failed">
@@ -148,6 +148,7 @@
     <string name="ro_geo_point_rotate">Rotire</string>
     <string name="ro_geo_point_scale">Scalare</string>
     <string name="ro_geo_point_transparency">Transparența</string>
+    <!-- string name="ro_map_mode">Map mode</string -->
 
     <!-- map editor -->
     <string name="ro_editor_help">
@@ -180,10 +181,10 @@
     <string name="ro_metric_title">Utlizați sistemul metric</string>
     <string name="ro_metric_use_metric">Acum utilizați sistemul metric</string>
     <string name="ro_metric_use_english">Acum utilizați sistemul englezesc</string>
-    <string name="ro_distance_units_title">Selected distance units</string>
-    <string name="ro_scale_title">Display scale on map</string>
+    <!--string name="ro_distance_units_title">Selected distance units</string -->
+    <!-- string name="ro_scale_title">Display scale on map</string>
     <string name="ro_scale_show">Scale is displayed</string>
-    <string name="ro_scale_hide">Scale is not displayed</string>
+    <string name="ro_scale_hide">Scale is not displayed</string -->
     <string name="ro_distance_title">Afișează distanța</string>
     <string name="ro_distance_show">
         Afișează distanța de la locația curentă la centrul ecranului
@@ -203,15 +204,15 @@
     <string name="ro_language_selected_format">Utilizarea %s</string>
     <string name="ro_max_map_img_size_title">Dimenziune maximă imagine hartă</string>
     <string name="ro_max_map_img_size">%.1f megapixels</string>
-    <string name="ro_watch_tutorial">Watch tutorial video</string>
+    <!-- string name="ro_watch_tutorial">Watch tutorial video</string -->
     <string name="ro_about_custom_maps">Despre Custom Maps</string>
 
     <!-- Selectable distance units labels. -->
-    <string-array name="ro_distance_unit_entries">
+    <!-- string-array name="ro_distance_unit_entries">
         <item>Kilometers and meters (km, m)</item>
         <item>Miles, yards, and feet (mi, yds, ft)</item>
         <item>Nautical miles and feet (nmi, ft)</item>
-    </string-array>
+    </string-array -->
 
     <!-- about dialog -->
     <string name="ro_version_label">version</string>
@@ -220,6 +221,7 @@
         \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (pinch zoom, user location icon)
         \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Michael Ganss (German translation)
         \n\u2022 Francesco Terribile (Italian translation)
 	    \n\u2022 Dorin Hongu (Romanian translation)
         \n\u2022 Germain Zouein (testing)
@@ -259,4 +261,24 @@
     <string name="ro_zoom_out">Zoom out</string>
     <string name="ro_menu">Menu</string>
 
+    <!-- Preferences -->
+    <!--string name="ro_argb_8888_title">Use 32-bit color</string>
+    <string name="ro_argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
+    <string name="ro_argb_8888_summary_off">
+        Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.
+    </string>
+    <string name="ro_use_gpu_title">Use GPU rendering</string>
+    <string name="ro_use_gpu_summary_on">
+        Using GPU rendering (reduces maximum map image size).
+    </string>
+    <string name="ro_use_gpu_summary_off">
+        Using software rendering (allows largest map image size). But app crashes on some LG devices.
+    </string>
+    <string name="ro_max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string -->
+
+    <!-- PDF related UI strings -->
+    <!-- string name="ro_preparing_pdf_file">Preparing PDF file</string>
+    <string name="ro_select_map_page">Select map page</string>
+    <string name="ro_rotate_page">Rotate page</string>
+    <string name="ro_select_action">Select</string -->
 </resources>

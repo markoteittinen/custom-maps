@@ -17,6 +17,7 @@ package com.custommapsapp.android.storage;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -72,6 +73,9 @@ public class EditPreferences extends AppCompatActivity {
   }
 
   void updateTitle(Linguist linguist) {
-    getSupportActionBar().setTitle(linguist.getString(R.string.edit_prefs_name));
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null && linguist != null) {
+      actionBar.setTitle(linguist.getString(R.string.edit_prefs_name));
+    }
   }
 }

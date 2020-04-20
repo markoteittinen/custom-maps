@@ -190,6 +190,7 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
   private static final int MENU_MAP_MODE = 2;
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     MenuItem item =

@@ -521,16 +521,16 @@ public class DMatrix {
         count == 2 ? this::poly2Process : (count == 3 ? this::poly3Process : this::poly4Process);
     DMatrix temp = new DMatrix();
     if (!processor.process(srcPts, temp)) {
-      Log.d(LOG_TAG, "First poly-to-poly process failed");
+      Log.w(LOG_TAG, "First poly-to-poly process failed");
       return false;
     }
     DMatrix result = new DMatrix();
     if (!temp.invert(result)) {
-      Log.d(LOG_TAG, "Failed to invert matrix (poly-to-poly)");
+      Log.w(LOG_TAG, "Failed to invert matrix (poly-to-poly)");
       return false;
     }
     if (!processor.process(dstPts, temp)) {
-      Log.d(LOG_TAG, "Second poly-to-poly process failed");
+      Log.w(LOG_TAG, "Second poly-to-poly process failed");
       return false;
     }
     this.setConcat(temp, result);

@@ -66,7 +66,7 @@
         android:contentDescription="@string/zoom_out"
         android:tag="zoom_out"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_zoom_out" />
+        app:srcCompat="@drawable/ic_zoom_out" />
 
     <ImageButton
         android:id="@+id/zoomIn"
@@ -80,7 +80,7 @@
         android:contentDescription="@string/zoom_in"
         android:tag="zoom_in"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_zoom_in" />
+        app:srcCompat="@drawable/ic_zoom_in" />
 
     <LinearLayout
         android:id="@+id/scale_display"
@@ -88,8 +88,10 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/mapDisplay"
         android:layout_alignBottom="@id/mapDisplay"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:background="#C0FFFFFF"
         android:orientation="horizontal">
 
@@ -97,7 +99,7 @@
             android:id="@+id/scale_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:rotation="-90"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_span_short_24dp"
@@ -108,8 +110,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            android:gravity="center_vertical"
-            android:textSize="22dp"
+            android:paddingBottom="4dp"
+            android:gravity="bottom"
+            android:textSize="18dp"
             android:textColor="#ff000000"
             android:textStyle="bold"
             tools:text="40mi" />

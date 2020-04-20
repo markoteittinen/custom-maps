@@ -89,6 +89,7 @@ public class HelpDialogManager {
     webLinkUrl = url;
   }
 
+  @SuppressWarnings("deprecation")
   public void onResume() {
     if (isFirstTime || helpIsShowing) {
       helpIsShowing = true;
@@ -96,6 +97,7 @@ public class HelpDialogManager {
     }
   }
 
+  @SuppressWarnings("deprecation")
   public void onPause() {
     if (helpIsShowing) {
       activity.dismissDialog(HELP_ID);
@@ -125,6 +127,7 @@ public class HelpDialogManager {
     menu.findItem(HELP_ID).setTitle(linguist.getString(R.string.help_menu_title));
   }
 
+  @SuppressWarnings("deprecation")
   public void onOptionsItemSelected(MenuItem selected) {
     if (selected.getItemId() == HELP_ID && !helpIsShowing) {
       helpIsShowing = true;

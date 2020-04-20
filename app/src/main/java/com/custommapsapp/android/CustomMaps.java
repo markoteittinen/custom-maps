@@ -36,10 +36,11 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -82,7 +83,6 @@ public class CustomMaps extends AppCompatActivity {
   private static final String SAVED_ZOOMLEVEL = PREFIX + ".ZoomLevel";
   private static final String SAVED_FOLLOWMODE = PREFIX + ".FollowMode";
   private static final String SAVED_CENTER = PREFIX + ".Center";
-  private static final String SAVED_INSTANCESTATE = PREFIX + ".InstanceState";
   private static final String SAVED_SAFETY_REMINDER = PREFIX + ".SafetyReminder";
 
   private static final String DOWNLOAD_URL_PREFIX = "http://www.custommapsapp.com/qr?";
@@ -147,6 +147,8 @@ public class CustomMaps extends AppCompatActivity {
     }
 
     reloadUI();
+    ViewTreeObserver observer = ((ViewGroup)distanceLayer.getParent()).getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(this::updateDistanceLabelPosition);
 
     // Do not process launch intent if software license is not accepted yet
     if (PreferenceStore.instance(this).isLicenseAccepted()) {
@@ -269,6 +271,20 @@ public class CustomMaps extends AppCompatActivity {
     scaleMap(factor, mapDisplay.getWidth() / 2f, mapDisplay.getHeight() / 2f);
   }
 
+  /**
+   * Centers the distance label in the unused area at the bottom of map display.
+   */
+  private void updateDistanceLabelPosition() {
+    // Pixels covered in lower left by scale display
+    int leftUsed = 0;
+    if (scaleDisplayView.getVisibility() == View.VISIBLE) {
+      leftUsed = scaleDisplayView.getRight();
+    }
+    // Pixels covered in lower right by zoom buttons
+    int rightUsed = distanceLayer.getWidth() - zoomOut.getLeft();
+    distanceLayer.setUsedPixels(leftUsed, rightUsed);
+  }
+
   private void processLaunchIntent(Bundle savedInstanceState) {
     Intent intent = getIntent();
     if (intent != null && Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -280,7 +296,7 @@ public class CustomMaps extends AppCompatActivity {
         return;
       }
       // Found invalid intent parameters, ignore them and launch normally
-      Log.d(LOG_TAG, "Invalid params for VIEW action, ignoring action");
+      Log.w(LOG_TAG, "Invalid params for VIEW action, ignoring action");
     }
 
     if (savedInstanceState != null && savedInstanceState.getSerializable(SAVED_MAP) != null) {
@@ -314,23 +330,18 @@ public class CustomMaps extends AppCompatActivity {
       launchSelectMap(true);
       return;
     }
-
-    if (selectedMap != null) {
-      loadMapForDisplay(mapImage, null);
-      mapDisplay.centerOnGpsLocation();
-    }
-
-    if (mapDisplay.getMap() == null && getIntent().getBundleExtra(SAVED_INSTANCESTATE) != null) {
-      selectedMap = null;
-      onRestoreInstanceState(getIntent().getBundleExtra(SAVED_INSTANCESTATE));
-    }
     locationTracker.setContext(getApplicationContext());
     locationTracker.setDisplay(getWindowManager().getDefaultDisplay());
     locationTracker.setQuitting(false);
     locationTracker.resetCompass();
 
+    // Initialize locationTracker with the last known position (if it is not older than 15 minutes)
+    long _15Minutes = 15 * 60 * 1000;
+    Location location = getLastKnownLocation(_15Minutes);
+    locationTracker.onLocationChanged(location);
+
     // Avoid crashing on some systems where location providers are disabled
-    // This is possible on some open source Android variants.
+    // This is possible on some open source Android variants and on Chromebooks.
     boolean gpsAvailable = false;
     if (locator.getProvider(LocationManager.GPS_PROVIDER) != null) {
       locator.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0.0f, locationTracker);
@@ -382,12 +393,6 @@ public class CustomMaps extends AppCompatActivity {
     isLaunchingSelectMap = false;
   }
 
-  @Override
-  protected void onStop() {
-    loadMapForDisplay(null, null);
-    super.onStop();
-  }
-
   // --------------------------------------------------------------------------
   // Instance state saving and restoring
 
@@ -408,8 +413,6 @@ public class CustomMaps extends AppCompatActivity {
     if (safetyReminder != null) {
       outState.putBundle(SAVED_SAFETY_REMINDER, safetyReminder.onSaveInstanceState());
     }
-    // Save to original intent to have this available at will
-    getIntent().putExtra(SAVED_INSTANCESTATE, outState);
   }
 
   @Override
@@ -419,10 +422,6 @@ public class CustomMaps extends AppCompatActivity {
       if (safetyReminderState != null) {
         displaySafetyReminder(safetyReminderState);
       }
-    }
-    if (selectedMap != null) {
-      // Do not restore instance state since a map is selected
-      return;
     }
     KmlFolder savedMap = (KmlFolder) inState.getSerializable(SAVED_MAP);
     if (savedMap != null) {
@@ -448,13 +447,10 @@ public class CustomMaps extends AppCompatActivity {
         } else {
           // map has been deleted, remove its info
           inState.remove(SAVED_MAP);
-          savedMap = null;
           selectedMap = null;
         }
       }
     }
-    // Remove from original intent (might have been saved there)
-    getIntent().removeExtra(SAVED_INSTANCESTATE);
   }
 
   private void displayUserMessage(final String message) {
@@ -474,14 +470,14 @@ public class CustomMaps extends AppCompatActivity {
     mapImage = null;
     if (map != null) {
       mapImage = map.getFirstMap();
-      Log.d(LOG_TAG, "Selected map: " + (mapImage == null ? "- none -" : mapImage.getName()));
+      Log.i(LOG_TAG, "Selected map: " + (mapImage == null ? "- none -" : mapImage.getName()));
       for (KmlFeature feature : map.getFeatures()) {
         if (feature instanceof Placemark) {
           placemarks.add((Placemark) feature);
         }
       }
     }
-    Log.d(LOG_TAG,
+    Log.i(LOG_TAG,
         String.format("CustomMaps initialized map. Found %d placemarks.", placemarks.size()));
   }
 
@@ -498,13 +494,13 @@ public class CustomMaps extends AppCompatActivity {
   private void createMenuItems(Menu menu) {
     menu.add(Menu.NONE, MENU_SELECT_MAP, Menu.NONE, linguist.getString(R.string.select_map))
         .setIcon(R.drawable.mapmode);
-    MenuItem item =
-        menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, linguist.getString(R.string.my_location))
-            .setIcon(R.drawable.ic_my_location_white_24dp);
-    item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    menu.add(Menu.NONE, MENU_MY_LOCATION, Menu.NONE, linguist.getString(R.string.my_location))
+        .setIcon(R.drawable.ic_my_location_white_24dp)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     menu.add(
         Menu.NONE, MENU_LOCATION_DETAILS, Menu.NONE, linguist.getString(R.string.location_details))
-        .setIcon(android.R.drawable.ic_menu_info_details);
+        .setIcon(android.R.drawable.ic_menu_info_details)
+        .setCheckable(true);
     menu.add(Menu.NONE, MENU_SHARE_MAP, Menu.NONE, linguist.getString(R.string.share_map))
         .setIcon(android.R.drawable.ic_menu_share);
     menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, linguist.getString(R.string.settings))
@@ -521,6 +517,8 @@ public class CustomMaps extends AppCompatActivity {
       menu.findItem(MENU_PREFERENCES).setTitle(linguist.getString(R.string.settings));
       updateMenuItems = false;
     }
+    boolean showDetails = PreferenceStore.instance(this).isShowDetails();
+    menu.findItem(MENU_LOCATION_DETAILS).setChecked(showDetails);
     // Can't share a null map or one that doesn't contain KmlInfo
     boolean enableShare = (selectedMap != null && selectedMap.getKmlInfo() != null);
     menu.findItem(MENU_SHARE_MAP).setEnabled(enableShare);
@@ -578,6 +576,7 @@ public class CustomMaps extends AppCompatActivity {
       detailsDisplay.getParent().requestLayout();
     }
     PreferenceStore.instance(getApplicationContext()).setShowDetails(showDetails);
+    scaleDisplayView.post(scaleDisplay::update);
   }
 
   private void shareMap() {
@@ -589,6 +588,14 @@ public class CustomMaps extends AppCompatActivity {
   // --------------------------------------------------------------------------
   // Activities
 
+  /**
+   * Processes launch intent action. Only Intent.ACTION_VIEW is supported, and the data Uri must be
+   * valid and it must point to KML/KMZ content to be viewed.
+   *
+   * @param action action that was in the intent that launched the app
+   * @param data Uri that was in the intent that launched the app
+   * @return true, iff the launch intent contained a valid KML/KMZ view action
+   */
   private boolean launchIntentAction(String action, Uri data) {
     if (!Intent.ACTION_VIEW.equals(action) || data == null) {
       return false;
@@ -689,16 +696,6 @@ public class CustomMaps extends AppCompatActivity {
 
     if (data == null) {
       Log.w(LOG_TAG, "User did not select a map.");
-      Bundle instanceState = getIntent().getBundleExtra(SAVED_INSTANCESTATE);
-      if (instanceState != null && instanceState.containsKey(SAVED_MAP)) {
-        selectedMap = null;
-        onRestoreInstanceState(instanceState);
-        if (selectedMap == null) {
-          // Previous map is no longer available, auto-select another one
-          mapDisplay.post(() -> launchSelectMap(getLastKnownLocation(0)));
-          return;
-        }
-      }
       if (selectedMap == null) {
         // User canceled initial selection, exit app
         finish();

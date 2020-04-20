@@ -134,6 +134,7 @@
     <string name="hu_geo_point_rotate">Forgatás</string>
     <string name="hu_geo_point_scale">Nagyítás</string>
     <string name="hu_geo_point_transparency">Átlátszóság</string>
+    <string name="hu_map_mode">Térkép mód</string>
 
     <!-- map editor -->
     <string name="hu_editor_help">
@@ -163,10 +164,10 @@
     <string name="hu_metric_title">Metrikus mértékegységek</string>
     <string name="hu_metric_use_metric">Metrikus mértékegységek használata</string>
     <string name="hu_metric_use_english">Angolszász mértékegységek használata</string>
-    <string name="hu_distance_units_title">Selected distance units</string>
-    <string name="hu_scale_title">Display scale on map</string>
-    <string name="hu_scale_show">Scale is displayed</string>
-    <string name="hu_scale_hide">Scale is not displayed</string>
+    <string name="hu_distance_units_title">Választott mértékegység</string>
+    <string name="hu_scale_title">Lépték megjelenítése</string>
+    <string name="hu_scale_show">Lépték megjelenítve</string>
+    <string name="hu_scale_hide">Lépték elrejtve</string>
     <string name="hu_distance_title">Távolság megjelenítés</string>
     <string name="hu_distance_show">Megjeleníti a jelenlegi helyzet és a képernyő közepe közötti távolságot</string>
     <string name="hu_distance_hide">A távolság nem megjelenített</string>
@@ -183,23 +184,24 @@
     <string name="hu_language_selected_format">Használt nyelv: %s</string>
     <string name="hu_max_map_img_size_title">Maximális térképlap méret</string>
     <string name="hu_max_map_img_size">%.1f megapixel</string>
-    <string name="hu_watch_tutorial">Watch tutorial video</string>
+    <string name="hu_watch_tutorial">Oktatóvideó megtekintése</string>
     <string name="hu_about_custom_maps">Custom Maps névjegy</string>
 
     <!-- Selectable distance units labels. -->
     <string-array name="hu_distance_unit_entries">
-        <item>Kilometers and meters (km, m)</item>
-        <item>Miles, yards, and feet (mi, yds, ft)</item>
-        <item>Nautical miles and feet (nmi, ft)</item>
+        <item>Kilométer és méter (km, m)</item>
+        <item>Mérföld, yard és láb (mi, yds, ft)</item>
+        <item>Tengeri mérföld (nmi, ft)</item>
     </string-array>
 
     <!-- about dialog -->
     <string name="hu_version_label">verzió</string>
     <string name="hu_credits_text">
         <b>Külön köszönet</b>
-        \n\u2022 Bart Eisenberg (tutorial video)
+        \n\u2022 Bart Eisenberg (bemutató videó)
         \n\u2022 Harlan Hile (pinch zoom, user location icon)
         \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Michael Ganss (German translation)
         \n\u2022 Francesco Terribile (Italian translation)
         \n\u2022 Dorin Hongu (Romanian translation)
         \n\u2022 Germain Zouein (testing)
@@ -239,6 +241,7 @@
     <string name="hu_zoom_out">Kicsinyítés</string>
     <string name="hu_menu">Menü</string>
 
+    <!-- Preferences -->
     <string name="hu_argb_8888_summary_off">16 bites szín használata (a legnagyobb térképmérethez). Használatakor az alkalmazás összeomolhat egyes Motorola készülékeken.</string>
     <string name="hu_argb_8888_summary_on">32 bites szín használata (korlátozhatja a maximális térképméretet).</string>
     <string name="hu_argb_8888_title">32 bites szín használat</string>
@@ -247,6 +250,7 @@
     <string name="hu_use_gpu_summary_on">GPU renderelés használat (csökkenti a maximális képméretet).</string>
     <string name="hu_use_gpu_title">GPU renderelés használata</string>
 
+    <!-- PDF map related -->
     <string name="hu_preparing_pdf_file">PDF file előkészítése</string>
     <string name="hu_select_map_page">Térképlap kiválaszása</string>
     <string name="hu_rotate_page">Lap elforgatása</string>

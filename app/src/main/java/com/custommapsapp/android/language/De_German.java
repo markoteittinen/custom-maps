@@ -32,10 +32,9 @@ class De_German extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.apache_license, R.string.de_apache_license);
     resourceIdMap.put(R.string.app_home, R.string.de_app_home);
     resourceIdMap.put(R.string.app_name, R.string.de_app_name);
-    // Missing translation
-//    resourceIdMap.put(R.string.argb_8888_summary_off, R.string.de_argb_8888_summary_off);
-//    resourceIdMap.put(R.string.argb_8888_summary_on, R.string.de_argb_8888_summary_on);
-//    resourceIdMap.put(R.string.argb_8888_title, R.string.de_argb_8888_title);
+    resourceIdMap.put(R.string.argb_8888_summary_off, R.string.de_argb_8888_summary_off);
+    resourceIdMap.put(R.string.argb_8888_summary_on, R.string.de_argb_8888_summary_on);
+    resourceIdMap.put(R.string.argb_8888_title, R.string.de_argb_8888_title);
     resourceIdMap.put(R.string.author, R.string.de_author);
     resourceIdMap.put(R.string.button_accept, R.string.de_button_accept);
     resourceIdMap.put(R.string.button_accept_license, R.string.de_button_accept_license);
@@ -112,8 +111,7 @@ class De_German extends Linguist.LanguageStore {
 //    resourceIdMap.put(R.string.map_mode, R.string.de_map_mode);
     resourceIdMap.put(R.string.map_too_large, R.string.de_map_too_large);
     resourceIdMap.put(R.string.max_map_img_size, R.string.de_max_map_img_size);
-    // Missing translation
-//    resourceIdMap.put(R.string.max_map_img_size_gpu_on, R.string.de_max_map_img_size_gpu_on);
+    resourceIdMap.put(R.string.max_map_img_size_gpu_on, R.string.de_max_map_img_size_gpu_on);
     resourceIdMap.put(R.string.max_map_img_size_title, R.string.de_max_map_img_size_title);
     resourceIdMap.put(R.string.menu, R.string.de_menu);
     resourceIdMap.put(R.string.metric_title, R.string.de_metric_title);
@@ -164,10 +162,9 @@ class De_German extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.share_message_subject, R.string.de_share_message_subject);
     resourceIdMap.put(R.string.speed, R.string.de_speed);
     resourceIdMap.put(R.string.unnamed_map, R.string.de_unnamed_map);
-    // Missing translation
-//    resourceIdMap.put(R.string.use_gpu_summary_off, R.string.de_use_gpu_summary_off);
-//    resourceIdMap.put(R.string.use_gpu_summary_on, R.string.de_use_gpu_summary_on);
-//    resourceIdMap.put(R.string.use_gpu_title, R.string.de_use_gpu_title);
+    resourceIdMap.put(R.string.use_gpu_summary_off, R.string.de_use_gpu_summary_off);
+    resourceIdMap.put(R.string.use_gpu_summary_on, R.string.de_use_gpu_summary_on);
+    resourceIdMap.put(R.string.use_gpu_title, R.string.de_use_gpu_title);
     resourceIdMap.put(R.string.use_picker, R.string.de_use_picker);
     resourceIdMap.put(R.string.version_label, R.string.de_version_label);
     resourceIdMap.put(R.string.waiting_for_gps, R.string.de_waiting_for_gps);

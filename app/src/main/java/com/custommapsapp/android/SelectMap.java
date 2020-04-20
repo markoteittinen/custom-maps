@@ -452,11 +452,13 @@ public class SelectMap extends AppCompatActivity
   // Dialog management methods
 
   @Override
+  @SuppressWarnings("deprecation")
   protected Dialog onCreateDialog(int id) {
     return helpDialogManager.onCreateDialog(id);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected void onPrepareDialog(int id, Dialog dialog) {
     helpDialogManager.onPrepareDialog(id, dialog);
   }

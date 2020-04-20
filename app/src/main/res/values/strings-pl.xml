@@ -134,6 +134,7 @@
     <string name="pl_geo_point_rotate">Obrót</string>
     <string name="pl_geo_point_scale">Skalowanie</string>
     <string name="pl_geo_point_transparency">Przezroczystość</string>
+    <!-- string name="pl_map_mode">Map mode</string -->
 
     <!-- map editor -->
     <string name="pl_editor_help">
@@ -162,10 +163,10 @@
     <string name="pl_metric_title">Użyj jednostek metrycznych</string>
     <string name="pl_metric_use_metric">W użyciu jednostki metryczne</string>
     <string name="pl_metric_use_english">W użyciu jednostki angielskie</string>
-    <string name="pl_distance_units_title">Selected distance units</string>
-    <string name="pl_scale_title">Display scale on map</string>
+    <!-- string name="pl_distance_units_title">Selected distance units</string -->
+    <!-- string name="pl_scale_title">Display scale on map</string>
     <string name="pl_scale_show">Scale is displayed</string>
-    <string name="pl_scale_hide">Scale is not displayed</string>
+    <string name="pl_scale_hide">Scale is not displayed</string -->
     <string name="pl_distance_title">Wyświetlaj odległość</string>
     <string name="pl_distance_show">Wyświetla odległość od położenia użytkownika do środka ekranu</string>
     <string name="pl_distance_hide">Odległość nie jest wyświetlana ani przeliczana</string>
@@ -182,15 +183,15 @@
     <string name="pl_language_selected_format">Używany %s</string>
     <string name="pl_max_map_img_size_title">Maksymalny rozmia mapy</string>
     <string name="pl_max_map_img_size">%.1f megapixeli</string>
-    <string name="pl_watch_tutorial">Watch tutorial video</string>
+    <!-- string name="pl_watch_tutorial">Watch tutorial video</string -->
     <string name="pl_about_custom_maps">Informacje o Custom Maps</string>
 
     <!-- Selectable distance units labels. -->
-    <string-array name="pl_distance_unit_entries">
+    <!-- string-array name="pl_distance_unit_entries">
         <item>Kilometers and meters (km, m)</item>
         <item>Miles, yards, and feet (mi, yds, ft)</item>
         <item>Nautical miles and feet (nmi, ft)</item>
-    </string-array>
+    </string-array -->
 
     <!-- about dialog -->
     <string name="pl_version_label">wersja</string>
@@ -199,6 +200,7 @@
         \n\u2022 Bart Eisenberg (tutorial video)
 		\n\u2022 Harlan Hile (skalowanie poprzez przesuwanie palcami, ikona położenia użytkownika)
 		\n\u2022 Patrick Steiner (przystosowanie do innych języków, niemieckie tłumaczenie)
+        \n\u2022 Michael Ganss (niemieckie tłumaczenie)
 		\n\u2022 Francesco Terribile (włoskie tłumaczenie)
 		\n\u2022 Dorin Hongu (rumuńskie tłumaczenie)
 		\n\u2022 Germain Zouein (testowanie)
@@ -238,4 +240,24 @@
     <string name="pl_zoom_out">Zoom out</string>
     <string name="pl_menu">Menu</string>
 
+    <!-- Preferences -->
+    <!-- string name="pl_argb_8888_title">Use 32-bit color</string>
+    <string name="pl_argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
+    <string name="pl_argb_8888_summary_off">
+        Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.
+    </string>
+    <string name="pl_use_gpu_title">Use GPU rendering</string>
+    <string name="pl_use_gpu_summary_on">
+        Using GPU rendering (reduces maximum map image size).
+    </string>
+    <string name="pl_use_gpu_summary_off">
+        Using software rendering (allows largest map image size). But app crashes on some LG devices.
+    </string>
+    <string name="pl_max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string -->
+
+    <!-- PDF related UI strings -->
+    <!-- string name="pl_preparing_pdf_file">Preparing PDF file</string>
+    <string name="pl_select_map_page">Select map page</string>
+    <string name="pl_rotate_page">Rotate page</string>
+    <string name="pl_select_action">Select</string -->
 </resources>

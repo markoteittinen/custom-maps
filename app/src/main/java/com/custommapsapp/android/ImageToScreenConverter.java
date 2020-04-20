@@ -16,11 +16,11 @@
 package com.custommapsapp.android;
 
 import android.graphics.Matrix;
+import android.util.Log;
 import android.view.View;
 
 /**
- * ImageToScreenConverter converts image coordinates to screen coordinates and
- * vice versa.
+ * ImageToScreenConverter converts image coordinates to screen coordinates and vice versa.
  *
  * @author Marko Teittinen
  */
@@ -100,17 +100,31 @@ public class ImageToScreenConverter {
   }
 
   public void zoom(float factor, float focusX, float focusY) {
-    if (imageToScreenMatrix == null) {
+    // Don't allow negative zoom factors that would turn the image upside down
+    if (imageToScreenMatrix == null || factor < 0) {
       return;
     }
+    // Convert focus point to image coordinates, and force it inside the image
+    float[] focusPoint = { focusX, focusY };
+    convertScreenToImageCoordinates(focusPoint);
+    if (focusPoint[0] < 0 || imageWidth < focusPoint[0] ||
+        focusPoint[1] < 0 || imageHeight < focusPoint[1]) {
+      // Focus point is outside image, force it inside
+      focusPoint[0] = Math.max(0, Math.min(focusPoint[0], imageWidth));
+      focusPoint[1] = Math.max(0, Math.min(focusPoint[1], imageHeight));
+      convertImageToScreenCoordinates(focusPoint);
+      focusX = focusPoint[0];
+      focusY = focusPoint[1];
+    }
+    // Apply zoom with potentially adjusted focus point
     zoomLevel *= factor;
     imageToScreenMatrix.postScale(factor, factor, focusX, focusY);
+    checkImageOnScreen();
   }
 
   /**
-   * Translates the image by (dx, dy). Returns 'true' if full translation was
-   * performed, 'false' if the translation was limited to keep image from going
-   * off screen.
+   * Translates the image by (dx, dy). Returns 'true' if full translation was performed, 'false' if
+   * the translation was limited to keep image from going off screen.
    *
    * @param dx amount of horizontal translation
    * @param dy amount of vertical translation
@@ -151,12 +165,12 @@ public class ImageToScreenConverter {
   /**
    * Converts image coordinates to screen coordinates in place.
    *
-   * @param imageCoords Array of image coordinates to be converted to screen
-   *     space. The even indexes are x coordinates of the points, each of which
-   *     should be followed by the y coordinate of the same point. That is, for
-   *     three points the array would contain [x0, y0, x1, y1, x2, y2].
-   * @return Passed-in float array containing screen coordinates, or null if the
-   *     conversion cannot be computed.
+   * @param imageCoords Array of image coordinates to be converted to screen space. The even
+   *     indexes are x coordinates of the points, each of which should be followed by the y
+   *     coordinate of the same point. That is, for three points the array would contain [x0, y0,
+   *     x1, y1, x2, y2].
+   * @return Passed-in float array containing screen coordinates, or null if the conversion cannot
+   *     be computed.
    */
   public float[] convertImageToScreenCoordinates(float[] imageCoords) {
     if (imageToScreenMatrix == null) {
@@ -230,7 +244,7 @@ public class ImageToScreenConverter {
 
     if (dx != 0f || dy != 0f) {
       // dx and dy are in image coordinates, map to screen (w/o translation)
-      float[] screenDiff = new float[] { dx, dy };
+      float[] screenDiff = new float[]{dx, dy};
       imageToScreenMatrix.mapVectors(screenDiff);
       // Now adjust translation to keep map on screen
       imageToScreenMatrix.postTranslate(screenDiff[0], screenDiff[1]);

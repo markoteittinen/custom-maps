@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="distance_layer_text_size">22dp</dimen> <!-- 10pt -->
+    <dimen name="distance_layer_text_size">18dp</dimen> <!-- 8pt -->
     <dimen name="distance_layer_padding">9dp</dimen> <!-- 4pt -->
     <dimen name="distance_layer_small_radius">6dp</dimen>
 

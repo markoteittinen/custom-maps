@@ -254,7 +254,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     // Prepare dialog
     language.setDialogTitle(linguist.getString(R.string.language_title));
     language.setOnPreferenceChangeListener((preference, newValue) -> {
-      Log.d(CustomMaps.LOG_TAG, "PrefsFrag language changed to: " + newValue);
       // Update language used by app on user selection
       CustomMapsApp app = (CustomMapsApp) activity.getApplication();
       String languageCode = (String) newValue;
@@ -303,7 +302,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
   // Tutorial video
 
   private void launchTutorial() {
-    Uri tutorialUrl = Uri.parse("https://youtu.be/-lTrUL3HXqU");
+    Uri tutorialUrl = Uri.parse("https://youtu.be/qVuQenIzwik");
     Intent showTutorial = new Intent(Intent.ACTION_VIEW, tutorialUrl);
     startActivity(showTutorial);
   }

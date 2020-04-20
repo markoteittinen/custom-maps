@@ -59,6 +59,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
 import com.custommapsapp.android.CustomMapsApp;
@@ -234,7 +235,6 @@ public class SelectImageFileActivity extends AppCompatActivity
   }
 
   private void launchSelectPdfPageActivity(ImageFile pdfFile) {
-    Log.d(LOG_TAG, "Launching select PDF page: " + pdfFile.getFile().getName());
     Intent pageSelectIntent = new Intent(getApplicationContext(), SelectPdfPageActivity.class);
     pageSelectIntent.putExtra(
         SelectPdfPageActivity.PDF_FILENAME, pdfFile.getFile().getAbsolutePath());
@@ -249,14 +249,12 @@ public class SelectImageFileActivity extends AppCompatActivity
     }
     if (requestCode == SELECT_PDF_PAGE) {
       Uri selectedPageUri = data.getData();
-      Log.d(LOG_TAG, "Selected page image: " + selectedPageUri);
       // Remove "file://" prefix from Uri (7 chars)
       String selectedPageImage = selectedPageUri.toString().substring(7);
       returnImageFile(new File(selectedPageImage));
     } else if (requestCode == SELECT_IMAGE) {
       // Image was selected
       final Uri selectedImage = data.getData();
-      Log.d(LOG_TAG, "Selected image: " + selectedImage);
 
       // Display spinner and copy image to data directory in a background thread
       View v = findViewById(R.id.wait);
@@ -323,11 +321,13 @@ public class SelectImageFileActivity extends AppCompatActivity
   // Dialog management methods
 
   @Override
+  @SuppressWarnings("deprecation")
   protected Dialog onCreateDialog(int id) {
     return helpDialogManager.onCreateDialog(id);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected void onPrepareDialog(int id, Dialog dialog) {
     helpDialogManager.onPrepareDialog(id, dialog);
   }
@@ -670,7 +670,7 @@ public class SelectImageFileActivity extends AppCompatActivity
       return;
     }
     Drawable iconDrawable =
-        ContextCompat.getDrawable(SelectImageFileActivity.this, R.drawable.ic_pdf_file);
+        AppCompatResources.getDrawable(SelectImageFileActivity.this, R.drawable.ic_pdf_file);
     pdfIcon = Bitmap.createBitmap(
         iconDrawable.getIntrinsicWidth(), iconDrawable.getIntrinsicHeight(),
         Bitmap.Config.ARGB_8888);

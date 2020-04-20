@@ -230,6 +230,7 @@ public class PreviewMapActivity extends AppCompatActivity
   private static final int MENU_MAP_MODE = 1;
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     Linguist linguist = ((CustomMapsApp) getApplication()).getLinguist();
@@ -275,11 +276,13 @@ public class PreviewMapActivity extends AppCompatActivity
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected Dialog onCreateDialog(int id) {
     return helpDialogManager.onCreateDialog(id);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected void onPrepareDialog(int id, Dialog dialog) {
     helpDialogManager.onPrepareDialog(id, dialog);
   }

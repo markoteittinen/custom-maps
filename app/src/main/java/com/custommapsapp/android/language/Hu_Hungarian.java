@@ -60,9 +60,8 @@ class Hu_Hungarian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.distance_hide, R.string.hu_distance_hide);
     resourceIdMap.put(R.string.distance_show, R.string.hu_distance_show);
     resourceIdMap.put(R.string.distance_title, R.string.hu_distance_title);
-    // Missing translation
-//    resourceIdMap.put(R.string.distance_units_title, R.string.hu_distance_units_title);
-//    resourceIdMap.put(R.array.distance_unit_entries, R.array.hu_distance_unit_entries);
+    resourceIdMap.put(R.string.distance_units_title, R.string.hu_distance_units_title);
+    resourceIdMap.put(R.array.distance_unit_entries, R.array.hu_distance_unit_entries);
     resourceIdMap.put(R.string.download_canceled, R.string.hu_download_canceled);
     resourceIdMap.put(R.string.download_failed, R.string.hu_download_failed);
     resourceIdMap.put(R.string.download_info, R.string.hu_download_info);
@@ -108,8 +107,7 @@ class Hu_Hungarian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.location_not_available, R.string.hu_location_not_available);
     resourceIdMap.put(R.string.longitude, R.string.hu_longitude);
     resourceIdMap.put(R.string.map_image_load_failed, R.string.hu_map_image_load_failed);
-    // Missing translation
-//    resourceIdMap.put(R.string.map_mode, R.string.hu_map_mode);
+    resourceIdMap.put(R.string.map_mode, R.string.hu_map_mode);
     resourceIdMap.put(R.string.map_too_large, R.string.hu_map_too_large);
     resourceIdMap.put(R.string.max_map_img_size, R.string.hu_max_map_img_size);
     resourceIdMap.put(R.string.max_map_img_size_gpu_on, R.string.hu_max_map_img_size_gpu_on);
@@ -139,10 +137,9 @@ class Hu_Hungarian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.safety_reminder_title, R.string.hu_safety_reminder_title);
     resourceIdMap.put(R.string.safety_warning, R.string.hu_safety_warning);
     resourceIdMap.put(R.string.safety_warning_title, R.string.hu_safety_warning_title);
-    // Missing translation
-//    resourceIdMap.put(R.string.scale_hide, R.string.hu_scale_hide);
-//    resourceIdMap.put(R.string.scale_show, R.string.hu_scale_show);
-//    resourceIdMap.put(R.string.scale_title, R.string.hu_scale_title);
+    resourceIdMap.put(R.string.scale_hide, R.string.hu_scale_hide);
+    resourceIdMap.put(R.string.scale_show, R.string.hu_scale_show);
+    resourceIdMap.put(R.string.scale_title, R.string.hu_scale_title);
     resourceIdMap.put(R.string.sdcard, R.string.hu_sdcard);
     resourceIdMap.put(R.string.select_action, R.string.hu_select_action);
     resourceIdMap.put(R.string.select_cannot_modify_map_set, R.string.hu_select_cannot_modify_map_set);
@@ -169,8 +166,7 @@ class Hu_Hungarian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.use_picker, R.string.hu_use_picker);
     resourceIdMap.put(R.string.version_label, R.string.hu_version_label);
     resourceIdMap.put(R.string.waiting_for_gps, R.string.hu_waiting_for_gps);
-    // Missing translation
-//    resourceIdMap.put(R.string.watch_tutorial, R.string.hu_watch_tutorial);
+    resourceIdMap.put(R.string.watch_tutorial, R.string.hu_watch_tutorial);
     resourceIdMap.put(R.string.zoom_in, R.string.hu_zoom_in);
     resourceIdMap.put(R.string.zoom_out, R.string.hu_zoom_out);
   }

@@ -48,6 +48,7 @@ public class MapApiKeys {
    * @return hash code for the signature used to sign the app, or zero (0) if there are multiple
    *     signatures, or given context package name is not found by PackageManager.
    */
+  @SuppressWarnings("deprecation")
   private static int getSignatureHash(Context context) {
     PackageManager pm = context.getPackageManager();
     String name = context.getPackageName();

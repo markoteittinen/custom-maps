@@ -225,6 +225,7 @@ public class UnitsManager {
     if (distance < 9.995) {
       // Accuracy is ignored on longer distances, so return here if it needs to be shown
       if (accuracy > 0) {
+        // \u00B1 is plus-minus sign (±)
         return String.format(Locale.getDefault(),
             "%.2f \u00B1 %.2f %s", distance, accuracy, unitStr);
       }
@@ -244,32 +245,8 @@ public class UnitsManager {
     if (accuracy == 0) {
       return String.format(Locale.getDefault(), "%.0f %s", distance, unitStr);
     }
+    // \u00B1 is plus-minus sign (±)
     return String.format(Locale.getDefault(), "%.0f \u00B1 %.0f %s", distance, accuracy, unitStr);
-  }
-
-  /**
-   * Convert metric distance to given distance units, and format it using given number of
-   * significant digits.
-   *
-   * @param distanceM distance in meters
-   * @param units units preferred by the user
-   * @param significantDigits number of significant digits in result
-   * @return String for presenting the given distance to user
-   */
-  public static String toString(int distanceM, DistanceUnits units, int significantDigits) {
-    return null;
-  }
-
-  /**
-   * Convert metric distance to given distance units and format it using given format pattern.
-   *
-   * @param distanceM distance in meters
-   * @param units units preferred by the user
-   * @param format formatting pattern to be used to generate the result
-   * @return String for presenting the given distance to user
-   */
-  public static String toString(int distanceM, DistanceUnits units, String format) {
-    return null;
   }
 
   private static double metersToMiles(double distanceM) {

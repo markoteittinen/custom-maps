@@ -2,10 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.custommapsapp.android"
     android:installLocation="auto"
-    android:versionCode="116"
-    android:versionName="1.6 beta 3">
-    <!-- Beta version in Play Store: 1.6 beta 2/115 (2019-12-30) -->
-    <!-- Release version in Play Store: 1.5.2/111 (2019-9-30) -->
+    android:versionCode="126"
+    android:versionName="1.6.2">
     <!-- Target and min API versions now in build.gradle file
          uses-sdk android:targetSdkVersion="28"
                   android:minSdkVersion="19"                   -->

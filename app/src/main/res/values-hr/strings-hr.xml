@@ -137,6 +137,7 @@
     <string name="geo_point_rotate">Rotiranje</string>
     <string name="geo_point_scale">Skaliranje</string>
     <string name="geo_point_transparency">Prozirnost</string>
+    <!-- string name="map_mode">Map mode</string -->
 
     <!-- map editor -->
     <string name="editor_help">
@@ -169,10 +170,10 @@
     <string name="metric_title">Koristi metričke jedinice</string>
     <string name="metric_use_metric">Sada koristim metričke jedinice</string>
     <string name="metric_use_english">Sada koristim Engleske jedinice</string>
-    <string name="distance_units_title">Selected distance units</string>
-    <string name="scale_title">Display scale on map</string>
-    <string name="scale_show">Scale is displayed</string>
-    <string name="scale_hide">Scale is not displayed</string>
+    <!-- string name="distance_units_title">Selected distance units</string -->
+    <!-- string name="scale_title">Display scale on map</string -->
+    <!-- string name="scale_show">Scale is displayed</string -->
+    <!-- string name="scale_hide">Scale is not displayed</string -->
     <string name="distance_title">Prikaži udaljenost</string>
     <string name="distance_show">Prikaži udaljenost od korisničke lokacije do centra ekrana</string>
     <string name="distance_hide">
@@ -193,22 +194,24 @@
     <string name="language_selected_format">Koristim %s</string>
     <string name="max_map_img_size_title">Maksimalna veličina slike</string>
     <string name="max_map_img_size">%.1f megapiksela</string>
-    <string name="watch_tutorial">Watch tutorial video</string>
+    <!-- string name="watch_tutorial">Watch tutorial video</string -->
     <string name="about_custom_maps">O Custom Maps</string>
 
     <!-- Selectable distance units labels. -->
-    <string-array name="distance_unit_entries">
+    <!-- string-array name="distance_unit_entries">
         <item>Kilometers and meters (km, m)</item>
         <item>Miles, yards, and feet (mi, yds, ft)</item>
         <item>Nautical miles and feet (nmi, ft)</item>
-    </string-array>
+    </string-array -->
 
     <!-- about dialog -->
     <string name="version_label">verzija</string>
-    <string name="credits_text"><b>Posebne zahvale</b>
+    <string name="credits_text">
+        <b>Posebne zahvale</b>
         \n\u2022 Bart Eisenberg (tutorial video)
         \n\u2022 Harlan Hile (zumiranje hvatanjem, ikona lokacije korisnika)
         \n\u2022 Patrick Steiner (internacionalizacija, Njemački prijevod)
+        \n\u2022 Michael Ganss (Njemački prijevod)
         \n\u2022 Francesco Terribile (Talijanski prijevod)
         \n\u2022 Dorin Hongu (Rumunjski prijevod)
         \n\u2022 Germain Zouein (testiranje)
@@ -246,4 +249,26 @@
     <string name="use_picker">Alternativni selektor</string>
     <string name="zoom_in">Povećaj</string>
     <string name="zoom_out">Smanji</string>
-    <string name="menu">Izbornik</string></resources>
+    <string name="menu">Izbornik</string>
+
+    <!-- Preferences -->
+    <!--string name="argb_8888_title">Use 32-bit color</string>
+    <string name="argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
+    <string name="argb_8888_summary_off">
+        Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.
+    </string>
+    <string name="use_gpu_title">Use GPU rendering</string>
+    <string name="use_gpu_summary_on">
+        Using GPU rendering (reduces maximum map image size).
+    </string>
+    <string name="use_gpu_summary_off">
+        Using software rendering (allows largest map image size). But app crashes on some LG devices.
+    </string>
+    <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string -->
+
+    <!-- PDF map related -->
+    <!-- string name="preparing_pdf_file">Preparing PDF file</string>
+    <string name="select_map_page">Select Map Page</string>
+    <string name="rotate_page">Rotate page</string>
+    <string name="select_action">Select</string -->
+</resources>

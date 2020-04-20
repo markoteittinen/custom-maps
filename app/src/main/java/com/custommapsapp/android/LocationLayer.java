@@ -15,21 +15,25 @@
  */
 package com.custommapsapp.android;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.LinkedList;
-import java.util.List;
+import androidx.appcompat.content.res.AppCompatResources;
 
 /**
  * LocationLayer is responsible for drawing the user's location icon on the map.
@@ -56,8 +60,7 @@ public class LocationLayer extends View {
   private float heading;
   private float speedMps = 0f;  // m/s
 
-  private transient Matrix headingMatrix = new Matrix();
-
+  @SuppressWarnings("deprecation")
   public LocationLayer(Context context, AttributeSet attrs) {
     super(context, attrs);
 
@@ -76,7 +79,14 @@ public class LocationLayer extends View {
     fillPaint.setAntiAlias(true);
     fillPaint.setStyle(Paint.Style.FILL);
 
-    animation = (AnimationDrawable) getResources().getDrawable(R.drawable.blinking_arrow);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      // Android N (7.0) and later can use vector graphics
+      animation = (AnimationDrawable)
+          getResources().getDrawable(R.drawable.arrow_blinking_green);
+    } else {
+      // Earlier versions must convert vector graphics to bitmaps
+      animation = createBitmapAnimationDrawable();
+    }
   }
 
   @Override
@@ -141,10 +151,14 @@ public class LocationLayer extends View {
 
   @Override
   public void onDraw(Canvas canvas) {
+    drawUserLocation(canvas);
+
     if (warningMessage != null) {
       displayWarning(canvas);
     }
+  }
 
+  private void drawUserLocation(Canvas canvas) {
     if (!locationSet) {
       return;
     }
@@ -176,16 +190,17 @@ public class LocationLayer extends View {
       canvas.drawCircle(location[0], location[1], radius, solidPaint);
     }
     // Location indicator
-    Bitmap image = ((BitmapDrawable) animation.getCurrent()).getBitmap();
-    int w = image.getWidth();
-    int h = image.getHeight();
-    // Rotate arrow head to correct orientation
-    headingMatrix.reset();
-    headingMatrix.postTranslate(-(w / 2f), -(h / 2f));
-    headingMatrix.postRotate(heading + mapAngle);
-    headingMatrix.postTranslate(location[0], location[1]);
-    // solidPaint has anti alias and bitmap filtering flags on so image transforms are smooth.
-    canvas.drawBitmap(image, headingMatrix, solidPaint);
+    Drawable icon = animation.getCurrent();
+    int w = icon.getIntrinsicWidth();
+    int h = icon.getIntrinsicHeight();
+    icon.setBounds(0, 0, w, h);
+
+    // Rotate and translate canvas coordinates to draw location in the right place
+    canvas.save();
+    canvas.rotate(heading + mapAngle, location[0], location[1]);
+    canvas.translate(location[0] - w / 2f, location[1] - h / 2f);
+    icon.draw(canvas);
+    canvas.restore();
   }
 
   // --------------------------------------------------------------------------
@@ -311,5 +326,30 @@ public class LocationLayer extends View {
         line = "";
       }
     }
+  }
+
+  private AnimationDrawable createBitmapAnimationDrawable() {
+    Drawable dark = AppCompatResources.getDrawable(getContext(), R.drawable.arrow_green_dark);
+    dark = vectorToBitmapDrawable(dark);
+
+    Drawable light = AppCompatResources.getDrawable(getContext(), R.drawable.arrow_green_light);
+    light = vectorToBitmapDrawable(light);
+
+    AnimationDrawable animation = new AnimationDrawable();
+    animation.addFrame(dark, 500);
+    animation.addFrame(light, 500);
+    animation.setOneShot(false);
+    return animation;
+  }
+
+  private BitmapDrawable vectorToBitmapDrawable(Drawable drawable) {
+    assert drawable != null;
+    int w = drawable.getIntrinsicWidth();
+    int h = drawable.getIntrinsicHeight();
+    Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    drawable.setBounds(0, 0, w, h);
+    drawable.draw(canvas);
+    return new BitmapDrawable(getResources(), bitmap);
   }
 }

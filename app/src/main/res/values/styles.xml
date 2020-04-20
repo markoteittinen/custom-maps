@@ -19,6 +19,7 @@
 
     <style name="PrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/primaryColor</item>
+        <item name="android:textColor">#fff</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

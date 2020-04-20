@@ -78,6 +78,7 @@ public class PreferenceStore {
     prefs = context.getSharedPreferences(SHARED_PREFS_NAME, Activity.MODE_PRIVATE);
   }
 
+  @SuppressWarnings("deprecation")
   public String getVersion() {
     String version = null;
     try {
@@ -111,7 +112,8 @@ public class PreferenceStore {
   public UnitsManager.DistanceUnits getDistanceUnits() {
     if (prefs.contains(PREFS_METRIC)) {
       // If old two-option preference exists, migrate its value
-      UnitsManager.DistanceUnits units = isMetric() ? UnitsManager.DistanceUnits.KM : UnitsManager.DistanceUnits.MI;
+      UnitsManager.DistanceUnits units =
+          isMetric() ? UnitsManager.DistanceUnits.KM : UnitsManager.DistanceUnits.MI;
       setDistanceUnits(units);
       // Remove old preference value, and return
       prefs.edit().remove(PREFS_METRIC).apply();

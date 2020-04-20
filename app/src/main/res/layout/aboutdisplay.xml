@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     style="@style/AppTheme"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFFFF"
     android:padding="8dp"
@@ -17,16 +17,16 @@
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
         android:scaleType="fitCenter"
-        android:src="@drawable/icon" />
+        android:src="@drawable/icon"/>
 
     <TextView
         android:id="@+id/appTitle"
         style="@style/LargeText"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/appLogo"
-        android:layout_alignParentTop="true"
         android:layout_toEndOf="@id/appLogo"
+        android:layout_alignParentEnd="true"
         android:inputType="none"
         android:tag="app_name"
         android:text="@string/app_name"
@@ -36,10 +36,11 @@
     <TextView
         android:id="@+id/version"
         style="@style/SmallText"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/appTitle"
         android:layout_alignStart="@id/appTitle"
+        android:layout_alignEnd="@id/appTitle"
         android:inputType="none"
         android:tag="version_label"
         android:text="@string/version_label"
@@ -49,10 +50,11 @@
     <TextView
         android:id="@+id/author"
         style="@style/SmallText"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/version"
         android:layout_alignStart="@id/appTitle"
+        android:layout_alignEnd="@id/appTitle"
         android:layout_marginTop="8dp"
         android:inputType="none"
         android:tag="author"
@@ -62,13 +64,15 @@
     <TextView
         android:id="@+id/credits"
         style="@style/SmallText"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/appLogo"
         android:layout_marginTop="4dp"
-        android:background="#f4f4ff"
+        android:background="#f2f2f2"
         android:inputType="none"
+        android:maxHeight="184dp"
         android:padding="8dp"
+        android:scrollbars="vertical"
         android:tag="credits_text"
         android:text="@string/credits_text"
         android:textColor="#000000" />
@@ -140,9 +144,8 @@
         style="@style/NormalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/weblinks"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
+        android:layout_below="@id/weblinks"
         android:tag="button_accept_license"
         android:text="@string/button_accept_license" />
 
@@ -151,11 +154,11 @@
         style="@style/SecondaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/weblinks"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="false"
+        android:layout_below="@id/weblinks"
         android:tag="button_close"
         android:text="@string/button_close"
+        android:textColor="@android:color/black"
         android:textSize="18dp" />
 
 </RelativeLayout>

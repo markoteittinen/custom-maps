@@ -216,8 +216,8 @@ public class BitmapPointActivity extends AppCompatActivity {
     int snippetSize = MapEditor.SNIPPET_SIZE;
     byte[] mapSnippet = ImageHelper.createPngSample(image, intPoint, snippetSize, orientation);
     Point snippetPoint = new Point();
-    snippetPoint.x = Math.min(intPoint.x, snippetSize / 2);
-    snippetPoint.y = Math.min(intPoint.y, snippetSize / 2);
+    snippetPoint.x = snippetSize / 2;
+    snippetPoint.y = snippetSize / 2;
 
     // Release memory used by the loaded large bitmap
     imageDisplay.setBitmap(null);
@@ -240,11 +240,13 @@ public class BitmapPointActivity extends AppCompatActivity {
   // Dialog management
 
   @Override
+  @SuppressWarnings("deprecation")
   protected Dialog onCreateDialog(int id) {
     return helpDialogManager.onCreateDialog(id);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   protected void onPrepareDialog(int id, Dialog dialog) {
     helpDialogManager.onPrepareDialog(id, dialog);
   }
