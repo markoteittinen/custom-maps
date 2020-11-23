@@ -143,7 +143,7 @@
     <string name="geo_point_rotate">Вращать</string>
     <string name="geo_point_scale">Масштабировать</string>
     <string name="geo_point_transparency">Прозрачность</string>
-    <!--string name="map_mode">Map mode</string -->
+    <string name="map_mode">Режим карты</string>
 
     <!-- map editor -->
     <string name="editor_help">
@@ -176,10 +176,10 @@
     <string name="metric_title">Метрические единицы</string>
     <string name="metric_use_metric">Используются метрические единицы</string>
     <string name="metric_use_english">Используются неметрические единицы</string>
-    <!-- string name="distance_units_title">Selected distance units</string -->
-    <!-- string name="scale_title">Display scale on map</string>
-    <string name="scale_show">Scale is displayed</string>
-    <string name="scale_hide">Scale is not displayed</string -->
+    <string name="distance_units_title">Единицы измерения</string>
+    <string name="scale_title">Отображать масштаб на карте</string>
+    <string name="scale_show">Масштаб отображается</string>
+    <string name="scale_hide">Масштаб не отображается</string>
     <string name="distance_title">Показывать расстояние</string>
     <string name="distance_show">Показывать расстояние от Вашего положения до центра экрана</string>
     <string name="distance_hide">Расстояние не показывается или не определено</string>
@@ -196,15 +196,15 @@
     <string name="language_selected_format">Используемый %s</string>
     <string name="max_map_img_size_title">Максимальный размер карты</string>
     <string name="max_map_img_size">%.1f мегапикселей</string>
-    <!-- string name="watch_tutorial">Watch tutorial video</string -->
+    <string name="watch_tutorial">Смотреть обучающее видео</string>
     <string name="about_custom_maps">О приложении Custom Maps</string>
 
     <!-- Selectable distance units labels. -->
-    <!-- string-array name="distance_unit_entries">
-        <item>Kilometers and meters (km, m)</item>
-        <item>Miles, yards, and feet (mi, yds, ft)</item>
-        <item>Nautical miles and feet (nmi, ft)</item>
-    </string-array -->
+    <string-array name="distance_unit_entries">
+        <item>Километры и метры (km, m)</item>
+        <item>Мили, ярды и футы (mi, yds, ft)</item>
+        <item>Морские мили и футы (nmi, ft)</item>
+    </string-array>
 
     <!-- about dialog -->
     <string name="version_label">Версия</string>
@@ -254,23 +254,27 @@
     <string name="menu">Меню</string>
 
     <!-- Preferences -->
-    <!-- string name="argb_8888_title">Use 32-bit color</string>
-    <string name="argb_8888_summary_on">Using 32-bit color (may limit maximum map image size).</string>
-    <string name="argb_8888_summary_off">
-        Using 16-bit color (allows largest map image size). But app crashes on some Motorola devices.
+    <string name="argb_8888_title">Использовать 32-битный цвет</string>
+    <string name="argb_8888_summary_on">
+        Используется 32-битный цвет (может ограничивать максимально возможный размер изображения карт)
     </string>
-    <string name="use_gpu_title">Use GPU rendering</string>
+    <string name="argb_8888_summary_off">
+        Используется 16-битный цвет (позволяет использовать больший размер изображения карт,
+        но нестабильно работает на некоторых устройствах Motorola)
+    </string>
+    <string name="use_gpu_title">Использовать GPU для отрисовки</string>
     <string name="use_gpu_summary_on">
-        Using GPU rendering (reduces maximum map image size).
+        GPU используется (может ограничивать максимально возможный размер изображения карт)
     </string>
     <string name="use_gpu_summary_off">
-        Using software rendering (allows largest map image size). But app crashes on some LG devices.
+        Используется программная отрисовка (позволяет использовать больший размер изображения карт,
+        но нестабильно работает на некоторых устройствах LG)
     </string>
-    <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string -->
+    <string name="max_map_img_size_gpu_on">4096x4096 (16 мегапикселей) or 2048x2048 (4 мегапикселя)</string>
 
     <!-- PDF related UI strings -->
-    <!-- string name="preparing_pdf_file">Preparing PDF file</string>
-    <string name="select_map_page">Select map page</string>
-    <string name="rotate_page">Rotate page</string>
-    <string name="select_action">Select</string -->
+    <string name="preparing_pdf_file">Подготовка PDF-файла</string>
+    <string name="select_map_page">Выберите страницу</string>
+    <string name="rotate_page">Поворот страницы</string>
+    <string name="select_action">Выбрать</string>
 </resources>
