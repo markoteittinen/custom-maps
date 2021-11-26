@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="zh_app_name">Custom Maps</string>
+    <string name="zh_select_map_name">選擇地圖</string>
+    <string name="zh_create_map_name">建立地圖</string>
+    <string name="zh_edit_prefs_name">偏愛</string>
+    <string name="zh_author">由 Marko Teittinen</string>
+    <string name="zh_open_source">
+        Custom Maps 應用程序及其源始碼是在 Apache 許可證 2.0 版本下發佈的。
+    </string>
+    <string name="zh_apache_license">閱讀 Apache 許可證 2.0</string>
+    <string name="zh_google_code">訪問開源專案網站</string>
+    <string name="zh_app_home">訪問 Custom Maps 應用程序網站</string>
+
+    <!-- CustomMaps.java -->
+    <string name="zh_gps_not_available">
+        GPS 定位對這個應用程序是不可用的。
+        \n請允許本應用程序訪問GPS位置，以提高定位的準確性。
+    </string>
+    <string name="zh_location_not_available">
+        你的位置對這個應用程序是不可用的。
+        \n請在系統設置中啟用對GPS或網絡位置的訪問。
+    </string>
+    <string name="zh_gps_outside_map">GPS位置不在地圖范圍內</string>
+    <string name="zh_share_map_failed">無法傳送這個地圖</string>
+    <string name="zh_external_content_failed">Custom Maps 無法顯示 KMZ 的內容。</string>
+    <string name="zh_waiting_for_gps">當前位置未知。\n正在搜索 GPS 信號…</string>
+    <string name="zh_map_too_large">由於所選的地圖太大，無法載入。</string>
+
+    <!-- sharing -->
+    <string name="zh_share_message_subject">我想要共享一個地圖給你</string>
+    <string name="zh_share_chooser_title">發送地圖與...</string>
+
+    <!-- safety warning -->
+    <string name="zh_safety_warning_title">重要的!</string>
+    <string name="zh_safety_warning">
+        許多可用於自定義地圖的地圖圖像繪制得不夠精確，無法顯示準確的 GPS 位置。顯示的位置在任何時候都應該被認為是近似的。\n\n即使在一張地圖中，一些地區可能比其他地區更能與 GPS 保持一致。
+    </string>
+    <string name="zh_remind_me_again">下次再提醒我</string>
+
+    <!-- select map -->
+    <string name="zh_select_map_to_use">選擇要使用的地圖</string>
+    <string name="zh_no_maps_found_on_sd">
+        在SD卡上的CustomMaps文件夾中沒有找到地圖。\n\n使用選單創建地圖並獲得幫助。\n\n或按 \'返回\' 去退出。
+    </string>
+    <string name="zh_create_map_help">
+        使用選單，從照片或下載的地圖圖檔中創建地圖。\n\n點擊並按住一個地圖名稱來修改或刪除它。
+    </string>
+    <string name="zh_create_map_help_link">
+        點擊這裡訪問 Custom Maps 網站，查看樣本地圖和教程。
+    </string>
+    <string name="zh_select_cannot_modify_map_set">
+        該地圖是一個地圖集的一部分。它不能被修改或刪除。
+    </string>
+    <string name="zh_select_cannot_modify_placemarks">
+        這張地圖包含地標。它不能被修改。
+    </string>
+    <string name="zh_no_map_sharing_apps">沒有安裝可以分享地圖的應用程序</string>
+    <string name="zh_delete_map_dialog_title">確認刪除</string>
+    <string name="zh_delete_map_dialog">你是否確定想要刪除地圖\n\"%s\"?</string>
+    <string name="zh_delete_map_dialog_positive">是的 - 刪除</string>
+    <string name="zh_delete_map_dialog_negative">不要 - 保留地圖</string>
+    <string name="zh_deleting_map_failed">無法刪附附附除地圖 \"%s\"</string>
+    <string name="zh_local_maps">區域地圖</string>
+    <string name="zh_nearby_maps">附近的地圖</string>
+    <string name="zh_other_maps">其它地圖</string>
+    <string name="zh_all_maps">所有地圖</string>
+
+    <!-- downloading -->
+    <string name="zh_progress_format">地圖大小未知。已下載 %,d kB。</string>
+    <string name="zh_download_canceled">地圖下載已取消</string>
+    <string name="zh_download_failed">無法由 %s 下載地圖</string>
+    <string name="zh_download_successful">地圖下載成功</string>
+    <string name="zh_download_no_datadir">
+        Custom Maps 無法找到 SD 卡去儲存地圖.\n下載已取消.
+    </string>
+    <string name="zh_download_title_label">由網站下載地圖中</string>
+    <string name="zh_download_progress_label">進度</string>
+    <string name="zh_download_starting">開始下載…</string>
+    <string name="zh_download_info">
+        請等待，直到下載完成或用下面的按鈕取消下載。
+    </string>
+
+    <!-- map image display -->
+    <string name="zh_unnamed_map">未命名地圖</string>
+    <string name="zh_map_image_load_failed">能加載%s的地圖圖像。</string>
+
+    <!-- help manager -->
+    <string name="zh_help_menu_title">幫助</string>
+    <string name="zh_help_redisplay">你可以使用選單重新顯示這些信息</string>
+
+    <!-- details display -->
+    <string name="zh_latitude">緯度</string>
+    <string name="zh_longitude">經度</string>
+    <string name="zh_altitude">海拔高度</string>
+    <string name="zh_heading">方向</string>
+    <string name="zh_speed">速度</string>
+    <string name="zh_accuracy">準確度</string>
+    <string name="zh_no_data_available">不適用</string>
+
+    <!-- map image selection -->
+    <string name="zh_select_image_help">
+        選擇一個包含地圖圖像的檔案。\n\n只能使用你有權限的圖像。\n\n選單包含包含你的照片和互聯網下載的文件夾的鏈接。
+    </string>
+    <string name="zh_select_image_invalid">
+        %s 不是有效的圖像檔.\n你必需選擇一個圖像檔
+    </string>
+    <string name="zh_select_image_select_file">選擇地圖圖像檔案</string>
+    <string name="zh_select_image_processing">正在處理選定的圖像。\n請等待…</string>
+
+    <!-- map image point selection -->
+    <string name="zh_image_point_help">
+        選擇一個要在谷歌地圖上定位的點。\n\n選擇相距較遠的點以獲得最佳效果。\n\n避免在以前的點之間的定位點。
+    </string>
+    <string name="zh_image_point_no_image">沒有選擇地圖圖像。不能選擇定位點。</string>
+    <string name="zh_image_point_select_for_matching">選擇要匹配的定位點</string>
+
+    <!-- map geo point selection -->
+    <string name="zh_geo_point_help">
+        縮放和平移谷歌地圖以匹配縮略圖的中心。\n\n使用滑動條來旋轉和縮放縮略圖，並調整其透明度。\n\n地圖按鈕可以切換地圖視圖和衛星視圖。
+    </string>
+    <string name="zh_geo_point_mapview_failure">
+        創建地圖視圖失敗。\n無法使用地圖預覽。
+    </string>
+    <string name="zh_geo_point_rotate">旋轉</string>
+    <string name="zh_geo_point_scale">比例</string>
+    <string name="zh_geo_point_transparency">透明度</string>
+    <string name="zh_map_mode">地圖模式</string>
+
+    <!-- map editor -->
+    <string name="zh_editor_help">
+        命名你的地圖，並為地圖列表描述它。\n\n添加2-4個定位點來定位和縮放地圖圖像。\n\n通過長按項目調整或刪除定位點。\n\n地圖可以在預覽後儲存。
+    </string>
+    <string name="zh_editor_image_load_failed">無法載入地圖</string>
+    <string name="zh_editor_need_two_points">你必須在預覽前至少添加2個定位點</string>
+    <string name="zh_editor_map_save_failed">無法儲存地圖</string>
+    <string name="zh_editor_map_name">地圖名稱</string>
+    <string name="zh_editor_new_map">新地圖</string>
+    <string name="zh_editor_description">描述</string>
+    <string name="zh_editor_tiepoints">定位點</string>
+
+    <!-- map preview -->
+    <string name="zh_preview_help">
+        通過縮放和平移地圖來驗證地圖圖像的排列。\n\n後退按鈕允許您調整或添加定位點。\n\n注意：有些地圖圖像不能完美對齊。
+    </string>
+    <string name="zh_preview_mapview_failure">
+        創建地圖視圖失敗。\n無法使用地圖預覽。
+    </string>
+    <string name="zh_preview_transparency">透明度</string>
+
+    <!-- edit preferences -->
+    <string name="zh_metric_title">使用公制單位</string>
+    <string name="zh_metric_use_metric">現在使用公制單位</string>
+    <string name="zh_metric_use_english">現在使用英制單位</string>
+    <string name="zh_distance_units_title">選擇距離單位</string>
+    <string name="zh_scale_title">在地圖上顯示比例</string>
+    <string name="zh_scale_show">顯示比例</string>
+    <string name="zh_scale_hide">不顯示比例</string>
+    <string name="zh_distance_title">顯示距離</string>
+    <string name="zh_distance_show">顯示從用戶位置至螢幕中心的距離</string>
+    <string name="zh_distance_hide">距離未顯示或未計算</string>
+    <string name="zh_heading_title">顯示方向</string>
+    <string name="zh_heading_show">顯示從用戶位置至螢幕中心的方向</string>
+    <string name="zh_heading_hide">方向未顯示或未計算</string>
+    <string name="zh_safety_reminder_title">顯示安全提示</string>
+    <string name="zh_safety_reminder_show">更換地圖時，將顯示安全提示</string>
+    <string name="zh_safety_reminder_hide">
+        更換地圖時，將不顯示安全提示
+    </string>
+    <string name="zh_language_title">選擇語言</string>
+    <string name="zh_language_default">預設</string>
+    <string name="zh_language_selected_format">使用 %s</string>
+    <string name="zh_max_map_img_size_title">最大的地圖圖像尺寸</string>
+    <string name="zh_max_map_img_size">%.1f 百萬像素</string>
+    <string name="zh_watch_tutorial">觀看教學影片</string>
+    <string name="zh_about_custom_maps">關於 Custom Maps</string>
+
+    <!-- Selectable distance units labels. -->
+    <string-array name="zh_distance_unit_entries">
+        <item>公里和公尺(km、m)</item>
+        <item>英里、碼和英尺 (mi, yds, ft)</item>
+        <item>海里和英尺 (nmi, ft)</item>
+    </string-array>
+
+    <!-- about dialog -->
+    <string name="zh_version_label">version</string>
+    <string name="zh_credits_text">
+        <b>Special thanks</b>
+        \n\u2022 Bart Eisenberg (tutorial video)
+        \n\u2022 Harlan Hile (pinch zoom, user location icon)
+        \n\u2022 Patrick Steiner (internationalization, German translation)
+        \n\u2022 Michael Ganss (German translation)
+        \n\u2022 Francesco Terribile (Italian translation)
+        \n\u2022 Dorin Hongu (Romanian translation)
+        \n\u2022 Germain Zouein (testing)
+        \n\u2022 Tomasz Kossakowski (Polish translation)
+        \n\u2022 Dmitry Kandin (Russian translation)
+        \n\u2022 Vladimira Šantek (Croatian translation)
+        \n\u2022 András Hegedűs Juju (Hungarian translation)
+    </string>
+
+    <!-- button items -->
+    <string name="zh_button_ok">OK</string>
+    <string name="zh_button_close">關閉</string>
+    <string name="zh_button_accept_license">接受許可證</string>
+    <string name="zh_button_cancel">取消</string>
+    <string name="zh_button_save">儲存</string>
+    <string name="zh_button_add_point">添加定位點</string>
+    <string name="zh_button_preview">預覽</string>
+    <string name="zh_button_accept">接受</string>
+
+    <!-- menu items -->
+    <string name="zh_select_map">選擇地圖</string>
+    <string name="zh_my_location">我的地點</string>
+    <string name="zh_location_details">地點詳情</string>
+    <string name="zh_share_map">分享地圖</string>
+    <string name="zh_settings">偏愛</string>
+    <string name="zh_create_map">建立地圖</string>
+    <string name="zh_modify_map">修改地圖</string>
+    <string name="zh_delete_map">刪除地圖</string>
+    <string name="zh_select_point">選擇定位點</string>
+    <string name="zh_adjust_tiepoint">調整定位點</string>
+    <string name="zh_delete_tiepoint">刪除定位點</string>
+    <string name="zh_photos">照片</string>
+    <string name="zh_downloads">下載</string>
+    <string name="zh_sdcard">SD 卡</string>
+    <string name="zh_use_picker">其它選擇器</string>
+    <string name="zh_zoom_in">放大</string>
+    <string name="zh_zoom_out">縮小</string>
+    <string name="zh_menu">選單</string>
+
+    <!-- Preferences -->
+    <string name="zh_argb_8888_title">使用顏色位元數</string>
+    <string name="zh_argb_8888_summary_on">使用 32 位元顏色（可能會限制最大的地圖尺寸）。</string>
+    <string name="zh_argb_8888_summary_off">
+        使用 16 位元顏色 (允許較大的地圖尺寸)，但應用程序在一些 Motorola 裝置可能會崩潰.
+    </string>
+    <string name="zh_use_gpu_title">渲染方式</string>
+    <string name="zh_use_gpu_summary_on">
+        使用GPU渲染（減少最大地圖大小）。
+    </string>
+    <string name="zh_use_gpu_summary_off">
+        使用軟件渲染（允許最大的地圖尺寸）。但應用程序在一些 LG 設備上可能會崩潰。
+    </string>
+    <string name="zh_max_map_img_size_gpu_on">4096x4096（1千6百萬像素）或2048x2048（4百萬像素）。</string>
+
+    <!-- PDF map related -->
+    <string name="zh_preparing_pdf_file">準備 PDF 檔案</string>
+    <string name="zh_select_map_page">選擇地圖頁面</string>
+    <string name="zh_rotate_page">旋轉頁面</string>
+    <string name="zh_select_action">選擇</string>
+</resources>
