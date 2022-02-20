@@ -16,8 +16,8 @@
 package com.custommapsapp.android.create;
 
 import java.util.Locale;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,14 +28,13 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.SeekBar;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,7 +42,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-
+import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.MouseWheelZoom;
@@ -97,8 +96,8 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
 
     Bundle extras = getIntent().getExtras();
     int[] center = extras.getIntArray(IMAGE_POINT);
-    byte[] pngImage = extras.getByteArray(BITMAP_DATA);
-    Bitmap image = BitmapFactory.decodeByteArray(pngImage, 0, pngImage.length);
+    byte[] jpgImage = extras.getByteArray(BITMAP_DATA);
+    Bitmap image = BitmapFactory.decodeByteArray(jpgImage, 0, jpgImage.length);
     tiePointOverlay.setOverlayImage(image, center[0], center[1]);
 
     if (extras.getBoolean(RESTORE_SETTINGS, false)) {
@@ -157,7 +156,7 @@ public class TiePointActivity extends AppCompatActivity implements OnMapReadyCal
   }
 
   @Override
-  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+  protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
     if (helpDialogManager != null) {
       helpDialogManager.onRestoreInstanceState(savedInstanceState);

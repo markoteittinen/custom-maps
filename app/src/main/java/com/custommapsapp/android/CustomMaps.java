@@ -129,10 +129,15 @@ public class CustomMaps extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    // Initialize preference store and check if legacy storage is being used
+    PreferenceStore prefs = PreferenceStore.instance(this);
+    prefs.isUsingLegacyStorage();
+
     linguist = ((CustomMapsApp) getApplication()).getLinguist();
     Log.i(LOG_TAG, "App memory available (MB): " + MemoryUtil.getTotalAppMemoryMB(this));
     ImageHelper.initializePreferredBitmapConfig(this);
-    if (PreferenceStore.instance(this).isUseGpu()) {
+    if (prefs.isUseGpu()) {
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
           WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
     }
@@ -151,7 +156,7 @@ public class CustomMaps extends AppCompatActivity {
     observer.addOnGlobalLayoutListener(this::updateDistanceLabelPosition);
 
     // Do not process launch intent if software license is not accepted yet
-    if (PreferenceStore.instance(this).isLicenseAccepted()) {
+    if (prefs.isLicenseAccepted()) {
       processLaunchIntent(savedInstanceState);
     } else {
       selectedMap = null;
@@ -324,8 +329,7 @@ public class CustomMaps extends AppCompatActivity {
       return;
     }
     // If some permissions have not been granted, launch select map activity to request them
-    if (!PermissionFragment.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-        || !PermissionFragment.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+    if (!PermissionFragment.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
       isLaunchingSelectMap = true;
       launchSelectMap(true);
       return;
@@ -602,10 +606,21 @@ public class CustomMaps extends AppCompatActivity {
     }
     // Save content:// scheme Uri data into a file using ContentResolver
     if (ContentResolver.SCHEME_CONTENT.equals(data.getScheme())) {
-      File savedFile = FileUtil.saveKmzContentUri(this, data);
-      if (savedFile != null) {
-        // Open the saved file instead of passed-in content Uri
-        data = Uri.fromFile(savedFile);
+      Log.d(LOG_TAG, "Opening content w/ mimetype: " + getContentResolver().getType(data));
+      File catalogFile = null;
+      try {
+        // Check if that file is already in the catalog
+        catalogFile = FileUtil.findMatchingCatalogFile(this, data);
+      } catch (IllegalArgumentException ex) {
+        Log.e(LOG_TAG, "Failed to check matching files in catalog", ex);
+      }
+      if (catalogFile == null) {
+        // No matching file was found in catalog, add the file to catalog
+        catalogFile = FileUtil.saveKmzContentUri(this, data);
+      }
+      if (catalogFile != null) {
+        // Open the catalog file instead of passed-in content Uri
+        data = Uri.fromFile(catalogFile);
       } else {
         // Failed to save the data, display error message and quit app
         displayUserMessage(linguist.getString(R.string.external_content_failed));
@@ -670,13 +685,6 @@ public class CustomMaps extends AppCompatActivity {
   private void launchSelectMap(File localFile) {
     Intent selectMap = new Intent(this, SelectMap.class);
     selectMap.putExtra(SelectMap.LOCAL_FILE, localFile.getAbsolutePath());
-    selectMap.putExtra(SelectMap.AUTO_SELECT, true);
-    startActivityForResult(selectMap, SELECT_MAP);
-  }
-
-  private void launchSelectMap(Location location) {
-    Intent selectMap = new Intent(this, SelectMap.class);
-    selectMap.putExtra(SelectMap.LAST_LOCATION, location);
     selectMap.putExtra(SelectMap.AUTO_SELECT, true);
     startActivityForResult(selectMap, SELECT_MAP);
   }
@@ -748,22 +756,23 @@ public class CustomMaps extends AppCompatActivity {
         // download failed or was cancelled, launch default map selection
         launchSelectMap(false);
       }
-      return;
+    } else {
+      switch (requestCode) {
+        case SELECT_MAP:
+          processSelectMapResult(resultCode == RESULT_OK ? data : null);
+          break;
+        case EDIT_PREFS:
+          processEditPreferencesResult(data);
+          break;
+        case ACCEPT_LICENSE:
+          processLicenseActivityResult(resultCode, data);
+          break;
+        default:
+          Log.w(LOG_TAG, String.format(
+              "Unexpected activity result. Request: %d, Result %d", requestCode, resultCode));
+          break;
+      }
     }
-    if (requestCode == SELECT_MAP) {
-      processSelectMapResult(resultCode == RESULT_OK ? data : null);
-      return;
-    }
-    if (requestCode == EDIT_PREFS) {
-      processEditPreferencesResult(data);
-      return;
-    }
-    if (requestCode == ACCEPT_LICENSE) {
-      processLicenseActivityResult(resultCode, data);
-      return;
-    }
-    Log.w(LOG_TAG, String.format(
-        "Unexpected activity result. Request: %d, Result %d", requestCode, resultCode));
     super.onActivityResult(requestCode, resultCode, data);
   }
 
@@ -899,7 +908,7 @@ public class CustomMaps extends AppCompatActivity {
       return selectedMap;
     }
 
-    Iterable<KmlInfo> kmlFiles = KmlFinder.findKmlFiles(FileUtil.getDataDirectory());
+    Iterable<KmlInfo> kmlFiles = KmlFinder.findKmlFiles(FileUtil.getInternalMapDirectory());
     KmlInfo data = kmlFiles.iterator().next();
     KmlParser parser = new KmlParser();
     Iterable<KmlFeature> features = parser.readFile(data.getKmlReader());

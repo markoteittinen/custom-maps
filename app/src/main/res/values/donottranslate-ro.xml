@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="ro_app_name">Custom Maps</string>
     <string name="ro_select_map_name">Selectează hartă</string>
     <string name="ro_create_map_name">Crează hartă</string>
@@ -49,11 +48,14 @@
     <!-- select map -->
     <string name="ro_select_map_to_use">Selectați o hartă pentru utilizare</string>
     <string name="ro_no_maps_found_on_sd">
-        Nu au fost găsite hărți pe cardul SD în dosarul CustomMaps.\n\nFolosiți meniu pentru a crea
+        Nu au fost găsite hărți pe cardul SD în dosarul CustomMaps.\n\nFolosiți meniu pentru a crea
         hărți și pentru a obține ajutor să le găsiți.\n\n Sau apăsați \'inapoi\' pentru a ieși.
     </string>
+    <!-- string name="ro_transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="ro_create_map_help">
-        Utilizați meniul pentru a crea hărți din fotografii sau din imagini descărcate\n\nApăsați
+        Utilizați meniul pentru a crea hărți din fotografii sau din imagini descărcate\n\nApăsați
         pe o hartă și mențineți pentru a o modifica sau șterge.
     </string>
     <string name="ro_create_map_help_link">
@@ -113,7 +115,7 @@
 
     <!-- map image selection -->
     <string name="ro_select_image_help">
-        Selectați un fișier care conține o imagine hartă \n\nFolosiți numai imagini pentru care
+        Selectați un fișier care conține o imagine hartă \n\nFolosiți numai imagini pentru care
         aveți permisiunea.\n\nMeniul conține link-uri către dosarele care conțin fotografii și
         descărcări de pe internet.
     </string>
@@ -127,7 +129,7 @@
 
     <!-- map image point selection -->
     <string name="ro_image_point_help">
-        Selectați un punct care urmează să fie amplasat pe o hartă Google.\n\nSelectați puncte
+        Selectați un punct care urmează să fie amplasat pe o hartă Google.\n\nSelectați puncte
         depărtate pentru rezultate mai bune.departe cel mai bun pentru.\n\nEvită selectarea
         punctelor între puncte precente.
     </string>
@@ -153,7 +155,7 @@
     <!-- map editor -->
     <string name="ro_editor_help">
         Denumiți harta dvs. și descrieți-o pentru lista de hărți.\n\nAdugați 2-4 punte pentru a
-        localiza și scară harta imagine.\n\nAdjustați sau șterge puntele prin apăsarea lungă pe
+        localiza și scară harta imagine.\n\nAdjustați sau șterge puntele prin apăsarea lungă pe
         intrări.\n\nHărțile pot fi salvate după vizualizare.
     </string>
     <string name="ro_editor_image_load_failed">A eșuat încărcarea imaginii hartă</string>
@@ -168,8 +170,8 @@
 
     <!-- map preview -->
     <string name="ro_preview_help">
-        Verificați alinierea imaginii hartă prin scalare și panoramare harta.\n\nButonul înapoi
-        permite să reglați sau să adăugați puncte.\n\nNOTĂ: Anumite imagini hartă nu pot fi
+        Verificați alinierea imaginii hartă prin scalare și panoramare harta.\n\nButonul înapoi
+        permite să reglați sau să adăugați puncte.\n\nNOTĂ: Anumite imagini hartă nu pot fi
         aliniate perfect.
     </string>
     <string name="ro_preview_mapview_failure">
@@ -248,6 +250,7 @@
     <string name="ro_share_map">Distribuie haartă</string>
     <string name="ro_settings">Setări</string>
     <string name="ro_create_map">Creați hartă</string>
+    <!-- string name="ro_export_all_maps">Export all maps</string -->
     <string name="ro_modify_map">Modifică harta</string>
     <string name="ro_delete_map">Ștergere hartă</string>
     <string name="ro_select_point">Slectare punct</string>

@@ -82,6 +82,8 @@ class Ru_Russian extends Linguist.LanguageStore {
     resourceIdMap.put(R.string.editor_need_two_points, R.string.ru_editor_need_two_points);
     resourceIdMap.put(R.string.editor_new_map, R.string.ru_editor_new_map);
     resourceIdMap.put(R.string.editor_tiepoints, R.string.ru_editor_tiepoints);
+    // Missing translation
+//    resourceIdMap.put(R.string.export_all_maps, R.string.ru_export_all_maps);
     resourceIdMap.put(R.string.external_content_failed, R.string.ru_external_content_failed);
     resourceIdMap.put(R.string.geo_point_help, R.string.ru_geo_point_help);
     resourceIdMap.put(R.string.geo_point_mapview_failure, R.string.ru_geo_point_mapview_failure);

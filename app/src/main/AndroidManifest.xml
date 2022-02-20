@@ -2,14 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.custommapsapp.android"
     android:installLocation="auto"
-    android:versionCode="126"
-    android:versionName="1.6.2">
+    android:versionCode="133"
+    android:versionName="1.8.1">
     <!-- Target and min API versions now in build.gradle file
-         uses-sdk android:targetSdkVersion="28"
-                  android:minSdkVersion="19"                   -->
+         uses-sdk android:targetSdkVersion="29" (10, Q)
+                  android:minSdkVersion="19" (4.4, KitKat)           -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- READ EXTERNAL STORAGE is used only for migrating legacy data -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".CustomMapsApp"
@@ -18,17 +19,18 @@
         android:icon="@mipmap/appicon"
         android:installLocation="auto"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".CustomMaps"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-
                 <!-- QR codes - http://www.custommapsapp.com/qr?url=http://host/path/file.kmz -->
                 <action android:name="android.intent.action.VIEW" />
 
@@ -38,24 +40,27 @@
                 <data
                     android:host="www.custommapsapp.com"
                     android:pathPrefix="/qr"
+                    android:scheme="https" />
+                <data
+                    android:host="www.custommapsapp.com"
+                    android:pathPrefix="/qr"
                     android:scheme="http" />
             </intent-filter>
             <intent-filter>
-
                 <!-- Local file support (for file managers and downloaded files) -->
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <data android:scheme="file" />
+                <data android:scheme="content" />
                 <data
                     android:host="*"
                     android:mimeType="*/*"
-                    android:pathPattern=".*\\.kmz"
-                    android:scheme="file" />
+                    android:pathPattern=".*\\.kmz" />
             </intent-filter>
             <intent-filter>
-
                 <!-- Kmz file download support for Android apps (like Chrome, Gmail, Drive) -->
                 <action android:name="android.intent.action.VIEW" />
 
@@ -64,10 +69,29 @@
 
                 <data android:scheme="ftp" />
                 <data android:scheme="http" />
+                <data android:scheme="https" />
                 <data android:scheme="content" />
                 <data android:host="*" />
                 <data android:mimeType="application/vnd.google-earth.kmz" />
+
+                <data android:mimeType="application/kmz" />
+                <data android:mimeType="application/kmz+xml" />
+                <data android:mimeType="application/vnd.google-earth.kmz+xml" />
+                <data android:mimeType="application/zip" />
             </intent-filter>
+<!--            <intent-filter>-->
+<!--                &lt;!&ndash; Local file support (i.e Google Files app) &ndash;&gt;-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                <data android:scheme="content" />-->
+<!--                <data android:host="*" />-->
+<!--                <data-->
+<!--                    android:mimeType="*/*"-->
+<!--                    android:pathPattern=".*\\.kmz" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity android:name=".AboutDisplay" />
         <activity
@@ -75,9 +99,6 @@
             android:label="@string/select_map_name" />
         <activity
             android:name=".create.MapEditor"
-            android:label="@string/create_map_name" />
-        <activity
-            android:name=".create.SelectImageFileActivity"
             android:label="@string/create_map_name" />
         <activity android:name=".create.SelectPdfPageActivity"/>
         <activity

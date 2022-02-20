@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.custommapsapp.android.kml.GroundOverlay;
@@ -171,6 +172,7 @@ public class MapCatalog {
   // Instance variables and methods
 
   private File dataDir;
+  private Uri dataUri;
   private Collator stringComparer = Collator.getInstance();
   private Set<String> createdFiles = new HashSet<>();
   private List<KmlFolder> allMaps = new ArrayList<>();
@@ -185,6 +187,17 @@ public class MapCatalog {
    */
   public MapCatalog(File dataDir) {
     this.dataDir = dataDir;
+  }
+
+  /**
+   * Creates a new MapCatalog that contains all maps in a folder outside the app's internal data
+   * directory. This Uri must come from a call to system to request the user to select a storage
+   * folder for the maps, granting the app a permanent permission to manage that folder.
+   *
+   * @param permittedExternalFolder User selected folder outside the app's internal storage space
+   */
+  public MapCatalog(Uri permittedExternalFolder) {
+    this.dataUri = permittedExternalFolder;
   }
 
   /**

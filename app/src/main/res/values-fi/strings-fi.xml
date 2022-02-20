@@ -21,7 +21,7 @@
         Sijaintisi ei ole tämän ohjelman käytettävissä.
         \nAnna tälle ohjelmalle lupa GPS:n käyttöön laitteesi asetuksissa.
     </string>
-    <string name="gps_outside_map">GPS sijaintisi ei ole kartan alueella</string>
+    <string name="gps_outside_map">Sijaintisi ei ole tämän kartan alueella</string>
     <string name="share_map_failed">Kartan lähetys epäonnistui</string>
     <string name="external_content_failed">
         Custom Maps ei pystynyt näyttämään KMZ-tiedoston sisältöä.
@@ -48,6 +48,9 @@
     <string name="no_maps_found_on_sd">
         Custom Maps hakemistossa SD-kortilla ei ole karttoja.\n\nAvaa valikko luodaksesi uusi kartta
         tai saadaksesi apua karttojen löytämiseen.\n\nTai paina \'Peru\'-nappia lopettaaksesi.
+    </string>
+    <string name="transferring_maps">
+        Odota hetki…\n\nKartat kopioidaan laitteen sisäiseen muistiin.
     </string>
     <string name="create_map_help">
         Valitse \'Luo kartta\' valikosta tehdäksesi uusia karttoja valokuvista tai netistä
@@ -150,6 +153,9 @@
         poistaa kiintopisteitä koskettamalla niitä pitkään listassa.\n\nKartan voi tallettaa
         esikatselun jälkeen.
     </string>
+    <string name="editor_select_file_prompt">
+        Valitse ensin karttakuvan tiedosto.\nSen pitää olla joko PDF, JPG, PNG, tai GIF tiedosto.
+    </string>
     <string name="editor_image_load_failed">Karttakuvan lataaminen epäonnistui</string>
     <string name="editor_need_two_points">
         Ennen esikatselua pitää valita ainakin 2 kiintopistettä
@@ -237,6 +243,7 @@
     <string name="share_map">Lähetä kartta</string>
     <string name="settings">Asetukset</string>
     <string name="create_map">Luo kartta</string>
+    <string name="export_all_maps">Kopioi kaikki kartat</string>
     <string name="modify_map">Muokkaa karttaa</string>
     <string name="delete_map">Poista kartta</string>
     <string name="select_point">Valitse piste</string>

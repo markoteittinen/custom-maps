@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -171,7 +170,7 @@ public class KmzDownloader extends Activity {
    */
   private String createLocalPath(URL mapUrl) {
     // Check that app data directory exists or can be created
-    File localDir = FileUtil.getDataDirectory();
+    File localDir = FileUtil.getInternalMapDirectory();
     if (!localDir.exists()) {
       cancelActivity(linguist.getString(R.string.download_no_datadir));
       return null;

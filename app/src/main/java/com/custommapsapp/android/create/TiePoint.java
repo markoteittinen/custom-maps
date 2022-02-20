@@ -15,13 +15,13 @@
  */
 package com.custommapsapp.android.create;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.annotation.NonNull;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * TiePoint is a class holding an image point, its geo coordinates, and a small
@@ -29,30 +29,30 @@ import android.os.Parcelable;
  *
  * @author Marko Teittinen
  */
-public class TiePoint implements Parcelable {
+public class TiePoint implements Parcelable, Cloneable {
   private final Point imagePoint;
   private final Point offset;
-  private byte[] pngData;
+  private byte[] jpgData;
   private LatLng geoPoint;
   private transient Bitmap image;
 
-  public TiePoint(Point imagePoint, byte[] pngData, Point offset) {
+  public TiePoint(Point imagePoint, byte[] jpgData, Point offset) {
     this.imagePoint = imagePoint;
-    this.pngData = pngData;
+    this.jpgData = jpgData;
     this.offset = offset;
   }
 
   public Bitmap getImage() {
-    if (image == null && pngData != null) {
+    if (image == null && jpgData != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 2;
-      image = BitmapFactory.decodeByteArray(pngData, 0, pngData.length, options);
+      image = BitmapFactory.decodeByteArray(jpgData, 0, jpgData.length, options);
     }
     return image;
   }
 
-  public byte[] getPngData() {
-    return pngData;
+  public byte[] getJpgData() {
+    return jpgData;
   }
 
   public Point getOffset() {
@@ -76,7 +76,7 @@ public class TiePoint implements Parcelable {
     // Release memory used by the bitmap
     if (image != null && !image.isRecycled()) {
       image.recycle();
-      pngData = null;
+      jpgData = null;
       image = null;
     }
   }
@@ -85,6 +85,18 @@ public class TiePoint implements Parcelable {
   protected void finalize() throws Throwable {
     releaseBitmap();
     super.finalize();
+  }
+
+  @NonNull
+  public TiePoint clone() {
+    try {
+      return (TiePoint) super.clone();
+    } catch (CloneNotSupportedException ex) {
+      ex.printStackTrace();
+      TiePoint pt = new TiePoint(imagePoint, jpgData, offset);
+      pt.geoPoint = geoPoint;
+      return pt;
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -105,12 +117,12 @@ public class TiePoint implements Parcelable {
   private TiePoint(Parcel data) {
     imagePoint = readPoint(data);
     offset = readPoint(data);
-    int pngDataSize = data.readInt();
-    if (pngDataSize == 0) {
-      pngData = null;
+    int jpgDataSize = data.readInt();
+    if (jpgDataSize == 0) {
+      jpgData = null;
     } else {
-      pngData = new byte[pngDataSize];
-      data.readByteArray(pngData);
+      jpgData = new byte[jpgDataSize];
+      data.readByteArray(jpgData);
     }
     if (data.readByte() > 0) {
       geoPoint = new LatLng(data.readDouble(), data.readDouble());
@@ -121,11 +133,11 @@ public class TiePoint implements Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     writePoint(dest, imagePoint);
     writePoint(dest, offset);
-    if (pngData == null) {
+    if (jpgData == null) {
       dest.writeInt(0);
     } else {
-      dest.writeInt(pngData.length);
-      dest.writeByteArray(pngData);
+      dest.writeInt(jpgData.length);
+      dest.writeByteArray(jpgData);
     }
     if (geoPoint == null) {
       dest.writeByte((byte) 0);

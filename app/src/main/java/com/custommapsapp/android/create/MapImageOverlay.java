@@ -48,21 +48,21 @@ public class MapImageOverlay extends View
     implements GoogleMap.OnCameraMoveStartedListener,
     GoogleMap.OnCameraMoveListener,
     GoogleMap.OnCameraIdleListener {
-  private List<Point> imagePoints;
-  private List<LatLng> geoPoints;
-  private List<Point> screenPoints;
+  private final List<Point> imagePoints;
+  private final List<LatLng> geoPoints;
+  private final List<Point> screenPoints;
 
   private GoogleMap googleMap;
   private Bitmap mapImage;
 
   /** Paint used for drawing the map image as translucent overlay */
-  private Paint transparency;
+  private final Paint transparency;
   /** Paint used for drawing the tiepoint locations */
-  private Paint pointPaint;
+  private final Paint pointPaint;
   /** Matrix that maps image coordinates to screen coordinates */
   private Matrix imageMatrix;
   /** DMatrix that maps image coordinates to screen coordinates */
-  private DMatrix imageMatrixDbl;
+  private final DMatrix imageMatrixDbl;
   /** LatLng location that was center (target) of the GoogleMap when overlay was last drawn */
   private LatLng lastDrawnLocation = null;
   /** Zoom level of the GoogleMap when overlay was last drawn */

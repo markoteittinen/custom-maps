@@ -43,6 +43,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
     <style name="NormalButton" parent="@style/PrimaryButton">
+        <item name="android:background">@color/primaryColor</item>
         <item name="android:textSize">18dp</item> <!-- Normal text size -->
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
@@ -50,6 +51,7 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
     <style name="LargeButton" parent="@style/PrimaryButton">
+        <item name="android:background">@color/primaryColor</item>
         <item name="android:textSize">22dp</item> <!-- Large text size -->
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="it_app_name">Custom Maps</string>
     <string name="it_select_map_name">Seleziona mappa</string>
     <string name="it_create_map_name">Crea map</string>
@@ -50,6 +49,9 @@
         Nessuna mappa trovata sulla scheda SD nella cartella CustomMaps.\n\nUsa menu per creare le
         mappe e per cercarle.\n\nOppure premi \'back\' per uscire.
     </string>
+    <!-- string name="it_transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="it_create_map_help">
        Usa menu per creare mappe da foto o da immagini scaricate.\n\nSeleziona e tieni premuto il
        nome di una mappa per modificarla o cancellarla.
@@ -252,6 +254,7 @@
     <string name="it_share_map">Condividi mappa</string>
     <string name="it_settings">Impostazioni</string>
     <string name="it_create_map">Crea mappa</string>
+    <!-- string name="it_export_all_maps">Export all maps</string -->
     <string name="it_modify_map">Modifica mappa</string>
     <string name="it_delete_map">Cancella mappa</string>
     <string name="it_select_point">Seleziona punto</string>

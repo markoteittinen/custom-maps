@@ -138,6 +138,7 @@ public class ImageDiskCache {
   }
 
   private File toFile(String cacheValue) {
-    return (cacheValue != null ? new File(FileUtil.getCacheDirectory(), cacheValue) : null);
+    File offlineImageCacheDir = FileUtil.getCacheDirectory("offlineImages");
+    return (cacheValue != null ? new File(offlineImageCacheDir, cacheValue) : null);
   }
 }

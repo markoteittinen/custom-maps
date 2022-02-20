@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="de_app_name">Custom Maps</string>
     <string name="de_select_map_name">Karte auswählen</string>
     <string name="de_create_map_name">Karte erstellen</string>
@@ -52,6 +51,9 @@
         Keine Karten auf der SD-Karte im Ordner CustomMaps gefunden.\nVerwenden Sie das Menü, um Karten
         zu erstellen und Hilfe zu erhalten.\n\nZum Verlassen drücken Sie \'Zurück\'.
     </string>
+    <!-- string name="de_transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="de_create_map_help">
         Verwenden Sie das Menü, um Karten von Fotos oder heruntergeladenen Kartenbildern zu erstellen.
         \n\nDrücken und halten Sie einen Kartennamen, um ihn zu verändern oder zu löschen.
@@ -242,6 +244,7 @@
     <string name="de_share_map">Karte teilen</string>
     <string name="de_settings">Einstellungen</string>
     <string name="de_create_map">Karte erstellen</string>
+    <!-- string name="de_export_all_maps">Export all maps</string -->
     <string name="de_modify_map">Karte ändern</string>
     <string name="de_delete_map">Karte löschen</string>
     <string name="de_select_point">Punkt wählen</string>

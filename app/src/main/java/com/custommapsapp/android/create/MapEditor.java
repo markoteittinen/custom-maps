@@ -25,16 +25,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,31 +38,34 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
+import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+import com.google.maps.android.SphericalUtil;
 import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.CustomMapsApp;
+import com.custommapsapp.android.DMatrix;
 import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
+import com.custommapsapp.android.InfoDialogFragment;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.kml.GroundOverlay;
 import com.custommapsapp.android.kml.KmlFeature;
@@ -83,19 +82,11 @@ import com.custommapsapp.android.language.Linguist;
  */
 public class MapEditor extends AppCompatActivity {
   private static final String EXTRA_PREFIX = "com.custommapsapp.android";
-  private static final String TIEPOINT_INDEX = EXTRA_PREFIX + ".TiepointIndex";
   public static final String BITMAP_FILE = EXTRA_PREFIX + ".BitmapFile";
   public static final String KMZ_FILE = EXTRA_PREFIX + ".KmzFile";
   public static final String KML_FOLDER = EXTRA_PREFIX + ".KmlFolder";
 
   public static final int SNIPPET_SIZE = 240;
-
-  // Sub-activity IDs
-  private static final int CONVERT_PDF_FILE = 1;
-  private static final int SELECT_IMAGE_FILE = 2;
-  private static final int SELECT_IMAGE_POINT = 3;
-  private static final int SELECT_GEO_LOCATION = 4;
-  private static final int PREVIEW = 5;
 
   private static final int MENU_ADJUST_TIEPOINT = 1;
   private static final int MENU_DELETE_TIEPOINT = 2;
@@ -110,11 +101,22 @@ public class MapEditor extends AppCompatActivity {
 
   private EditText nameField;
   private EditText descriptionField;
-  private ListView tiePointsList;
   private TiePointAdapter tiepointAdapter;
   private HelpDialogManager helpDialogManager;
   // when 'false', tiepoint selection will restore thumbnail orientation
   private boolean firstTiepoint;
+
+  private final ActivityResultLauncher<String[]> imageFileSelector =
+      registerForActivityResult(
+          new ActivityResultContracts.OpenDocument(), this::onImageFileSelected);
+  private final ActivityResultLauncher<Uri> pdfPageSelector =
+      registerForActivityResult(new Launchers.SelectPdfPage(), this::processMapImageUri);
+  private final ActivityResultLauncher<Launchers.SelectImagePointInput> imagePointSelector =
+      registerForActivityResult(new Launchers.SelectImagePoint(), this::onImagePointSelected);
+  private final ActivityResultLauncher<Launchers.SelectMapPointInput> mapPointSelector =
+      registerForActivityResult(new Launchers.SelectMapPoint(), this::onMapPointSelected);
+  private final ActivityResultLauncher<Launchers.PreviewMapInput> mapPreviewer =
+      registerForActivityResult(new Launchers.PreviewMap(), this::saveMapAndExit);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +165,18 @@ public class MapEditor extends AppCompatActivity {
     if (bitmapFilename == null && kmzFilename == null) {
       // Prevent from clearing "firstTime" flag for help dialog never shown
       helpDialogManager.clearFirstTime(false);
-      launchSelectImageFileActivity();
+      // Display dialog letting the user know they have to select the map image first
+      FragmentManager fragmentManager = getSupportFragmentManager();
+      fragmentManager.setFragmentResultListener(InfoDialogFragment.TAG, this,
+          (requestKey, result) -> launchSelectImageFileActivity());
+      InfoDialogFragment infoDialog = (InfoDialogFragment)
+          fragmentManager.findFragmentByTag(InfoDialogFragment.TAG);
+      if (infoDialog == null) {
+        InfoDialogFragment.showDialog(
+            fragmentManager,
+            getString(R.string.create_map_name),
+            getString(R.string.editor_select_file_prompt));
+      }
     }
     firstTiepoint = tiepointAdapter.isEmpty();
   }
@@ -206,7 +219,7 @@ public class MapEditor extends AppCompatActivity {
   }
 
   @Override
-  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+  protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
     bitmapFilename = savedInstanceState.getString(BITMAP_FILE);
     String name = savedInstanceState.getString(NAME);
@@ -257,7 +270,7 @@ public class MapEditor extends AppCompatActivity {
   }
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     super.onOptionsItemSelected(item);
     helpDialogManager.onOptionsItemSelected(item);
     return true;
@@ -276,13 +289,13 @@ public class MapEditor extends AppCompatActivity {
   }
 
   private void findTiePoints(GroundOverlay map) {
-    FileUtil.verifyImageDir();
     unpackImage(map, FileUtil.getTmpImagePath());
     bitmapFilename = FileUtil.getTmpImagePath();
 
     Bitmap mapImage = ImageHelper.loadImage(FileUtil.getTmpImagePath(), true);
     if (mapImage == null) {
-      Toast.makeText(this, linguist.getString(R.string.editor_image_load_failed), Toast.LENGTH_LONG).show();
+      Toast.makeText(this, linguist.getString(R.string.editor_image_load_failed), Toast.LENGTH_LONG)
+          .show();
       setResult(RESULT_CANCELED);
       finish();
       return;
@@ -349,7 +362,7 @@ public class MapEditor extends AppCompatActivity {
 
     for (GroundOverlay.Tiepoint oldPoint : mapPoints) {
       Point imagePoint = oldPoint.getImagePoint();
-      byte[] snippet = ImageHelper.createPngSample(mapImage, imagePoint, SNIPPET_SIZE, orientation);
+      byte[] snippet = ImageHelper.createJpgSample(mapImage, imagePoint, SNIPPET_SIZE, orientation);
       Point snippetPoint = new Point();
       snippetPoint.x = snippetPoint.y = SNIPPET_SIZE / 2;
       TiePoint newPoint = new TiePoint(oldPoint.getImagePoint(), snippet, snippetPoint);
@@ -389,27 +402,82 @@ public class MapEditor extends AppCompatActivity {
   // --------------------------------------------------------------------------
   // Sub-activity management
 
-  private void processConvertedPdfImage(String generatedImageFilePath) {
-    bitmapFilename = generatedImageFilePath;
-
-    String defaultName = new File(bitmapFilename).getName();
-    defaultName = defaultName.substring(0, defaultName.lastIndexOf('.'))
-        .replace('_', ' ')
-        .replace('+', ' ');
-    nameField.setText(defaultName);
-  }
-
+  /** Launches image file selection activity allowing selection of pdf, jpg, png, and gif files. */
   private void launchSelectImageFileActivity() {
-    Intent selectImageFile = new Intent(this, SelectImageFileActivity.class);
-    startActivityForResult(selectImageFile, SELECT_IMAGE_FILE);
+    Log.d("MapEditor", "*** Launching select image file...");
+    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+    ArrayList<String> mimeTypes = new ArrayList<>();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      mimeTypes.add(mimeTypeMap.getMimeTypeFromExtension("pdf"));
+    }
+    mimeTypes.add(mimeTypeMap.getMimeTypeFromExtension("jpg"));
+    mimeTypes.add(mimeTypeMap.getMimeTypeFromExtension("png"));
+    mimeTypes.add(mimeTypeMap.getMimeTypeFromExtension("gif"));
+    imageFileSelector.launch(mimeTypes.toArray(new String[0]));
   }
 
-  private void processSelectedImageFile(Bundle filenameData) {
-    bitmapFilename = filenameData.getString(SelectImageFileActivity.BITMAP_FILE);
+  /**
+   * Selects processing path for select map image file. Starts PDF page selection activity if a PDF
+   * file was selected, otherwise passes image file for further processing.
+   */
+  private void onImageFileSelected(Uri contentUri) {
+    if (contentUri == null) {
+      // User cancelled map image selection, exit activity
+      finish();
+      return;
+    }
+    String filename = FileUtil.resolveContentFileName(contentUri);
+    if (filename == null) {
+      filename = contentUri.getLastPathSegment();
+    }
+    Log.i("MapEditor", "Map image file selected: " + filename);
+    if (filename.toLowerCase().endsWith(".pdf")) {
+      // PDF file selected, launch page selection activity
+      pdfPageSelector.launch(contentUri);
+    } else {
+      // Image file selected, process it
+      processMapImageUri(contentUri);
+    }
+  }
+
+  /** Called when user has either selected a bitmap image file, or has selected a PDF page. */
+  private void processMapImageUri(Uri mapImageUri) {
+    if (mapImageUri == null) {
+      // User cancelled PDF page selection, restart map image selection activity
+      launchSelectImageFileActivity();
+      return;
+    }
+
+    String filename = FileUtil.resolveContentFileName(mapImageUri);
+    if (filename == null) {
+      filename = mapImageUri.getLastPathSegment();
+    }
+    if (mapImageUri.getScheme().equals("content")) {
+      // Copy content to internal cache directory
+      File copiedImageFile = new File(FileUtil.getCacheDirectory("MapEditor"), filename);
+      try {
+        InputStream source = getContentResolver().openInputStream(mapImageUri);
+        OutputStream dest = new FileOutputStream(copiedImageFile);
+        FileUtil.copyContents(source, dest);
+        dest.close();
+        source.close();
+      } catch (IOException ex) {
+        // Finish activity
+        // TODO: notify user with an error msg
+        Log.e(CustomMaps.LOG_TAG, "Failed to copy selected map image to internal storage");
+        finish();
+        return;
+      }
+      mapImageUri = Uri.fromFile(copiedImageFile);
+    }
+
     helpDialogManager.clearFirstTime(true);
 
-    String defaultName = new File(bitmapFilename).getName();
-    defaultName = defaultName.substring(0, defaultName.lastIndexOf('.'))
+    // Remove "file://" prefix from Uri (7 chars)
+    bitmapFilename = mapImageUri.toString().substring(7);
+
+    // Initialize the map name field based on the image filename
+    String defaultName = filename.substring(0, filename.lastIndexOf('.'))
         .replace('_', ' ')
         .replace('+', ' ');
     nameField.setText(defaultName);
@@ -419,37 +487,20 @@ public class MapEditor extends AppCompatActivity {
    * Launches the activity to select another image point to be tied to geo coordinates.
    */
   private void launchSelectPointActivity() {
-    Intent selectImagePoint = new Intent(this, BitmapPointActivity.class);
-    selectImagePoint.putExtra(BitmapPointActivity.BITMAP_FILE, bitmapFilename);
-    if (!tiepointAdapter.isEmpty()) {
-      int[] pointArray = new int[2 * tiepointAdapter.getCount()];
-      for (int i = 0; i < tiepointAdapter.getCount(); i++) {
-        TiePoint tiepoint = tiepointAdapter.getItem(i);
-        Point p = tiepoint.getImagePoint();
-        pointArray[2 * i] = p.x;
-        pointArray[2 * i + 1] = p.y;
-      }
-      selectImagePoint.putExtra(BitmapPointActivity.TIEPOINTS, pointArray);
-    }
-    startActivityForResult(selectImagePoint, SELECT_IMAGE_POINT);
+    Launchers.SelectImagePointInput params = new Launchers.SelectImagePointInput();
+    params.mapImageFile = new File(bitmapFilename);
+    params.tiepoints = tiepointAdapter.getAllTiePoints();
+    imagePointSelector.launch(params);
   }
 
-  /**
-   * Creates a new tiepoint (w/o geo location) from the returned data and adds it to the end of list
-   * of tiepoints.
-   *
-   * @param imagePointData extras returned from select image point activity
-   * @return newly created TiePoint
-   */
-  private TiePoint processSelectedImagePoint(Bundle imagePointData) {
-    // Get the selected point and image around it
-    int[] selectedPoint = imagePointData.getIntArray(BitmapPointActivity.SELECTED_POINT);
-    Point imagePoint = new Point(selectedPoint[0], selectedPoint[1]);
-    Point offset = new Point(selectedPoint[2], selectedPoint[3]);
-    byte[] imageSnippet = imagePointData.getByteArray(BitmapPointActivity.BITMAP_DATA);
-    TiePoint tiepoint = new TiePoint(imagePoint, imageSnippet, offset);
+  /** Processes the TiePoint created when user selected a new point in the map image. */
+  private void onImagePointSelected(TiePoint tiepoint) {
+    if (tiepoint == null) {
+      // User cancelled adding a tiepoint, no change on editor page
+      return;
+    }
     tiepointAdapter.add(tiepoint);
-    return tiepoint;
+    launchTiePointActivity(tiepoint);
   }
 
   /**
@@ -458,39 +509,32 @@ public class MapEditor extends AppCompatActivity {
    * @param tiepoint image point to be associated with geo coordinates
    */
   private void launchTiePointActivity(TiePoint tiepoint) {
-    Intent assignGeoPoint = new Intent(this, TiePointActivity.class);
-    assignGeoPoint.putExtra(TiePointActivity.BITMAP_DATA, tiepoint.getPngData());
-    Point p = tiepoint.getOffset();
-    int[] selectedOffset = new int[]{p.x, p.y};
-    assignGeoPoint.putExtra(TiePointActivity.IMAGE_POINT, selectedOffset);
-    LatLng geoLocation = tiepoint.getGeoPoint();
-    if (geoLocation != null) {
-      assignGeoPoint.putExtra(TiePointActivity.GEO_POINT, geoLocation);
-    }
-    assignGeoPoint.putExtra(TiePointActivity.RESTORE_SETTINGS, !firstTiepoint);
     int index = tiepointAdapter.getPosition(tiepoint);
-    if (index < 0) {
-      Log.e(CustomMaps.LOG_TAG, "Given tiepoint was not found in tiepoint adapter!!!");
+    if (tiepoint.getGeoPoint() == null) {
+      // Make a copy of the tiepoint to leave the one in adapter untouched (w/o geolocation)
+      tiepoint = tiepoint.clone();
+      // Estimate the point's location based on previously created points (may return 'null')
+      tiepoint.setGeoPoint(guessGeolocationOf(tiepoint.getImagePoint()));
     }
-    // store (index + 1), since value '0' means "not stored"
-    assignGeoPoint.putExtra(TIEPOINT_INDEX, index);
-    startActivityForResult(assignGeoPoint, SELECT_GEO_LOCATION);
+    Launchers.SelectMapPointInput params = new Launchers.SelectMapPointInput();
+    params.tiepoint = tiepoint;
+    params.tiepointIndex = index;
+    params.isFirstTiePoint = firstTiepoint;
+    mapPointSelector.launch(params);
   }
 
-  private void processSelectedTiePoint(Bundle tiePointData) {
-    LatLng selectedLocation = tiePointData.getParcelable(TiePointActivity.GEO_POINT);
-    if (selectedLocation == null) {
-      throw new IllegalArgumentException("No geo coordinates found");
+  /** Processes the selected geolocation for a TiePoint or cancellation of TiePoint creation. */
+  private void onMapPointSelected(Launchers.SelectMapPointOutput result) {
+    if (result == null || result.tiepointIndex < 0 || result.mapPoint == null) {
+      // Remove the last tiepoint if it doesn't have geolocation
+      cancelLastImagePoint();
+      return;
     }
-    // stored value is (index + 1)
-    int index = tiePointData.getInt(TIEPOINT_INDEX, -1);
-    if (index >= 0) {
-      TiePoint tiepoint = tiepointAdapter.getItem(index);
-      tiepoint.setGeoPoint(selectedLocation);
-      tiepointAdapter.notifyDataSetChanged();
-    } else {
-      Log.e(CustomMaps.LOG_TAG, "TiePoint defined, but tiepoint index is missing!!!");
-    }
+    // Update the tiepoint with the selected geolocation
+    TiePoint tiepoint = tiepointAdapter.getItem(result.tiepointIndex);
+    tiepoint.setGeoPoint(result.mapPoint);
+    tiepointAdapter.notifyDataSetChanged();
+
     firstTiepoint = false;
   }
 
@@ -517,88 +561,90 @@ public class MapEditor extends AppCompatActivity {
           .show();
       return;
     }
-
-    Intent preview = new Intent(this, PreviewMapActivity.class);
-    preview.putExtra(PreviewMapActivity.BITMAP_FILE, bitmapFilename);
-    if (!tiepointAdapter.isEmpty()) {
-      int[] imagePointArray = new int[2 * tiepointAdapter.getCount()];
-      LatLng[] geoPointArray = new LatLng[tiepointAdapter.getCount()];
-      for (int i = 0; i < tiepointAdapter.getCount(); i++) {
-        TiePoint tiepoint = tiepointAdapter.getItem(i);
-        Point p = tiepoint.getImagePoint();
-        imagePointArray[2 * i] = p.x;
-        imagePointArray[2 * i + 1] = p.y;
-        geoPointArray[i] = tiepoint.getGeoPoint();
-      }
-      preview.putExtra(PreviewMapActivity.IMAGE_POINTS, imagePointArray);
-      preview.putExtra(PreviewMapActivity.TIEPOINTS, geoPointArray);
-    }
-    startActivityForResult(preview, PREVIEW);
+    Launchers.PreviewMapInput params = new Launchers.PreviewMapInput();
+    params.mapImageFile = new File(bitmapFilename);
+    params.tiepoints = tiepointAdapter.getAllTiePoints();
+    mapPreviewer.launch(params);
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Bundle results = (data != null ? data.getExtras() : null);
-    switch (requestCode) {
-      case CONVERT_PDF_FILE:
-        if (resultCode != Activity.RESULT_OK) {
-          launchSelectImageFileActivity();
-        } else {
-          processConvertedPdfImage(results.getString(BITMAP_FILE));
-        }
-        break;
-      case SELECT_IMAGE_FILE:
-        if (resultCode != Activity.RESULT_OK) {
-          finish();
-          break;
-        }
-        processSelectedImageFile(results);
-        break;
-      case SELECT_IMAGE_POINT:
-        if (resultCode != Activity.RESULT_OK) {
-          // Image point addition cancelled, show normal UI
-          break;
-        }
-        // Save the image point and launch tie point activity to select geo
-        // coordinates for it
-        TiePoint tiepoint = processSelectedImagePoint(results);
-        launchTiePointActivity(tiepoint);
-        break;
-      case SELECT_GEO_LOCATION:
-        if (resultCode != Activity.RESULT_OK) {
-          // Remove last tie point if it doesn't have geo location
-          cancelLastImagePoint();
-          break;
-        }
-        // Stores the selected geo coordinates to the tiepoint that was edited
-        processSelectedTiePoint(results);
-        break;
-      case PREVIEW:
-        if (resultCode != Activity.RESULT_OK) {
-          // User backed out of preview, continue editing
-          break;
-        }
-        // User returned by pressing "save" button, save kmz and exit
-        saveMapAndExit(results);
-        break;
-      default:
-        super.onActivityResult(requestCode, resultCode, data);
+  /**
+   * Tries to guess the geolocation of an image point. Will return null if the location cannot be
+   * guessed (at least two previous points have to be set before guessing can happen).
+   */
+  private LatLng guessGeolocationOf(Point imagePoint) {
+    // Ignore the last point in tiepointAdapter, it is the one being added (it has no geo location)
+    int n = tiepointAdapter.getCount() - 1;
+    // If we don't already have at least 2 known points, return null
+    if (n < 2) {
+      return null;
     }
+    if (n == 2) {
+      return guessGeolocationByGeometry(imagePoint);
+    }
+    // Use only 3 points to avoid potential unsolvable matrix with 4 points
+    n = 3;
+    double[] imageCoords = new double[2 * n]; // points ordered in x1,y1, x2,y2, ...
+    double[] geoCoords = new double[2 * n];   // points ordered lon1,lng1, lon2,lng2, ...
+    for (int i = 0; i < n; i++) {
+      TiePoint tiePoint = tiepointAdapter.getItem(i);
+      imageCoords[2 * i] = tiePoint.getImagePoint().x;
+      imageCoords[2 * i + 1] = tiePoint.getImagePoint().y;
+      // When geoPoint is stored, invert sign of latitude so that it grows down like image y
+      geoCoords[2 * i] = tiePoint.getGeoPoint().longitude;
+      geoCoords[2 * i + 1] = -tiePoint.getGeoPoint().latitude;
+    }
+    // Solve linear matrix mapping image points to their geo coordinates
+    DMatrix matrix = new DMatrix();
+    matrix.setPolyToPoly(imageCoords, 0, geoCoords, 0, n);
+    // Map given image point to its geo coordinates using that matrix
+    double[] point = {imagePoint.x, imagePoint.y};
+    matrix.mapPoints(point);
+    // Invert sign of latitude to get correct value
+    point[1] = -point[1];
+    return new LatLng(point[1], point[0]);
+  }
+
+  /**
+   * Guesses the geolocation of an image point based on two earlier points for which we already
+   * have geo coordinates.
+   */
+  private LatLng guessGeolocationByGeometry(Point imagePoint) {
+    Point imagePt1 = tiepointAdapter.getItem(0).getImagePoint();
+    Point imagePt2 = tiepointAdapter.getItem(1).getImagePoint();
+    double dx = imagePt2.x - imagePt1.x;
+    double dy = imagePt1.y - imagePt2.y;  // sign inverted since image y grows downwards
+    double imageDistancePx = Math.sqrt(dx * dx + dy * dy);
+    double imageHeading = 90 - Math.toDegrees(Math.atan2(dy, dx));
+
+    LatLng geoPt1 = tiepointAdapter.getItem(0).getGeoPoint();
+    LatLng geoPt2 = tiepointAdapter.getItem(1).getGeoPoint();
+    double geoDistanceM = SphericalUtil.computeDistanceBetween(geoPt1, geoPt2);
+    double geoHeading = SphericalUtil.computeHeading(geoPt1, geoPt2);
+
+    // Compute distance and heading from imagePt1 to given imagePoint
+    dx = imagePoint.x - imagePt1.x;
+    dy = imagePt1.y - imagePoint.y; // sign inverted since image y grows downwards
+    double distancePx = Math.sqrt(dx * dx + dy * dy);
+    double heading = 90 - Math.toDegrees(Math.atan2(dy, dx));
+
+    // Convert the new distance and heading to geo values
+    double distanceM = geoDistanceM * distancePx / imageDistancePx;
+    double headingNew = heading + (geoHeading - imageHeading);
+    return SphericalUtil.computeOffset(geoPt1, distanceM, headingNew);
   }
 
   // --------------------------------------------------------------------------
   // Save and exit
 
-  private void saveMapAndExit(Bundle imageCornerData) {
-    // Restore geo points (LatLng[]) from Bundle
-    Parcelable[] parcelables =
-        imageCornerData.getParcelableArray(PreviewMapActivity.CORNER_GEO_POINTS);
-    LatLng[] cornerArray = Arrays.copyOf(parcelables, parcelables.length, LatLng[].class);
-    ArrayList<LatLng> corners = new ArrayList<>();
-    Collections.addAll(corners, cornerArray);
-    // Create the map kmz file
+  private void saveMapAndExit(List<LatLng> imageCornerLocations) {
+    if (imageCornerLocations == null) {
+      // User cancelled saving and exiting in preview screen
+      return;
+    }
     try {
-      saveAsKmz(corners);
+      // Create the map kmz file, and delete the map image file from cache
+      saveAsKmz(imageCornerLocations);
+      new File(bitmapFilename).delete();
     } catch (Exception ex) {
       Toast.makeText(this, linguist.getString(R.string.editor_map_save_failed), Toast.LENGTH_LONG)
           .show();
@@ -649,10 +695,10 @@ public class MapEditor extends AppCompatActivity {
     return fileName.toString();
   }
 
-  private void saveAsKmz(ArrayList<LatLng> imageCorners) throws IOException {
+  private void saveAsKmz(List<LatLng> imageCorners) throws IOException {
     if (kmzFilename == null) {
       kmzFilename = convertToFileName(nameField.getText());
-      File file = new File(FileUtil.getDataDirectory(), kmzFilename + ".kmz");
+      File file = new File(FileUtil.getInternalMapDirectory(), kmzFilename + ".kmz");
       if (file.exists()) {
         // File with same name already exists, find unused name
         file = FileUtil.newFileInDataDirectory(kmzFilename + "_%d.kmz");
@@ -734,7 +780,7 @@ public class MapEditor extends AppCompatActivity {
     zip.closeEntry();
   }
 
-  private String generateLatLonQuadKml(ArrayList<LatLng> cornerList) {
+  private String generateLatLonQuadKml(List<LatLng> cornerList) {
     String kml = LATLONQUAD_KML_TEMPLATE.replace("${NAME}", nameField.getText().toString().trim());
     kml = kml.replace("${DESCRIPTION}", descriptionField.getText().toString().trim());
     kml = kml.replace("${IMAGE_PATH}", generateKmzImagePath());
@@ -755,7 +801,7 @@ public class MapEditor extends AppCompatActivity {
         corners[3].longitude, corners[3].latitude);
   }
 
-  private String generateLatLonBoxKml(ArrayList<LatLng> cornerList) {
+  private String generateLatLonBoxKml(List<LatLng> cornerList) {
     String kml = LATLONBOX_KML_TEMPLATE.replace("${NAME}", nameField.getText().toString().trim());
     kml = kml.replace("${DESCRIPTION}", descriptionField.getText().toString().trim());
     kml = kml.replace("${IMAGE_PATH}", generateKmzImagePath());
@@ -946,7 +992,7 @@ public class MapEditor extends AppCompatActivity {
   private void prepareUI() {
     nameField = findViewById(R.id.nameField);
     descriptionField = findViewById(R.id.descriptionField);
-    tiePointsList = findViewById(R.id.tiepoints);
+    ListView tiePointsList = findViewById(R.id.tiepoints);
 
     tiepointAdapter = new TiePointAdapter(this, R.layout.tiepointitem);
     tiepointAdapter.setNotifyOnChange(true);

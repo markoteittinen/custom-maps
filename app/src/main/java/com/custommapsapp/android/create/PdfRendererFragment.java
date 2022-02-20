@@ -382,14 +382,12 @@ public class PdfRendererFragment extends Fragment {
     /** Name of the file containing Uri of currently cached PDF. */
     private static final String URI_FILE = "uri.txt";
 
-    private File cacheDir;
+    private final File cacheDir;
     private Uri pdfUri;
 
     private PageCache(Context context) {
-      cacheDir = new File(context.getCacheDir(), "/pdfpages");
-      if (!cacheDir.exists()) {
-        cacheDir.mkdirs();
-      }
+      FileUtil.init(context);
+      cacheDir = FileUtil.getCacheDirectory("MapEditor");
     }
 
     /** Initializes the cache and returns the current PDF Uri. */

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="en_app_name">Custom Maps</string>
     <string name="en_select_map_name">Select map</string>
     <string name="en_create_map_name">Create map</string>
@@ -46,6 +45,9 @@
     <string name="en_no_maps_found_on_sd">
         No maps found on SD card in CustomMaps folder.\n\nUse menu to create maps and to get help
         finding them.\n\nOr press \'back\' to exit.
+    </string>
+    <string name="en_transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
     </string>
     <string name="en_create_map_help">
         Use menu to create maps from photos or from downloaded map images.\n\nTap and hold a map
@@ -142,6 +144,9 @@
         the map image.\n\nAdjust or delete tiepoints by long pressing the entries.\n\nMaps can be
         saved after preview.
     </string>
+    <string name="en_editor_select_file_prompt">
+        Select first a map image file.\nIt must be a PDF, JPG, PNG, or GIF file.
+    </string>
     <string name="en_editor_image_load_failed">Failed to load map image</string>
     <string name="en_editor_need_two_points">You must add at least 2 points before previewing</string>
     <string name="en_editor_map_save_failed">Failed to save the map</string>
@@ -228,6 +233,7 @@
     <string name="en_share_map">Share map</string>
     <string name="en_settings">Preferences</string>
     <string name="en_create_map">Create map</string>
+    <string name="en_export_all_maps">Export all maps</string>
     <string name="en_modify_map">Modify map</string>
     <string name="en_delete_map">Delete map</string>
     <string name="en_select_point">Select point</string>

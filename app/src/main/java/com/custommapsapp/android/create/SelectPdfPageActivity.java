@@ -39,6 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.custommapsapp.android.CustomMaps;
 import com.custommapsapp.android.CustomMapsApp;
+import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.language.Linguist;
@@ -57,6 +58,7 @@ public class SelectPdfPageActivity extends AppCompatActivity {
   private static final String EXTRA_PREFIX = "com.custommapsapp.android";
   private static final String CURRENT_PAGE = EXTRA_PREFIX + ".CurrentPage";
   public static final String PDF_FILENAME = EXTRA_PREFIX + ".PdfFile";
+  public static final String PDF_CONTENTURI = EXTRA_PREFIX + ".PdfUri";
 
   private ImageView pageDisplay;
   private TextView pageNumber;
@@ -64,6 +66,7 @@ public class SelectPdfPageActivity extends AppCompatActivity {
   private Linguist linguist;
 
   private String pdfFilename;
+  private Uri pdfContentUri;
   private int currentPageNum = 0;
   private int lastPage = 9;
 
@@ -91,11 +94,13 @@ public class SelectPdfPageActivity extends AppCompatActivity {
       pdfRendererFragment = (PdfRendererFragment) getSupportFragmentManager()
           .findFragmentByTag(CustomMaps.PDF_RENDERER_FRAGMENT_TAG);
       pdfFilename = savedInstanceState.getString(PDF_FILENAME);
+      pdfContentUri = savedInstanceState.getParcelable(PDF_CONTENTURI);
       currentPageNum = savedInstanceState.getInt(CURRENT_PAGE);
     } else {
       getSupportActionBar().setTitle(linguist.getString(R.string.preparing_pdf_file));
       displayScrim(true);
       pdfFilename = getIntent().getStringExtra(PDF_FILENAME);
+      pdfContentUri = getIntent().getParcelableExtra(PDF_CONTENTURI);
       currentPageNum = 0;
     }
     if (pdfRendererFragment == null) {
@@ -117,7 +122,7 @@ public class SelectPdfPageActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    Uri pdfUri = Uri.fromFile(new File(pdfFilename));
+    Uri pdfUri = pdfContentUri != null ? pdfContentUri : Uri.fromFile(new File(pdfFilename));
     pdfRendererFragment.setPdfFile(pdfUri, this::pdfRendererReady);
   }
 
@@ -175,8 +180,15 @@ public class SelectPdfPageActivity extends AppCompatActivity {
   }
 
   private String generatePdfImageName() {
-    File pdfFile = new File(pdfFilename);
-    String filename = pdfFile.getName();
+    String filename;
+    if (pdfContentUri != null) {
+      filename = FileUtil.resolveContentFileName(pdfContentUri);
+      if (filename == null) {
+        filename = pdfContentUri.getLastPathSegment();
+      }
+    } else {
+      filename = new File(pdfFilename).getName();
+    }
     // Replace spaces in the PDF filename with underscores
     filename = filename.replace(' ', '_');
     // Drop suffix, and replace it with ".jpg"

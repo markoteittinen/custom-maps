@@ -46,6 +46,9 @@
         Nem találhatóak térképek az SD kártyán a Custom Maps mappában.\n\nVálassza a menüt térképkészítéshez vagy a térképfile megtalálásához.
         \n\nVagy nyomja meg a vissza gombot \'back\' a kilépéshez.
     </string>
+    <!-- string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="create_map_help">
         Válassza a menüt fotóból, vagy letöltött képből való térkép készítéséhez.\n\nTartsa nyomva a térkép
         nevét annak módosításához vagy törléséhez.
@@ -227,6 +230,7 @@
     <string name="share_map">Térkép megosztása</string>
     <string name="settings">Beállítások</string>
     <string name="create_map">Térkép létrehozása</string>
+    <!-- string name="export_all_maps">Export all maps</string -->
     <string name="modify_map">Térkép módosítása</string>
     <string name="delete_map">Térkép törlése</string>
     <string name="select_point">Válasszon ki egy pontot</string>

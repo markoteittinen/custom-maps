@@ -46,6 +46,9 @@
         No maps found on SD card in CustomMaps folder.\n\nUse menu to create maps and to get help
         finding them.\n\nOr press \'back\' to exit.
     </string>
+    <string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string>
     <string name="create_map_help">
         Use menu to create maps from photos or from downloaded map images.\n\nTap and hold a map
         name to modify or delete it.
@@ -141,6 +144,9 @@
         the map image.\n\nAdjust or delete tiepoints by long pressing the entries.\n\nMaps can be
         saved after preview.
     </string>
+    <string name="editor_select_file_prompt">
+        Select first a map image file.\nIt must be a PDF, JPG, PNG, or GIF file.
+    </string>
     <string name="editor_image_load_failed">Failed to load map image</string>
     <string name="editor_need_two_points">You must add at least 2 points before previewing</string>
     <string name="editor_map_save_failed">Failed to save the map</string>
@@ -190,7 +196,7 @@
     <string-array name="distance_unit_entries">
         <item>Kilometers and meters (km, m)</item>
         <item>Miles, yards, and feet (mi, yds, ft)</item>
-        <item>Nautical miles (nmi, ft)</item>
+        <item>Nautical miles and feet (nmi, ft)</item>
     </string-array>
 
     <!-- about dialog -->
@@ -227,6 +233,7 @@
     <string name="share_map">Share map</string>
     <string name="settings">Preferences</string>
     <string name="create_map">Create map</string>
+    <string name="export_all_maps">Export all maps</string>
     <string name="modify_map">Modify map</string>
     <string name="delete_map">Delete map</string>
     <string name="select_point">Select point</string>
@@ -255,9 +262,9 @@
     </string>
     <string name="max_map_img_size_gpu_on">4096x4096 (16 megapixels) or 2048x2048 (4 megapixels)</string>
 
-    <!-- PDF map related -->
+    <!-- PDF related UI strings -->
     <string name="preparing_pdf_file">Preparing PDF file</string>
-    <string name="select_map_page">Select Map Page</string>
+    <string name="select_map_page">Select map page</string>
     <string name="rotate_page">Rotate page</string>
     <string name="select_action">Select</string>
 </resources>

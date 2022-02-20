@@ -50,6 +50,9 @@
         В папке CustomMaps на карте памяти пусто.\n\nСоздайте через Меню новую карту
         \n\nИли нажмите \'назад\' чтобы выйти.
     </string>
+    <!-- string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="create_map_help">
         Через Меню создайте карту из фотографии или изображения карты\n\nНажмите и держите название
         карты чтобы изменить его или удалить карту.
@@ -240,6 +243,7 @@
     <string name="share_map">Поделиться картой</string>
     <string name="settings">Настройки</string>
     <string name="create_map">Создать карту</string>
+    <!-- string name="export_all_maps">Export all maps</string -->
     <string name="modify_map">Изменить карту</string>
     <string name="delete_map">Удалить карту</string>
     <string name="select_point">Выбрать точку привязки</string>

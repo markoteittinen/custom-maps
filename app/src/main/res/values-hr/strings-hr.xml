@@ -47,6 +47,9 @@
         Nema karata na SD kartici u CustomMaps folderu.\n\nKoristi izbornik za kreiranje karata
         i pomoć u pronalaženju.\n\nili pritisni \'back\' za izlaz.
     </string>
+    <!-- string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="create_map_help">
         Koristi izbornik za kreiranje karata iz fotografija ili preuzetih kartografskih slika.
         \n\nPritisni na ime karte i drži neko vrijeme, ako ju želiš modificirati ili izbrisati.
@@ -238,6 +241,7 @@
     <string name="share_map">Dijeli kartu</string>
     <string name="settings">Postavke</string>
     <string name="create_map">Kreiraj kartu</string>
+    <!-- string name="export_all_maps">Export all maps</string -->
     <string name="modify_map">Modificiraj kartu</string>
     <string name="delete_map">Izbriši kartu</string>
     <string name="select_point">Odaberi točku</string>

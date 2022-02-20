@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="hu_app_name">Custom Maps</string>
     <string name="hu_select_map_name">Térkép kiválasztása</string>
     <string name="hu_create_map_name">Térkép készítése</string>
@@ -47,6 +46,9 @@
         Nem találhatóak térképek az SD kártyán a Custom Maps mappában.\n\nVálassza a menüt térképkészítéshez vagy a térképfile megtalálásához.
         \n\nVagy nyomja meg a vissza gombot \'back\' a kilépéshez.
     </string>
+    <!-- string name="hu_transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="hu_create_map_help">
         Válassza a menüt fotóból, vagy letöltött képből való térkép készítéséhez.\n\nTartsa nyomva a térkép
         nevét annak módosításához vagy törléséhez.
@@ -228,6 +230,7 @@
     <string name="hu_share_map">Térkép megosztása</string>
     <string name="hu_settings">Beállítások</string>
     <string name="hu_create_map">Térkép létrehozása</string>
+    <!-- string name="hu_export_all_maps">Export all maps</string -->
     <string name="hu_modify_map">Térkép módosítása</string>
     <string name="hu_delete_map">Térkép törlése</string>
     <string name="hu_select_point">Válasszon ki egy pontot</string>

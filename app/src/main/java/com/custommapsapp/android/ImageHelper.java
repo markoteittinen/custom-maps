@@ -15,6 +15,11 @@
  */
 package com.custommapsapp.android;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,13 +28,6 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.util.Log;
 import androidx.exifinterface.media.ExifInterface;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.custommapsapp.android.MapDisplay.MapImageTooLargeException;
 import com.custommapsapp.android.storage.PreferenceStore;
 
@@ -200,16 +198,16 @@ public class ImageHelper {
 
   /**
    * Copies a small region of pixels around a point into a separate bitmap and
-   * returns it PNG compressed. The PNG image will be rotated around the point
-   * if requested.
+   * returns it compressed. The compressed image will be rotated around the
+   * point if requested.
    *
    * @param image Bitmap from which to take the sample
    * @param p Center point of the sample
    * @param size Width and height of the sample
    * @param rotation Degrees to rotate the original image around center point
-   * @return byte[] containing PNG compressed sample at the point.
+   * @return byte[] containing JPG compressed sample at the point.
    */
-  public static byte[] createPngSample(Bitmap image, Point p, int size, int rotation) {
+  public static byte[] createJpgSample(Bitmap image, Point p, int size, int rotation) {
     Bitmap sample = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
     sample.eraseColor(0x00000000); // Transparent
     // Grab content from map image
@@ -252,12 +250,17 @@ public class ImageHelper {
     int contentX = shiftX ? size - content.getWidth() : 0;
     int contentY = shiftY ? size - content.getHeight() : 0;
     new Canvas(sample).drawBitmap(content, contentX, contentY, null);
-    // Compress the sample into a byte[] of PNG data
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream(2048);
-    boolean success = sample.compress(Bitmap.CompressFormat.PNG, 100, buffer);
+    // Compress the sample into a byte[] of JPG data, and release memory used by the bitmaps
+    byte[] bytes = compressToJpg(sample);
     content.recycle();
     sample.recycle();
-    return (success ? buffer.toByteArray() : null);
+    return bytes;
+  }
+
+  private static byte[] compressToJpg(Bitmap bitmap) {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream(8192);
+    boolean success = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, buffer);
+    return success ? buffer.toByteArray() : null;
   }
 
   /**

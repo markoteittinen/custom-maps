@@ -51,6 +51,9 @@
         Keine Karten auf der SD-Karte im Ordner CustomMaps gefunden.\nVerwenden Sie das Menü, um Karten
         zu erstellen und Hilfe zu erhalten.\n\nZum Verlassen drücken Sie \'Zurück\'.
     </string>
+    <!-- string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="create_map_help">
         Verwenden Sie das Menü, um Karten von Fotos oder heruntergeladenen Kartenbildern zu erstellen.
         \n\nDrücken und halten Sie einen Kartennamen, um ihn zu verändern oder zu löschen.
@@ -241,6 +244,7 @@
     <string name="share_map">Karte teilen</string>
     <string name="settings">Einstellungen</string>
     <string name="create_map">Karte erstellen</string>
+    <!-- string name="export_all_maps">Export all maps</string -->
     <string name="modify_map">Karte ändern</string>
     <string name="delete_map">Karte löschen</string>
     <string name="select_point">Punkt wählen</string>

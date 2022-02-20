@@ -19,6 +19,7 @@ import android.location.Location;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 
 public class ScaleDisplay {
   /** Index for X coordinate in arrays. */
@@ -29,21 +30,22 @@ public class ScaleDisplay {
   private static final int ICON_SPAN_SHORT = R.drawable.ic_span_short_24dp;
   private static final int ICON_SPAN_LONG = R.drawable.ic_span_long_24dp;
 
-  private DisplayState displayState;
-  private ImageView scaleIcon;
-  private TextView scaleText;
+  private final DisplayState displayState;
+  private final ImageView scaleIcon;
+  private final TextView scaleText;
   private boolean isHorizontal = false;
   private int textLength;
 
   /** screenPoint is reused whenever a screen point is converted to Location. */
-  private float[] screenPoint = new float[2];
+  private final float[] screenPoint = new float[2];
   // These location object are re-used each time scale is computed to avoid memory allocation. */
-  private Location upperLeft = new Location("tmp");
-  private Location upperRight = new Location("tmp");
-  private Location lowerLeft = new Location("tmp");
-  private Location lowerRight = new Location("tmp");
+  private final Location upperLeft = new Location("tmp");
+  private final Location upperRight = new Location("tmp");
+  private final Location lowerLeft = new Location("tmp");
+  private final Location lowerRight = new Location("tmp");
 
-  public ScaleDisplay(ImageView icon, TextView label, DisplayState displayState) {
+  public ScaleDisplay(
+      @NonNull ImageView icon, @NonNull TextView label, @NonNull DisplayState displayState) {
     scaleIcon = icon;
     scaleText = label;
     this.displayState = displayState;
@@ -64,17 +66,16 @@ public class ScaleDisplay {
   }
 
   public void update() {
-    Location upperLeftGeo = getUpperLeftLocation();
-    Location upperRightGeo = getUpperRightLocation();
-    Location lowerLeftGeo = getLowerLeftLocation();
-    Location lowerRightGeo = getLowerRightLocation();
-
-    if (upperLeftGeo == null || upperRightGeo == null
-        || lowerLeftGeo == null || lowerRightGeo == null) {
+    if (displayState.getViewWidth() == 0) {
+      // Display is not fully initialized, can't compute scale, show "no value"
       scaleText.setText("--");
       updateTextLength(2);
       return;
     }
+    Location upperLeftGeo = getUpperLeftLocation();
+    Location upperRightGeo = getUpperRightLocation();
+    Location lowerLeftGeo = getLowerLeftLocation();
+    Location lowerRightGeo = getLowerRightLocation();
 
     // Span distance in meters
     double distanceM;

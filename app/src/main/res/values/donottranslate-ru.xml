@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources>
     <string name="ru_app_name">Custom Maps</string>
     <string name="ru_select_map_name">Выбрать карту</string>
     <string name="ru_create_map_name">Создать карту</string>
@@ -51,6 +50,9 @@
         В папке CustomMaps на карте памяти пусто.\n\nСоздайте через Меню новую карту
         \n\nИли нажмите \'назад\' чтобы выйти.
     </string>
+    <!-- string name="ru_transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="ru_create_map_help">
         Через Меню создайте карту из фотографии или изображения карты\n\nНажмите и держите название
         карты чтобы изменить его или удалить карту.
@@ -241,6 +243,7 @@
     <string name="ru_share_map">Поделиться картой</string>
     <string name="ru_settings">Настройки</string>
     <string name="ru_create_map">Создать карту</string>
+    <!-- string name="ru_export_all_maps">Export all maps</string -->
     <string name="ru_modify_map">Изменить карту</string>
     <string name="ru_delete_map">Удалить карту</string>
     <string name="ru_select_point">Выбрать точку привязки</string>

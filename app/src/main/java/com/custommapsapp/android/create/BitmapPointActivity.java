@@ -17,7 +17,6 @@ package com.custommapsapp.android.create;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,15 +25,12 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.custommapsapp.android.CustomMapsApp;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
@@ -50,7 +46,7 @@ import com.custommapsapp.android.storage.PreferenceStore;
  * points.
  *
  * <p>
- * BitmapPointActivity returns a PNG compressed {@code byte[]} in {@code
+ * BitmapPointActivity returns a JPG compressed {@code byte[]} in {@code
  * BITMAP_DATA} containing a small image surrounding the selected point. The
  * selected point itself is returned in an {@code int[]} in {@code
  * SELECTED_POINT} which contains the point both in bitmap space, and then the
@@ -105,6 +101,7 @@ public class BitmapPointActivity extends AppCompatActivity {
           .show();
       setResult(RESULT_CANCELED);
       finish();
+      return;
     }
 
     // Load the actual bitmap (if load fails, displays an error message)
@@ -121,6 +118,7 @@ public class BitmapPointActivity extends AppCompatActivity {
       Toast.makeText(this, linguist.getString(R.string.map_too_large), Toast.LENGTH_LONG).show();
       setResult(RESULT_CANCELED);
       finish();
+      return;
     }
 
     // Pass existing tiepoints to AnnotationLayer
@@ -214,7 +212,7 @@ public class BitmapPointActivity extends AppCompatActivity {
   private void returnSelectedPoint(PointF bitmapPoint) {
     Point intPoint = new Point(Math.round(bitmapPoint.x), Math.round(bitmapPoint.y));
     int snippetSize = MapEditor.SNIPPET_SIZE;
-    byte[] mapSnippet = ImageHelper.createPngSample(image, intPoint, snippetSize, orientation);
+    byte[] mapSnippet = ImageHelper.createJpgSample(image, intPoint, snippetSize, orientation);
     Point snippetPoint = new Point();
     snippetPoint.x = snippetSize / 2;
     snippetPoint.y = snippetSize / 2;

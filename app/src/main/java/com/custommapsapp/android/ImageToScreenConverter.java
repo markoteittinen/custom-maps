@@ -201,11 +201,20 @@ public class ImageToScreenConverter {
       int translateX = 0;
       int translateY = 0;
       if (imageOrientation == 90) {
+        // Image was rotated clockwise 90 degrees around top-left corner, so it is left of its
+        // original position by its previous height (which is now its width). Translate it back.
+        //noinspection SuspiciousNameCombination
         translateX = imageHeight;
       } else if (imageOrientation == 180) {
+        // Image was rotated 180 degrees around top-left corner, so it is upside down left and above
+        // its original position. Translate it so that the new top-left corner is where the original
+        // was before rotation (shift right and down by its width and height).
         translateX = imageWidth;
         translateY = imageHeight;
       } else if (imageOrientation == 270) {
+        // Image was rotated counter-clockwise 90 degrees around top-left corner, so it is above its
+        // original position by its previous width (which is now its height). Translate it back.
+        //noinspection SuspiciousNameCombination
         translateY = imageWidth;
       }
       imageToScreenMatrix.postTranslate(translateX, translateY);

@@ -15,7 +15,9 @@
  */
 package com.custommapsapp.android.storage;
 
+import java.io.File;
 import java.util.Locale;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,10 +25,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import com.custommapsapp.android.CustomMaps;
+import com.custommapsapp.android.FileUtil;
 import com.custommapsapp.android.MapApiKeys;
 import com.custommapsapp.android.UnitsManager;
 
@@ -48,6 +52,8 @@ public class PreferenceStore {
   public static final String PREFS_LANGUAGE = "language";
   public static final String PREFS_USE_ARGB_8888 = "useArgb_8888";
   public static final String PREFS_USE_GPU = "useGpu";
+  public static final String PREFS_LEGACY_STORAGE = "legacyStorage2";
+  public static final String PREFS_MAP_STORAGE_DIR = "mapStorageDir";
   public static final String SHARED_PREFS_NAME = "com.custommapsapp.android.prefs";
 
   private static PreferenceStore instance; // singleton
@@ -70,15 +76,14 @@ public class PreferenceStore {
   // --------------------------------------------------------------------------
   // Instance variables and methods
 
-  private SharedPreferences prefs;
-  private Context context;
+  private final SharedPreferences prefs;
+  private final Context context;
 
   private PreferenceStore(Context context) {
     this.context = context;
     prefs = context.getSharedPreferences(SHARED_PREFS_NAME, Activity.MODE_PRIVATE);
   }
 
-  @SuppressWarnings("deprecation")
   public String getVersion() {
     String version = null;
     try {
@@ -102,7 +107,7 @@ public class PreferenceStore {
    * @return boolean indicating if user prefers metric distance units over miles and feet.
    */
   @Deprecated
-  public boolean isMetric() {
+  private boolean isMetric() {
     return prefs.getBoolean(PREFS_METRIC, PreferenceStore.isMetricLocale());
   }
 
@@ -259,6 +264,85 @@ public class PreferenceStore {
 
   public void setLicenseAccepted(boolean accepted) {
     prefs.edit().putBoolean(getLicensePreferenceName(), accepted).apply();
+  }
+
+  /**
+   * Returns 'true' if the maps are stored in folder named CustomMaps in internal public storage,
+   * and 'false' if the user is new or if they have been migrated to new model that does not need
+   * WRITE_EXTERNAL_STORAGE permission.
+   */
+  public boolean isUsingLegacyStorage() {
+    if (prefs.contains(PREFS_LEGACY_STORAGE)) {
+      // Note: given default value doesn't matter, key was verified to exist
+      return prefs.getBoolean(PREFS_LEGACY_STORAGE, false);
+    }
+    // Value has not been set, use 'true' if license has been approved previously, false otherwise
+    boolean previousUse = isAnyLicenseAccepted();
+    prefs.edit().putBoolean(PREFS_LEGACY_STORAGE, previousUse).apply();
+    return previousUse;
+  }
+
+  /**
+   * Clears the legacy storage flag. This method should be called when the user's maps have been
+   * migrated to internal storage.
+   */
+  public void setStopUsingLegacyStorage() {
+    prefs.edit().putBoolean(PREFS_LEGACY_STORAGE, false).apply();
+  }
+
+  // DO NOT SUBMIT: for testing purposes only
+  public void returnToLegacyStorage() {
+    // Delete all files in internal map directory
+    File mapDir = FileUtil.getInternalMapDirectory();
+    File[] mapFiles = mapDir.listFiles();
+    if (mapFiles != null) {
+      for (File mapFile : mapFiles) {
+        if (mapFile.isFile()) {
+          mapFile.delete();
+        }
+      }
+    }
+    // Clear any selected value for map storage directory, and clear the flag for legacy storage
+    setMapStorageDirectory(null);
+    prefs.edit().remove(PREFS_LEGACY_STORAGE).apply();
+  }
+
+  /**
+   * Returns 'true' if user has accepted license for any app version. If a license has been
+   * accepted, but legacy storage value has not been initialized, the user most likely has existing
+   * maps in CustomMaps folder in internal public storage.
+   */
+  private boolean isAnyLicenseAccepted() {
+    Set<String> keys = prefs.getAll().keySet();
+    for (String key: keys) {
+      if (key.startsWith(PREFS_LICENSE_ACCEPTED)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Returns the Uri pointing to the directory storing the user's maps, or null if the maps are
+   * stored into the app's internal data directory.
+   */
+  public Uri getMapStorageDirectory() {
+    String mapStorageDirectory = prefs.getString(PREFS_MAP_STORAGE_DIR, null);
+    return mapStorageDirectory != null ? Uri.parse(mapStorageDirectory) : null;
+  }
+
+  /**
+   * Sets the Uri pointing to the directory where user's map will be stored. Use value 'null' for
+   * storing the maps in a private internal directory.
+   *
+   * @param mapStorageDirectoryUri Uri from pointing
+   */
+  public void setMapStorageDirectory(Uri mapStorageDirectoryUri) {
+    if (mapStorageDirectoryUri == null) {
+      prefs.edit().remove(PREFS_MAP_STORAGE_DIR).apply();
+    } else {
+      prefs.edit().putString(PREFS_MAP_STORAGE_DIR, mapStorageDirectoryUri.toString()).apply();
+    }
   }
 
   /**

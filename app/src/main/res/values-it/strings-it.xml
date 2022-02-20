@@ -49,6 +49,9 @@
         Nessuna mappa trovata sulla scheda SD nella cartella CustomMaps.\n\nUsa menu per creare le
         mappe e per cercarle.\n\nOppure premi \'back\' per uscire.
     </string>
+    <!-- string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="create_map_help">
        Usa menu per creare mappe da foto o da immagini scaricate.\n\nSeleziona e tieni premuto il
        nome di una mappa per modificarla o cancellarla.
@@ -251,6 +254,7 @@
     <string name="share_map">Condividi mappa</string>
     <string name="settings">Impostazioni</string>
     <string name="create_map">Crea mappa</string>
+    <!-- string name="export_all_maps">Export all maps</string -->
     <string name="modify_map">Modifica mappa</string>
     <string name="delete_map">Cancella mappa</string>
     <string name="select_point">Seleziona punto</string>

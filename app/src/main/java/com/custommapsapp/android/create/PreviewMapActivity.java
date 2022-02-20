@@ -57,7 +57,6 @@ import com.custommapsapp.android.DMatrix;
 import com.custommapsapp.android.HelpDialogManager;
 import com.custommapsapp.android.ImageHelper;
 import com.custommapsapp.android.MouseWheelZoom;
-import com.custommapsapp.android.PermissionFragment;
 import com.custommapsapp.android.R;
 import com.custommapsapp.android.language.Linguist;
 
@@ -66,8 +65,7 @@ import com.custommapsapp.android.language.Linguist;
  *
  * @author Marko Teittinen
  */
-public class PreviewMapActivity extends AppCompatActivity
-    implements OnMapReadyCallback, PermissionFragment.PermissionResultCallback {
+public class PreviewMapActivity extends AppCompatActivity implements OnMapReadyCallback {
   private static final String EXTRA_PREFIX = "com.custommapsapp.android";
   public static final String BITMAP_FILE = EXTRA_PREFIX + ".BitmapFile";
   /** Array of ints providing image point coordinates in repeating (x, y) order */
@@ -87,7 +85,7 @@ public class PreviewMapActivity extends AppCompatActivity
 
   private DMatrix imageToGeo;
   private LatLng mapImageCenter;
-  private List<LatLng> imageCornerGeoPoints;
+  private ArrayList<LatLng> imageCornerGeoPoints;
   private double latSpan;
   private double lonSpan;
 
@@ -177,10 +175,6 @@ public class PreviewMapActivity extends AppCompatActivity
   }
 
   public void computeAndReturnTiepoints() {
-    if (!PermissionFragment.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-      PermissionFragment.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-      return;
-    }
     mapImageOverlay.computeImageWarp(googleMap.getProjection());
     if (!mapImageOverlay.hasGoogleMap()) {
       mapImageOverlay.setGoogleMap(googleMap);
@@ -188,25 +182,10 @@ public class PreviewMapActivity extends AppCompatActivity
     imageToGeo = mapImageOverlay.computeImageToGeoMatrix();
     computeImageCornerGeoPoints();
 
-    LatLng[] cornerGeoPoints = new LatLng[4];
-    cornerGeoPoints = imageCornerGeoPoints.toArray(cornerGeoPoints);
     Intent result = getIntent();
-    result.putExtra(CORNER_GEO_POINTS, cornerGeoPoints);
+    result.putExtra(CORNER_GEO_POINTS, imageCornerGeoPoints);
     setResult(RESULT_OK, result);
     finish();
-  }
-
-  public void onPermissionResult(String permission, boolean granted) {
-    // permission is always WRITE_EXTERNAL_STORAGE
-    if (!granted) {
-      // The app must be able to read local storage to select a map image file
-      Log.w(CustomMaps.LOG_TAG, "Cannot continue without " + permission + " permission, exiting");
-      System.exit(0);
-      return;
-    }
-    Log.i(CustomMaps.LOG_TAG, "Permission " + permission + " was granted");
-    // Permission is always requested at the very end when returning tiepoints continue there
-    computeAndReturnTiepoints();
   }
 
   @Override
@@ -351,8 +330,11 @@ public class PreviewMapActivity extends AppCompatActivity
   private void centerGoogleMapOnMapImageLocation() {
     if (googleMap != null) {
       // Keep latitude range values between [-85, 85] (away from the poles)
-      double minBoundsLat = Math.max(-85, mapImageCenter.latitude - latSpan / 2.0);
-      double maxBoundsLat = Math.min(85, mapImageCenter.latitude + latSpan / 2.0);
+      double minBoundsLat = Math.min(Math.max(-85, mapImageCenter.latitude - latSpan / 2.0), 85);
+      double maxBoundsLat = Math.max(-85, Math.min(mapImageCenter.latitude + latSpan / 2.0, 85));
+      if (minBoundsLat == maxBoundsLat) {
+        minBoundsLat -= 0.1;
+      }
       // Keep longitude values between [-180, 180) (prevent over/underflow)
       double minBoundsLng = mapImageCenter.longitude - lonSpan / 2.0;
       if (minBoundsLng < -180.0) {
@@ -362,14 +344,8 @@ public class PreviewMapActivity extends AppCompatActivity
       if (maxBoundsLng >= 180.0) {
         maxBoundsLng -= 360;
       }
-      LatLngBounds mapImageBounds;
-      try {
-        mapImageBounds = new LatLngBounds(
-            new LatLng(minBoundsLat, minBoundsLng), new LatLng(maxBoundsLat, maxBoundsLng));
-      } catch (IllegalArgumentException ex) {
-        throw new IllegalArgumentException(String.format("SW: %.4f %.4f  NE: %.4f %.4f",
-            minBoundsLat, minBoundsLng, maxBoundsLat, maxBoundsLng), ex);
-      }
+      LatLngBounds mapImageBounds = new LatLngBounds(
+          new LatLng(minBoundsLat, minBoundsLng), new LatLng(maxBoundsLat, maxBoundsLng));
       CameraUpdate fullView = CameraUpdateFactory.newLatLngBounds(
           mapImageBounds, getResources().getDimensionPixelSize(R.dimen.quarter_inch));
       googleMap.moveCamera(fullView);

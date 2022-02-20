@@ -15,10 +15,14 @@
  */
 package com.custommapsapp.android;
 
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import android.app.Application;
-
+import android.os.Build;
+import android.util.Log;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
-
 import com.custommapsapp.android.language.Linguist;
 import com.custommapsapp.android.storage.PreferenceStore;
 
@@ -33,6 +37,9 @@ public class CustomMapsApp extends Application {
   public void onCreate() {
     super.onCreate();
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+    // Provide context to FileUtil so that it can locate internal file directories
+    FileUtil.init(this);
 
     PreferenceStore prefStore = PreferenceStore.instance(getApplicationContext());
     String language = prefStore.getLanguage();

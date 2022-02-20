@@ -48,11 +48,14 @@
     <!-- select map -->
     <string name="select_map_to_use">Selectați o hartă pentru utilizare</string>
     <string name="no_maps_found_on_sd">
-        Nu au fost găsite hărți pe cardul SD în dosarul CustomMaps.\n\nFolosiți meniu pentru a crea
+        Nu au fost găsite hărți pe cardul SD în dosarul CustomMaps.\n\nFolosiți meniu pentru a crea
         hărți și pentru a obține ajutor să le găsiți.\n\n Sau apăsați \'inapoi\' pentru a ieși.
     </string>
+    <!-- string name="transferring_maps">
+        Please wait…\n\nMigrating maps to internal storage area
+    </string -->
     <string name="create_map_help">
-        Utilizați meniul pentru a crea hărți din fotografii sau din imagini descărcate\n\nApăsați
+        Utilizați meniul pentru a crea hărți din fotografii sau din imagini descărcate\n\nApăsați
         pe o hartă și mențineți pentru a o modifica sau șterge.
     </string>
     <string name="create_map_help_link">
@@ -112,7 +115,7 @@
 
     <!-- map image selection -->
     <string name="select_image_help">
-        Selectați un fișier care conține o imagine hartă \n\nFolosiți numai imagini pentru care
+        Selectați un fișier care conține o imagine hartă \n\nFolosiți numai imagini pentru care
         aveți permisiunea.\n\nMeniul conține link-uri către dosarele care conțin fotografii și
         descărcări de pe internet.
     </string>
@@ -126,7 +129,7 @@
 
     <!-- map image point selection -->
     <string name="image_point_help">
-        Selectați un punct care urmează să fie amplasat pe o hartă Google.\n\nSelectați puncte
+        Selectați un punct care urmează să fie amplasat pe o hartă Google.\n\nSelectați puncte
         depărtate pentru rezultate mai bune.departe cel mai bun pentru.\n\nEvită selectarea
         punctelor între puncte precente.
     </string>
@@ -167,7 +170,7 @@
 
     <!-- map preview -->
     <string name="preview_help">
-        Verificați alinierea imaginii hartă prin scalare și panoramare harta.\n\nButonul înapoi
+        Verificați alinierea imaginii hartă prin scalare și panoramare harta.\n\nButonul înapoi
         permite să reglați sau să adăugați puncte.\n\nNOTĂ: Anumite imagini hartă nu pot fi
         aliniate perfect.
     </string>
@@ -247,6 +250,7 @@
     <string name="share_map">Distribuie haartă</string>
     <string name="settings">Setări</string>
     <string name="create_map">Creați hartă</string>
+    <!-- string name="export_all_maps">Export all maps</string -->
     <string name="modify_map">Modifică harta</string>
     <string name="delete_map">Ștergere hartă</string>
     <string name="select_point">Slectare punct</string>

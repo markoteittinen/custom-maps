@@ -28,8 +28,8 @@ import android.view.View;
  * @author Marko Teittinen
  */
 public class DisplayState {
-  private GeoToImageConverter geoToImage = new GeoToImageConverter();
-  private ImageToScreenConverter imageToScreen = new ImageToScreenConverter();
+  private final GeoToImageConverter geoToImage = new GeoToImageConverter();
+  private final ImageToScreenConverter imageToScreen = new ImageToScreenConverter();
   private float imageNorthHeading = Float.NaN;
   private boolean followMode = false;
 
@@ -46,10 +46,16 @@ public class DisplayState {
   }
 
   public int getViewWidth() {
+    if (imageToScreen.getScreenView() == null) {
+      return 0;
+    }
     return imageToScreen.getScreenView().getWidth();
   }
 
   public int getViewHeight() {
+    if (imageToScreen.getScreenView() == null) {
+      return 0;
+    }
     return imageToScreen.getScreenView().getHeight();
   }
 

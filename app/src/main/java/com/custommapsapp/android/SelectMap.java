@@ -16,8 +16,15 @@
 package com.custommapsapp.android;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,11 +33,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -48,8 +58,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 
 import com.custommapsapp.android.create.MapEditor;
 import com.custommapsapp.android.kml.GroundOverlay;
@@ -66,6 +80,8 @@ import com.custommapsapp.android.storage.PreferenceStore;
  */
 public class SelectMap extends AppCompatActivity
     implements PermissionFragment.PermissionResultCallback {
+  private static final String LOG_TAG = "SelectMap";
+
   public static final String EXTRA_PREFIX = "com.custommapsapp.android";
   public static final String LAST_LOCATION = EXTRA_PREFIX + ".LastLocation";
   public static final String LOCAL_FILE = EXTRA_PREFIX + ".LocalFile";
@@ -76,7 +92,8 @@ public class SelectMap extends AppCompatActivity
 
   // Option menu and activity result constants
   private static final int MENU_CREATE_MAP = 1;
-  private static final int MENU_PREFERENCES = 2;
+  private static final int MENU_EXPORT_ALL = 2;
+  private static final int MENU_PREFERENCES = 3;
   private static final int CREATE_MAP = 1;
   private static final int EDIT_PREFERENCES = 2;
   // Context (item) menu constants
@@ -157,10 +174,6 @@ public class SelectMap extends AppCompatActivity
     if (!PermissionFragment.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
       PermissionFragment.requestPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
       return;
-    } else if (
-        !PermissionFragment.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-      PermissionFragment.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-      return;
     }
     // All necessary permissions have been granted, start operation
     initializeLocation();
@@ -222,14 +235,14 @@ public class SelectMap extends AppCompatActivity
     Location last = null;
     if (hasGpsProvider) {
       last = locator.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      if (last != null && !isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
+      if (last != null && isOlderThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
         last = null;
       }
     }
     // Use network location only if it is fresh enough and if GPS was not used
     if (last == null && hasNetworkProvider) {
       last = locator.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-      if (last != null && !isNewerThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
+      if (last != null && isOlderThan(last.getTime(), OLDEST_OK_LOCATION_MS)) {
         last = null;
       }
     }
@@ -246,8 +259,8 @@ public class SelectMap extends AppCompatActivity
     }
   }
 
-  private boolean isNewerThan(long time, long ageInMillis) {
-    return System.currentTimeMillis() - ageInMillis < time;
+  private boolean isOlderThan(long time, long ageInMillis) {
+    return time < System.currentTimeMillis() - ageInMillis;
   }
 
   // --------------------------------------------------------------------------
@@ -297,12 +310,7 @@ public class SelectMap extends AppCompatActivity
     File localFile = new File(localPath);
     // Copy or move file to data directory if not already there
     if (!FileUtil.isInDataDirectory(localFile)) {
-      File result;
-      if (FileUtil.isDownloadFile(localFile)) {
-        result = FileUtil.moveToDataDirectory(localFile);
-      } else {
-        result = FileUtil.copyToDataDirectory(localFile);
-      }
+      File result = FileUtil.copyToDataDirectory(localFile);
       if (result != null) {
         localFile = result;
       }
@@ -372,6 +380,7 @@ public class SelectMap extends AppCompatActivity
     super.onCreateOptionsMenu(menu);
     menu.add(Menu.NONE, MENU_CREATE_MAP, Menu.NONE, linguist.getString(R.string.create_map))
         .setIcon(android.R.drawable.ic_menu_gallery);
+    menu.add(Menu.NONE, MENU_EXPORT_ALL, Menu.NONE, linguist.getString(R.string.export_all_maps));
     menu.add(Menu.NONE, MENU_PREFERENCES, Menu.NONE, linguist.getString(R.string.settings))
         .setIcon(android.R.drawable.ic_menu_preferences);
     helpDialogManager.onCreateOptionsMenu(menu);
@@ -399,6 +408,10 @@ public class SelectMap extends AppCompatActivity
         Intent createMap = new Intent(this, MapEditor.class);
         startActivityForResult(createMap, CREATE_MAP);
         return true;
+      case MENU_EXPORT_ALL:
+        // Export all maps by sharing them
+        shareAllMaps();
+        break;
       case MENU_PREFERENCES:
         // Invoke preferences activity
         Intent preferences = new Intent(this, EditPreferences.class);
@@ -420,7 +433,7 @@ public class SelectMap extends AppCompatActivity
       case CREATE_MAP:
         // New map created, refresh catalog, and include just edited file
         String mapFilename = data.getStringExtra(MapEditor.KMZ_FILE);
-        if (mapFilename != null) {
+        if (mapFilename != null && mapCatalog != null) {
           File file = new File(mapFilename);
           mapCatalog.addCreatedFile(file.getName());
           updateMapList();
@@ -446,6 +459,12 @@ public class SelectMap extends AppCompatActivity
     helpDialogManager.setWebLink(
         linguist.getString(R.string.create_map_help_link),
         "http://www.custommapsapp.com/sample-maps");
+  }
+
+  /** Export all maps by using "send multiple" action. */
+  private void shareAllMaps() {
+    mapCatalog.refreshCatalog();
+    FileUtil.exportMaps(this, mapCatalog.getAllMapsSortedByName());
   }
 
   // -------------------------------------------------------------------------------------
@@ -604,7 +623,7 @@ public class SelectMap extends AppCompatActivity
     setResult(RESULT_OK, getIntent());
     locator.removeUpdates(locationTracker);
     mapCatalog.clearCatalog();
-    finish();
+    runOnUiThread(this::finish);
   }
 
   // -------------------------------------------------------------------------------------
@@ -615,11 +634,25 @@ public class SelectMap extends AppCompatActivity
    * creates a new MapCatalog object pointing to the data directory.
    */
   void initializeMapCatalog() {
-    File dataDir = FileUtil.getDataDirectory();
-    if (!dataDir.exists()) {
-      Log.e(CustomMaps.LOG_TAG, "Creation of data dir failed. Name: " + dataDir.getAbsolutePath());
+    PreferenceStore prefs = PreferenceStore.instance(this);
+    if (prefs.isUsingLegacyStorage()) {
+      @SuppressWarnings("deprecation")
+      File dataDir = FileUtil.getLegacyMapDirectory();
+      if (!dataDir.exists()) {
+        Log.e(CustomMaps.LOG_TAG, "Legacy data dir does not exist: " + dataDir.getAbsolutePath());
+      }
+      mapCatalog = new MapCatalog(dataDir);
+    } else {
+      // Initialize mapCatalog for new storage model
+      Uri mapStorageDir = prefs.getMapStorageDirectory();
+      if (mapStorageDir == null) {
+        // Use app's internal storage folder
+        mapCatalog = new MapCatalog(FileUtil.getInternalMapDirectory());
+      } else {
+        // Use MapCatalog with new storage API
+        mapCatalog = new MapCatalog(mapStorageDir);
+      }
     }
-    mapCatalog = new MapCatalog(dataDir);
   }
 
   /**
@@ -631,8 +664,49 @@ public class SelectMap extends AppCompatActivity
     // Clear map list (and its empty message) while refreshing the list contents
     noMapsFoundMessage.setText("");
     mapList.setAdapter(new MapListAdapter(this, Collections.emptyList()));
-    // Since maps for catalog are read from disk, update the catalog in a bg thread
-    backgroundExecutor.submit(this::refreshMapCatalogSync);
+    // Migrate maps to internal storage, if they are in legacy storage
+    if (PreferenceStore.instance(this).isUsingLegacyStorage()) {
+      noMapsFoundMessage.setText(linguist.getString(R.string.transferring_maps));
+      backgroundExecutor.submit(this::migrateMapCatalog);
+      // After migration completes, it will trigger refreshMapCatalogSync()
+    } else {
+      // Since maps for catalog are read from disk, update the catalog in a bg thread
+      backgroundExecutor.submit(this::refreshMapCatalogSync);
+    }
+  }
+
+  void migrateMapCatalog() {
+    long startTimeMs = System.currentTimeMillis();
+    // Copy all kmz files (i.e. map files) from sdcard/CustomMaps to internal directory
+    @SuppressWarnings("deprecation")
+    File legacyDataDir = FileUtil.getLegacyMapDirectory();
+    File[] legacyFiles = legacyDataDir.listFiles();
+    if (legacyFiles != null) {
+      for (File mapFile : legacyFiles) {
+        if (mapFile.getName().endsWith(".kmz")) {
+          if (FileUtil.copyToDataDirectory(mapFile) != null) {
+            Log.d(LOG_TAG, "Copy successful: " + mapFile.getName());
+          } else {
+            Log.w(LOG_TAG, "Failed to copy: " + mapFile.getName());
+          }
+        }
+      }
+    }
+    // Update preferences to indicate files have been moved to internal storage
+    PreferenceStore.instance(this).setStopUsingLegacyStorage();
+    autoSelectRequested = false;
+    // Keep the migration message on the screen at least 3 seconds
+    long untilThreeSecMs = startTimeMs + 3000 - System.currentTimeMillis();
+    if (untilThreeSecMs > 0) {
+      try {
+        Thread.sleep(untilThreeSecMs);
+      } catch (InterruptedException ex) {
+        // Wait interrupted, just continue
+      }
+    }
+    // Clear the migration message and refresh the map catalog
+    runOnUiThread(() -> noMapsFoundMessage.setText(""));
+    refreshMapCatalogSync();
   }
 
   // This method accesses the disk, so it should never be called in UI thread
