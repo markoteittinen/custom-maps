@@ -212,6 +212,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     languages.add(Locale.ENGLISH);
     languages.add(Locale.GERMAN);
     languages.add(Locale.ITALIAN);
+    languages.add(Locale.TAIWAN);
     languages.add(new Locale("pl"));
     languages.add(new Locale("ro"));
     languages.add(new Locale("fi"));

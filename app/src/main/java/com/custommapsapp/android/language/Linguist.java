@@ -93,6 +93,9 @@ public class Linguist {
         case "ru":
           language = new Ru_Russian();
           break;
+        case "zh":
+          language = new Zh_Chinese();
+          break;
         default:
           // Do not change language
           Log.w(CustomMaps.LOG_TAG, "Unsupported language code: " + languageCode);
